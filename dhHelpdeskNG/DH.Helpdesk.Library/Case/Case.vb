@@ -57,6 +57,7 @@ Imports System.Data
     Private miStateSecondary_Id As Integer
     Private msStateSecondary As String
     Private miStateSecondary_FinishingCause_Id? As Integer
+    Private miStateSecondary_ReminderDays As Integer
     Private miStateSecondary_AutoCloseDays As Integer
     Private miResetOnExternalUpdate As Integer = 0
     Private mdtWatchDate As DateTime
@@ -446,13 +447,12 @@ Imports System.Data
             miStateSecondary_FinishingCause_id = dr("StateSecondary_FinishingCause_Id")
         End If
 
-        If Not IsDBNull(dr("StateSecondary_AutoCloseDays")) Then
-            If Not IsDBNull(dr("StateSecondary_ReminderDays")) Then
-                miStateSecondary_AutoCloseDays = dr("StateSecondary_AutoCloseDays") - dr("StateSecondary_ReminderDays")
-            Else
-                miStateSecondary_AutoCloseDays = dr("StateSecondary_AutoCloseDays")
-            End If
+        If Not IsDBNull(dr("StateSecondary_ReminderDays")) Then
+            miStateSecondary_ReminderDays = dr("StateSecondary_ReminderDays")
+        End If
 
+        If Not IsDBNull(dr("StateSecondary_AutoCloseDays")) Then
+            miStateSecondary_AutoCloseDays = dr("StateSecondary_AutoCloseDays")
         End If
 
         If Not IsDBNull(dr("ResetOnExternalUpdate")) Then
@@ -1247,6 +1247,12 @@ Imports System.Data
     Public ReadOnly Property StateSecondary_FinishingCause_Id() As Integer?
         Get
             Return miStateSecondary_FinishingCause_Id
+        End Get
+    End Property
+
+    Public ReadOnly Property ReminderDays() As Integer
+        Get
+            Return miStateSecondary_ReminderDays
         End Get
     End Property
 

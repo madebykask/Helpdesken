@@ -1,12 +1,13 @@
 Imports System.Data.SqlClient
 Imports System.Linq
+Imports DH.Helpdesk.BusinessData.Models.Reports
 Imports DH.Helpdesk.BusinessData.Models.WorktimeCalculator
 Imports DH.Helpdesk.Dal.Infrastructure
 Imports DH.Helpdesk.Dal.Repositories
 'Imports System.Data.Odbc
 Imports DH.Helpdesk.Library.SharedFunctions
 Imports DH.Helpdesk.Services.Services
-Imports DH.Helpdesk.Services.utils
+Imports DH.Helpdesk.Services.Utils
 
 Public Class CaseData
     Public Function getTodayPlanDate() As Collection
@@ -709,7 +710,28 @@ Public Class CaseData
 
     Public Function getCaseReminder() As Collection
         Try
-            Return getCases(iReminder:=1)
+
+            Dim tempcol As Collection = getCases(iReminder:=1)
+            Dim col As New Collection
+
+            For Each c As CCase In tempcol
+                ' Check when StateSecondary First Set
+                Dim dt As DateTime? = getStateSecondarySetDate(c.StateSecondary_Id, c.Id)
+
+                Dim timeDifference As TimeSpan = DateTime.Now - dt
+                Dim numberOfDays As Integer = timeDifference.Days
+
+
+                If numberOfDays = c.ReminderDays Then
+                    col.Add(c)
+
+                End If
+
+            Next
+
+            Return col
+
+
         Catch ex As Exception
             Throw ex
         End Try
@@ -717,7 +739,29 @@ Public Class CaseData
 
     Public Function getCaseAutoClose() As Collection
         Try
-            Return getCases(iAutoClose:=1)
+            Dim tempcol As Collection = getCases(iAutoClose:=1)
+            Dim col As New Collection
+
+            For Each c As CCase In tempcol
+                ' Check when StateSecondary First Set
+                Dim dt As DateTime? = getStateSecondarySetDate(c.StateSecondary_Id, c.Id)
+
+                'If dt IsNot Nothing Then
+                Debug.WriteLine(c.Casenumber & ", " & dt)
+
+                Dim timeDifference As TimeSpan = DateTime.Now - dt
+                Dim numberOfDays As Integer = timeDifference.Days
+
+
+                If numberOfDays = c.AutoCloseDays Then
+                    col.Add(c)
+
+                End If
+                'End If
+
+            Next
+
+            Return col
         Catch ex As Exception
             Throw ex
         End Try
@@ -921,11 +965,11 @@ Public Class CaseData
             ElseIf iReminder = 1 Then
                 sSQL = sSQL & "WHERE tblStateSecondary.ReminderDays <> 0 And tblCase.FinishingDate Is NULL "
 
-                sSQL = sSQL & "And tblCase.Id IN (SELECT tblcasehistory.Case_Id FROM tblCasehistory INNER JOIN tblStateSecondary ON tblCaseHistory.StateSecondary_Id=tblstatesecondary.Id WHERE tblStateSecondary.Reminderdays <> 0 And Datediff(d, tblcasehistory.CreatedDate, getdate()) = tblstatesecondary.Reminderdays)"
+                'sSQL = sSQL & "And tblCase.Id IN (SELECT tblcasehistory.Case_Id FROM tblCasehistory INNER JOIN tblStateSecondary ON tblCaseHistory.StateSecondary_Id=tblstatesecondary.Id WHERE tblStateSecondary.Reminderdays <> 0 And Datediff(d, tblcasehistory.CreatedDate, getdate()) = tblstatesecondary.Reminderdays)"
             ElseIf iAutoClose = 1 Then
                 sSQL = sSQL & "WHERE tblStateSecondary.AutocloseDays <> 0 And tblCase.FinishingDate Is NULL "
 
-                sSQL = sSQL & "And tblCase.Id IN (SELECT tblcasehistory.Case_Id FROM tblCasehistory INNER JOIN tblStateSecondary ON tblCaseHistory.StateSecondary_Id=tblstatesecondary.Id WHERE tblStateSecondary.AutocloseDays <> 0 And Datediff(d, tblcasehistory.CreatedDate, getdate()) = tblstatesecondary.AutocloseDays)"
+                'sSQL = sSQL & "And tblCase.Id IN (SELECT tblcasehistory.Case_Id FROM tblCasehistory INNER JOIN tblStateSecondary ON tblCaseHistory.StateSecondary_Id=tblstatesecondary.Id WHERE tblStateSecondary.AutocloseDays <> 0 And Datediff(d, tblcasehistory.CreatedDate, getdate()) = tblstatesecondary.AutocloseDays)"
 
             End If
 
@@ -967,44 +1011,6 @@ Public Class CaseData
             sCaseHistoryGUID = System.Guid.NewGuid.ToString()
 
             ' Lägg in den nya posten i historiken
-            'sSQL = "INSERT INTO tblCaseHistory(CaseHistoryGUID, Case_Id ,ReportedBy ,Persons_Name,Persons_EMail,Persons_Phone,Persons_CellPhone," &
-            '                                    "Customer_Id,Region_Id,Department_Id,OU_Id,Place,UserCode,CostCentre,InventoryNumber,InventoryType,InventoryLocation, " &
-            '                                    "Casenumber,User_Id,IPAddress,CaseType_Id,ProductArea_Id,ProductAreaSetDate,Category_Id,Supplier_Id,InvoiceNumber, " &
-            '                                    "ReferenceNumber,Caption,Description,Miscellaneous,ContactBeforeAction,SMS,Available,Cost,OtherCost,Currency," &
-            '                                    "Performer_User_Id,CaseResponsibleUser_Id,Priority_Id,Status_Id,StateSecondary_Id,ExternalTime,Project_Id, " &
-            '                                    "PlanDate,ApprovedDate,ApprovedBy_User_Id,WatchDate,LockCaseToWorkingGroup_Id,WorkingGroup_Id,FinishingDate, " &
-            '                                    "FollowUpDate,RegistrationSource,RelatedCaseNumber,Problem_Id," &
-            '                                    "Deleted,Status,RegLanguage_Id,RegUserId,RegUserDomain,RegistrationSourceCustomer_Id, CreatedDate,CreatedByUser, LeadTime ) " &
-            '        " SELECT '" & sCaseHistoryGUID & "', " & iCase_Id & " ,ReportedBy ,Persons_Name,Persons_EMail,Persons_Phone,Persons_CellPhone," &
-            '                                    "Customer_Id,Region_Id,Department_Id,OU_Id,Place,UserCode,CostCentre,InventoryNumber,InventoryType,InventoryLocation, " &
-            '                                    "Casenumber,User_Id,IPAddress,CaseType_Id,ProductArea_Id,ProductAreaSetDate,Category_Id,Supplier_Id,InvoiceNumber, " &
-            '                                    "ReferenceNumber,Caption,Description,Miscellaneous,ContactBeforeAction,SMS,Available,Cost,OtherCost,Currency," &
-            '                                    "Performer_User_Id,CaseResponsibleUser_Id,Priority_Id,Status_Id,StateSecondary_Id,ExternalTime,Project_Id, " &
-            '                                    "PlanDate,ApprovedDate,ApprovedBy_User_Id,WatchDate,LockCaseToWorkingGroup_Id,WorkingGroup_Id,FinishingDate, " &
-            '                                    "FollowUpDate,RegistrationSource,RelatedCaseNumber,Problem_Id," &
-            '                                    "Deleted,Status,RegLanguage_Id,RegUserId,RegUserDomain, RegistrationSourceCustomer_Id, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "', tblCase.LeadTime  FROM tblCase WHERE Id=" & iCase_Id
-
-            'sSQL = "INSERT INTO tblCaseHistory(CaseHistoryGUID, Case_Id, ReportedBy, Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Customer_Id, Region_Id, Department_Id, OU_Id, Place, UserCode, InventoryNumber, InventoryType," &
-            '              "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber, Caption, Description," &
-            '              "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, Cost, OtherCost, Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id," &
-            '              "ProjectSchedule_Id, Verified, VerifiedDescription, SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, FinishingDescription, FollowUpDate," &
-            '              "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, RegUserId, RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, CreatedDate, CreatedByUser, CausingPartId, " &
-            '              "DefaultOwnerWG_Id, RegistrationSourceCustomer_Id, CostCentre, IsAbout_Persons_Name, IsAbout_ReportedBy, IsAbout_Persons_Phone, IsAbout_UserCode," &
-            '              "IsAbout_Department_Id, CreatedByApp, LatestSLACountDate, IsAbout_Persons_EMail, IsAbout_Persons_CellPhone, IsAbout_Region_Id, IsAbout_OU_Id, " &
-            '              "IsAbout_CostCentre, IsAbout_Place) " &
-            '           "Select top 1  '" & sCaseHistoryGUID & "', " & iCase_Id & " , " &
-            '                    "c.ReportedBy, c.Persons_Name, c.Persons_EMail, c.Persons_Phone, c.Persons_CellPhone, Customer_Id, c.Region_Id, c.Department_Id, c.OU_Id, c.Place, Replace(c.UserCode,'', NULL) UserCode, InventoryNumber, InventoryType," &
-            '                  "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, Replace(ReferenceNumber,'', NULL) ReferenceNumber,  Caption, Description," &
-            '                  "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, c.Cost, OtherCost, Replace(Currency,'', NULL) Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id, " &
-            '                  "ProjectSchedule_Id, Verified, Replace(VerifiedDescription, '', NULL) VerifiedDescription, Replace(SolutionRate,'', NULL) SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, Replace(FinishingDescription,'', NULL) FinishingDescription, FollowUpDate, " &
-            '                  "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, Replace(RegUserId,NULL, '') RegUserId, Replace(RegUserDomain,NULL, '') RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "', CausingPartId, " &
-            '                  "DefaultOwnerWG_Id, RegistrationSourceCustomer_Id, Replace(c.CostCentre, '', NULL) AS CostCentre , ca.Person_Name, ca.ReportedBy, ca.Person_Phone, ca.UserCode, " &
-            '                  "ca.Department_Id, '', LatestSLACountDate, ca.Person_Email, ca.Person_CellPhone,ca.Region_Id, ca.OU_Id, " &
-            '                  "Replace(ca.CostCentre, '', NULL) AS CostCentre , ca.Place " &
-            '           "From tblCase c " &
-            '           "LEFT JOIN tblCaseIsAbout ca ON c.Id = ca.Case_Id" &
-            '           " where c.Id = " & iCase_Id & " "
-
 
             sSQL = "INSERT INTO tblCaseHistory(CaseHistoryGUID, Case_Id, ReportedBy, Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Customer_Id, Region_Id, Department_Id, OU_Id, Place, UserCode, InventoryNumber, InventoryType," &
                           "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber, Caption, Description," &
@@ -1027,95 +1033,6 @@ Public Class CaseData
                        "LEFT JOIN tblCaseIsAbout ca ON c.Id = ca.Case_Id" &
                        " where c.Id = " & iCase_Id & " "
 
-
-            '"Replace(c.ReportedBy, '', NULL) AS ReportedBy, " &
-            '                  "c.Persons_Name AS Persons_Name, " &
-            '                  "c.Persons_EMail AS Persons_EMail, " &
-            '                  "Replace(c.Persons_Phone, '', NULL) AS Persons_Phone, " &
-            '                  "Replace(c.Persons_CellPhone, '', NULL) AS Persons_CellPhone, " &
-            '                  "Customer_Id, " &
-            '                  "Replace(c.Region_Id, 0, NULL) AS Region_Id, " &
-            '                  "Replace(c.Department_Id, 0, NULL) AS Department_Id, " &
-            '                  "Replace(c.OU_Id, 0, NULL) AS OU_Id, " &
-            '                  "c.Place, " &
-            '                  "Replace(c.UserCode,'', NULL) UserCode, " &
-            '                  "Replace(InventoryNumber,'', NULL) AS InventoryNumber, " &
-            '                  "InventoryType," &
-            '                  "InventoryLocation, " &
-            '                  "Casenumber, " &
-            '                  "Replace(User_Id, 0, NULL) AS User_Id, " &
-            '                  "IPAddress, " &
-            '                  "CaseType_Id, " &
-            '                  "Replace(ProductArea_Id, 0, NULL) AS ProductArea_Id, " &
-            '                  "Replace(ProductAreaSetDate, '', NULL) AS ProductAreaSetDate, " &
-            '                  "Replace(System_Id, 0, NULL) AS System_Id, " &
-            '                  "Replace(Urgency_Id, 0, NULL) AS Urgency_Id, " &
-            '                  "Replace(Impact_Id, 0, NULL) AS Impact_Id, " &
-            '                  "Replace(Category_Id, 0, NULL) AS Category_Id, " &
-            '                  "Replace(Supplier_Id, 0, NULL) AS Supplier_Id, " &
-            '                  "InvoiceNumber, " &
-            '                  "Replace(ReferenceNumber,'', NULL) ReferenceNumber,  " &
-            '                  "Caption, " &
-            '                  "Description," &
-            '                  "Miscellaneous, " &
-            '                  "ContactBeforeAction, " &
-            '                  "SMS, " &
-            '                  "Replace(AgreedDate,'', NULL) AS AgreedDate, " &
-            '                  "Available, " &
-            '                  "c.Cost, " &
-            '                  "OtherCost, " &
-            '                  "Replace(Currency,'', NULL) Currency, " &
-            '                  "Replace(Performer_User_Id, 0, NULL) AS Performer_User_Id, " &
-            '                  "Replace(CaseResponsibleUser_Id, 0, NULL) AS CaseResponsibleUser_Id, " &
-            '                  "Replace(Priority_Id, 0, NULL) AS Priority_Id, " &
-            '                  "Replace(Status_Id, 0, NULL) AS Status_Id, " &
-            '                  "Replace(StateSecondary_Id, 0, NULL) AS StateSecondary_Id, " &
-            '                  "ExternalTime, " &
-            '                  "Replace(Project_Id, 0, NULL) AS Project_Id, " &
-            '                  "Replace(ProjectSchedule_Id, 0, NULL) AS ProjectSchedule_Id,  " &
-            '                  "Replace(Verified, 0, NULL) AS Verified, " &
-            '                  "Replace(VerifiedDescription, '', NULL) VerifiedDescription, " &
-            '                  "Replace(SolutionRate,'', NULL) SolutionRate, " &
-            '                  "Replace(PlanDate, '', NULL) PlanDate, " &
-            '                  "Replace(ApprovedDate, '', NULL) AS ApprovedDate, " &
-            '                  "Replace(ApprovedBy_User_Id, 0, NULL) AS ApprovedBy_User_Id, " &
-            '                  "Replace(WatchDate, '', NULL) AS WatchDate, " &
-            '                  "Replace(LockCaseToWorkingGroup_Id, 0, NULL) AS LockCaseToWorkingGroup_Id, " &
-            '                  "Replace(WorkingGroup_Id, 0, NULL) AS WorkingGroup_Id, " &
-            '                  "Replace(FinishingDate, '', NULL) AS FinishingDate, " &
-            '                  "Replace(FinishingDescription,'', NULL) FinishingDescription, " &
-            '                  "Replace(FollowUpDate, '', NULL) AS FollowUpDate, " &
-            '                  "RegistrationSource, " &
-            '                  "RelatedCaseNumber, " &
-            '                  "Replace(Problem_Id, 0, NULL) AS Problem_Id, " &
-            '                  "Replace(Change_Id, 0, NULL) AS Change_Id, " &
-            '                  "Deleted, " &
-            '                  "Status, " &
-            '                  "RegLanguage_Id, " &
-            '                  "Replace(RegUserId,NULL, '') RegUserId, " &
-            '                  "Replace(RegUserDomain,NULL, '') RegUserDomain, " &
-            '                  "Replace(ProductAreaQuestionVersion_Id, 0, NULL) AS ProductAreaQuestionVersion_Id, " &
-            '                  "LeadTime, " &
-            '                  "getutcdate(), " &
-            '                  "'" & Replace(sCreatedByUser, "'", "''") & "', " &
-            '                  "Replace(CausingPartId, 0, NULL) AS CausingPartId, " &
-            '                  "Replace(DefaultOwnerWG_Id, 0, NULL) AS DefaultOwnerWG_Id, " &
-            '                  "Replace(RegistrationSourceCustomer_Id, 0, NULL) AS RegistrationSourceCustomer_Id, " &
-            '                  "Replace(c.CostCentre, '', NULL) AS CostCentre , " &
-            '                  "ca.Person_Name, " &
-            '                  "Replace(ca.ReportedBy, '', NULL) AS ReportedBy, " &
-            '                  "Replace(ca.Person_Phone, '', NULL) AS Person_Phone, " &
-            '                  "Replace(ca.UserCode, '', NULL) AS UserCode, " &
-            '                  "Replace(ca.Department_Id, 0, NULL) AS Department_Id, " &
-            '                  "'', " &
-            '                  "Replace(LatestSLACountDate, '', NULL) AS LatestSLACountDate, " &
-            '                  "ca.Person_Email, " &
-            '                  "Replace(ca.Person_CellPhone, '', NULL) AS Person_CellPhone, " &
-            '                  "Replace(ca.Region_Id, 0, NULL) AS Region_Id, " &
-            '                  "Replace(ca.OU_Id, 0, NULL) AS OU_Id, " &
-            '                  "Replace(ca.CostCentre, '', NULL) AS CostCentre, " &
-            '                  "ca.Place " &
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
 
             Return getCaseHistoryIdByGUID(sCaseHistoryGUID)
@@ -1135,11 +1052,7 @@ Public Class CaseData
                 "WHERE tblCaseHistory.CaseHistoryGUID='" & sCaseHistoryGUID & "'"
 
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Return dt.Rows(0)("Id")
@@ -1752,19 +1665,11 @@ Public Class CaseData
                         "User_Id=Null " &
                     "WHERE Case_Id=" & iCase_Id
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
 
             sSQL = "DELETE FROM tblCaseFile WHERE Case_Id=" & iCase_Id
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
 
             If System.IO.Directory.Exists(sFilePath & "\" & sCaseNumber) Then
                 Try
@@ -1778,11 +1683,7 @@ Public Class CaseData
                         "EMailAddress='-' " &
                     " WHERE tblEmailLog.CaseHistory_Id IN (SELECT Id FROM tblCaseHistory WHERE Case_Id=" & iCase_Id & ")"
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
 
             sSQL = "UPDATE tblCaseHistory SET " &
                         "ReportedBy='-', " &
@@ -1795,11 +1696,7 @@ Public Class CaseData
                         "User_Id=Null " &
                     " WHERE tblCaseHistory.Case_Id=" & iCase_Id
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
 
             sSQL = "UPDATE tblCase SET " &
                         "ReportedBy='-', " &
@@ -1811,11 +1708,7 @@ Public Class CaseData
                         "CaseCleanUp_Id=" & iCaseCleanUp_Id &
                     " WHERE tblCase.Id=" & iCase_Id
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
         Catch ex As Exception
             Throw ex
         End Try
@@ -1994,6 +1887,43 @@ Public Class CaseData
             Throw ex
         End Try
     End Sub
+
+    Private Function getStateSecondarySetDate(iStateSecondary_Id As Integer, iCase_Id As Integer) As DateTime
+        Dim setDate As DateTime?
+
+        Dim sSQL As String
+        Dim dr As DataRow
+
+        Try
+            sSQL = "select StateSecondary_Id, CreatedDate " &
+                    "from tblCaseHistory where Case_Id=" & iCase_Id &
+                    " order by Id desc"
+
+            Dim dt As DataTable = getDataTable(gsConnectionString, sSQL)
+
+            If dt IsNot Nothing Then
+                For Each dr In dt.Rows
+                    If setDate Is Nothing Then
+                        setDate = dr("CreatedDate")
+                    End If
+
+                    If Convert.IsDBNull(dr("StateSecondary_Id")) Then
+                        Exit For
+                    End If
+
+                    If dr("StateSecondary_Id") = iStateSecondary_Id Then
+                        setDate = dr("CreatedDate")
+                    Else
+                        Exit For
+                    End If
+                Next
+            End If
+
+            Return setDate
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
 
     Private Function GetDate(dtDate As Date) As String
         GetDate = dtDate.Year.ToString & "-" & dtDate.Month.ToString.PadLeft(2, "0") & "-" & dtDate.Day.ToString.PadLeft(2, "0")
