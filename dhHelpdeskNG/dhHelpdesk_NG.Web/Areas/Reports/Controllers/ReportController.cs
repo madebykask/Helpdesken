@@ -44,9 +44,10 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
 	using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
 	using DH.Helpdesk.BusinessData.Enums.Case;
 	using BusinessData.Models.Case.CaseSettingsOverview;
-	using BusinessData.Models.Case;
+    using BusinessData.Models.Case;
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
 
-	public sealed class ReportController : UserInteractionController
+    public sealed class ReportController : UserInteractionController
     {
         private readonly IReportModelFactory _reportModelFactory;
         private readonly IReportGeneratorModelFactory _reportGeneratorModelFactory;
@@ -106,6 +107,7 @@ namespace DH.Helpdesk.Web.Areas.Reports.Controllers
         }
 
         [HttpGet]
+        [UserPermissions(UserPermission.ReportPermission)]
         public ActionResult Index()
         {
             var customerId = OperationContext?.CustomerId ?? SessionFacade.CurrentCustomer.Id;

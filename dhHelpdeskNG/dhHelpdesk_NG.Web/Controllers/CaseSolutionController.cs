@@ -30,6 +30,8 @@ namespace DH.Helpdesk.Web.Controllers
     using System;
     using DH.Helpdesk.Domain.Cases;
     using System.Web;
+    using DH.Helpdesk.BusinessData.Enums.Admin.Users;
+    using DH.Helpdesk.Web.Infrastructure.Attributes;
 
     public class CaseSolutionController : UserInteractionController
     {
@@ -158,7 +160,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         #region Template 
-
+        [UserPermissions(UserPermission.CaseSolutionPermission)]
         public ActionResult Index()
         {
             //Set default
