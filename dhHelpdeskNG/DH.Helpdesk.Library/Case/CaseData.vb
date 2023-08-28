@@ -748,18 +748,12 @@ Public Class CaseData
                 ' Check when StateSecondary First Set
                 Dim dt As DateTime? = getStateSecondarySetDate(c.StateSecondary_Id, c.Id)
 
-                'If dt IsNot Nothing Then
-                Debug.WriteLine(c.Casenumber & ", " & dt)
-
-                Dim timeDifference As TimeSpan = DateTime.Now - dt
-                Dim numberOfDays As Integer = timeDifference.Days
-
+                Dim numberOfDays As Integer = (DateTime.Now - dt.Value).TotalDays
 
                 If numberOfDays = c.AutoCloseDays Then
                     col.Add(c)
 
                 End If
-                'End If
 
             Next
 
