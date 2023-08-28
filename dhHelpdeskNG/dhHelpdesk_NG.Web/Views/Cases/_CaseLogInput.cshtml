@@ -141,7 +141,7 @@
                             @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
                                 new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool(), id="sendMailToNotifyer" })
                         }
-                        <div class="lbl" id="informNotifyerSpan">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </div><br />
+                        <div class="lbl" id="informNotifyerSpan">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </div>
                         <span id="emailsToTitle" style="display: none;">
                             @Translation.ToTitleCase(@Translation.GetCoreTextTranslation("Till")):
                         </span><span id="emailsTo" style="display: none;"></span><br />

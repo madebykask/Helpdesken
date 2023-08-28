@@ -36,6 +36,13 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Helpers
             var cookie = ctx.Request.Cookies[name] ?? new HttpCookie(name, value);
             cookie.Expires = DateTime.MinValue;
             cookie.HttpOnly = true;
+
+            // Set the Secure flag if the request is made over HTTPS
+            if (ctx.Request.IsSecureConnection)
+            {
+                cookie.Secure = true;
+            }
+
             cookie.Value = value;
             ctx.Response.Cookies.Set(cookie);
         }
