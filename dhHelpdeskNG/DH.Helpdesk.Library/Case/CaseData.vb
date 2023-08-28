@@ -718,8 +718,10 @@ Public Class CaseData
                 ' Check when StateSecondary First Set
                 Dim dt As DateTime? = getStateSecondarySetDate(c.StateSecondary_Id, c.Id)
 
-                Dim timeDifference As TimeSpan = DateTime.Now - dt
-                Dim numberOfDays As Integer = timeDifference.Days
+                Dim numberOfDays As Integer = (DateTime.Now - dt.Value).TotalDays
+
+                'Dim timeDifference As TimeSpan = DateTime.Now - dt
+                'Dim numberOfDays As Integer = timeDifference.Days
 
 
                 If numberOfDays = c.ReminderDays Then
@@ -981,11 +983,7 @@ Public Class CaseData
 
             Dim dt As DataTable
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             Dim c As CCase
 
