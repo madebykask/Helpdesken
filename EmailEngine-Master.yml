@@ -58,7 +58,7 @@ steps:
   displayName: Build DH.Helpdesk.Mail2Ticket
   inputs:
     msbuildVersion: '17.0'  
-    solution: '**/dhHelpdeskNG/DH.Helpdesk.Mail2Ticket/DH.Helpdesk.EmailEngine.WinService.csproj'
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.EmailEngine.WinService/DH.Helpdesk.EmailEngine.WinService.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.EmailEngine.WinService"'
 
 - task: PublishBuildArtifacts@1
