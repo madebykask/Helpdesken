@@ -540,12 +540,20 @@ Imports System.Text.RegularExpressions
         End If
     End Function
 
-    Public Shared Function IfNullTheDefault(Of TValue As Class)(value As TValue, defaultValue As TValue) As Object  
+    Public Shared Function IfNullTheDefault(Of TValue As Class)(value As TValue, defaultValue As TValue) As Object
         If value Is Nothing Then
             Return defaultValue
         Else
             Return value
         End If
+    End Function
+
+    Public Shared Function ReplaceSingleApostrophe(ByVal self As String) As String
+        If String.IsNullOrEmpty(self) OrElse String.IsNullOrWhiteSpace(self) Then
+            Return String.Empty
+        End If
+
+        Return Regex.Replace(self, "(?<!')'(?!')", "''")
     End Function
 
 
