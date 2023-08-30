@@ -105,6 +105,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     CaseSolutionId = cs.Id,
                     Name = cs.Name,
+                    HasFinishingCauseId = cs.FinishingCause_Id.HasValue,
                     CustomerId = cs.Customer_Id,
                     CategoryId = cs.CaseSolutionCategory_Id,
                     CategoryName = cs.CaseSolutionCategory.Name,

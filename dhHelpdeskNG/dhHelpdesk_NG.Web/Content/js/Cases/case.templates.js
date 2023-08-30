@@ -706,6 +706,7 @@ var ApplyTemplate = function (data, doOverwrite) {
         }
     }
     if (!isNullOrEmpty(data.FinishingCause_Id)) {
+
         val = data.FinishingCause_Id || '';
         SetValueToBtnGroup('#divFinishingType', "#divBreadcrumbs_FinishingType", "#CaseLog_FinishingType", val, doOverwrite);
     }
