@@ -304,39 +304,51 @@
             var isPreview = ($(this).data("preview") === true);
             if ($(this).data("excel") === true) {
 
-                var iframe = document.getElementById('excelIframe');
-               
-                if (iframe)
-                {
-                    iframe.parentElement.removeChild(iframe);
-                }
+                $("#showReportLoader").show();
 
-                iframe = document.createElement('iframe');
-                iframe.id = 'excelIframe';
-                iframe.style.display = 'none';
-                document.body.appendChild(iframe);
-                
-
-                var doc = iframe.contentWindow.document;
-                doc.open();
-
-                doc.write('<form name="excelForm" action="' + showGeneratedReportUrl + '" method="post">');
-                for (var prop in getDataForParams)
-                {
-                    var val = getDataForParams[prop];
-                    if (Array.isArray(val))
-                    {
-                        val.forEach(function (v) {
-                            doc.write('<input type="text" style="display:none" name="' + prop + '" value="' + v + '"/>');
-                        });
+                fetch(showGeneratedReportUrl, {
+                    method: 'POST',
+                    body: JSON.stringify(getDataForParams),
+                    headers: {
+                        'Content-Type': 'application/json'  // specifying how we're sending the data
                     }
-                    else {
-                        doc.write('<input type="text" style="display:none" name="' + prop + '" value="' + val + '"/>');
-                    }
-                }
-                doc.write('</form>');
 
-                doc.excelForm.submit();
+                })
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error("Network response was not ok");
+                        }
+
+                        // Extract filename from the Content-Disposition header
+                        const contentDisposition = response.headers.get('Content-Disposition');
+                        let filename = 'default_filename.xlsx';  // Default filename if not found in header
+
+                        if (contentDisposition) {
+                            const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+                            if (filenameMatch && filenameMatch[1]) {
+                                filename = filenameMatch[1].replace(/['"]/g, '');  // Remove quotes if present
+                            }
+                        }
+
+                        return response.blob().then(blob => ({ blob, filename }));
+                    })
+                    .then(data => {
+                        var downloadUrl = URL.createObjectURL(data.blob);
+                        var downloadLink = document.createElement('a');
+                        downloadLink.href = downloadUrl;
+                        downloadLink.download = data.filename;
+                        document.body.appendChild(downloadLink);
+                        downloadLink.click();
+                        document.body.removeChild(downloadLink);
+
+                        // Hide the loader.
+                        $("#showReportLoader").hide();
+                    })
+                    .catch(error => {
+                        console.log("Error:", error);
+                        $("#showReportLoader").hide();
+                    });
+
             } else {
                 $("#showReportLoader").show();
                 $.ajax(
