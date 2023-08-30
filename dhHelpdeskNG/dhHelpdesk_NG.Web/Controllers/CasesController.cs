@@ -1164,6 +1164,10 @@ namespace DH.Helpdesk.Web.Controllers
                         {
                             jsRow.Add(col.name, outputFormatter.StripHTML(searchCol.StringValue));
                         }
+                        else if (searchCol.Key == "AgreedDate" || searchCol.Key == "PlanDate")
+                        {
+                            jsRow.Add(col.name, searchCol.StringValue);
+                        }
                         else
                         {
                             jsRow.Add(col.name, outputFormatter.FormatField(searchCol));
