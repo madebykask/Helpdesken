@@ -90,7 +90,7 @@ namespace DH.Helpdesk.Dal.Repositories
                      Name = cs.Name,
                      NextStepState = cs.NextStepState,
                      StateSecondaryId = cs.StateSecondary != null ? cs.StateSecondary.StateSecondaryId : 0,
-
+                     FinishingCause_Id = cs.FinishingCause_Id,
                      csc.Id,
                      csc.Property_Name,
                      csc.Values
@@ -102,7 +102,8 @@ namespace DH.Helpdesk.Dal.Repositories
                     x.CaseSolutionId,
                     x.Name,
                     x.NextStepState,
-                    x.StateSecondaryId
+                    x.StateSecondaryId,
+                    x.FinishingCause_Id
                 }, x => new CaseSolutionConditionOverview()
                 {
                     Id = x.Id,
@@ -115,7 +116,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         Name = x.Key.Name,
                         StateSecondaryId = x.Key.StateSecondaryId,
                         NextStepState = x.Key.NextStepState,
-                        Conditions = x.ToList()
+                        Conditions = x.ToList(),
+                        HasFinishingCauseId = x.Key.FinishingCause_Id != null
                     }).ToList();
 
             return res;

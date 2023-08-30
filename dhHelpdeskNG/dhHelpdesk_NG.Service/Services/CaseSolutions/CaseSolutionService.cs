@@ -406,8 +406,12 @@ namespace DH.Helpdesk.Services.Services
 
             var caseSolutionsWithConditions = CaseSolutionRepository.GetCaseSolutionsWithConditions(caseSolutionsIds);
 
+            
+
             foreach (var cs in caseSolutionsWithConditions)
             {
+
+
                 // load conditions for solutions from the loaded list (perf optimisation)
                 var solutionConditions = caseSolutionsWithConditions.FirstOrDefault(x => x.CaseSolutionId == cs.CaseSolutionId);
 

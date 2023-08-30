@@ -2078,6 +2078,7 @@ EditPage.prototype.init = function (p) {
                 isValid = self.isExtendedCaseValid(false, false);
             }
 
+
             if (isValid) {
                 $('#SelectedWorkflowStep').val(templateId);
                 LoadTemplate(templateId);

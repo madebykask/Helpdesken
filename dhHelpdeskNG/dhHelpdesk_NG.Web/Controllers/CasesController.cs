@@ -5635,6 +5635,24 @@ namespace DH.Helpdesk.Web.Controllers
                     .Select(x => x.CaseSolutionId)
                     .ToList();
 
+            if (m.ChildCaseViewModel != null)
+            {
+                var closedChildCasesCount = m.ClosedChildCasesCount;
+                var totalChildCases = m.ChildCaseViewModel.ChildCaseList.Count;
+                bool hasUnclosedChildren = closedChildCasesCount != totalChildCases;
+
+                if (hasUnclosedChildren)
+                {
+                    workflowCaseSolutionIds = customerCaseSolutions
+                        .Where(x => x.ConnectedButton == 0
+                                 && x.Status > 0
+                                 && x.HasFinishingCauseId == false)
+                        .Select(x => x.CaseSolutionId)
+                        .ToList();
+                }
+            }
+
+
 #pragma warning disable 0618
             if (m.case_.FinishingDate == null)
             {
