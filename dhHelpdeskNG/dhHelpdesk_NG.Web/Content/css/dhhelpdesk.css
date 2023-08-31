@@ -4342,15 +4342,17 @@ div.chosen-container.chosen-container-single.error {
     left: 50% !important;
     bottom: auto !important;
 }
-/*.note-editable {
-    overflow-x: hidden !important;
-}*/
+.note-editor .note-editable p {
+    line-height: 1.2;
+    margin-top: 2px !important;
+    margin-bottom: 2px !important;
+}
 .note-input{
     padding: 0 !important
 }
 
 .note-editor.note-frame {
-    margin-bottom: 5px !important;
+    margin-bottom: 0px !important;
 }
 
 .showDescriptionFlat {
