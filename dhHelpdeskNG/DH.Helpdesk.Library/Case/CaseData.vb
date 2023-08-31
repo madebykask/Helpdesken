@@ -546,7 +546,7 @@ Public Class CaseData
                             getDBStringPrefix() & "'" & Replace(objCase.InventoryNumber, "'", "") & "', " &
                             getDBStringPrefix() & "'" & Replace(objCase.InvoiceNumber, "'", "") & "', " &
                             getDBStringPrefix() & "'" & Replace(objCase.Caption, "'", "") & "', " &
-                            getDBStringPrefix() & "'" & Replace(objCase.Description, "'", "''") & "', " &
+                            getDBStringPrefix() & "'" & ReplaceSingleApostrophe(objCase.Description) & "', " &
                             getDBStringPrefix() & "'" & Replace(objCase.Miscellaneous, "'", "''") & "', " &
                             getDBStringPrefix() & "'" & Replace(objCase.Available, "'", "''") & "', " &
                             getDBStringPrefix() & "'" & Replace(objCase.ReferenceNumber, "'", "''") & "', "
