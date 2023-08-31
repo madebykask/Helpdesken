@@ -79,7 +79,7 @@ namespace DH.Helpdesk.LicenseReporter
                 mail.To.Add(recipient);
             }
 
-            using (SmtpClient smtp = new SmtpClient(smtpServer, smtpPort))
+            using (SmtpClient smtp = smtpPort == 0 ? new SmtpClient(smtpServer) : new SmtpClient(smtpServer, smtpPort))
             {
                 smtp.Send(mail);
             }
