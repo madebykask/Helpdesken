@@ -152,5 +152,17 @@ namespace DH.Helpdesk.Domain
         public bool QuickLinkWGRestriction { get; set; }
         public bool AllowMoveCaseToAnyCustomer { get; set; }
         public string BlockedEmailRecipients { get; set; }
+
+        public string EMailFolder { get; set; }
+
+        public string EMailFolderArchive { get; set; }
+
+        public bool UseEws { get; set; }
+
+        public string EwsApplicationId { get; set; }
+
+        public string EwsClientSecret { get; set; }
+
+        public string EwsTenantId { get; set; }
     }
 }
