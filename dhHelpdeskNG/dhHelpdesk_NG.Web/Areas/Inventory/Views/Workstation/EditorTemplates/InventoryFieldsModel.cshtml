@@ -7,8 +7,12 @@
         <div class="span12">
             <table class="tableform">
                 @Html.EditorFor(m => m.BarCode, "Fields/Text")
-                @*@Html.EditorFor(m => m.PurchaseDate, "Fields/Date", new { id = "purchasedate_datepicker" }) For Workstation field moved to Contract, but stores in db in inventory for legacy support*@ 
+                @*@Html.EditorFor(m => m.PurchaseDate, "Fields/Date", new { id = "purchasedate_datepicker" }) For Workstation field moved to Contract, but stores in db in inventory for legacy support*@
             </table>
         </div>
     </div>
+}
+else
+{
+    @Html.HiddenFor(m => m.BarCode.Value)
 }

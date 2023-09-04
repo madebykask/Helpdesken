@@ -98,21 +98,26 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             vmodel.Setting.CaseFiles = setting.CaseFiles;
             vmodel.Setting.Customer_Id = setting.Customer_Id;
             vmodel.Setting.LDAPPassword = setting.LDAPPassword.ToString();
-            vmodel.Setting.POP3Server = setting.POP3Server.ToString();
             vmodel.Setting.ComputerUserInfoListLocation = setting.ComputerUserInfoListLocation;
             vmodel.Setting.ModuleCase = setting.ModuleCase;
 
-            vmodel.Setting.POP3Port = setting.POP3Port;
-            vmodel.Setting.POP3UserName = setting.POP3UserName.ToString();
-            vmodel.Setting.POP3Password = setting.POP3Password.ToString();
-            vmodel.Setting.POP3DebugLevel = setting.POP3DebugLevel;
-            vmodel.Setting.MailServerProtocol = setting.MailServerProtocol;
+            //Now these settings exists in the UI, therefore disable these resetters
+            //vmodel.Setting.POP3Server = setting.POP3Server.ToString();
+            //vmodel.Setting.POP3Port = setting.POP3Port;
+            //vmodel.Setting.POP3UserName = setting.POP3UserName.ToString();
+            //vmodel.Setting.POP3Password = setting.POP3Password.ToString();
+            //vmodel.Setting.POP3DebugLevel = setting.POP3DebugLevel;
+            //vmodel.Setting.PhysicalFilePath = setting.PhysicalFilePath;
+            //vmodel.Setting.MailServerProtocol = setting.MailServerProtocol;
+
+
+
             vmodel.Setting.EMailAnswerSeparator = setting.EMailAnswerSeparator.ToString();
             vmodel.Setting.EMailSubjectPattern = setting.EMailSubjectPattern.ToString();
             vmodel.Setting.LDAPSyncType = setting.LDAPSyncType;
             vmodel.Setting.LDAPCreateOrganization = setting.LDAPCreateOrganization;
            // vmodel.Setting.IntegrationType = setting.IntegrationType;
-            vmodel.Setting.PhysicalFilePath = setting.PhysicalFilePath;
+            
             vmodel.Setting.VirtualFilePath = setting.VirtualFilePath;
             vmodel.Setting.CaseComplaintDays = setting.CaseComplaintDays;
             vmodel.Setting.FileIndexingServerName = setting.FileIndexingServerName;

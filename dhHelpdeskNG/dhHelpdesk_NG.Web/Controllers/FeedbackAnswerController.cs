@@ -97,7 +97,11 @@ namespace DH.Helpdesk.Web.Controllers
                     requestContext.HttpContext.Response.AddHeader("Content-Length", option.IconSrc.Length.ToString());
                     requestContext.HttpContext.Response.ContentType = "application/octet-stream";
                     requestContext.HttpContext.Response.BinaryWrite(option.IconSrc);
-                    requestContext.HttpContext.Response.Flush();
+
+                    if (requestContext.HttpContext.Response.IsClientConnected)
+                    {
+                        requestContext.HttpContext.Response.Flush();
+                    }
                 }
             }
         }

@@ -181,6 +181,8 @@ namespace DH.Helpdesk.Services.Services
             setting.SMSEMailDomainUserName = setting.SMSEMailDomainUserName ?? string.Empty;
             setting.XMLFileFolder = setting.XMLFileFolder ?? string.Empty;
 
+
+
             if (setting.QuickNewCaseLinkText == null)
                 setting.QuickNewCaseLinkText = "+";
             else

@@ -8405,6 +8405,97 @@ If not exists (select * from tblTextTranslation where text_id = 2143 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2143, 2, 'Automatically close after')
 GO
 
+If not exists (select * from tbltext where id = 2144)
+	insert into tbltext (id, TextString) VALUES (2144, 'Port')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2144 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2144, 2, 'Port')
+GO
+
+If not exists (select * from tbltext where id = 2145)
+	insert into tbltext (id, TextString) VALUES (2145, 'Felsökningsnivå')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2145 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2145, 2, 'Debug level')
+GO
+
+If not exists (select * from tbltext where id = 2146)
+	insert into tbltext (id, TextString) VALUES (2146, 'Fysisk sökväg')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2146 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2146, 2, 'Physical path')
+GO
+
+If not exists (select * from tbltext where id = 2147)
+	insert into tbltext (id, TextString) VALUES (2147, 'E-post sökväg')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2147 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2147, 2, 'Email path')
+GO
+
+If not exists (select * from tbltext where id = 2148)
+	insert into tbltext (id, TextString) VALUES (2148, 'E-post prefix')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2148 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2148, 2, 'Email prefix')
+GO
+
+If not exists (select * from tbltext where id = 2149)
+	insert into tbltext (id, TextString) VALUES (2149, 'E-post sökväg arkiv')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2149 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2149, 2, 'Email path archive')
+GO
+
+If not exists (select * from tbltext where id = 2150)
+	insert into tbltext (id, TextString) VALUES (2150, 'E-post server protokoll')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2150 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2150, 2, 'Email server protocol')
+GO
+
+If not exists (select * from tbltext where id = 2151)
+	insert into tbltext (id, TextString) VALUES (2151, 'Inget lösenord')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2151 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2151, 2, 'No password')
+GO
+
+If not exists (select * from tbltext where id = 2152)
+	insert into tbltext (id, TextString) VALUES (2152, 'Lösenord satt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2152 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2152, 2, 'Password set')
+GO
+
+If not exists (select * from tbltext where id = 2153)
+	insert into tbltext (id, TextString) VALUES (2153, 'Applikations Id')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2153 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2153, 2, 'Application Id')
+GO
+
+If not exists (select * from tbltext where id = 2154)
+	insert into tbltext (id, TextString) VALUES (2154, 'Hemlig nyckel')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2154 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2154, 2, 'Secret key')
+GO
+
+If not exists (select * from tbltext where id = 2155)
+	insert into tbltext (id, TextString) VALUES (2155, 'Tenant Id')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2155 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2155, 2, 'Tenant Id')
+GO
+
+If not exists (select * from tbltext where id = 2156)
+	insert into tbltext (id, TextString) VALUES (2156, 'Använd Ews')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2156 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2156, 2, 'Use Ews')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
