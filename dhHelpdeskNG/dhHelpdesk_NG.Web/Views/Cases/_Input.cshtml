@@ -2545,7 +2545,10 @@
                 $('.summernoteinternal').val($('.summernoteinternal').summernote('isEmpty') ? "" : contents);
                 var $txtInformPerformer = $('#txtInformPerformer');
                 $($txtInformPerformer).css('display', 'none');
-                if (this.value.length) {
+                var plainText = $('<div>').html(contents).text().trim(); // Strip HTML and trim whitespace
+                var isEmpty = !plainText.length; // Check if the plain text is empty
+
+                if (!isEmpty) {
 
                     $($txtInformPerformer).css('display', 'inline');
                     //Check if we should tick checkbox from hidden
@@ -2589,8 +2592,10 @@
                 $('.summernoteexternal').val($('.summernoteexternal').summernote('isEmpty') ? "" : contents);
 
                 var $initiatorEmail = $('#case__PersonsEmail')
+                var plainText = $('<div>').html(contents).text().trim(); // Strip HTML and trim whitespace
+                var isEmpty = !plainText.length; // Check if the plain text is empty
 
-                if (this.value.length) {
+                if (!isEmpty) {
 
                     $('#sendMailToNotifyer:not(:disabled)').attr('checked', 'checked');
 
@@ -2618,6 +2623,10 @@
                 }
                 else {
                     $('#sendMailToNotifyer:not(:disabled)').prop('checked', false);
+                    $("#emailsTo").css('display', 'none');
+                    $("#emailsToTitle").css('display', 'none');
+                    $('#extraEmailsInputShow').hide();
+                    $("#ccTitle").hide();
                 }
 
                 validator.element($('.summernoteexternal'));
