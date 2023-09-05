@@ -120,8 +120,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             
             vmodel.Setting.VirtualFilePath = setting.VirtualFilePath;
             vmodel.Setting.CaseComplaintDays = setting.CaseComplaintDays;
-            vmodel.Setting.FileIndexingServerName = setting.FileIndexingServerName;
-            vmodel.Setting.FileIndexingCatalogName = setting.FileIndexingCatalogName;
+            //vmodel.Setting.FileIndexingServerName = setting.FileIndexingServerName;
+            //vmodel.Setting.FileIndexingCatalogName = setting.FileIndexingCatalogName;
             vmodel.Setting.SMSEMailDomain = setting.SMSEMailDomain;
             vmodel.Setting.SMSEMailDomainPassword = setting.SMSEMailDomainPassword;
             vmodel.Setting.SMSEMailDomainUserId = setting.SMSEMailDomainUserId;
