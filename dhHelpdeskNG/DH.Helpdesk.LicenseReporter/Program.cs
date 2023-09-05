@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Configuration;
+using System.IO;
 
 namespace DH.Helpdesk.LicenseReporter
 {
@@ -79,9 +80,21 @@ namespace DH.Helpdesk.LicenseReporter
                 mail.To.Add(recipient);
             }
 
-            using (SmtpClient smtp = smtpPort == 0 ? new SmtpClient(smtpServer) : new SmtpClient(smtpServer, smtpPort))
+            try
             {
-                smtp.Send(mail);
+                using (SmtpClient smtp = smtpPort == 0 ? new SmtpClient(smtpServer) : new SmtpClient(smtpServer, smtpPort))
+                {
+                    smtp.Send(mail);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Log exception to a text file at the same location as the exe file
+                string logFilePath = AppDomain.CurrentDomain.BaseDirectory + "log.txt";
+                using (StreamWriter sw = new StreamWriter(logFilePath, true)) // true to append text
+                {
+                    sw.WriteLine($"[{DateTime.Now}] Failed to send email. Exception: {ex.ToString()}");
+                }
             }
         }
     }
