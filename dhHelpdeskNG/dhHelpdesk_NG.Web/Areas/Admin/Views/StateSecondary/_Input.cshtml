@@ -29,13 +29,22 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Alternativt namn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.StateSecondary.AlternativeStateSecondaryName, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>
                                         @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="StateSecondary.IncludeInCaseStatistics" @(Model.StateSecondary.IncludeInCaseStatistics == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.IncludeInCaseStatistics" value="0" />
-                                        &nbsp;@Translation.Get("Fortsätt räkna tid om aktuell understatus är vald", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="StateSecondary.IncludeInCaseStatistics" @(Model.StateSecondary.IncludeInCaseStatistics == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="StateSecondary.IncludeInCaseStatistics" value="0" />
+                                            &nbsp;@Translation.Get("Fortsätt räkna tid om aktuell understatus är vald", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -43,10 +52,11 @@
                                     <td>
                                         @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="StateSecondary.ResetOnExternalUpdate" @(Model.StateSecondary.ResetOnExternalUpdate == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.ResetOnExternalUpdate" value="0" />
-                                        &nbsp;@Translation.Get("Ta bort understatus när anmälaren uppdaterar ärendet", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="StateSecondary.ResetOnExternalUpdate" @(Model.StateSecondary.ResetOnExternalUpdate == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="StateSecondary.ResetOnExternalUpdate" value="0" />
+                                            &nbsp;@Translation.Get("Ta bort understatus när anmälaren uppdaterar ärendet", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -54,9 +64,10 @@
                                     <td>
                                         @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="StateSecondary.IsDefault" @(Model.StateSecondary.IsDefault == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.IsDefault" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="StateSecondary.IsDefault" @(Model.StateSecondary.IsDefault == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="StateSecondary.IsDefault" value="0" />
                                         </label>
                                     </td>
                                 </tr>
@@ -64,9 +75,10 @@
                                     <td>
                                         @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="StateSecondary.IsActive" @(Model.StateSecondary.IsActive == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.IsActive" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="StateSecondary.IsActive" @(Model.StateSecondary.IsActive == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="StateSecondary.IsActive" value="0" />
                                         </label>
                                     </td>
                                 </tr>
