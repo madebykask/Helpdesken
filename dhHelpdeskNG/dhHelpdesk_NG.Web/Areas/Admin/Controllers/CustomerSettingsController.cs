@@ -126,7 +126,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             vmodel.Setting.SMSEMailDomainPassword = setting.SMSEMailDomainPassword;
             vmodel.Setting.SMSEMailDomainUserId = setting.SMSEMailDomainUserId;
             vmodel.Setting.SMSEMailDomainUserName = setting.SMSEMailDomainUserName;
-            vmodel.Setting.EMailRegistrationMailID = setting.EMailRegistrationMailID;
+            //vmodel.Setting.EMailRegistrationMailID = setting.EMailRegistrationMailID;
             vmodel.Setting.DefaultEmailLogDestination = setting.DefaultEmailLogDestination;
             vmodel.Setting.TimeZone_offset = setting.TimeZone_offset;
             vmodel.Setting.CalcSolvedInTimeByLatestSLADate = setting.CalcSolvedInTimeByLatestSLADate;
