@@ -164,5 +164,15 @@ namespace DH.Helpdesk.Domain
         public string EwsClientSecret { get; set; }
 
         public string EwsTenantId { get; set; }
+        public string SharePointSiteId { get; set; }
+        public string SharePointUserName { get; set; }
+        public string SharePointPassword { get; set; }
+        public string SharePointFolderId { get; set; }
+        public string SharePointDriveId { get; set; }
+
+        public string SharePointSecretKey { get; set; }
+        public string SharePointClientId { get; set; }
+        public string SharePointTenantId { get; set; }
+        public string SharePointScope { get; set; }
     }
 }
