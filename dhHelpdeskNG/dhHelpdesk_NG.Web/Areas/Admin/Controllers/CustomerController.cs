@@ -381,6 +381,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 setting.IsUserFirstLastNameRepresentation = vmodel.UserFirstLastNameRepresentationId == UserFirstLastNameModes.LastFirstNameMode ? 0 : 1;
                 setting.CalcSolvedInTimeByLatestSLADate = vmodel.Setting.CalcSolvedInTimeByLatestSLADate;
                 setting.BatchEmail = vmodel.Setting.BatchEmail;
+                setting.BlockedEmailRecipients = vmodel.Setting.BlockedEmailRecipients;
+                setting.EMailAnswerSeparator = vmodel.Setting.EMailAnswerSeparator;
+                setting.EMailSubjectPattern = vmodel.Setting.EMailSubjectPattern;
             }
 
             IDictionary<string, string> errors;
@@ -880,6 +883,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ShowQuickNewCaseLink = customerToCopySettings.ShowQuickNewCaseLink,
                 QuickNewCaseLinkText = customerToCopySettings.QuickNewCaseLinkText,
                 QuickNewCaseLinkUrl = customerToCopySettings.QuickNewCaseLinkUrl,
+                EMailSubjectPattern = customerToCopySettings.EMailSubjectPattern,
+                EMailAnswerSeparator = customerToCopySettings.EMailAnswerSeparator,
+                BlockedEmailRecipients = "noreply;",
+
             };
 
             //Get CaseSettings to copy
