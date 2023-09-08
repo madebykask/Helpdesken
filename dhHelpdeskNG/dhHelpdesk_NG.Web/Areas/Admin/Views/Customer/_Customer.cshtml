@@ -247,7 +247,7 @@
         </tr>
         <tr>
             <td class="span3">
-                @Translation.Get("Blockerade adresser eller delar av en adress")
+                @Translation.Get("Blockerade adresser / del av adress")
             </td>
             <td>
                 @Html.TextBoxFor(model => model.Setting.BlockedEmailRecipients, new { maxlength = "4000", style = "width: 600px;" })
@@ -258,12 +258,12 @@
                 @Translation.Get("Svarsavgränsare")
             </td>
             <td>
-                @Html.TextBoxFor(model => model.Setting.EMailAnswerSeparator, new { maxlength = "500", style = "width: 600px;" })
+                @Html.TextAreaFor(model => model.Setting.EMailAnswerSeparator, new { maxlength = "500", style = "width: 600px;" })
             </td>
         </tr>
         <tr>
             <td class="span3">
-                @Translation.Get("Nyckelord rubrik")
+                @Translation.Get("Nyckelord koppla rubrik")
             </td>
             <td>
                 @Html.TextBoxFor(model => model.Setting.EMailSubjectPattern, new { maxlength = "500", style = "width: 600px;" })
