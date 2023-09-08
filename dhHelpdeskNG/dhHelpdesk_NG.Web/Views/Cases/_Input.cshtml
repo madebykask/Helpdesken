@@ -2767,6 +2767,7 @@
                 .replace(/\r\n|\r|\n/g, "<br>")     // Replace line breaks with <br>
                 .replace(/<o:p>&nbsp;<\/o:p>/g, "") // Remove Office-generated tags
                 .replace(/<o:p><\/o:p>/g, "")
+                .replace(/<p><\/p>/g, "<br>")
 
             textarea.summernote('code', '<div>' + text + '</div>');
         }
