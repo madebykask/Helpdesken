@@ -8523,6 +8523,14 @@ GO
 If not exists (select * from tblTextTranslation where text_id = 2160 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2160, 2, 'Headline key word')
 GO
+
+If not exists (select * from tbltext where id = 2161)
+	insert into tbltext (id, TextString) VALUES (2161, 'Skicka registreringsmail till anmälare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2161 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2161, 2, 'Send new case email to initiator')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
