@@ -686,19 +686,27 @@ namespace DH.Helpdesk.Services.Services.Concrete
                                        .ToArray();
 
             string blockedEmailsList = _settingService.GetCustomerSettings(customerId).BlockedEmailRecipients;
-            string[] blockedPatterns = blockedEmailsList.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                                                        .Select(e => e.Trim())
-                                                        .ToArray();
+            if(!string.IsNullOrEmpty(blockedEmailsList))
+            {
+                string[] blockedPatterns = blockedEmailsList.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                            .Select(e => e.Trim())
+                                            .ToArray();
 
-            // Filter out the emails based on the blocked patterns
-            string[] filteredEmails = emails.Where(email =>
-                    !blockedPatterns.Any(pattern =>
-                        email.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) != -1
-                    )
-                ).ToArray();
+                // Filter out the emails based on the blocked patterns
+                string[] filteredEmails = emails.Where(email =>
+                        !blockedPatterns.Any(pattern =>
+                            email.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) != -1
+                        )
+                    ).ToArray();
 
-            // Join the filtered emails back into a single string
-            return string.Join(",", filteredEmails);
+                // Join the filtered emails back into a single string
+                return string.Join(",", filteredEmails);
+            }
+            else
+            {
+                return emailList;
+            }
+
         }
     }
 }

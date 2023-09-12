@@ -8496,6 +8496,41 @@ If not exists (select * from tblTextTranslation where text_id = 2156 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2156, 2, 'Use Ews')
 GO
 
+If not exists (select * from tbltext where id = 2157)
+	insert into tbltext (id, TextString) VALUES (2157, 'Windows söktjänst')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2157 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2157, 2, 'Windows search service')
+GO
+
+If not exists (select * from tbltext where id = 2158)
+	insert into tbltext (id, TextString) VALUES (2158, 'Blockerade adresser / del av adress')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2158 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2158, 2, 'Blocked addresses / part of address')
+GO
+
+If not exists (select * from tbltext where id = 2159)
+	insert into tbltext (id, TextString) VALUES (2159, 'Svarsavgränsare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2159 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2159, 2, 'Answer delimiter')
+GO
+
+If not exists (select * from tbltext where id = 2160)
+	insert into tbltext (id, TextString) VALUES (2160, 'Nyckelord koppla rubrik')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2160 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2160, 2, 'Headline key word')
+GO
+
+If not exists (select * from tbltext where id = 2161)
+	insert into tbltext (id, TextString) VALUES (2161, 'Skicka registreringsmail till anmälare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2161 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2161, 2, 'Send new case email to initiator')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
