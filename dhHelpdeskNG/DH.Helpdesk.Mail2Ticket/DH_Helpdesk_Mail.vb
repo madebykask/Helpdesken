@@ -353,8 +353,8 @@ Module DH_Helpdesk_Mail
 
                         Dim ip As String = ""
 
-                        If objCustomer.UseEws Then
-                            If IsNullOrEmpty(objCustomer.EMailFolder) Then
+                        If eMailConnectionType = MailConnectionType.Ews Then
+                            If String.IsNullOrEmpty(objCustomer.EMailFolder) Then
                                 objCustomer.EMailFolder = InboxMailFolderName 'Set Default To inbox If NULL
                             End If
 
@@ -450,7 +450,7 @@ Module DH_Helpdesk_Mail
 
                         End If
 
-                        LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName & ", EWS Mode: " & objCustomer.UseEws, iPop3DebugLevel)
+                        LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName & ", EWS Mode: " & MailConnectionType.Ews, iPop3DebugLevel)
 
 
                         If eMailConnectionType = MailConnectionType.Pop3 Then

@@ -782,18 +782,11 @@
                                 <tbody id="EwsFields">
                                     <tr>
                                         <td>
-                                            @Translation.GetCoreTextTranslation("Använd Ews")
-                                        </td>
-                                        <td>
-                                            @Html.CheckBoxFor(model => model.Setting.UseEws)
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>
                                             @Translation.GetCoreTextTranslation("Applikations Id")
                                         </td>
                                         <td>
                                             @Html.TextBoxFor(model => model.Setting.EwsApplicationId, new { maxlength = "200", style = "width: 400px;" })
+                                            @Html.HiddenFor(model => model.Setting.UseEws)
                                         </td>
                                     </tr>
                                     <tr>
