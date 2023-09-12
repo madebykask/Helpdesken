@@ -110,6 +110,7 @@ Imports System.Data
     Private msIsAbout_UserCode As String
     Private mCaseSolution_Id As Integer
     Private msExtendedCaseFormId As Nullable(Of Integer)
+    Private miStatus As Integer
 
 
 #End Region
@@ -622,6 +623,7 @@ Imports System.Data
             miVerified = dr("CaseSolution_Id")
         End If
 
+        miStatus = dr("Status")
     End Sub
 
 #End Region
@@ -1566,7 +1568,14 @@ Imports System.Data
         End Set
     End Property
 
-
+    Public Property Status() As Integer
+        Get
+            Return miStatus
+        End Get
+        Set(ByVal Value As Integer)
+            miStatus = Value
+        End Set
+    End Property
 #End Region
 
 End Class

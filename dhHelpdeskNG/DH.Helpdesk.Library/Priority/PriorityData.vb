@@ -37,7 +37,7 @@ Public Class PriorityData
         Dim colPrio As New Collection
 
         Try
-            sSQL = "SELECT * FROM tblPriority WHERE (Customer_Id = " & iId & ") and ([Status] = 1)"
+            sSQL = "SELECT * FROM tblPriority WHERE (Customer_Id = " & iId & ") and ([Status] = 1) ORDER BY SolutionTime"
 
             'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
