@@ -2765,7 +2765,7 @@
         function replaceLinebreakesInTextArea(textarea) {
             var text = textarea.summernote('code')
                 .replace(/\r\n|\r|\n/g, "<br>")     // Replace line breaks with <br>
-                .replace(/<o:p>&nbsp;<\/o:p>/g, "") // Remove Office-generated tags
+                .replace(/<o:p>&nbsp;<\/o:p>/g, "<br>") // Remove Office-generated tags
                 .replace(/<o:p><\/o:p>/g, "")
                 .replace(/<p><\/p>/g, "<br>")
 
