@@ -232,6 +232,7 @@ namespace DH.Helpdesk.Services.Services
             setting.DSN_Sync = setting.DSN_Sync ?? string.Empty;
             setting.EMailAnswerSeparator = setting.EMailAnswerSeparator ?? string.Empty;
             setting.EMailSubjectPattern = setting.EMailSubjectPattern ?? string.Empty;
+            setting.BlockedEmailRecipients = setting.BlockedEmailRecipients ?? string.Empty;
             setting.LDAPBase = setting.LDAPBase ?? string.Empty;
             setting.LDAPFilter = setting.LDAPFilter ?? string.Empty;
             setting.LDAPPassword = setting.LDAPPassword ?? string.Empty;
