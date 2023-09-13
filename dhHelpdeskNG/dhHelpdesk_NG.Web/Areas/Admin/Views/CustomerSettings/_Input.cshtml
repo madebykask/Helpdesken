@@ -794,7 +794,7 @@
                                             @Translation.GetCoreTextTranslation("Hemlig nyckel")
                                         </td>
                                         <td>
-                                            @Html.PasswordFor(model => model.Setting.EwsClientSecret, new { maxlength = "200", style = "width: 400px;", placeholder = string.IsNullOrEmpty(Model.Setting.EwsClientSecret) ? "Inget lösenord" : "Lösenord satt" })
+                                            @Html.TextBoxFor(model => model.Setting.EwsClientSecret, new { maxlength = "200", style = "width: 400px;"})
                                         </td>
                                     </tr>
                                     <tr>
