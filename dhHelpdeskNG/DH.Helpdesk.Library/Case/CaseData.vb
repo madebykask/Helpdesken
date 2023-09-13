@@ -43,6 +43,14 @@ Public Class CaseData
         End Try
     End Function
 
+    Public Function getCasesByCustomer(ByVal iCustomer_Id As Integer) As Collection
+        Try
+            Return getCases(iCustomer_Id:=iCustomer_Id)
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
+
     Public Sub saveFileInfo(ByVal iCase_Id As Integer, ByVal sFileName As String)
         Dim sSQL As String = ""
 
@@ -910,14 +918,14 @@ Public Class CaseData
         End Try
     End Function
 
-    Private Function getCases(Optional ByVal iPerformerUser_Id As Integer = 0, Optional ByVal iPlanDate As Integer = 0, Optional ByVal iApproval As Integer = 0, Optional ByVal iWatchdate As Integer = 0, Optional ByVal iReminder As Integer = 0, Optional ByVal iAutoClose As Integer = 0) As Collection
+    Private Function getCases(Optional ByVal iPerformerUser_Id As Integer = 0, Optional ByVal iPlanDate As Integer = 0, Optional ByVal iApproval As Integer = 0, Optional ByVal iWatchdate As Integer = 0, Optional ByVal iReminder As Integer = 0, Optional ByVal iAutoClose As Integer = 0, Optional ByVal iCustomer_Id As Integer = 0) As Collection
         Dim colCase As New Collection
         Dim sSQL As String
         Dim dr As DataRow
 
         Try
             sSQL = "Select tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, " &
-                        "tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
+                        "tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, tblCase.Status, " &
                         "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name As CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
                         "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, " &
                         "tblUsers.FirstName As PerformerFirstName, tblUsers.SurName As PerformerSurName, tblUsers.EMail As PerformerEMail, tblUsers.Phone As PerformerPhone, tblUsers.Cellphone As PerformerCellPhone, " &
@@ -948,7 +956,9 @@ Public Class CaseData
                         "LEFT JOIN tblProductArea ON tblCase.ProductArea_Id=tblProductArea.Id " &
                         "LEFT JOIN tblDepartment ON tblCase.Department_Id=tblDepartment.Id "
 
-            If iPerformerUser_Id <> 0 Then
+            If iCustomer_Id <> 0 Then
+                sSQL = sSQL & "WHERE tblCase.FinishingDate Is NULL And tblCase.Deleted=0 and tblCase.Customer_Id=" & iCustomer_Id
+            ElseIf iPerformerUser_Id <> 0 Then
                 sSQL = sSQL & "WHERE tblCase.FinishingDate Is NULL And tblCase.Performer_user_Id=" & iPerformerUser_Id
             ElseIf iPlanDate <> 0 Then
                 sSQL = sSQL & "WHERE " & Call4DateFormat("PlanDate", giDBType) & " = " & convertDateTime(Now.Date, giDBType) &
