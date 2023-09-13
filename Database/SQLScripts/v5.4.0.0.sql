@@ -68,6 +68,24 @@ SET BlockedEmailRecipients =
 WHERE CHARINDEX(';noreply', BlockedEmailRecipients) = 0 OR BlockedEmailRecipients IS NULL;
 Go
 
+
+IF EXISTS (
+    SELECT 1
+    FROM sys.indexes
+    WHERE name = 'IX_tblFormFieldValueHistory_Case_Id'
+        AND object_id = OBJECT_ID('tblFormFieldValueHistory')
+)
+BEGIN
+    PRINT 'Index exists.'
+END
+ELSE
+BEGIN
+    CREATE INDEX IX_tblFormFieldValueHistory_Case_Id ON tblFormFieldValueHistory(Case_Id);
+END
+GO
+
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.4.0.0'
 GO
