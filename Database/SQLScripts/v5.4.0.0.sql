@@ -62,10 +62,10 @@ Go
 UPDATE [dbo].[tblSettings]
 SET BlockedEmailRecipients = 
     CASE 
-        WHEN BlockedEmailRecipients IS NULL THEN ';noreply'
+        WHEN BlockedEmailRecipients IS NULL THEN 'noreply'
         ELSE CONCAT(BlockedEmailRecipients, ';noreply')
     END
-WHERE CHARINDEX(';noreply', BlockedEmailRecipients) = 0 OR BlockedEmailRecipients IS NULL;
+WHERE CHARINDEX('noreply', BlockedEmailRecipients) = 0 OR BlockedEmailRecipients IS NULL;
 Go
 
 
