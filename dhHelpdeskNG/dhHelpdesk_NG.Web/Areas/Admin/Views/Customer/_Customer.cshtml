@@ -91,94 +91,94 @@
 <div class="formContainer">
     <table id="customerUser" class="tableform" border="0">
         <tbody>
-        @if (showCustomerUsers)
-        {
-        <tr>
-            <td class="span1">
-                @Translation.Get("Användare")
-            </td>
-            <td class="span5">
-                @Translation.Get("Tillgängliga")
-            </td>
-            <td>
-                @Translation.Get("Följande användare har rättighet till kunden")
-            </td>
-        </tr>
-            <tr>
-            <td></td>
-            <td colspan="2">
-                <table>
-                    <tr>
-                        <td>
-                            <select id="UsAvailable" multiple="multiple" name="UsAvailable" style="width: 314px; height: 350px">
-                                @foreach (var us in Model.AvUsMultiSelect.Items)
-                                {
-                                    var classType = us.IsActive ? "" : "style=color:lightgray;";
-                                    <option @classType value="@us.Id"> @us.Value </option>
-                                }
-                            </select>
-                            @* @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 314px; height: 350px" })*@
-                        </td>
-                        <td>
-                            <input type="button" value="&gt;" class="btn" id="addUs"/><br/>
-                            <input type="button" value="&lt;" class="btn" id="removeUs"/>
-                        </td>
-                        <td>
-                            <select id="UsSelected" multiple="multiple" name="UsSelected" style="width: 314px; height: 350px">
-                                @foreach (var us in Model.UsMultiSelect.Items)
-                                {
-                                    var classType = us.IsActive ? "" : "style=color:lightgray;";
-                                    <option @classType value="@us.Id"> @us.Value </option>
-                                }
-                            </select>
-                            @*@Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 314px; height: 350px" })*@
-                        </td>
-                    </tr>
-                </table>
+            @if (showCustomerUsers)
+            {
+                <tr>
+                    <td class="span1">
+                        @Translation.Get("Användare")
+                    </td>
+                    <td class="span5">
+                        @Translation.Get("Tillgängliga")
+                    </td>
+                    <td>
+                        @Translation.Get("Följande användare har rättighet till kunden")
+                    </td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td colspan="2">
+                        <table>
+                            <tr>
+                                <td>
+                                    <select id="UsAvailable" multiple="multiple" name="UsAvailable" style="width: 314px; height: 350px">
+                                        @foreach (var us in Model.AvUsMultiSelect.Items)
+                                        {
+                                            var classType = us.IsActive ? "" : "style=color:lightgray;";
+                                            <option @classType value="@us.Id"> @us.Value </option>
+                                        }
+                                    </select>
+                                    @* @Html.ListBox("UsAvailable", Model.UsAvailable, new { style = "width: 314px; height: 350px" })*@
+                                </td>
+                                <td>
+                                    <input type="button" value="&gt;" class="btn" id="addUs" /><br />
+                                    <input type="button" value="&lt;" class="btn" id="removeUs" />
+                                </td>
+                                <td>
+                                    <select id="UsSelected" multiple="multiple" name="UsSelected" style="width: 314px; height: 350px">
+                                        @foreach (var us in Model.UsMultiSelect.Items)
+                                        {
+                                            var classType = us.IsActive ? "" : "style=color:lightgray;";
+                                            <option @classType value="@us.Id"> @us.Value </option>
+                                        }
+                                    </select>
+                                    @*@Html.ListBox("UsSelected", Model.UsSelected, new { style = "width: 314px; height: 350px" })*@
+                                </td>
+                            </tr>
+                        </table>
 
-            </td>
-        </tr>
-        }
-        <tr>
-            <td style="width: 220px">
-                @Translation.Get("Användaren är förvald som handläggare på nya externa ärenden")<br/>
-            </td>
-            <td colspan="2">
-                <select data-val="true" data-val-number="The field DefaultAdministratorExternal must be a number." id="Setting_DefaultAdministratorExternal" name="Setting.DefaultAdministratorExternal">
-                    <option value=""> </option>
-                    @foreach (var us in Model.UsMultiSelect.Items)
-                    {
-                        var classType = us.IsActive ? "" : "style=color:lightgray;";
-                        <option @classType value="@us.Id" @us.Id.ValueIsSelected(Model.Setting.DefaultAdministratorExternal.ToString())> @us.Value </option>
-                    }
-                </select>
-                @*@Html.DropDownListFor(model => model.Setting.DefaultAdministratorExternal, Model.UsSelected, "", new { })*@
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 220px">
-                @Translation.Get("Användaren är förvald som handläggare på nya ärenden")
-            </td>
-            <td colspan="2">
-                <select data-val="true" data-val-number="The field DefaultAdministrator must be a number." id="Setting_DefaultAdministrator" name="Setting.DefaultAdministrator">
-                    <option value=""> </option>
-                    @foreach (var us in Model.UsMultiSelect.Items)
-                    {
-                        var classType = us.IsActive ? "" : "style=color:lightgray;";
-                        <option @classType value="@us.Id" @us.Id.ValueIsSelected(Model.Setting.DefaultAdministrator.ToString())> @us.Value </option>
-                    }
-                </select>
-                @*@Html.DropDownListFor(model => model.Setting.DefaultAdministrator, Model.UsSelected, "", new { })*@
-            </td>
-        </tr>
-        <tr>
-            <td style="width: 220px">
-                @Translation.Get("Lista användaren")
-            </td>
-            <td colspan="2">
-                @Html.DropDownListFor(m => m.UserFirstLastNameRepresentationId, Model.UserFirstLastNameRepresentationList)
-            </td>
-        </tr>
+                    </td>
+                </tr>
+            }
+            <tr>
+                <td style="width: 220px">
+                    @Translation.Get("Användaren är förvald som handläggare på nya externa ärenden")<br />
+                </td>
+                <td colspan="2">
+                    <select data-val="true" data-val-number="The field DefaultAdministratorExternal must be a number." id="Setting_DefaultAdministratorExternal" name="Setting.DefaultAdministratorExternal">
+                        <option value=""> </option>
+                        @foreach (var us in Model.UsMultiSelect.Items)
+                        {
+                            var classType = us.IsActive ? "" : "style=color:lightgray;";
+                            <option @classType value="@us.Id" @us.Id.ValueIsSelected(Model.Setting.DefaultAdministratorExternal.ToString())> @us.Value </option>
+                        }
+                    </select>
+                    @*@Html.DropDownListFor(model => model.Setting.DefaultAdministratorExternal, Model.UsSelected, "", new { })*@
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 220px">
+                    @Translation.Get("Användaren är förvald som handläggare på nya ärenden")
+                </td>
+                <td colspan="2">
+                    <select data-val="true" data-val-number="The field DefaultAdministrator must be a number." id="Setting_DefaultAdministrator" name="Setting.DefaultAdministrator">
+                        <option value=""> </option>
+                        @foreach (var us in Model.UsMultiSelect.Items)
+                        {
+                            var classType = us.IsActive ? "" : "style=color:lightgray;";
+                            <option @classType value="@us.Id" @us.Id.ValueIsSelected(Model.Setting.DefaultAdministrator.ToString())> @us.Value </option>
+                        }
+                    </select>
+                    @*@Html.DropDownListFor(model => model.Setting.DefaultAdministrator, Model.UsSelected, "", new { })*@
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 220px">
+                    @Translation.Get("Lista användaren")
+                </td>
+                <td colspan="2">
+                    @Html.DropDownListFor(m => m.UserFirstLastNameRepresentationId, Model.UserFirstLastNameRepresentationList)
+                </td>
+            </tr>
         </tbody>
     </table>
 
@@ -252,24 +252,35 @@
             <td>
                 @Translation.Get("Separera adresser med semikolon") (;)<br />
                 @Html.TextAreaFor(model => model.Setting.BlockedEmailRecipients, new { maxlength = "4000", style = "width: 600px;" })
+
             </td>
         </tr>
-        <tr>
-            <td class="span3">
-                @Translation.Get("Svarsavgränsare")
-            </td>
-            <td>
-                @Html.TextAreaFor(model => model.Setting.EMailAnswerSeparator, new { maxlength = "500", style = "width: 600px;" })
-            </td>
-        </tr>
-        <tr>
-            <td class="span3">
-                @Translation.Get("Nyckelord koppla rubrik")
-            </td>
-            <td>
-                @Html.TextBoxFor(model => model.Setting.EMailSubjectPattern, new { maxlength = "500", style = "width: 600px;" })
-            </td>
-        </tr>
+        @if (SessionFacade.CurrentUser.IsSystemAdministrator())
+        {
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Svarsavgränsare")
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.Setting.EMailAnswerSeparator, new { maxlength = "500", style = "width: 600px;" })
+
+                </td>
+            </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Nyckelord koppla rubrik")
+                </td>
+                <td>
+                    @Html.TextBoxFor(model => model.Setting.EMailSubjectPattern, new { maxlength = "500", style = "width: 600px;" })
+
+                </td>
+            </tr>
+        }
+        else
+        {
+            @Html.HiddenFor(model => model.Setting.EMailAnswerSeparator)
+            @Html.HiddenFor(model => model.Setting.EMailSubjectPattern)
+        }
         <tr>
             <td style="vertical-align: top">
                 @Translation.Get("Statistik")
