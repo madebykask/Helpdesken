@@ -250,7 +250,8 @@
                 @Translation.Get("Blockerade adresser / del av adress")
             </td>
             <td>
-                @Html.TextBoxFor(model => model.Setting.BlockedEmailRecipients, new { maxlength = "4000", style = "width: 600px;" })
+                @Translation.Get("Separera adresser med semikolon") (;)<br />
+                @Html.TextAreaFor(model => model.Setting.BlockedEmailRecipients, new { maxlength = "4000", style = "width: 600px;" })
             </td>
         </tr>
         <tr>

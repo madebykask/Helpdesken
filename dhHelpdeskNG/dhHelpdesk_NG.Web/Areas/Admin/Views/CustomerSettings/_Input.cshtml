@@ -650,9 +650,6 @@
                                         @Translation.GetCoreTextTranslation("E-post server protokoll")&nbsp;
                                     </td>
                                     <td>
-                                        @*<input type="radio" name="Setting.MailServerProtocol" @(Model.Setting.MailServerProtocol == 0 ? "checked='checked'" : "") id="Customer_Setting_MailServerProtocol0" value="0" />
-                @Translation.GetCoreTextTranslation("Pop3")
-                <br />*@
                                         <input type="radio" name="Setting.MailServerProtocol" @(Model.Setting.MailServerProtocol == 1 ? "checked='checked'" : "") id="Customer_Setting_MailServerProtocol1" value="1" />
                                         @Translation.GetCoreTextTranslation("Imap")
                                         <br />
