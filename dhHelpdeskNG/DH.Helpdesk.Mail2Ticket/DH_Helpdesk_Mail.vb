@@ -276,6 +276,8 @@ Module DH_Helpdesk_Mail
         Dim isHtml As Boolean = False
 
         Try
+
+            ' Hämta globala inställningar
             gsConnectionString = sConnectionstring
 
             ' Hämta globala inställningar
@@ -337,6 +339,7 @@ Module DH_Helpdesk_Mail
                     Dim mails As List(Of MailMessage) = Nothing
                     ' Denna try fångar exception
                     Try
+
                         ' hämta inställningar om e-post texten ska översättas till fält på ärendet
                         Dim fieldsToUpdate As Dictionary(Of String, String)
                         fieldsToUpdate = objCustomerData.GetCaseFieldsSettings(objCustomer.Id)
@@ -846,7 +849,6 @@ Module DH_Helpdesk_Mail
                                         newcaseEmailTo = sNewCaseToEmailAddress
                                     End If
                                     '#65030
-
                                     If isBlockedRecipient(newcaseEmailTo, objCustomer.BlockedEmailRecipients) = False Then
                                         If isValidRecipient(newcaseEmailTo, objCustomer.AllowedEMailRecipients) = True Then
                                             If objCustomer.EMailRegistrationMailID <> 0 And bOrder = False And (message.From.ToString() <> message.To.ToString()) Then
@@ -2621,20 +2623,28 @@ Module DH_Helpdesk_Mail
         If objErrorLogFile IsNot Nothing Then
             objErrorLogFile.WriteLine("{0}: {1}", Now(), msg)
         End If
-        SendErrorMail(msg)
+        'check if objCustomer not is null
+        If objCustomer IsNot Nothing Then
+            SendErrorMail(msg, objCustomer)
+        End If
+
     End Sub
 
-    Private Sub SendErrorMail(msg As String)
+    Private Sub SendErrorMail(msg As String, objCustomer As Customer)
         Try
-            Dim smtpServer As String = GetAppSettingValue("DefaultSmtpServer")
             Dim sConnectionstring As String = ConfigurationManager.ConnectionStrings("Helpdesk")?.ConnectionString
-            Dim toAddress As String = GetAppSettingValue("ErrorMailTo")
-            Dim fromAddress As String = GetAppSettingValue("ErrorMailFrom")
-            If (Not IsNullOrEmpty(smtpServer) And Not IsNullOrEmpty(toAddress) And Not IsNullOrEmpty(fromAddress)) Then
+            Dim objGlobalSettingsData As New GlobalSettingsData
+            MGlobal.gsConnectionString = sConnectionstring
+            Dim objGlobalSettings As GlobalSettings
+            objGlobalSettings = objGlobalSettingsData.getGlobalSettings()
+
+            Dim toAddress As String = objCustomer.ErrorMailTo
+            Dim fromAddress As String = objCustomer.HelpdeskEMail
+            If (Not IsNullOrEmpty(objGlobalSettings.SMTPServer) And Not IsNullOrEmpty(toAddress) And Not IsNullOrEmpty(fromAddress)) Then
 
                 Try
                     Dim objMail As New Mail
-                    objMail.SendErrorMail(fromAddress, toAddress, "Error in M2T", msg, sConnectionstring, smtpServer)
+                    objMail.SendErrorMail(fromAddress, toAddress, "Error in M2T", msg, sConnectionstring, objGlobalSettings.SMTPServer)
 
                 Catch ex As Exception
                     If objErrorLogFile IsNot Nothing Then
