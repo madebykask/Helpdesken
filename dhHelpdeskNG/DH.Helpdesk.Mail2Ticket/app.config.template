@@ -13,8 +13,6 @@
     <add key="LogIdentifier" value="" /> <!-- -->
     <add key="ProductAreaSeparator" value="" /> <!--separator symbol. Example: ;-->
 	<add key="DefaultSmtpServer" value="" /><!--smtp.datahalland.se -->
-	<add key="ErrorMailFrom" value="" /> <!-- testhelpdesk@dhsolutions.se -->
-	<add key="ErrorMailTo" value="" />  <!-- fredrik.landh@dhsolutions.se -->
 	<add key="MaxConnectionAttempts" value="1" />
   </appSettings>
   <connectionStrings>
