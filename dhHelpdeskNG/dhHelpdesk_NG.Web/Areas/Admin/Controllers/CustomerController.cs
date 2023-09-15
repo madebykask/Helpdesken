@@ -384,6 +384,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 setting.BlockedEmailRecipients = vmodel.Setting.BlockedEmailRecipients;
                 setting.EMailAnswerSeparator = vmodel.Setting.EMailAnswerSeparator;
                 setting.EMailSubjectPattern = vmodel.Setting.EMailSubjectPattern;
+                setting.ErrorMailTo = vmodel.Setting.ErrorMailTo;
             }
 
             IDictionary<string, string> errors;

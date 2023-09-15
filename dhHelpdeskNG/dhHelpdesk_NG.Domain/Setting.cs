@@ -174,5 +174,7 @@ namespace DH.Helpdesk.Domain
         public string SharePointClientId { get; set; }
         public string SharePointTenantId { get; set; }
         public string SharePointScope { get; set; }
+
+        public string ErrorMailTo { get; set; }
     }
 }

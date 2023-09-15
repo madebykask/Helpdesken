@@ -648,6 +648,16 @@
                                 @if (SessionFacade.CurrentUser.IsSystemAdministrator())
                                 {
                                     <tr>
+                                        <td class="span3">
+                                            @Translation.Get("Felmeddelanden skickas till")
+                                        </td>
+                                        <td>
+                                            @Translation.Get("Lämna tomt om inget fel-mejl ska skickas")<br />
+                                            @Html.TextBoxFor(model => model.Setting.ErrorMailTo, new { maxlength = "200", style = "width: 400px;" })
+
+                                        </td>
+                                    </tr>
+                                    <tr>
                                         <td>
                                             @Translation.GetCoreTextTranslation("E-post server protokoll")&nbsp;
                                         </td>

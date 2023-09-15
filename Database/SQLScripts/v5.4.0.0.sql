@@ -84,7 +84,13 @@ BEGIN
 END
 GO
 
-
+RAISERROR ('Add Column ErrorMailTo to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','ErrorMailTo') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD ErrorMailTo nvarchar(200) null
+	End
+Go
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.4.0.0'

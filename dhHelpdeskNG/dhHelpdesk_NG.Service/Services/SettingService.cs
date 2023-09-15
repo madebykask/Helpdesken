@@ -246,6 +246,7 @@ namespace DH.Helpdesk.Services.Services
             setting.SMSEMailDomainUserId = setting.SMSEMailDomainUserId ?? string.Empty;
             setting.SMSEMailDomainUserName = setting.SMSEMailDomainUserName ?? string.Empty;
             setting.XMLFileFolder = setting.XMLFileFolder ?? string.Empty;
+            setting.ErrorMailTo = setting.ErrorMailTo ?? string.Empty;
 
             if (setting.Id == 0)
             {
