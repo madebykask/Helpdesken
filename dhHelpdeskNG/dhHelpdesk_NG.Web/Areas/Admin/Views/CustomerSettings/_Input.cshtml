@@ -459,10 +459,10 @@
                         <div class="span15">
                             <table>
                                 <tr>
-                                    <td style="width:150px">
+                                    <td class="span3">
                                         @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td>
+                                    <td class="span9">
                                         <input type="radio" name="Setting.CaseWorkingGroupSource" @(Model.Setting.CaseWorkingGroupSource == 0 ? "checked='checked'" : "") id="Customer_Setting_CaseWorkingGroupSource1" value="0" />
                                         @Translation.Get("visa endast värde om användarens standarddriftgrupp (fält för andra driftgrupper visas som tomma)", Enums.TranslationSource.TextTranslation)
                                         <br />
@@ -471,7 +471,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="width:150px">
+                                    <td>
                                         @Translation.Get("Avdelning", Enums.TranslationSource.TextTranslation) -<br />
                                         @Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)
                                     </td>
@@ -612,13 +612,13 @@
                 <h4>@Translation.GetCoreTextTranslation("Mail2Ticket")</h4>
                 <div class="container">
                     <div class="row">
-                        <div class="span10">
+                        <div class="span12">
                             <table id="">
                                 <tr>
-                                    <td valign="top">
-                                        @Translation.GetCoreTextTranslation("E-post mall Nytt ärende skickas till")  <br />(Avancerad Mail2Ticket)
+                                    <td valign="top" class="span3">
+                                        @Translation.GetCoreTextTranslation("E-post mall Nytt ärende skickas till")  <br />(@Translation.GetCoreTextTranslation("Avancerad Mail2Ticket"))
                                     </td>
-                                    <td>
+                                    <td class="span9">
                                         <input type="radio" name="Setting.M2TNewCaseMailTo" @(Model.Setting.M2TNewCaseMailTo == 0 ? "checked='checked'" : "") id="Customer_Setting_M2TNewCaseMailTo0" value="0" />
                                         @Translation.GetCoreTextTranslation("Anmälare")
                                         <br />
@@ -884,22 +884,22 @@
                 <h4>@Translation.GetCoreTextTranslation("Helpdesk meny")</h4>
                 <div class="container">
                     <div class="row">
-                        <div class="span15">
+                        <div class="span12">
                             <table>
 
                                 <tr>
-                                    <td style="width:150px">
+                                    <td class="span3">
                                         @Translation.GetCoreTextTranslation("Genväg")
 
                                     </td>
-                                    <td>
+                                    <td class="span9">
                                         <input type="checkbox" name="setting.ShowQuickNewCaseLink" @(Model.Setting.ShowQuickNewCaseLink == 1 ? "checked=checked" : "") value="1" />
                                         <input type="hidden" name="setting.ShowQuickNewCaseLink" value="0" />
                                         @Translation.GetCoreTextTranslation("Visa genväg för Nytt ärende")
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="width:150px">
+                                    <td>
                                         @Translation.GetCoreTextTranslation("Text")
 
                                     </td>
@@ -908,7 +908,7 @@
                                     </td>
                                 </tr>
                                 <tr>
-                                    <td style="width:150px">
+                                    <td>
                                         @Translation.GetCoreTextTranslation("URL")
 
                                     </td>
@@ -925,20 +925,20 @@
                     <h4>@Translation.GetCoreTextTranslation("Windows söktjänst")</h4>
                     <div class="container">
                         <div class="row">
-                            <div class="span15">
+                            <div class="span12">
                                 <table>
 
                                     <tr>
-                                        <td style="width:150px">
+                                        <td class="span3">
                                             @Translation.GetCoreTextTranslation("Server")
 
                                         </td>
-                                        <td>
+                                        <td class="span9">
                                             @Html.TextBoxFor(model => model.Setting.FileIndexingServerName, new { maxlength = "200", style = "width: 400px;" })
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width:150px">
+                                        <td>
                                             @Translation.GetCoreTextTranslation("Katalog")
 
                                         </td>
@@ -953,19 +953,19 @@
                     <h4>Sharepoint</h4>
                     <div class="container">
                         <div class="row">
-                            <div class="span15">
+                            <div class="span12">
                                 <table>
 
                                     <tr>
-                                        <td style="width:150px">
+                                        <td class="span3">
                                             SharePoint SiteId
                                         </td>
-                                        <td>
+                                        <td class="span9">
                                             @Html.TextBoxFor(model => model.Setting.SharePointSiteId, new { maxlength = "200", style = "width: 400px;" })
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width:150px">
+                                        <td>
                                             SharePoint UserName
                                         </td>
                                         <td>
@@ -973,7 +973,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width:150px">
+                                        <td>
                                             SharePoint Password
                                         </td>
                                         <td>
@@ -981,7 +981,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width:150px">
+                                        <td>
                                             SharePoint ClientId
                                         </td>
                                         <td>
@@ -989,7 +989,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width:150px">
+                                        <td>
                                             SharePoint SecretKey
                                         </td>
                                         <td>
@@ -997,7 +997,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width:150px">
+                                        <td>
                                             SharePoint TenantId
                                         </td>
                                         <td>
@@ -1005,7 +1005,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width:150px">
+                                        <td>
                                             SharePoint DriveId
                                         </td>
                                         <td>
@@ -1013,7 +1013,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width:150px">
+                                        <td>
                                             SharePoint FolderId
                                         </td>
                                         <td>
@@ -1021,7 +1021,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style="width:150px">
+                                        <td>    
                                             SharePoint Scope
                                         </td>
                                         <td>
