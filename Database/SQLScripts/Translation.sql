@@ -8538,6 +8538,20 @@ If not exists (select * from tblTextTranslation where text_id = 2162 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2162, 2, 'Advanced Mail2Ticket')
 GO
 
+If not exists (select * from tbltext where id = 2163)
+	insert into tbltext (id, TextString) VALUES (2163, 'Felmeddelanden skickas till')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2163 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2163, 2, 'Send error message to')
+GO
+
+If not exists (select * from tbltext where id = 2164)
+	insert into tbltext (id, TextString) VALUES (2164, 'Lämna tomt om inget fel-mejl ska skickas')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2164 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2164, 2, 'Leave blank if no alert should be sent')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
