@@ -461,6 +461,8 @@ Module DH_Helpdesk_Schedule
                     Dim objMail As New Mail
                     Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
+                    objLogFile.WriteLine(Now() & ", caseReminder, Case:" & objCase.Casenumber.ToString & ", to: " & objCase.Persons_EMail)
+
                     objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, SharedFunctions.EMailType.EMailReminderNotifier, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                 End If
             End If
