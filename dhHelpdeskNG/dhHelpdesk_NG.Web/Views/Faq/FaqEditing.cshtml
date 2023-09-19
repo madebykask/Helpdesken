@@ -4,255 +4,256 @@
 @using DH.Helpdesk.Web.Infrastructure.Extensions
 @using DH.Helpdesk.Web.Infrastructure.Extensions.HtmlHelperExtensions
 @model DH.Helpdesk.Web.Models.Faq.Output.EditingFaqModel
-           
+
 
 
 <input type="hidden" name="Id" value="@Model.Id" />
- @Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
- @Html.HiddenFor(m => m.ShowDetails)
+@Html.Hidden("CurLanguageId", SessionFacade.CurrentLanguageId)
+@Html.HiddenFor(m => m.ShowDetails)
 
 <div class="content">
-<div class="container">
-<ul class="nav nav-tabs">
-    <li class="active">
-        <a href="#fragment-1">@Translation.GetCoreTextTranslation("FAQ")</a>
-    </li>
-</ul>
-<div class="tab-content">
-<div class="tab-pane tab-pane-border active" id="fragment-1">
-<div class="container">
-    <input type="hidden" id="FAQKey" name="FAQKey" value="@Model.Id"/>
-    <input type="hidden" id="FAQFileNames" name="FAQFileNames" value="@ViewData["FN"]"/>
+    <div class="container">
+        <ul class="nav nav-tabs">
+            <li class="active">
+                <a href="#fragment-1">@Translation.GetCoreTextTranslation("FAQ")</a>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <div class="tab-pane tab-pane-border active" id="fragment-1">
+                <div class="container">
+                    <input type="hidden" id="FAQKey" name="FAQKey" value="@Model.Id" />
+                    <input type="hidden" id="FAQFileNames" name="FAQFileNames" value="@ViewData["FN"]" />
 
-    <h4>@Translation.GetCoreTextTranslation("Allmänt")</h4>
-    <div class="row">
-        <div class="span12">
-            <table class="tableform">
-                @if (!Model.IsNew)
-                {
-                    <tr>
-                        <td class="span3">
-                            @Translation.GetCoreTextTranslation("Språk")
-                        </td>
-                        <td class="span9">
-                            @Html.DropDownListFor(model => model.LanguageId, Model.Languages, new {id = "languageList"})
-                        </td>
-                    </tr>
-                }
-                <tr>
-                    <td class="span3">
-                        @Translation.GetCoreTextTranslation("Kategori") <span class="mandatorystar">*</span>
-                    </td>
-                    <td class="span9" style="">
-                        @if (Model.LanguageId == LanguageIds.Swedish)
-                        {
-                            @Html.DropDownWithSubmenus("category_dropdown", "CategoryId", false, Model.Category)
-                        }
-                        else
-                        {
-                            @Html.DropDownWithSubmenus("category_dropdown", "CategoryId", false, Model.Category, true)
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Translation.GetCoreTextTranslation("Fråga")
-                        <span class="mandatorystar">*</span>
-                    </td>   
-                    <td>
-                        @Html.TextBoxFor(m => m.Question)
-                        @Html.ValidationMessageFor(m => m.Question)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Translation.GetCoreTextTranslation("Svar")
-                        <span class="mandatorystar">*</span>
-                    </td>
-                    <td class="pb5">
-                        @Html.TextAreaFor(m => m.Answer, new { style = "height:250px;", @class = "richtexteditor" , id="faqAnswer"})
-@*                        @Html.TextAreaFor(m => m.Answer, new {style = "height: 250px;"})*@
-                        @Html.ValidationMessageFor(m => m.Answer)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Translation.GetCoreTextTranslation("Internt svar")
-                    </td>
-                    <td>
-                        @Html.TextAreaFor(m => m.InternalAnswer, new {style = "height: 250px;",id = "faqInternalAnswer" })
-                        @Html.ValidationMessageFor(m => m.InternalAnswer)
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Translation.GetCoreTextTranslation("Bifogad fil")
-                    </td>
-                    <td>
-                        @*<table id="files_table">
-                                            <tbody>
-                                                @if (!this.Model.Files.Any())
-                                                {
-                                                    <div id="no_uploaded_files_label">
-                                                      
-                                                    </div>
-                                                }
-                                                else
-                                                {
-                                                    for (var i = 0; i < this.Model.Files.Count; i++)
+                    <h4>@Translation.GetCoreTextTranslation("Allmänt")</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                @if (!Model.IsNew)
+                                {
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Språk")
+                                        </td>
+                                        <td class="span9">
+                                            @Html.DropDownListFor(model => model.LanguageId, Model.Languages, new { id = "languageList" })
+                                        </td>
+                                    </tr>
+                                }
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.GetCoreTextTranslation("Kategori") <span class="mandatorystar">*</span>
+                                    </td>
+                                    <td class="span9" style="">
+                                        @if (Model.LanguageId == LanguageIds.Swedish)
+                                        {
+                                            @Html.DropDownWithSubmenus("category_dropdown", "CategoryId", false, Model.Category)
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDownWithSubmenus("category_dropdown", "CategoryId", false, Model.Category, true)
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Fråga")
+                                        <span class="mandatorystar">*</span>
+                                    </td>
+                                    <td>
+                                        @Html.TextBoxFor(m => m.Question)
+                                        @Html.ValidationMessageFor(m => m.Question)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Svar")
+                                        <span class="mandatorystar">*</span>
+                                    </td>
+                                    <td class="pb5">
+                                        @Html.TextAreaFor(m => m.Answer, new { style = "height:250px;", @class = "richtexteditor", id = "faqAnswer" })
+                                        @*                        @Html.TextAreaFor(m => m.Answer, new {style = "height: 250px;"})*@
+                                        @Html.ValidationMessageFor(m => m.Answer)
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Internt svar")
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(m => m.InternalAnswer, new { style = "height: 250px;", id = "faqInternalAnswer" })
+                                        @Html.ValidationMessageFor(m => m.InternalAnswer)
+                                        @*<div id="charCount" style="color:red"></div>*@
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Bifogad fil")
+                                    </td>
+                                    <td>
+                                        @*<table id="files_table">
+                                                <tbody>
+                                                    @if (!this.Model.Files.Any())
                                                     {
-                                                        var file = this.Model.Files[i];
+                                                        <div id="no_uploaded_files_label">
 
-                                                        <tr>
-                                                            <td>
-                                                                <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "faqId", this.Model.Id }, { "fileName", file } })">@file</a>
-                                                            </td>
-                                                            <td>
-                                                                <a id="@string.Format("delete_file_button_{0}", i)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
-                                                            </td>
-                                                        </tr>
+                                                        </div>
                                                     }
-                                                }
-                                            </tbody>
-                                        </table>*@
+                                                    else
+                                                    {
+                                                        for (var i = 0; i < this.Model.Files.Count; i++)
+                                                        {
+                                                            var file = this.Model.Files[i];
 
-                        @*<a href="#upload_files_popup" role="button" class="btn" data-toggle="modal" id ="b1">@Translation.Get("Upload", Enums.TranslationSource.TextTranslation)</a>
+                                                            <tr>
+                                                                <td>
+                                                                    <a href="@Url.Action("DownloadFile", new RouteValueDictionary { { "faqId", this.Model.Id }, { "fileName", file } })">@file</a>
+                                                                </td>
+                                                                <td>
+                                                                    <a id="@string.Format("delete_file_button_{0}", i)" class="btn">@Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation)</a>
+                                                                </td>
+                                                            </tr>
+                                                        }
+                                                    }
+                                                </tbody>
+                                            </table>*@
 
-                                        <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
-                                            <div class="modal-header">
-                                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                                                <h3>&nbsp;</h3>
+                                        @*<a href="#upload_files_popup" role="button" class="btn" data-toggle="modal" id ="b1">@Translation.Get("Upload", Enums.TranslationSource.TextTranslation)</a>
+
+                                            <div id="upload_files_popup" role="dialog" class="modal hide fade" aria-labelledby="myModalLabel" aria-hidden="true">
+                                                <div class="modal-header">
+                                                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                                                    <h3>&nbsp;</h3>
+                                                </div>
+                                                <div class="modal-body">
+                                                    <div id="file_uploader"></div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="refreshFileList()">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
+                                                </div>
                                             </div>
-                                            <div class="modal-body">
-                                                <div id="file_uploader"></div>                                                
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button class="btn" data-dismiss="modal" aria-hidden="true" onclick="refreshFileList()">@Translation.Get("Stäng", Enums.TranslationSource.TextTranslation)</button>
-                                            </div>
-                                        </div>
                                         *@
-                        @if (Model.LanguageId == LanguageIds.Swedish)
-                        {
-                            <a href="#upload_FAQfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.GetCoreTextTranslation("Lägg till")</a>
+                                        @if (Model.LanguageId == LanguageIds.Swedish)
+                                        {
+                                            <a href="#upload_FAQfiles_popup" role="button" class="btn" data-toggle="modal">@Translation.GetCoreTextTranslation("Lägg till")</a>
 
-                            <div id="divFAQFiles">
-                                @Html.Partial("_FAQFiles", Model.FAQLFile)
-                            </div>
-                        }
-                        else
-                        {
-                            <a class="btn" data-toggle="modal" disabled role="button">@Translation.GetCoreTextTranslation("Lägg till")</a>
-                            <div id="divFAQFiles">
-                                @Html.Partial("_FAQFiles", Model.FAQLFile)
-                            </div>
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Translation.GetCoreTextTranslation("URL")
-                    </td>
-                    <td>
-                        @if (Model.LanguageId == LanguageIds.Swedish)
-                        {
-                            @Html.TextBoxFor(m => m.UrlOne)
-                            @Html.ValidationMessageFor(m => m.UrlOne)
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(m => m.UrlOne, new {@readonly = "readonly"})
-                            @Html.ValidationMessageFor(m => m.UrlOne)
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        @Translation.GetCoreTextTranslation("URL")
-                    </td>
-                    <td>
-                        @if (Model.LanguageId == LanguageIds.Swedish)
-                        {
-                            @Html.TextBoxFor(m => m.UrlTwo)
-                            @Html.ValidationMessageFor(m => m.UrlTwo)
-                        }
-                        else
-                        {
-                            @Html.TextBoxFor(m => m.UrlTwo, new {@readonly = "readonly"})
-                            @Html.ValidationMessageFor(m => m.UrlTwo)
-                        }
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>
+                                            <div id="divFAQFiles">
+                                                @Html.Partial("_FAQFiles", Model.FAQLFile)
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <a class="btn" data-toggle="modal" disabled role="button">@Translation.GetCoreTextTranslation("Lägg till")</a>
+                                            <div id="divFAQFiles">
+                                                @Html.Partial("_FAQFiles", Model.FAQLFile)
+                                            </div>
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("URL")
+                                    </td>
+                                    <td>
+                                        @if (Model.LanguageId == LanguageIds.Swedish)
+                                        {
+                                            @Html.TextBoxFor(m => m.UrlOne)
+                                            @Html.ValidationMessageFor(m => m.UrlOne)
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.UrlOne, new { @readonly = "readonly" })
+                                            @Html.ValidationMessageFor(m => m.UrlOne)
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("URL")
+                                    </td>
+                                    <td>
+                                        @if (Model.LanguageId == LanguageIds.Swedish)
+                                        {
+                                            @Html.TextBoxFor(m => m.UrlTwo)
+                                            @Html.ValidationMessageFor(m => m.UrlTwo)
+                                        }
+                                        else
+                                        {
+                                            @Html.TextBoxFor(m => m.UrlTwo, new { @readonly = "readonly" })
+                                            @Html.ValidationMessageFor(m => m.UrlTwo)
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
 
-<div class="container">
-    <h4>@Translation.GetCoreTextTranslation("Säkerhet")</h4>
-    <div class="row">
-        <div class="span12">
-            <table>
-                <tr>
-                    <td class="span3">
-                        @Translation.GetCoreTextTranslation("Driftgrupp")
-                    </td>
-                    <td>
-                        @if (Model.LanguageId == LanguageIds.Swedish)
-                        {
-                            @Html.DropDown("working_groups_dropdown", "WorkingGroupId", true, this.Model.WorkingGroup)
-                        }
-                        else
-                        {
-                            @Html.DropDown("working_groups_dropdown", "WorkingGroupId", true, this.Model.WorkingGroup, false, true)
-                        }
-                    </td>
-                </tr>
-            </table>
+                <div class="container">
+                    <h4>@Translation.GetCoreTextTranslation("Säkerhet")</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table>
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.GetCoreTextTranslation("Driftgrupp")
+                                    </td>
+                                    <td>
+                                        @if (Model.LanguageId == LanguageIds.Swedish)
+                                        {
+                                            @Html.DropDown("working_groups_dropdown", "WorkingGroupId", true, this.Model.WorkingGroup)
+                                        }
+                                        else
+                                        {
+                                            @Html.DropDown("working_groups_dropdown", "WorkingGroupId", true, this.Model.WorkingGroup, false, true)
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <h4>@Translation.GetCoreTextTranslation("Visa")</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table>
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.GetCoreTextTranslation("Visa på självservice")
+                                    </td>
+                                    <td>
+                                        @if (Model.LanguageId == LanguageIds.Swedish)
+                                        {
+                                            @Html.CheckBox("InformationIsAvailableForNotifiers", this.Model.InformationIsAvailableForNotifiers, new { @class = "switchcheckbox" })
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBox("InformationIsAvailableForNotifiers", this.Model.InformationIsAvailableForNotifiers, new { @class = "switchcheckbox", disabled = "disabled" })
+                                        }
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.GetCoreTextTranslation("Visa på startsidan")
+                                    </td>
+                                    <td>
+                                        @if (Model.LanguageId == LanguageIds.Swedish)
+                                        {
+                                            @Html.CheckBox("ShowOnStartPage", this.Model.ShowOnStartPage, new { @class = "switchcheckbox" })
+                                        }
+                                        else
+                                        {
+                                            @Html.CheckBox("ShowOnStartPage", this.Model.ShowOnStartPage, new { @class = "switchcheckbox", disabled = "disabled" })
+                                        }
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<div class="container">
-    <h4>@Translation.GetCoreTextTranslation("Visa")</h4>
-    <div class="row">
-        <div class="span12">
-            <table>
-                <tr>
-                    <td class="span3">
-                        @Translation.GetCoreTextTranslation("Visa på självservice")
-                    </td>
-                    <td>
-                        @if (Model.LanguageId == LanguageIds.Swedish)
-                        {
-                            @Html.CheckBox("InformationIsAvailableForNotifiers", this.Model.InformationIsAvailableForNotifiers, new {@class = "switchcheckbox"})
-                        }
-                        else
-                        {
-                            @Html.CheckBox("InformationIsAvailableForNotifiers", this.Model.InformationIsAvailableForNotifiers, new {@class = "switchcheckbox", disabled = "disabled"})
-                        }
-                    </td>
-                </tr>
-                <tr>
-                    <td class="span3">
-                        @Translation.GetCoreTextTranslation("Visa på startsidan")
-                    </td>
-                    <td>
-                        @if (Model.LanguageId == LanguageIds.Swedish)
-                        {
-                            @Html.CheckBox("ShowOnStartPage", this.Model.ShowOnStartPage, new {@class = "switchcheckbox"})
-                        }
-                        else
-                        {
-                            @Html.CheckBox("ShowOnStartPage", this.Model.ShowOnStartPage, new {@class = "switchcheckbox", disabled = "disabled"})
-                        }
-                    </td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>
-</div>
-</div>
-</div>
 </div>
 
 <script type="text/javascript">
@@ -263,4 +264,6 @@
             window.location.href = '@Url.Action("EditFaq","Faq")?id=' + @Model.Id.ToString(CultureInfo.InvariantCulture) + "&languageId=" + selectedItem;
         });
     });
+
+
 </script>

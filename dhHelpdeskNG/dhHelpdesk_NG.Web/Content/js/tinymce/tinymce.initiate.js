@@ -5,12 +5,40 @@ window.tinymceDefaultOptions = {
     initOnPageLoad: true,
     selector: "textarea.richtexteditor",
     maxLength: 2000,
-    maxLengthFaq: 4000,
+    maxLengthFaq: 3000,
     showMaxLimitErrorMessage: true, //custom
     maxLimitErrorMessage: '', //custom
 
     setup: function (editor) {
+        // Handle pasted content and prevent overflows
+        editor.on('BeforeSetContent', function (e) {
+            var editorId = editor.id;
+            var maxLength = this.settings.maxLength;
+            var maxLengthFaq = this.settings.maxLengthFaq;
 
+            var targetLength = (editorId !== "faqAnswer") ? maxLength : maxLengthFaq;
+
+            if (e.content.length > targetLength) {
+                e.content = e.content.substring(0, targetLength);
+            }
+        });
+
+        // Handle keyup event for manually typed content
+        editor.on('keyup', function (e) {
+            var editorId = editor.id;
+            var content = this.getContent();
+            var maxLength = this.settings.maxLength;
+            var maxLengthFaq = this.settings.maxLengthFaq;
+
+            if (editorId !== "faqAnswer" && content.length > maxLength) {
+                content = content.substring(0, maxLength);
+                this.setContent(content);
+            } else if (content.length > maxLengthFaq) {
+                content = content.substring(0, maxLengthFaq);
+                this.setContent(content);
+
+            }
+        });
         // on text change handler
         editor.on('change', function (e) {
             //save to hidden input 
@@ -20,24 +48,16 @@ window.tinymceDefaultOptions = {
             var editorId = editor.id;
             var content = this.getContent();
             //strip all html tags
-            // var regex = /(<([^>]+)>)/ig; 
+            // var regex = /(<([^>]+)>)/ig;
             // content = content.replace(regex, "");
             var maxLength = this.settings.maxLength;
             var maxLengthFaq = this.settings.maxLengthFaq;
-            if (editorId != "faqAnswer") {
+            if (editorId !== "faqAnswer") {
                 if (content.length > maxLength) {
+
                     if (this.settings.showMaxLimitErrorMessage) {
                         var msg = this.settings.maxLimitErrorMessage ||
                             'The text is too long. Field has limitation of ' + this.settings.maxLength + ' characters.';
-                        alert(msg);
-                    }
-                }
-            }
-            else {
-                if (content.length > maxLengthFaq) {
-                    if (this.settings.showMaxLimitErrorMessage) {
-                        var msg = this.settings.maxLimitErrorMessage ||
-                            'The text is too long. Field has limitation of ' + this.settings.maxLengthFaq + ' characters.';
                         alert(msg);
                     }
                 }
