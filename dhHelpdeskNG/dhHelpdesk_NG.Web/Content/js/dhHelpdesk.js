@@ -758,36 +758,41 @@ $(".chosen-single-select:not(.custom)").chosen({
 //}
 
 function getObjectPosInView(element) {
-    var fixedArea = 90;
-    var pageSize = $(window).height() - fixedArea;
-    var scrollPos = $(window).scrollTop();
-    var elementToTop = $(element).offset().top - scrollPos - fixedArea;
-    var elementToDown = pageSize - elementToTop;
-    return { ToTop: elementToTop, ToDown: elementToDown };
+    var fixedArea = 0;
+    var elementToTop = $(element).offset().top - $(window).scrollTop();
+    var elementToDown = $(window).height() - elementToTop - fixedArea;
+
+    if (elementToTop < elementToDown) {
+        maxDropdownHeight = elementToDown - 50;
+    } else {
+        maxDropdownHeight = elementToTop;
+    }
+
+    return { ToTop: elementToTop, ToDown: elementToDown, MaxDropdownHeight: maxDropdownHeight };
 }
 
 function updateDropdownPosition(element) {
     var objPos = getObjectPosInView(element);
-    if (objPos.ToTop < objPos.ToDown) {
-        $('.dropdown-menu.subddMenu').css('max-height', objPos.ToDown - 50 + 'px');
-    } else {
-        $('.dropdown-menu.subddMenu').css('max-height', objPos.ToTop + 'px');
-    }
+
+    $('.dropdown-menu.subddMenu').css('max-height', objPos.MaxDropdownHeight + 'px');
 }
 
 function dynamicDropDownBehaviorOnMouseMove(target) {
     var target$ = $(target);
-    if (target$ != undefined && target$.hasClass('DynamicDropDown_Up') && target$.index(0) !== -1) {
+    var subMenu$ = target$.children('ul');
+
+    if (target$ && target$.hasClass('DynamicDropDown_Up')) {
         var objPos = getObjectPosInView(target$[0]);
-        var subMenu$ = $(target$[0]).children('ul');
         var targetPos = target$[0].getBoundingClientRect();
+
+        var dropdownTopPosition = $(window).height() - objPos.ToDown;
 
         subMenu$.css({
             bottom: 'auto',
             position: 'fixed',
-            top: $(window).height() - objPos.ToDown + 'px',
+            top: dropdownTopPosition + 'px',
             left: targetPos.left + target$.width() + 'px',
-            'max-height': $(window).innerHeight() - objPos.ToDown + 'px'
+            'max-height': objPos.MaxDropdownHeight + 'px'
         });
 
 
