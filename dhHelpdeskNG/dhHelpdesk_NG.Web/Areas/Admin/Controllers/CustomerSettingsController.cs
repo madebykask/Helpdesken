@@ -112,8 +112,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
 
 
-            vmodel.Setting.EMailAnswerSeparator = setting.EMailAnswerSeparator.ToString();
-            vmodel.Setting.EMailSubjectPattern = setting.EMailSubjectPattern.ToString();
+            //vmodel.Setting.EMailAnswerSeparator = setting.EMailAnswerSeparator.ToString();
+            //vmodel.Setting.EMailSubjectPattern = setting.EMailSubjectPattern.ToString();
             vmodel.Setting.LDAPSyncType = setting.LDAPSyncType;
             vmodel.Setting.LDAPCreateOrganization = setting.LDAPCreateOrganization;
            // vmodel.Setting.IntegrationType = setting.IntegrationType;

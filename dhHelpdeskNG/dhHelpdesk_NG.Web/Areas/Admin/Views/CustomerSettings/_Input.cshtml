@@ -7,7 +7,9 @@
     var passChangeError = Translation.Get("De lösenord du angav stämmer inte överens med varandra. Försök igen", Enums.TranslationSource.TextTranslation);
 }
 
-
+@Html.HiddenFor(model => model.Setting.EMailAnswerSeparator)
+@Html.HiddenFor(model => model.Setting.BlockedEmailRecipients)
+@Html.HiddenFor(model => model.Setting.EMailSubjectPattern)
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
@@ -314,10 +316,10 @@
                                     </td>
                                     <td>
                                         @*<label class="checkbox hidden">
-                                    <input type="checkbox" name="setting.ModuleExtendedCase" @(Model.Setting.ModuleExtendedCase == 1 ? "checked=checked" : "") value="1" />
-                                    <input type="hidden" name="setting.ModuleExtendedCase" value="0" />
-                                    &nbsp;@Translation.Get("Extended Case", Enums.TranslationSource.TextTranslation)
-                                </label>*@
+                                                <input type="checkbox" name="setting.ModuleExtendedCase" @(Model.Setting.ModuleExtendedCase == 1 ? "checked=checked" : "") value="1" />
+                                                <input type="hidden" name="setting.ModuleExtendedCase" value="0" />
+                                                &nbsp;@Translation.Get("Extended Case", Enums.TranslationSource.TextTranslation)
+                                            </label>*@
                                         @*TODO: this is hidden for now, add above code when customer should be able to decide this /TAN*@
                                         <input type="hidden" name="setting.ModuleExtendedCase" value="@Model.Setting.ModuleExtendedCase" />
                                     </td>
@@ -653,7 +655,7 @@
                                         </td>
                                         <td>
                                             @Translation.Get("Lämna tomt om inget fel-mejl ska skickas")<br />
-                                            @Html.TextBoxFor(model => model.Setting.ErrorMailTo, new { maxlength = "200", style = "width: 400px;" })
+                                            @Html.TextBoxFor(model => model.Setting.ErrorMailTo, new { maxlength = "200", style = "width: 400px;", autocomplete = "off" })
 
                                         </td>
                                     </tr>
@@ -671,59 +673,7 @@
                                         </td>
                                     </tr>
 
-
-                                    <tbody id="Pop3Fields">
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("Server")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3Server, new { maxlength = "50", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("Användarnamn")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3UserName, new { maxlength = "50", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("Lösenord")
-                                            </td>
-                                            <td>
-                                                @Html.PasswordFor(model => model.Setting.POP3Password, new { maxlength = "40", style = "width: 400px;", placeholder = string.IsNullOrEmpty(Model.Setting.POP3Password) ? "Inget lösenord" : "Lösenord satt" })
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("Port")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3Port, new { @type = "number", pattern = @"\d*", maxlength = "100", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("Felsökningsnivå")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3DebugLevel, new { @type = "number", pattern = @"\d*", maxlength = "100", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("E-post prefix")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3EMailPrefix, new { maxlength = "20", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
-                                    </tbody>
-
-                                    <tbody id="ImapFields">
+                                    <tbody>
                                         <tr>
                                             <td>
                                                 @Translation.GetCoreTextTranslation("E-post sökväg")
@@ -761,7 +711,7 @@
                                                 @Translation.GetCoreTextTranslation("Lösenord")
                                             </td>
                                             <td>
-                                                @Html.PasswordFor(model => model.Setting.POP3Password, new { maxlength = "40", style = "width: 400px;", placeholder = string.IsNullOrEmpty(Model.Setting.POP3Password) ? "Inget lösenord" : "Lösenord satt" })
+                                                @Html.TextBoxFor(model => model.Setting.POP3Password, new { maxlength = "40", style = "width: 400px;" })
                                             </td>
                                         </tr>
                                         <tr>
@@ -769,7 +719,7 @@
                                                 @Translation.GetCoreTextTranslation("Port")
                                             </td>
                                             <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3Port, new { @type = "number", pattern = @"\d*", maxlength = "100", style = "width: 400px;" })
+                                                @Html.TextBoxFor(model => model.Setting.POP3Port, new { maxlength = "100", style = "width: 400px;" })
                                             </td>
                                         </tr>
                                         <tr>
@@ -777,7 +727,7 @@
                                                 @Translation.GetCoreTextTranslation("Felsökningsnivå")
                                             </td>
                                             <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3DebugLevel, new { @type = "number", pattern = @"\d*", maxlength = "100", style = "width: 400px;" })
+                                                @Html.TextBoxFor(model => model.Setting.POP3DebugLevel, new { maxlength = "100", style = "width: 400px;" })
                                             </td>
                                         </tr>
                                         <tr>
@@ -788,11 +738,19 @@
                                                 @Html.TextBoxFor(model => model.Setting.POP3EMailPrefix, new { maxlength = "20", style = "width: 400px;" })
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td>
+                                                @Translation.GetCoreTextTranslation("Fysisk sökväg") (@Translation.GetCoreTextTranslation("Bilagor"))
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.Setting.PhysicalFilePath, new { maxlength = "100", style = "width: 400px;" })
+                                            </td>
+                                        </tr>
                                     </tbody>
                                     <tbody id="EwsFields">
                                         <tr>
                                             <td>
-                                                @Translation.GetCoreTextTranslation("Applikations Id")
+                                                Ews Application Id
                                             </td>
                                             <td>
                                                 @Html.TextBoxFor(model => model.Setting.EwsApplicationId, new { maxlength = "200", style = "width: 400px;" })
@@ -801,7 +759,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                @Translation.GetCoreTextTranslation("Hemlig nyckel")
+                                                Ews Client Secret
                                             </td>
                                             <td>
                                                 @Html.TextBoxFor(model => model.Setting.EwsClientSecret, new { maxlength = "200", style = "width: 400px;" })
@@ -809,58 +767,10 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                @Translation.GetCoreTextTranslation("Tenant Id")
+                                                Ews Tenant Id
                                             </td>
                                             <td>
                                                 @Html.TextBoxFor(model => model.Setting.EwsTenantId, new { maxlength = "200", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("E-post sökväg")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.EMailFolder, new { maxlength = "50", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("E-post sökväg arkiv")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.EMailFolderArchive, new { maxlength = "50", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("Användarnamn")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3UserName, new { maxlength = "50", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("Port")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3Port, new { @type = "number", pattern = @"\d*", maxlength = "100", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("Felsökningsnivå")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3DebugLevel, new { @type = "number", pattern = @"\d*", maxlength = "100", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("Fysisk sökväg")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.PhysicalFilePath, new { maxlength = "100", style = "width: 400px;" })
                                             </td>
                                         </tr>
 
@@ -885,6 +795,7 @@
                                     @Html.HiddenFor(model => model.Setting.PhysicalFilePath)
                                     @Html.HiddenFor(model => model.Setting.UseEws)
                                     @Html.HiddenFor(model => model.Setting.ErrorMailTo)
+
                                 }
 
                             </table>
@@ -953,7 +864,7 @@
 
                                         </td>
                                         <td>
-                                            @Html.TextBoxFor(model => model.Setting.FileIndexingCatalogName, new { maxlength = "200", style = "width: 400px;" })
+                                            @Html.TextAreaFor(model => model.Setting.FileIndexingCatalogName, new { maxlength = "200", style = "width: 400px;" })
                                         </td>
                                     </tr>
                                 </table>
@@ -1031,7 +942,7 @@
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td>    
+                                        <td>
                                             SharePoint Scope
                                         </td>
                                         <td>
@@ -1155,15 +1066,15 @@
 
         }
     });
- 
-    
+
+
 
     $(".CSVSync").hide();
 
     ShowRelatedFields();
 
     function ShowRelatedFields()
-    {                          
+    {
         if (document.getElementById('Customer_Setting_IntegrationType2').checked)
         {
             $(".CSVSync").show();
@@ -1172,8 +1083,8 @@
         else {
             $(".customerSync").show();
             $(".CSVSync").hide();
-        }       
-    }      
+        }
+    }
 
 
 
@@ -1188,23 +1099,14 @@
 
         function togglePop3Fields() {
 
+            //if ($("#Customer_Setting_MailServerProtocol1[value='1']").is(":checked")) {
+            //    // Show the tbody containing fields
+            //    $("#ImapFields").show();
+            //} else {
+            //    // Hide the tbody containing fields
+            //    $("#ImapFields").hide();
 
-            // If "Pop3" is selected
-            if ($("#Customer_Setting_MailServerProtocol0[value='0']").is(":checked")) {
-                // Show the tbody containing fields
-                $("#Pop3Fields").show();
-            } else {
-                // Hide the tbody containing fields
-                $("#Pop3Fields").hide();
-            }
-
-            if ($("#Customer_Setting_MailServerProtocol1[value='1']").is(":checked")) {
-                // Show the tbody containing fields
-                $("#ImapFields").show();
-            } else {
-                // Hide the tbody containing fields
-                $("#ImapFields").hide();
-            }
+            //}
 
             if ($("#Customer_Setting_MailServerProtocol2[value='2']").is(":checked")) {
                 // Show the tbody containing fields
@@ -1223,6 +1125,6 @@
         });
 
     });
-        
+
 
 </script>
