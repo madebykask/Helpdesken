@@ -65,6 +65,18 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
 
             var model = this.CustomerInputViewModel(customer);
+            if(model.Setting.SharePointClientId == null)
+            {
+                model.Setting.SharePointSiteId = "N/A";
+                model.Setting.SharePointClientId = "N/A";
+                model.Setting.SharePointDriveId = "N/A";
+                model.Setting.SharePointFolderId = "N/A";
+                model.Setting.SharePointPassword = "N/A";
+                model.Setting.SharePointScope = "N/A";
+                model.Setting.SharePointSecretKey = "N/A";
+                model.Setting.SharePointTenantId = "N/A";
+                model.Setting.SharePointUserName = "N/A";
+            }
 
             model.PasswordHis = model.Setting.PasswordHistory;
            

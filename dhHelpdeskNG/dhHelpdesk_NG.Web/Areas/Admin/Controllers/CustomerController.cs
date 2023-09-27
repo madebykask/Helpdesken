@@ -195,7 +195,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
 
-            //Get values from "default" customer
+            //Get values from "default" customer - Does not work...
             var caseFieldSettingsToCopy = this._caseFieldSettingService.GetCaseFieldSettingsForDefaultCust();
 
 
@@ -869,8 +869,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ModuleCaseInvoice = customerToCopySettings.ModuleCaseInvoice,
                 PreventToSaveCaseWithInactiveValue = customerToCopySettings.PreventToSaveCaseWithInactiveValue,
                 ShowOUsOnDepartmentFilter = customerToCopySettings.ShowOUsOnDepartmentFilter,
-                FileIndexingServerName = customerToCopySettings.FileIndexingServerName,
-                FileIndexingCatalogName = customerToCopySettings.FileIndexingCatalogName,
+                FileIndexingServerName = "",
+                FileIndexingCatalogName = "",
                 BatchEmail = customerToCopySettings.BatchEmail,
                 BulletinBoardWGRestriction = customerToCopySettings.BulletinBoardWGRestriction,
                 CalendarWGRestriction = customerToCopySettings.CalendarWGRestriction,
@@ -886,6 +886,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 EMailSubjectPattern = customerToCopySettings.EMailSubjectPattern,
                 EMailAnswerSeparator = customerToCopySettings.EMailAnswerSeparator,
                 BlockedEmailRecipients = "noreply;",
+                ErrorMailTo = "",
+                SharePointClientId = "N/A",
+                SharePointDriveId = "N/A",
+                SharePointSiteId = "N/A",
+                SharePointUserName = "N/A",
+                SharePointPassword = "N/A",
+                SharePointFolderId = "N/A",
+                SharePointSecretKey = "N/A",
+                SharePointTenantId = "N/A",
+                SharePointScope = "N/A",
 
             };
 

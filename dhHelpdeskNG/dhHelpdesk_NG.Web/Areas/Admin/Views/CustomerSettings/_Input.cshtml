@@ -599,6 +599,14 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Fysisk sökväg") (@Translation.GetCoreTextTranslation("Bilagor"))
+                                    </td>
+                                    <td>
+                                        @Html.TextAreaFor(model => model.Setting.PhysicalFilePath, new { maxlength = "100", style = "width: 400px;" })
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td style="width:100px">
                                         @Translation.GetCoreTextTranslation("Standardärendemall")
                                     </td>
@@ -738,14 +746,7 @@
                                                 @Html.TextBoxFor(model => model.Setting.POP3EMailPrefix, new { maxlength = "20", style = "width: 400px;" })
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("Fysisk sökväg") (@Translation.GetCoreTextTranslation("Bilagor"))
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.PhysicalFilePath, new { maxlength = "100", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
+                                        
                                     </tbody>
                                     <tbody id="EwsFields">
                                         <tr>
@@ -792,7 +793,6 @@
                                     @Html.HiddenFor(model => model.Setting.EwsTenantId)
                                     @Html.HiddenFor(model => model.Setting.EMailFolder)
                                     @Html.HiddenFor(model => model.Setting.EMailFolderArchive)
-                                    @Html.HiddenFor(model => model.Setting.PhysicalFilePath)
                                     @Html.HiddenFor(model => model.Setting.UseEws)
                                     @Html.HiddenFor(model => model.Setting.ErrorMailTo)
 
@@ -946,7 +946,7 @@
                                             SharePoint Scope
                                         </td>
                                         <td>
-                                            @Html.TextBoxFor(model => model.Setting.SharePointScope, new { maxlength = "200", style = "width: 400px;" })
+                                            @Html.TextBoxFor(model => model.Setting.SharePointScope, new { maxlength = "200", style = "width: 400px;", autocomplete = "off" })
                                         </td>
                                     </tr>
                                 </table>
@@ -1091,6 +1091,7 @@
     //Logic for m2t
 
     $(document).ready(function () {
+
         // Initial check to show/hide based on the current selection
         togglePop3Fields();
 

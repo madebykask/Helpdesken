@@ -182,6 +182,8 @@ namespace DH.Helpdesk.Services.Services
             setting.ErrorMailTo = setting.ErrorMailTo ?? string.Empty;
             setting.EMailFolder = setting.EMailFolder ?? string.Empty;
             setting.EMailFolderArchive = setting.EMailFolderArchive ?? string.Empty;
+            setting.EMailAnswerSeparator = setting.EMailAnswerSeparator ?? string.Empty;
+            setting.EMailSubjectPattern = setting.EMailSubjectPattern ?? string.Empty;
 
 
 
