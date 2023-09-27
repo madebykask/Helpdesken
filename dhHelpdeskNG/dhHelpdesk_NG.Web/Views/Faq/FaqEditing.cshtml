@@ -71,8 +71,8 @@
                                     </td>
                                     <td class="pb5">
                                         @Html.TextAreaFor(m => m.Answer, new { style = "height:250px;", @class = "richtexteditor", id = "faqAnswer" })
-                                        @*                        @Html.TextAreaFor(m => m.Answer, new {style = "height: 250px;"})*@
                                         @Html.ValidationMessageFor(m => m.Answer)
+                                        <span id="charCountFaq" style="color:red;display:none">Max 3000 @Translation.GetCoreTextTranslation("tecken")</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -82,7 +82,7 @@
                                     <td>
                                         @Html.TextAreaFor(m => m.InternalAnswer, new { style = "height: 250px;", id = "faqInternalAnswer" })
                                         @Html.ValidationMessageFor(m => m.InternalAnswer)
-                                        @*<div id="charCount" style="color:red"></div>*@
+                                        <span id="charCount" style="color:red;display:none">Max 3000 @Translation.GetCoreTextTranslation("tecken")</span>
                                     </td>
                                 </tr>
                                 <tr>
@@ -264,6 +264,39 @@
             window.location.href = '@Url.Action("EditFaq","Faq")?id=' + @Model.Id.ToString(CultureInfo.InvariantCulture) + "&languageId=" + selectedItem;
         });
     });
+        $(document).ready(function() {
+            var maxLength = 3000;
 
+            // Check on key press
+            $("#faqInternalAnswer").on("keydown", function(e) {
+                if ($(this).val().length >= maxLength && ![8, 37, 38, 39, 40].includes(e.which)) {
+                    // 8 = Backspace, 37-40 = Arrow keys
+                    console.log('too long');
+                    $("#charCount").css("display", "block");
+                    e.preventDefault();
+                }
+                else {
+                    $("#charCount").css("display", "none");
+
+                }
+            });
+
+            // Check on     
+            $("#faqInternalAnswer").on("paste", function(e) {
+                var pastedData = e.originalEvent.clipboardData.getData('text');
+                var finalData = $(this).val() + pastedData;
+
+                if (finalData.length > maxLength) {
+                    console.log('too long');
+                    $("#charCount").css("display", "block");
+                    $(this).val(finalData.substr(0, maxLength));
+                    e.preventDefault();
+                }
+                else {
+                    $("#charCount").css("display", "none");
+                
+                }
+            });
+        });
 
 </script>
