@@ -728,19 +728,17 @@ Public Class CaseData
 
                 Dim numberOfDays As Integer = (DateTime.Now - dt.Value).TotalDays
 
-                'Dim timeDifference As TimeSpan = DateTime.Now - dt
-                'Dim numberOfDays As Integer = timeDifference.Days
+                Dim commonDifference As Integer = c.ReminderDays
 
+                ' Check if value1 is included in the series
+                Dim isInSeries As Boolean = (numberOfDays Mod commonDifference) = 0
 
-                If numberOfDays = c.ReminderDays Then
+                If isInSeries Then
                     col.Add(c)
-
                 End If
-
             Next
 
             Return col
-
 
         Catch ex As Exception
             Throw ex
