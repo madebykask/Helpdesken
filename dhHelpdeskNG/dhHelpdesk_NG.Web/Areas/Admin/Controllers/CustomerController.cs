@@ -1139,6 +1139,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 newCustomerStateSecondaries.NoMailToNotifier = ss.NoMailToNotifier;
                 newCustomerStateSecondaries.ResetOnExternalUpdate = ss.ResetOnExternalUpdate;
                 newCustomerStateSecondaries.IsActive = ss.IsActive;
+                newCustomerStateSecondaries.AlternativeStateSecondaryName = ss.AlternativeStateSecondaryName;
 
                 this._stateSecondaryService.SaveStateSecondary(newCustomerStateSecondaries, out errors);
             }
