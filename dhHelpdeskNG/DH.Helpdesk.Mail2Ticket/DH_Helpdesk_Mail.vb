@@ -794,7 +794,7 @@ Module DH_Helpdesk_Mail
                                     'iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail.ToString())
 
 
-                                    ' save caseisabout
+                                    ' save caseisabout - Advanced
                                     If fieldsToUpdate.Count > 0 Then
                                         If fields.Count > 0 Then
                                             Dim objCaseIsAbout As ComputerUser = CreateCaseIsAbout(objCustomer.Id, fields)
