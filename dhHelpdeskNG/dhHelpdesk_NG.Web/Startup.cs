@@ -38,6 +38,8 @@ namespace DH.Helpdesk.Web.App_Start
         System.Configuration.ConfigurationManager.AppSettings["MicrosoftLogin"] : "";
         public void Configuration(IAppBuilder app)
         {
+            System.Web.Helpers.AntiForgeryConfig.RequireSsl = true;
+
             var config = new HttpConfiguration();
              app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
