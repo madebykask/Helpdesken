@@ -185,8 +185,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             caseNumber = -1;
 
             var res = new ProcessResult("Save Case Check Split");
-            var status = _statusService.GetStatus(caseModel.Status_Id.Value);
-            if (caseModel.CaseSolution_Id.HasValue && isNewCase && status.Name != "Checklista Draft (Test)")
+            //var status = _statusService.GetStatus(caseModel.Status_Id.Value);
+            if (caseModel.CaseSolution_Id.HasValue && isNewCase)
             {
                 var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
 
