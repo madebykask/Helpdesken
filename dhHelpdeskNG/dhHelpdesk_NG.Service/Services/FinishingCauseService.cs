@@ -34,6 +34,7 @@ namespace DH.Helpdesk.Services.Services
         IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId);
         IEnumerable<FinishingCauseInfo> GetAllFinishingCauseInfos(int customerId);
         FinishingCause GetMergedFinishingCause(int customerId);
+        IList<FinishingCause> GetAllFinishingCauses(int customerId);
     }
 
     public class FinishingCauseService : IFinishingCauseService
@@ -82,6 +83,13 @@ namespace DH.Helpdesk.Services.Services
                 .OrderBy(x => x.Name)
                 .ToList()
                 .Where(x => x.Parent_FinishingCause_Id == null)
+                .ToList();
+        }
+        public IList<FinishingCause> GetAllFinishingCauses(int customerId)
+        {
+            return this._finishingCauseRepository
+                .GetManyWithSubFinishingCauses(x => x.Customer_Id == customerId)
+                .OrderBy(x => x.Name)
                 .ToList();
         }
 
