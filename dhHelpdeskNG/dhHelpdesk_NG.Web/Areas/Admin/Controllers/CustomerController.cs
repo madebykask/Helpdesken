@@ -41,6 +41,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IComputerService _computerService;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IInventoryService _inventoryService;
+        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
 
         public CustomerController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -63,7 +64,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IComputerService computerService,
             IMailTemplateService mailTemplateService,
             IMasterDataService masterDataService,
-            IInventoryService inventoryService)
+            IInventoryService inventoryService,
+            IRegistrationSourceCustomerService registrationSourceCustomerService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -86,6 +88,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._computerService = computerService;
             this._mailTemplateService = mailTemplateService;
             _inventoryService = inventoryService;
+            _registrationSourceCustomerService = registrationSourceCustomerService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -916,7 +919,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 this._caseSettingsService.SaveCaseSetting(newCustomerCaseSetting, out errors);
             }
+            var registrationSourceToCopy = this._registrationSourceCustomerService.GetRegistrationSources(customerToCopy.Id);
+            foreach(var reg in registrationSourceToCopy)
+            {
+                var newRegistrationSourceCustomer = new RegistrationSourceCustomer() { };
+                newRegistrationSourceCustomer.Customer_Id = newCustomerToSave.Id;
+                newRegistrationSourceCustomer.SourceName = reg.SourceName;
+                newRegistrationSourceCustomer.SystemCode = reg.SystemCode;
+                newRegistrationSourceCustomer.IsActive = reg.IsActive;
 
+                this._registrationSourceCustomerService.SaveRegistrationSourceCustomer(newRegistrationSourceCustomer, out errors);
+            }
             //Get CaseFieldSettings to copy
             var caseFieldSettingsToCopy = this._caseFieldSettingService.GetCaseFieldSettings(customerToCopy.Id);
 
