@@ -43,6 +43,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IInventoryService _inventoryService;
         private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
         private readonly IDocumentService _documentService;
+        private readonly IInfoService _infoService;
 
         public CustomerController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -67,7 +68,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IMasterDataService masterDataService,
             IInventoryService inventoryService,
             IRegistrationSourceCustomerService registrationSourceCustomerService,
-            IDocumentService documentService)
+            IDocumentService documentService,
+            IInfoService infoService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -92,6 +94,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             _inventoryService = inventoryService;
             _registrationSourceCustomerService = registrationSourceCustomerService;
             _documentService = documentService;
+            _infoService = infoService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
@@ -930,6 +933,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             newCustomerToSave.WorkingDayStart = customerToCopy.WorkingDayStart;
             newCustomerToSave.WorkingDayEnd = customerToCopy.WorkingDayEnd;
 
+            //Selfservice infotexts to copy
+            var infoTexts = this._infoService.GetAllInfoTexts(customerToCopy.Id);
+            foreach( var info in infoTexts )
+            {
+                var newInfoText = new InfoText();
+                newInfoText.Customer_Id = newCustomerToSave.Id;
+                newInfoText.Name = info.Name;
+                newInfoText.Type = info.Type;
+                newInfoText.Language_Id = info.Language_Id;
+
+                this._infoService.SaveInfoText(newInfoText,  out errors);
+            }
+
             //Document types to copy
             var allDocumentCategories = _documentService.GetDocumentCategories(customerToCopy.Id);
 
@@ -1249,7 +1265,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             //Get FinishingCause to copy
-            var finishingCausesToCopy = this._finishingCauseService.GetAllFinishingCauses(customerToCopy.Id);
+            var finishingCausesToCopy = this._finishingCauseService.GetFinishingCauses(customerToCopy.Id);
 
             foreach (var fc in finishingCausesToCopy)
             {
@@ -1257,8 +1273,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 newCustomerFinishingCause.Customer_Id = newCustomerToSave.Id;
                 newCustomerFinishingCause.Name = fc.Name;
-                newCustomerFinishingCause.Parent_FinishingCause_Id = fc.Parent_FinishingCause_Id;
-                newCustomerFinishingCause.FinishingCauseCategory_Id = fc.FinishingCauseCategory_Id;
+                //newCustomerFinishingCause.Parent_FinishingCause_Id = fc.Parent_FinishingCause_Id;
+                //newCustomerFinishingCause.FinishingCauseCategory_Id = fc.FinishingCauseCategory_Id;
                 newCustomerFinishingCause.PromptUser = fc.PromptUser;
                 newCustomerFinishingCause.Merged = fc.Merged;
                 newCustomerFinishingCause.IsActive = fc.IsActive;
