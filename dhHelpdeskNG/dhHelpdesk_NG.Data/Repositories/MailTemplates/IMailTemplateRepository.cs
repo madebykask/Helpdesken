@@ -23,5 +23,6 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates
         int GetMailTemlpateMailId(int templateId);
 
         MailTemplateEntity GetMailTemplateForCustomer(int id, int customerId, int languageId);
+        IEnumerable<MailTemplateList> GetAllMailTemplatesForCustomer(int customerId);
     }
 }

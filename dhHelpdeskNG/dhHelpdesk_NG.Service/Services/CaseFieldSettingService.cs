@@ -90,6 +90,8 @@ namespace DH.Helpdesk.Services.Services
         public IList<CaseFieldSetting> GetCaseFieldSettingsForDefaultCust()
         {
             var list = _caseFieldSettingRepository.GetMany(x => x.Customer_Id == null).ToList();
+            //Todo
+            //DataContext.Database.SqlQuery<CaseFieldSetting>("SELECT * FROM CaseFieldSettings WHERE Customer_Id IS NULL").ToList();
 
             return list;
         

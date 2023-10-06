@@ -37,6 +37,7 @@
         void SaveMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage,  bool update, out IDictionary<string, string> errors);
         void DeleteMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage, out IDictionary<string, string> errors);
         void Commit();
+        IList<MailTemplateList> GetAllMailTemplatesForCustomer(int customerId);
 
         //void GetMailTemplateId();
     }
@@ -80,6 +81,11 @@
         public IList<MailTemplateList> GetMailTemplates(int customerId, int langaugeId)
         {
             return this._mailTemplateRepository.GetMailTemplates(customerId, langaugeId).ToList();
+        }
+
+        public IList<MailTemplateList> GetAllMailTemplatesForCustomer(int customerId)
+        {
+            return this._mailTemplateRepository.GetAllMailTemplatesForCustomer(customerId).ToList();
         }
 
         public CustomMailTemplate GetCustomMailTemplate(int mailTemplateId)
