@@ -107,9 +107,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [CustomAuthorize(Roles = "3,4")]
         public ActionResult Index()
         {
-            //IDictionary<string, string> errors = new Dictionary<string, string>();
-            //var language = this._languageService.GetLanguages();
-
             var model = this.IndexViewModel();
 
             //If administrator. return all customers, else: return only customers that user is assigned to.
@@ -1406,8 +1403,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 this._caseSolutionService.SaveCaseSolution(newCustomerCaseSolution, null, null, out errors);
             }
 
-            //Get All Mailtemplatesexept  to copy
-            var allmails = _mailTemplateService.GetAllMailTemplatesForCustomer(customerToCopy.Id).Where(x => x.MailID != 14);
+            //Get All Mailtemplates where ordertype_id and accountActivity_id is null to copy
+            var allmails = _mailTemplateService.GetAllMailTemplatesForCustomer(customerToCopy.Id)
+                 .Where(x => x.MailID < 100)
+                 .GroupBy(x => x.MailID)
+                 .Select(g => g.FirstOrDefault());
             foreach (var mt in allmails)
             {
                 var mailTemplateToCopy = this._mailTemplateService.GetMailTemplateForCopyCustomer(mt.MailID, customerToCopy.Id);
@@ -1416,7 +1416,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 {
                     var mailTemplateToSave = new MailTemplateEntity
                     {
-                        //Id = id,
                         MailID = mailTemplateToCopy.MailID,
                         Customer_Id = newCustomerToSave.Id,
                         SendMethod = mailTemplateToCopy.SendMethod,

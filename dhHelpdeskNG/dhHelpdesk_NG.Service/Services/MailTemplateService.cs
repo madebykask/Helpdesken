@@ -188,23 +188,23 @@
                 mailtemplatelanguage.MailTemplate.MailTemplateGUID = Guid.NewGuid();
                 update = false;
             }
+            //Had to comment this out because it was causing an error when trying to save a template - Katta 231009
+            //if (mailtemplatelanguage.MailTemplate.MailID == 14)
+            //{
+            //    var customersettings = this._settingService.GetCustomerSetting(mailtemplatelanguage.MailTemplate.Customer_Id.Value);
 
-            if (mailtemplatelanguage.MailTemplate.MailID == 14)
-            {
-                var customersettings = this._settingService.GetCustomerSetting(mailtemplatelanguage.MailTemplate.Customer_Id.Value);
+            //    if (mailtemplatelanguage.Body != "")
+            //    {
+            //        if (customersettings.CaseSMS == 0)
+            //            customersettings.CaseSMS = 1;
+            //    }
+            //    else
+            //    {
+            //        customersettings.CaseSMS = 0;
+            //    }
+            //    this._settingService.SaveSetting(customersettings, out errors);
 
-                if (mailtemplatelanguage.Body != "")
-                {
-                    if (customersettings.CaseSMS == 0)
-                        customersettings.CaseSMS = 1;
-                }
-                else
-                {
-                    customersettings.CaseSMS = 0;
-                }
-                this._settingService.SaveSetting(customersettings, out errors);
-
-            }
+            //}
 
             if (!update)
                 this._mailTemplateLanguageRepository.Add(mailtemplatelanguage);

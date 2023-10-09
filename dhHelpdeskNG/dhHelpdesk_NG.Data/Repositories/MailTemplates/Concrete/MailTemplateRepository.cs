@@ -55,10 +55,9 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
                         {
                             Id = m.Id,
                             Customer_Id = m.Customer_Id,
-                            OrderType_Id = m.OrderType_Id,
-                            AccountActivity_Id = m.AccountActivity_Id,
                             MailID = m.MailID,
                             IsStandard = m.IsStandard,
+                            SendMethod = (int)m.SendMethod,
                             IncludeLogText_External = m.IncludeLogText_External,
                         };
 
