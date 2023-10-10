@@ -162,17 +162,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
-        public ActionResult New(Customer customer)
+        public ActionResult New(CustomerInputViewModel customerModel)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._customerService.SaveNewCustomerToGetId(customer, out errors);
-
-            var newCustomerSetting = new Setting()
-            {
-                Customer_Id = customer.Id,
-                ModuleCase = 1,
-                CaseComplaintDays = 14
-            };
+            
+            this._customerService.SaveNewCustomerToGetId(customerModel.Customer, out errors);
+            var customer = customerModel.Customer;
+            var newCustomerSetting = customerModel.Setting;
+            newCustomerSetting.Customer_Id = customer.Id;
+            newCustomerSetting.ModuleCase = 1;
+            newCustomerSetting.CaseComplaintDays = 14;
 
             //Get mandatory Finishingcause 'Sammanfogat ärende' from logged in customer
             var mergedFinishingCause = _finishingCauseService.GetMergedFinishingCause(SessionFacade.CurrentCustomer.Id);

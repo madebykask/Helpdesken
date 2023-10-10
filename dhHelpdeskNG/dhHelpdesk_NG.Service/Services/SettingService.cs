@@ -184,6 +184,8 @@ namespace DH.Helpdesk.Services.Services
             setting.EMailFolderArchive = setting.EMailFolderArchive ?? string.Empty;
             setting.EMailAnswerSeparator = setting.EMailAnswerSeparator ?? string.Empty;
             setting.EMailSubjectPattern = setting.EMailSubjectPattern ?? string.Empty;
+            setting.BlockedEmailRecipients = setting.BlockedEmailRecipients ?? string.Empty;
+            setting.BatchEmail = setting.BatchEmail;
 
 
 
