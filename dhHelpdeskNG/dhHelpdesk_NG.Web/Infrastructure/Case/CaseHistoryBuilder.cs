@@ -647,7 +647,10 @@ namespace DH.Helpdesk.Web.Infrastructure.Case
             // Description
             if (cfs.getCaseSettingsValue(GlobalEnums.TranslationCaseFields.Description.ToString()).ShowOnStartPage == 1)
             {
-                if ((cur.Description ?? "") != (prev.Description ?? ""))
+                var newDesc = cur.Description.RemoveHtmlTags();
+                var oldDesc = prev.Description.RemoveHtmlTags();
+                
+                if (newDesc != oldDesc)
                 {
                     sb.Append("<tr>");
                     sb.Append(bs + Translation.Get(GlobalEnums.TranslationCaseFields.Description.ToString(), Enums.TranslationSource.CaseTranslation, customerId) + be);
