@@ -107,6 +107,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [CustomAuthorize(Roles = "3,4")]
         public ActionResult Index()
         {
+
             var model = this.IndexViewModel();
 
             //If administrator. return all customers, else: return only customers that user is assigned to.
@@ -1405,7 +1406,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             //Get All Mailtemplates where ordertype_id and accountActivity_id is null to copy
             var allmails = _mailTemplateService.GetAllMailTemplatesForCustomer(customerToCopy.Id)
-                 .Where(x => x.MailID < 100)
+                 .Where(x => x.MailID < 100 && x.MailID != 40 && x.MailID != 8)
                  .GroupBy(x => x.MailID)
                  .Select(g => g.FirstOrDefault());
             foreach (var mt in allmails)
