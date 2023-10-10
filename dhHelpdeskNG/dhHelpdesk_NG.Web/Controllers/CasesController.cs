@@ -3805,12 +3805,22 @@ namespace DH.Helpdesk.Web.Controllers
         /// <returns></returns>
         private int Save(CaseEditInput m)
         {
+
             var utcNow = DateTime.UtcNow;
             var movedFromCustomerId = m.MovedFromCustomerId;
 #pragma warning disable 0618
             var case_ = m.case_;
 #pragma warning restore 0618
             var caseLog = m.caseLog;
+            //Replace empty string with ""
+            if(!String.IsNullOrEmpty(caseLog.TextExternal))
+            {
+                caseLog.TextExternal = m.caseLog.TextExternal.Replace("<div><p><br></p></div>", "");
+            }
+            if (!String.IsNullOrEmpty(caseLog.TextInternal))
+            {
+                caseLog.TextInternal = m.caseLog.TextInternal.Replace("<div><p><br></p></div>", "");
+            }
             var caseMailSetting = m.caseMailSetting;
             var updateNotifierInformation = m.updateNotifierInformation;
             m.caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(case_.Customer_Id);
