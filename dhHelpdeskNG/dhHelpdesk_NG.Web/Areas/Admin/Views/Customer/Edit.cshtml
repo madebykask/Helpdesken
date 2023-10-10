@@ -16,8 +16,11 @@
                     if (SessionFacade.CurrentUser.UserGroupId == UserGroups.SystemAdministrator)
                     {
                         <li><a data-toggle="modal" href="#divCopyCustomer" title="@Translation.Get("Kopiera")" class="btn">@Translation.Get("Kopiera")</a></li>
-                    }   
+                    }
                 }
+                <li>
+                    <img id="showCopyLoader" src="@Url.Content("~/Content/icons/ajax-loader.gif")" style="display: none;" />
+                </li>
             </ul>
         </div>
         @Html.Partial("_MasterDataPanel", Model.Customer)
@@ -32,16 +35,16 @@
 @section Scripts {
     <script type="text/javascript">
 
-        //function save(Id) {
-        //    var cnumber = document.getElementById("customernumber").value;
-        //    var cname = document.getElementById("customername").value;
-        //    copyCustomer(Id, cnumber, cname);
-        //}
+        //Hide showCopyLoader on document ready
+        $(document).ready(function () {
+                    $('#showCopyLoader').hide();
+        });
 
         function copyCustomer(id) {
             var cnumber = document.getElementById("customernumber").value;
             var cname = document.getElementById("customername").value;
             var cemail = document.getElementById("customeremail").value;
+            $('#showCopyLoader').show();
 
             $.post('/customer/CopyCustomer/',
                 { id: id, customerNumber: cnumber, customerName: cname, customerEmail: cemail },
