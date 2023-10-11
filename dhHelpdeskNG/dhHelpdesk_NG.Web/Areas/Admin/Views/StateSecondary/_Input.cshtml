@@ -146,6 +146,7 @@
                                             </ul>
                                             @Html.HiddenFor(model => Model.StateSecondary.FinishingCause_Id)
                                         </div>
+                                        <div id="closingTypeError" style="display:none;color:red;">@Translation.GetCoreTextTranslation("Avslutsorsak måste anges på lägsta nivå")</div>
                                     </td>
                                 </tr>
                                 <tr>
@@ -202,7 +203,19 @@
             $finishTypeId.val(value);
             $finishTypeButton.text(text);
             console.log(value)
+            if ($(this).next("ul").length > 0) {
+                console.log(value)
+                $finishTypeId.val("");
+                $finishTypeButton.text("--");
+                $("#saveBtn").hide();
+                $("#closingTypeError").show();
+            }
+            else {
+                $("#saveBtn").show();
+                $("#closingTypeError").hide();
+            }
         });
+
 
         $("#StateSecondary_AutocloseDays").change(function () {
             var autocloseDays = parseInt($(this).val(), 10);
@@ -210,11 +223,13 @@
             reminderDays = parseInt(reminderDays, 10);
             if (autocloseDays > 0  && autocloseDays <= reminderDays)
             {
+                $("#saveBtn").hide();
                 $("#autoCloseError").show();
                 $("#divFinishingTypeOuterContainer").hide();
                 $finishTypeId.val(undefined);
                 
             } else {
+                $("#saveBtn").show();
                 $("#autoCloseError").hide();
                 if (autocloseDays <= 0) {
                     $("#divFinishingTypeOuterContainer").hide();
@@ -233,9 +248,11 @@
             //console.log("Avslutsdagar: " + autocloseDays + "ReminderDays: " + reminderDays);
             if (autocloseDays !== 0 && reminderDays > autocloseDays) {
                 $("#autoCloseError").show();
+                $("#saveBtn").hide();
                 $("#divFinishingTypeOuterContainer").hide();
             }
             else {
+                $("#saveBtn").show();
                 if (autocloseDays > 0) {
                     $("#autoCloseError").hide();
                     $("#divFinishingTypeOuterContainer").show();

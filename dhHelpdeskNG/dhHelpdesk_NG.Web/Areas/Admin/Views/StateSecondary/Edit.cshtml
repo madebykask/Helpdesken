@@ -8,7 +8,7 @@
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.StateSecondary.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                <li id="saveBtn">@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.StateSecondary.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
                 <li>
                     @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
      new { id = Model.StateSecondary.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })
