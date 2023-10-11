@@ -125,7 +125,7 @@
                                         
                                         @Html.DropDownListFor(model => model.StateSecondary.AutocloseDays, Model.AutocloseDays, new { style = "width: 60px;" })
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
-                                        <div id="autoCloseError" style="display:none;color:red;"></div>
+                                    <div id="autoCloseError" style="display:none;color:red;">@Translation.GetCoreTextTranslation("Avslutsdagar måste vara större än påminnelse dagar")</div>
                                     </td>
                                 </tr>
                                 <tr id="divFinishingTypeOuterContainer">
@@ -211,7 +211,6 @@
             if (autocloseDays > 0  && autocloseDays <= reminderDays)
             {
                 $("#autoCloseError").show();
-                $("#autoCloseError").text("Avslutsdagar måste vara större än påminnelse dagar");
                 $("#divFinishingTypeOuterContainer").hide();
                 $finishTypeId.val(undefined);
                 
@@ -234,7 +233,6 @@
             //console.log("Avslutsdagar: " + autocloseDays + "ReminderDays: " + reminderDays);
             if (autocloseDays !== 0 && reminderDays > autocloseDays) {
                 $("#autoCloseError").show();
-                $("#autoCloseError").text("Avslutsdagar måste vara större än påminnelse dagar");
                 $("#divFinishingTypeOuterContainer").hide();
             }
             else {
