@@ -942,7 +942,7 @@ Public Class CaseData
                         "tblStateSecondary.FinishingCause_Id AS StateSecondary_FinishingCause_Id, tblStateSecondary.ReminderDays AS StateSecondary_ReminderDays, tblStateSecondary.AutoCloseDays AS StateSecondary_AutoCloseDays, tblCase.ExternalTime, tblCase.LeadTime " &
                     "FROM tblCase " &
                         "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
-                        "INNER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &
+                        "LEFT JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &
                         "LEFT JOIN tblUsers u2 ON tblCase.User_Id = u2.Id " &
                         "LEFT OUTER JOIN tblWorkingGroup ON tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id " &
                         "LEFT OUTER JOIN tblWorkingGroup tblWorkingGroup_1 ON tblCase.WorkingGroup_Id = tblWorkingGroup_1.Id " &
