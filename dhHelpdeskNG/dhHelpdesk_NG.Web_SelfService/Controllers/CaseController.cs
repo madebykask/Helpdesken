@@ -2642,7 +2642,7 @@ namespace DH.Helpdesk.SelfService.Controllers
 
 
             var closedChildCasesCount = childCases.Count(it => it.ClosingDate != null);
-            var totalChildCases = childCases.Count;
+            var totalChildCases = childCases.Where(x => x.Indepandent == false).Count();
             bool hasUnclosedChildren = closedChildCasesCount != totalChildCases;
 
             if (hasUnclosedChildren)

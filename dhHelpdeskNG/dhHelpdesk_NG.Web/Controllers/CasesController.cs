@@ -5652,7 +5652,7 @@ namespace DH.Helpdesk.Web.Controllers
             if (m.ChildCaseViewModel != null)
             {
                 var closedChildCasesCount = m.ClosedChildCasesCount;
-                var totalChildCases = m.ChildCaseViewModel.ChildCaseList.Count;
+                var totalChildCases = m.ChildCaseViewModel.ChildCaseList.Where(x => x.Indepandent == false).Count();
                 bool hasUnclosedChildren = closedChildCasesCount != totalChildCases;
 
                 if (hasUnclosedChildren)
