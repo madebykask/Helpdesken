@@ -719,7 +719,7 @@
                                                 @Translation.GetCoreTextTranslation("Lösenord")
                                             </td>
                                             <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3Password, new { maxlength = "40", style = "width: 400px;" })
+                                                @Html.TextBoxFor(model => model.Setting.POP3Password, new { type="password", maxlength = "40", style = "width: 400px;" })
                                             </td>
                                         </tr>
                                         <tr>
