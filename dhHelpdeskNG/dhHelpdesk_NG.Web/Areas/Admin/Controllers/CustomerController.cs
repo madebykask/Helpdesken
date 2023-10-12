@@ -1049,29 +1049,29 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
             // caseSections 
-            var listOfCaseSectionsToCopy = new List<CaseSectionModel>();
-            var caseSectionsToCopy = _caseSectionService.GetCaseSections(customerToCopy.Id,customerToCopy.Language_Id);
+            //var listOfCaseSectionsToCopy = new List<CaseSectionModel>();
+            //var caseSectionsToCopy = _caseSectionService.GetCaseSections(customerToCopy.Id,customerToCopy.Language_Id);
 
-            foreach (var cs in caseSectionsToCopy)
-            {
-                // Get new caseSectionFields for the new customer based on caseFieldSettings
-                var caseSectionFieldsToCopy = _caseFieldSettingService.GetCaseFieldSettings(customerToCopy.Id);
-                var newCustomerCaseSection = new CaseSectionModel()
-                {
-                    CustomerId = newCustomerToSave.Id,
-                    SectionHeader = cs.SectionHeader,
-                    IsEditCollapsed = cs.IsEditCollapsed,
-                    IsNewCollapsed = cs.IsNewCollapsed,
-                    SectionType = cs.SectionType,
-                    CaseSectionFields = cs.CaseSectionFields, //This is wrong, we have to get the new CaseSectionFields
-                };
-                _caseSectionService.SaveCaseSection(newCustomerCaseSection);
-            }
-            foreach (var l in language)
-            {
-                var caseSectionsforNewCustomer = _caseSectionService.GetCaseSections(newCustomerToSave.Id, l.Id);
-                _caseSectionService.SaveCaseSections(l.Id, caseSectionsforNewCustomer, newCustomerToSave.Id);
-            }
+            //foreach (var cs in caseSectionsToCopy)
+            //{
+            //    // Get new caseSectionFields for the new customer based on caseFieldSettings
+            //    var caseSectionFieldsToCopy = _caseFieldSettingService.GetCaseFieldSettings(customerToCopy.Id);
+            //    var newCustomerCaseSection = new CaseSectionModel()
+            //    {
+            //        CustomerId = newCustomerToSave.Id,
+            //        SectionHeader = cs.SectionHeader,
+            //        IsEditCollapsed = cs.IsEditCollapsed,
+            //        IsNewCollapsed = cs.IsNewCollapsed,
+            //        SectionType = cs.SectionType,
+            //        CaseSectionFields = cs.CaseSectionFields, //This is wrong, we have to get the new CaseSectionFields
+            //    };
+            //    _caseSectionService.SaveCaseSection(newCustomerCaseSection);
+            //}
+            //foreach (var l in language)
+            //{
+            //    var caseSectionsforNewCustomer = _caseSectionService.GetCaseSections(newCustomerToSave.Id, l.Id);
+            //    _caseSectionService.SaveCaseSections(l.Id, caseSectionsforNewCustomer, newCustomerToSave.Id);
+            //}
 
             // Get ComputerUserFieldSettings
             var computerUserFieldSettingsToCopy = this._computerService.GetComputerUserFieldSettings(customerToCopy.Id);
