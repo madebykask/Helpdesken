@@ -3815,11 +3815,18 @@ namespace DH.Helpdesk.Web.Controllers
             //Replace empty string with ""
             if(!String.IsNullOrEmpty(caseLog.TextExternal))
             {
-                caseLog.TextExternal = m.caseLog.TextExternal.Replace("<div><p><br></p></div>", "");
+                if (caseLog.TextExternal.RemoveHtmlTags() == "")
+                {
+                    caseLog.TextExternal = "";
+                }
             }
             if (!String.IsNullOrEmpty(caseLog.TextInternal))
             {
-                caseLog.TextInternal = m.caseLog.TextInternal.Replace("<div><p><br></p></div>", "");
+                if(caseLog.TextInternal.RemoveHtmlTags() == "")
+                {
+                    caseLog.TextInternal = "";
+                }
+
             }
             var caseMailSetting = m.caseMailSetting;
             var updateNotifierInformation = m.updateNotifierInformation;
