@@ -728,14 +728,18 @@ Public Class CaseData
 
                 Dim numberOfDays As Integer = (DateTime.Now - dt.Value).TotalDays
 
-                Dim commonDifference As Integer = c.ReminderDays
+                If numberOfDays > 0 Then
+                    Dim commonDifference As Integer = c.ReminderDays
 
-                ' Check if value1 is included in the series
-                Dim isInSeries As Boolean = (numberOfDays Mod commonDifference) = 0
+                    ' Check if value1 is included in the series
+                    Dim isInSeries As Boolean = (numberOfDays Mod commonDifference) = 0
 
-                If isInSeries Then
-                    col.Add(c)
+                    If isInSeries Then
+                        col.Add(c)
+                    End If
+
                 End If
+
             Next
 
             Return col
@@ -756,11 +760,11 @@ Public Class CaseData
 
                 Dim numberOfDays As Integer = (DateTime.Now - dt.Value).TotalDays
 
-                If numberOfDays = c.AutoCloseDays Then
-                    col.Add(c)
-
+                If numberOfDays > 0 Then
+                    If numberOfDays = c.AutoCloseDays Then
+                        col.Add(c)
+                    End If
                 End If
-
             Next
 
             Return col
