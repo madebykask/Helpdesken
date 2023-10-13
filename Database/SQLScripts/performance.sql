@@ -5,7 +5,7 @@ GO
 
 IF (SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'tblCase' AND COLUMN_NAME = 'Description' and DATA_TYPE = 'ntext') IS NOT NULL
 	BEGIN	 
-		alter table tblcase alter column Description nvarchar(MAX) not null
+		alter table tblcase alter column [Description] nvarchar(MAX) not null
 	End
 Go
 
@@ -17,11 +17,13 @@ Go
 
 IF (SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'tblCaseHistory' AND COLUMN_NAME = 'Description' and DATA_TYPE = 'ntext') IS NOT NULL
 	BEGIN	 
-		alter table tblCaseHistory alter column Description nvarchar(MAX) not null
+		alter table tblCaseHistory alter column [Description] nvarchar(MAX) not null
 	End
 Go
 
-CREATE FULLTEXT INDEX ON dbo.tblCase
+IF EXISTS (SELECT * from sys.fulltext_catalogs AS c where c.[name] = 'SearchCasesFTS')
+BEGIN
+	CREATE FULLTEXT INDEX ON dbo.tblCase
   (   
 	Place Language 1033,   
 	Persons_Name Language 1033,   
@@ -46,6 +48,7 @@ CREATE FULLTEXT INDEX ON dbo.tblCase
   KEY INDEX PK_tblCase  
   ON SearchCasesFTS
           WITH STOPLIST = SYSTEM, CHANGE_TRACKING AUTO;  
+END
 GO
 
 
