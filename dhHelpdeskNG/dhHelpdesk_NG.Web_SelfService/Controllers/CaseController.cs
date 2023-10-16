@@ -2631,7 +2631,33 @@ namespace DH.Helpdesk.SelfService.Controllers
                 caseEntity = _caseService.GetCaseById(caseId);
             }
 
-            var workflowCaseSolutions = _caseSolutionService.GetWorkflowCaseSolutionIds(customerId);
+            var childCases = _caseService.GetChildCasesFor(caseId);
+
+            var customerCaseSolutions = _caseSolutionService.GetCustomerCaseSolutionsOverview(customerId);
+
+            var workflowCaseSolutionIds =
+                customerCaseSolutions.Where(x => x.ConnectedButton == 0 && x.Status > 0)
+                .Select(x => x.CaseSolutionId)
+                .ToList();
+
+
+            var closedChildCasesCount = childCases.Count(it => it.ClosingDate != null);
+            var totalChildCases = childCases.Where(x => x.Indepandent == false).Count();
+            bool hasUnclosedChildren = closedChildCasesCount != totalChildCases;
+
+            if (hasUnclosedChildren)
+            {
+                workflowCaseSolutionIds = customerCaseSolutions
+                    .Where(x => x.ConnectedButton == 0
+                             && x.Status > 0
+                             && x.HasFinishingCauseId == false)
+                    .Select(x => x.CaseSolutionId)
+                    .ToList();
+            }
+
+
+            //var workflowCaseSolutions = _caseSolutionService.GetWorkflowCaseSolutionIds(customerId);
+
             int lang = SessionFacade.CurrentLanguageId;
             if (lang == SessionFacade.CurrentCustomer.Language_Id)
             {
@@ -2645,7 +2671,7 @@ namespace DH.Helpdesk.SelfService.Controllers
                 res = _caseSolutionService.GetWorkflowSteps(
                     customerId,
                     caseEntity,
-                    workflowCaseSolutions,
+                    workflowCaseSolutionIds,
                     isRelatedCase,
                     null,
                     ApplicationType.LineManager, // this is used for purpose since its comapred against ApplicationTypes table values where Selfservice = 2

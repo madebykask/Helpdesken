@@ -2,7 +2,7 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
 {
     using System;
     using System.Collections.Generic;
-
+    using System.Runtime.InteropServices;
     using DH.Helpdesk.Common.ValidationAttributes;
     using DH.Helpdesk.Domain;
 
@@ -200,6 +200,10 @@ namespace DH.Helpdesk.BusinessData.Models.User.Input
         public bool IsAdministrator()
         {
             return this.UserGroupId > (int)UserGroup.User;
+        }
+        public bool IsSystemAdministrator()
+        {
+            return this.UserGroupId > (int)UserGroup.CustomerAdministrator;
         }
 
         public Guid? UserGUID { get; set; }

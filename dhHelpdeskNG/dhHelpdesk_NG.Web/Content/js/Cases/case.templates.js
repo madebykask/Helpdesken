@@ -677,6 +677,14 @@ var ApplyTemplate = function (data, doOverwrite) {
     }
     if (!isNullOrEmpty(data.Description)) {
         val = data.Description || '';
+        var existing = $(".summernotedesc").summernote("code");
+        var plainText = $('<div>').html(existing).text().trim(); // Strip HTML and trim whitespace
+        var isEmpty = !plainText.length;
+
+        if (val !== '' && isEmpty) {
+            $(".summernotedesc").summernote("code", replaceLinebreaksInString(val));
+            $("#spanDesc").text(val);
+        }
         if (val !== '' && doOverwrite) {
             $(".summernotedesc").summernote("code", replaceLinebreaksInString(val));
             $("#spanDesc").text(val);
@@ -695,17 +703,33 @@ var ApplyTemplate = function (data, doOverwrite) {
     }
     if (!isNullOrEmpty(data.Text_External)) {
         val = data.Text_External || '';
+        var existing = $(".summernoteexternal").summernote("code");
+        var plainText = $('<div>').html(existing).text().trim(); // Strip HTML and trim whitespace
+        var isEmpty = !plainText.length;
+
+        if (val !== '' && isEmpty) {
+            $(".summernoteexternal").summernote("code", replaceLinebreaksInString(val));
+        }
         if (val !== '' && doOverwrite) {
             $(".summernoteexternal").summernote("code", replaceLinebreaksInString(val));
         }
     }
     if (!isNullOrEmpty(data.Text_Internal)) {
         val = data.Text_Internal || '';
+        var existing = $(".summernoteinternal").summernote("code");
+        var plainText = $('<div>').html(existing).text().trim(); // Strip HTML and trim whitespace
+        var isEmpty = !plainText.length;
+
+        if (val !== '' && isEmpty) {
+            $(".summernoteinternal").summernote("code", replaceLinebreaksInString(val));
+        }
         if (val !== '' && doOverwrite) {
             $(".summernoteinternal").summernote("code", replaceLinebreaksInString(val));
         }
+
     }
     if (!isNullOrEmpty(data.FinishingCause_Id)) {
+
         val = data.FinishingCause_Id || '';
         SetValueToBtnGroup('#divFinishingType', "#divBreadcrumbs_FinishingType", "#CaseLog_FinishingType", val, doOverwrite);
     }

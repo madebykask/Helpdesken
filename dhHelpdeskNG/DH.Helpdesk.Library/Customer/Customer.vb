@@ -81,6 +81,7 @@
     Private mbUseEws As Boolean
 
     Private strBlockedEmailRecipients As String
+    Private strErrorMailTo As String
 
 
 #End Region
@@ -311,6 +312,10 @@
 
             If Not IsDBNull(dr("BlockedEmailRecipients")) Then
                 strBlockedEmailRecipients = dr("BlockedEmailRecipients")
+            End If
+
+            If Not IsDBNull(dr("ErrorMailTo")) Then
+                strErrorMailTo = dr("ErrorMailTo")
             End If
 
 
@@ -907,6 +912,14 @@
         End Set
     End Property
 
+    Public Property ErrorMailTo As String
+        Get
+            Return strErrorMailTo
+        End Get
+        Set(ByVal Value As String)
+            strErrorMailTo = Value
+        End Set
+    End Property
 
 #End Region
 End Class

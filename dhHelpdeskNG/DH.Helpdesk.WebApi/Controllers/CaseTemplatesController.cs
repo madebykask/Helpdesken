@@ -49,6 +49,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("")]
         public async Task<IList<CustomerCaseSolution>> Get([FromUri]int langId, [FromUri] bool mobileOnly = false)
         {
+
             var model = new List<CustomerCaseSolution>();
             var customers = _customerUserService.GetCustomerUsersForHomeIndexPage(UserId);
             if (!customers.Any())

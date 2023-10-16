@@ -27,8 +27,8 @@
 
 <div class="section-block">
     <h4 style="@Model.displayLogInfoHtml()">
-        <a href="#" class="showbtn"><i class="icon-plus-sign"></i></a>
-        <a href="#" class="hidebtn"><i class="icon-minus-sign"></i></a>
+        <a href="#" class="showbtn" id="showCommunication"><i class="icon-plus-sign"></i></a>
+        <a href="#" class="hidebtn" id="hideCommunication"><i class="icon-minus-sign"></i></a>
         @if (Model.case_.CaseNumber > 0)
         {
             @Translation.GetCoreTextTranslation("Ärende")
@@ -141,7 +141,7 @@
                             @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToNotifier,
                                 new { InformNotifierBehavior = Model.InformNotifierBehavior.ToJavaScriptBool(), id="sendMailToNotifyer" })
                         }
-                        <span class="lbl">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span><br />
+                        <span class="lbl" id="informNotifyerSpan">@Translation.GetCoreTextTranslation("Informera anmälare och följare om åtgärder") </span><br />
                         <span id="emailsToTitle" style="display: none;">
                             @Translation.ToTitleCase(@Translation.GetCoreTextTranslation("Till")):
                         </span><span id="emailsTo" style="display: none;"></span><br />
@@ -201,11 +201,11 @@ Model.EnableTwoAttachments))
                                 @Html.CheckBoxFor(model => model.CaseLog.SendMailAboutCaseToPerformer,
                                     new { InformPerformerBehavior = Model.InformPerformerBehavior.ToJavaScriptBool() })
 
-                                <span class="lbl case-usersearch-textarea">
+                                <div class="lbl case-usersearch-textarea" id="informPerformer">
                                     @Translation.GetCoreTextTranslation("Informera") @CaseFieldCaption(GlobalEnums.TranslationCaseFields.Performer_User_Id, "Handläggare")
                                     @if (Model.PerformersToSearch != null)
                                     {
-                                        <span id="txtInformPerformer" style="display: none">
+                                        <span id="txtInformPerformer" style="display: none;">
                                             @Html.Raw("(")<span id="selected-performer-email">
                                                 @{
                                                     var selectedPerformer = Model.PerformersToSearch.FirstOrDefault(p => p.UserId == Model.Performer_Id);
@@ -217,7 +217,7 @@ Model.EnableTwoAttachments))
                                             </span>@Html.Raw(")")
                                         </span>
                                     }
-                                </span>
+                                </div>
                             </div>
                             <div>
                                 @if (!Model.IsReadOnly(GlobalEnums.TranslationCaseFields.tblLog_Text_Internal, CaseSolutionFields.InternalLogNote) && !readonlyMode)
@@ -626,6 +626,41 @@ Model.EnableTwoAttachments))
 }
 
 <script>
+    $('#showCommunication').on("click", function () {
+        var $initiatorEmail = $('#case__PersonsEmail');
+        var to = $initiatorEmail.val();
+        var extras = ''
+
+        if ($("#extraEmailsInput")) {
+            if ($("#extraEmailsInput").val()) {
+                extras = $("#extraEmailsInput").val().replaceAll(";", " ").replaceAll(to, "");
+            }
+        }
+
+        if (to != '') {
+            $("#emailsTo").html(to);
+            $("#emailsTo").css('display', 'inline');
+            $("#emailsToTitle").css('display', 'inline');
+        }
+        if (extras != '') {
+            $('#extraEmailsInputShow').text(extras);
+            $('#extraEmailsInputShow').show();
+            $("#ccTitle").show();
+        }
+        $('#sendMailToNotifyer').css('display', 'inline');
+        $('#informPerformer').css('display', 'inline');
+        $('#informNotifyerSpan').css('display', 'inline');
+    });
+
+    $('#hideCommunication').on("click", function () {
+        $('#sendMailToNotifyer').css('display', 'none');
+        $('#informPerformer').css('display', 'none');
+        $('#informNotifyerSpan').css('display', 'none');
+        $('#emailsToTitle').css('display', 'none');
+        $('#emailsTo').css('display', 'none');
+        $('#ccTitle').css('display', 'none');
+        $('#extraEmailsInputShow').css('display', 'none');
+    });
 
     $(document)
         .on('change'
@@ -685,9 +720,11 @@ Model.EnableTwoAttachments))
         e.preventDefault();
         $(this).parents(".section-block").addClass("hideshow");
     });
+
     $(".showbtn").on("click", function (e) {
         e.preventDefault();
         $(this).parents(".section-block").removeClass("hideshow");
+
     });
     //casePersonsEmail
 

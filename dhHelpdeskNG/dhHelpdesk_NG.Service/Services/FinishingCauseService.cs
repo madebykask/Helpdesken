@@ -34,6 +34,9 @@ namespace DH.Helpdesk.Services.Services
         IEnumerable<FinishingCauseInfo> GetFinishingCauseInfos(int customerId);
         IEnumerable<FinishingCauseInfo> GetAllFinishingCauseInfos(int customerId);
         FinishingCause GetMergedFinishingCause(int customerId);
+        IList<FinishingCause> GetAllFinishingCauses(int customerId);
+        int SaveFinishingCauseAndGetId(FinishingCause finishingCause, out IDictionary<string, string> errors);
+        int SaveFinishingCauseCategoryAndGetId(FinishingCauseCategory finishingCauseCategory, out IDictionary<string, string> errors);
     }
 
     public class FinishingCauseService : IFinishingCauseService
@@ -82,6 +85,13 @@ namespace DH.Helpdesk.Services.Services
                 .OrderBy(x => x.Name)
                 .ToList()
                 .Where(x => x.Parent_FinishingCause_Id == null)
+                .ToList();
+        }
+        public IList<FinishingCause> GetAllFinishingCauses(int customerId)
+        {
+            return this._finishingCauseRepository
+                .GetManyWithSubFinishingCauses(x => x.Customer_Id == customerId)
+                .OrderBy(x => x.Name)
                 .ToList();
         }
 
@@ -197,6 +207,29 @@ namespace DH.Helpdesk.Services.Services
             if (errors.Count == 0)
                 this.Commit();
         }
+        public int SaveFinishingCauseCategoryAndGetId(FinishingCauseCategory finishingCauseCategory, out IDictionary<string, string> errors)
+        {
+            if (finishingCauseCategory == null)
+                throw new ArgumentNullException("finishingcausecategory");
+
+            errors = new Dictionary<string, string>();
+            finishingCauseCategory.ChangedDate = DateTime.UtcNow;
+
+            if (string.IsNullOrEmpty(finishingCauseCategory.Name))
+                errors.Add("FinishingCauseCategory.Name", "Du måste ange en avslutningskategori");
+
+            if (finishingCauseCategory.Id == 0)
+            {
+                finishingCauseCategory.FinishingCauseCategoryGUID = Guid.NewGuid();
+                this._finishingCauseCategoryRepository.Add(finishingCauseCategory);
+            }   
+            else
+                this._finishingCauseCategoryRepository.Update(finishingCauseCategory);
+
+            if (errors.Count == 0)
+                this.Commit();
+            return finishingCauseCategory.Id;
+        }
 
         public void SaveFinishingCause(FinishingCause finishingCause, out IDictionary<string, string> errors)
         {
@@ -219,6 +252,29 @@ namespace DH.Helpdesk.Services.Services
 
             if (errors.Count == 0)
                 this.Commit();
+        }
+        public int SaveFinishingCauseAndGetId(FinishingCause finishingCause, out IDictionary<string, string> errors)
+        {
+            if (finishingCause == null)
+                throw new ArgumentNullException("finishingcause");
+
+            errors = new Dictionary<string, string>();
+            finishingCause.ChangedDate = DateTime.UtcNow;
+
+            if (string.IsNullOrEmpty(finishingCause.Name))
+                errors.Add("FinishingCause.Name", "Du måste ange en avslutsorsak");
+
+            if (finishingCause.Id == 0)
+            {
+                finishingCause.FinishingCauseGUID = Guid.NewGuid();
+                this._finishingCauseRepository.Add(finishingCause);
+            }
+            else
+                this._finishingCauseRepository.Update(finishingCause);
+
+            if (errors.Count == 0)
+                this.Commit();
+            return finishingCause.Id;
         }
 
         public void Commit()

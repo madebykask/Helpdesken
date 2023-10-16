@@ -66,7 +66,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                 var setting = GetCustomerSetting(customerId.Value);
                 if (setting == null)
                     throw new Exception($"Cannot find customer settings. EmailLog Id: {email.Id}, CustomerId: {customerId}");
-
+                var blockedEmails = setting.BlockedEmailRecipients;
                 var smtpServer = setting.SMTPServer;
                 var smtpPort = setting.SMTPPort;
                 var smtpUser = setting.SMTPUserName;
@@ -108,7 +108,10 @@ namespace DH.Helpdesk.EmailEngine.Library
                         var addresses = email.Cc.Split(',');
                         foreach (var address in addresses)
                         {
-                            mailMessage.CC.Add(new MailAddress(address));
+                            if(!IsBlockedRecipient(address, blockedEmails))
+                            {
+                                mailMessage.CC.Add(new MailAddress(address));
+                            }
                         }
                     }
                     if (!string.IsNullOrWhiteSpace(email.Bcc))
@@ -116,16 +119,21 @@ namespace DH.Helpdesk.EmailEngine.Library
                         var addresses = email.Bcc.Split(',');
                         foreach (var address in addresses)
                         {
-                            mailMessage.Bcc.Add(new MailAddress(address));
+                            if (!IsBlockedRecipient(address, blockedEmails))
+                            {
+                                mailMessage.Bcc.Add(new MailAddress(address));
+                            }
                         }
                     }
                     if (!string.IsNullOrWhiteSpace(email.EmailAddress))
                     {
                         var addresses = email.EmailAddress.Split(',');
+
+                        //
                         foreach (var address in addresses)
                         {
 
-                            if (IsValidEmail(address))
+                            if (IsValidEmail(address) && !IsBlockedRecipient(address, blockedEmails))
                             {
 
                                 mailMessage.To.Add(new MailAddress(address));
@@ -190,6 +198,35 @@ namespace DH.Helpdesk.EmailEngine.Library
             {
                 return false;
             }
+        }
+        private bool IsBlockedRecipient(string sEmail, string sBlockedEmailRecipients)
+        {
+            // Return false if sEmail or sBlockedEmailRecipients are empty or contain invalid characters
+            if (string.IsNullOrWhiteSpace(sEmail) || string.IsNullOrWhiteSpace(sBlockedEmailRecipients))
+            {
+                return false;
+            }
+
+            // Split sBlockedEmailRecipients into an array of strings using the semicolon as a delimiter
+            string[] emails = sBlockedEmailRecipients.Split(';');
+            if (emails.Length == 0)
+            {
+                return false;
+            }
+
+            foreach (string pattern in emails)
+            {
+                if (!string.IsNullOrWhiteSpace(pattern))
+                {
+                    // Check if sEmail contains the pattern using a case-insensitive comparison
+                    if (sEmail.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private void AttachFiles(MailMessage mailMessage, string filesString)

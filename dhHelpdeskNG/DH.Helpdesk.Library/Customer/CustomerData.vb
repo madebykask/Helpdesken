@@ -40,7 +40,7 @@ Public Class CustomerData
                            "tblSettings.LDAPSyncType, tblCustomer.Days2WaitBeforeDelete, tblSettings.LDAPAuthenticationType, 0 AS WorkingGroup_Id, " &
                            "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " &
                            "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, tblCustomer.CaseStatisticsEMailList, tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, " &
-                           "tblSettings.DefaultAdministratorExternal, tblCustomer.NewCaseEMailList, tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, tblSettings.BlockedEmailRecipients "
+                           "tblSettings.DefaultAdministratorExternal, tblCustomer.NewCaseEMailList, tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo "
 
                 If Id <> 0 Then
                     sSQL = sSQL & ", tblSettings.XMLFileFolder, tblCustomer.NDSPath AS LDAPServerName, tblSettings.LDAPUserName, tblSettings.LDAPPassword " & _
@@ -314,7 +314,7 @@ Public Class CustomerData
                         "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " &
                         "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, Null AS WorkingGroupEMail, tblCustomer.CaseStatisticsEMailList, " &
                         "tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.DefaultAdministratorExternal, Null AS WorkingGroupDefaultCaseType_Id, tblCustomer.NewCaseEMailList, " &
-                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization,  tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, tblSettings.BlockedEmailRecipients "
+                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization,  tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo "
 
             sSQL = sSQL & ", tblSettings.M2TNewCaseMailTo "
 
@@ -371,7 +371,7 @@ Public Class CustomerData
                         "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.EMailImportType, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " &
                         "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, tblWorkingGroup.WorkingGroupEMail, tblCustomer.CaseStatisticsEMailList, " &
                         "tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.DefaultAdministratorExternal, tblWorkingGroup.EMailCaseType_Id AS WorkingGroupDefaultCaseType_Id, tblCustomer.NewCaseEMailList, " &
-                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization, tblSettings.M2TNewCaseMailTo, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, tblSettings.BlockedEmailRecipients "
+                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization, tblSettings.M2TNewCaseMailTo, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo "
 
             sSQL = sSQL & "FROM tblCustomer " & _
                             "INNER JOIN tblSettings ON tblCustomer.Id = tblSettings.Customer_Id " & _

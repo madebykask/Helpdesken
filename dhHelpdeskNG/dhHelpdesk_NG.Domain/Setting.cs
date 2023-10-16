@@ -151,5 +151,30 @@ namespace DH.Helpdesk.Domain
         public int DefaultCaseTemplateId { get; set; }
         public bool QuickLinkWGRestriction { get; set; }
         public bool AllowMoveCaseToAnyCustomer { get; set; }
-	}
+        public string BlockedEmailRecipients { get; set; }
+
+        public string EMailFolder { get; set; }
+
+        public string EMailFolderArchive { get; set; }
+
+        public bool UseEws { get; set; }
+
+        public string EwsApplicationId { get; set; }
+
+        public string EwsClientSecret { get; set; }
+
+        public string EwsTenantId { get; set; }
+        public string SharePointSiteId { get; set; }
+        public string SharePointUserName { get; set; }
+        public string SharePointPassword { get; set; }
+        public string SharePointFolderId { get; set; }
+        public string SharePointDriveId { get; set; }
+
+        public string SharePointSecretKey { get; set; }
+        public string SharePointClientId { get; set; }
+        public string SharePointTenantId { get; set; }
+        public string SharePointScope { get; set; }
+
+        public string ErrorMailTo { get; set; }
+    }
 }

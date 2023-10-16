@@ -19,9 +19,20 @@ namespace DH.Helpdesk.Services.Services.Concrete
     using System.Net;
     using System.Net.Mime;
     using System.IO;
+    using DH.Helpdesk.Dal.Repositories;
 
     public sealed class EmailService : IEmailService
     {
+        //Implement iSettingsservice
+        private readonly ISettingService _settingService;
+        private readonly ICaseHistoryRepository _caseHistoryRepository;
+
+        public EmailService(ISettingService settingsService, ICaseHistoryRepository caseHistoryRepository)
+        {
+            _settingService = settingsService;
+            _caseHistoryRepository = caseHistoryRepository;
+        }
+
         private readonly ILog _logger = LogManager.GetLogger(typeof(EmailService));
 
         const string EMAIL_SEND_MESSAGE = "Email has been sent!";
@@ -228,10 +239,24 @@ namespace DH.Helpdesk.Services.Services.Concrete
             EmailType emailType = EmailType.ToMail, 
              string siteSelfServiceMergeParent = "")
         {
-
-            return emailsettings.BatchEmail
+           
+            //Get customerid from casehistory
+            int customerID = _caseHistoryRepository.GetById((int)el.CaseHistory_Id).Customer_Id;
+            to = RemoveBlockedRecipients(customerID, to);
+            if(!String.IsNullOrEmpty(cc))
+            {
+                cc = RemoveBlockedRecipients(customerID, cc);
+            }
+            if(!String.IsNullOrEmpty(to))
+            {
+                return emailsettings.BatchEmail
                 ? EnqueueEmail(el, from, to, cc, subject, body, fields, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType, siteSelfServiceMergeParent)
                 : SendEmail(from, to, cc, subject, body, fields, emailsettings, mailMessageId, highPriority, files, siteSelfService, siteHelpdesk, emailType, siteSelfServiceMergeParent);
+            }
+            else
+            {
+                return new EmailResponse(DateTime.Now, "No valid recipients", 0);
+            }
         }
 
 
@@ -623,6 +648,65 @@ namespace DH.Helpdesk.Services.Services.Concrete
 
             return alternateView;
         }
+        private bool IsBlockedRecipient(string sEmail, string sBlockedEmailRecipients)
+        {
+            // Return false if sEmail or sBlockedEmailRecipients are empty or contain invalid characters
+            if (string.IsNullOrWhiteSpace(sEmail) || string.IsNullOrWhiteSpace(sBlockedEmailRecipients))
+            {
+                return false;
+            }
 
+            // Split sBlockedEmailRecipients into an array of strings using the semicolon as a delimiter
+            string[] emails = sBlockedEmailRecipients.Split(';');
+            if (emails.Length == 0)
+            {
+                return false;
+            }
+
+            foreach (string pattern in emails)
+            {
+                if (!string.IsNullOrWhiteSpace(pattern))
+                {
+                    // Check if sEmail contains the pattern using a case-insensitive comparison
+                    if (sEmail.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) >= 0)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+        //Kan det vara en lista med flera adresser??
+        public string RemoveBlockedRecipients(int customerId, string emailList)
+        {
+            // Split email lists into arrays
+            string[] emails = emailList.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries)
+                                       .Select(e => e.Trim())
+                                       .ToArray();
+
+            string blockedEmailsList = _settingService.GetCustomerSettings(customerId).BlockedEmailRecipients;
+            if(!string.IsNullOrEmpty(blockedEmailsList))
+            {
+                string[] blockedPatterns = blockedEmailsList.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                            .Select(e => e.Trim())
+                                            .ToArray();
+
+                // Filter out the emails based on the blocked patterns
+                string[] filteredEmails = emails.Where(email =>
+                        !blockedPatterns.Any(pattern =>
+                            email.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) != -1
+                        )
+                    ).ToArray();
+
+                // Join the filtered emails back into a single string
+                return string.Join(",", filteredEmails);
+            }
+            else
+            {
+                return emailList;
+            }
+
+        }
     }
 }

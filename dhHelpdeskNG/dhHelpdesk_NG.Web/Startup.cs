@@ -11,6 +11,7 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using Microsoft.Owin.Security.Notifications;
 using System.Threading.Tasks;
+using System.Web;
 
 [assembly: OwinStartup(typeof(DH.Helpdesk.Web.App_Start.Startup))]
 namespace DH.Helpdesk.Web.App_Start
@@ -38,13 +39,18 @@ namespace DH.Helpdesk.Web.App_Start
         System.Configuration.ConfigurationManager.AppSettings["MicrosoftLogin"] : "";
         public void Configuration(IAppBuilder app)
         {
+            if (!HttpContext.Current.Request.IsLocal)
+            {
+                System.Web.Helpers.AntiForgeryConfig.RequireSsl = true;
+            }
+
             var config = new HttpConfiguration();
              app.SetDefaultSignInAsAuthenticationType(CookieAuthenticationDefaults.AuthenticationType);
 
             var cookieOptions = new CookieAuthenticationOptions
             {
                 //SameSiteMode.None should be always with Secure = true in chrome https://docs.microsoft.com/en-us/aspnet/core/security/samesite?view=aspnetcore-5.0
-                CookieSameSite = SameSiteMode.None,
+                CookieSameSite = Microsoft.Owin.SameSiteMode.None,
                 CookieSecure = CookieSecureOption.Always,
                 CookieName ="HDCookie",
                 //SlidingExpiration = true,

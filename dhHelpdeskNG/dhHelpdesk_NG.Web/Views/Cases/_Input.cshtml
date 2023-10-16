@@ -2545,7 +2545,10 @@
                 $('.summernoteinternal').val($('.summernoteinternal').summernote('isEmpty') ? "" : contents);
                 var $txtInformPerformer = $('#txtInformPerformer');
                 $($txtInformPerformer).css('display', 'none');
-                if (this.value.length) {
+                var plainText = $('<div>').html(contents).text().trim(); // Strip HTML and trim whitespace
+                var isEmpty = !plainText.length; // Check if the plain text is empty
+
+                if (!isEmpty) {
 
                     $($txtInformPerformer).css('display', 'inline');
                     //Check if we should tick checkbox from hidden
@@ -2588,9 +2591,11 @@
 
                 $('.summernoteexternal').val($('.summernoteexternal').summernote('isEmpty') ? "" : contents);
 
-                var $initiatorEmail = $('#case__PersonsEmail')
+                var $initiatorEmail = $('#case__PersonsEmail');
+                var plainText = $('<div>').html(contents).text().trim(); // Strip HTML and trim whitespace
+                var isEmpty = !plainText.length; // Check if the plain text is empty
 
-                if (this.value.length) {
+                if (!isEmpty) {
 
                     $('#sendMailToNotifyer:not(:disabled)').attr('checked', 'checked');
 
@@ -2618,6 +2623,10 @@
                 }
                 else {
                     $('#sendMailToNotifyer:not(:disabled)').prop('checked', false);
+                    $("#emailsTo").css('display', 'none');
+                    $("#emailsToTitle").css('display', 'none');
+                    $('#extraEmailsInputShow').hide();
+                    $("#ccTitle").hide();
                 }
 
                 validator.element($('.summernoteexternal'));
@@ -2754,8 +2763,13 @@
         });
 
         function replaceLinebreakesInTextArea(textarea) {
-            var text = textarea.summernote('code').replace(/\r\n|\r|\n/g, "<br />").replace("<p><br></p>","");
-            textarea.summernote('code', text);
+            var text = textarea.summernote('code')
+                .replace(/\r\n|\r|\n/g, "<br>")     // Replace line breaks with <br>
+                .replace(/<o:p>&nbsp;<\/o:p>/g, "<br>") // Remove Office-generated tags
+                .replace(/<o:p><\/o:p>/g, "")
+                .replace(/<p><\/p>/g, "<br>")
+
+            textarea.summernote('code', '<div>' + text + '</div>');
         }
     });
 </script>

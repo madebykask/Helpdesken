@@ -12,10 +12,12 @@ using DH.Helpdesk.Common.Extensions.Integer;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Web.Common.Models.CaseSearch;
 using DH.Helpdesk.Web.Infrastructure;
+using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
 using DH.Helpdesk.Web.Infrastructure.Grid;
 using DH.Helpdesk.Web.Models.Case;
 using DH.Helpdesk.Web.Models.Case.Output;
+using static DH.Helpdesk.Dal.Repositories.CaseRepository;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -244,10 +246,20 @@ namespace DH.Helpdesk.Web.Controllers
             string notFoundText = Translation.GetCoreTextTranslation("Inget ärende tillgängligt");
 
             int caseId = _caseService.GetCaseQuickOpen(SessionFacade.CurrentUser, SessionFacade.CurrentCustomer.Id, searchFor);
-
+            //Get the case
+            var theCaseToCheck = _caseService.GetCaseById(caseId);
             if (caseId > 0)
             {
-
+                var userDeps = _departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
+                if(userDeps != null && userDeps.Count > 0) {
+                    //Check if the user has access to the case
+                    if (!userDeps.Any(x => x.Id == theCaseToCheck.Department_Id))
+                    {
+                        notFoundText = Translation.GetCoreTextTranslation("Åtkomst nekad");
+                        return this.Json(new { result = "error", data = notFoundText });
+                    }
+                }
+                
                 if (_userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, caseId))
                 {
                     return this.Json(new { result = "success", data = "/Cases/Edit/" + caseId });

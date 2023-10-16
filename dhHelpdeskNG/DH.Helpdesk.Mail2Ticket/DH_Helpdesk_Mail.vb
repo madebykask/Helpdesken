@@ -276,6 +276,8 @@ Module DH_Helpdesk_Mail
         Dim isHtml As Boolean = False
 
         Try
+
+            ' Hämta globala inställningar
             gsConnectionString = sConnectionstring
 
             ' Hämta globala inställningar
@@ -337,6 +339,7 @@ Module DH_Helpdesk_Mail
                     Dim mails As List(Of MailMessage) = Nothing
                     ' Denna try fångar exception
                     Try
+
                         ' hämta inställningar om e-post texten ska översättas till fält på ärendet
                         Dim fieldsToUpdate As Dictionary(Of String, String)
                         fieldsToUpdate = objCustomerData.GetCaseFieldsSettings(objCustomer.Id)
@@ -353,8 +356,8 @@ Module DH_Helpdesk_Mail
 
                         Dim ip As String = ""
 
-                        If objCustomer.UseEws Then
-                            If IsNullOrEmpty(objCustomer.EMailFolder) Then
+                        If eMailConnectionType = MailConnectionType.Ews Then
+                            If String.IsNullOrEmpty(objCustomer.EMailFolder) Then
                                 objCustomer.EMailFolder = InboxMailFolderName 'Set Default To inbox If NULL
                             End If
 
@@ -450,7 +453,7 @@ Module DH_Helpdesk_Mail
 
                         End If
 
-                        LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName & ", EWS Mode: " & objCustomer.UseEws, iPop3DebugLevel)
+                        LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName & ", EWS Mode: " & MailConnectionType.Ews, iPop3DebugLevel)
 
 
                         If eMailConnectionType = MailConnectionType.Pop3 Then
@@ -791,7 +794,7 @@ Module DH_Helpdesk_Mail
                                     'iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail.ToString())
 
 
-                                    ' save caseisabout
+                                    ' save caseisabout - Advanced
                                     If fieldsToUpdate.Count > 0 Then
                                         If fields.Count > 0 Then
                                             Dim objCaseIsAbout As ComputerUser = CreateCaseIsAbout(objCustomer.Id, fields)
@@ -846,7 +849,6 @@ Module DH_Helpdesk_Mail
                                         newcaseEmailTo = sNewCaseToEmailAddress
                                     End If
                                     '#65030
-
                                     If isBlockedRecipient(newcaseEmailTo, objCustomer.BlockedEmailRecipients) = False Then
                                         If isValidRecipient(newcaseEmailTo, objCustomer.AllowedEMailRecipients) = True Then
                                             If objCustomer.EMailRegistrationMailID <> 0 And bOrder = False And (message.From.ToString() <> message.To.ToString()) Then
@@ -875,10 +877,10 @@ Module DH_Helpdesk_Mail
                                                 'End If  #65030
                                             End If
                                         Else
-                                            LogToFile("readMailBox, isValidRecipient false" & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients, iPop3DebugLevel)
+                                            LogToFile("readMailBox, isValidRecipient false: " & objCase.Persons_EMail & ", " & objCustomer.AllowedEMailRecipients, iPop3DebugLevel)
                                         End If
                                     Else
-                                        LogToFile("readMailBox, isBlockedRecipient true" & objCase.Persons_EMail & ", " & objCustomer.BlockedEmailRecipients, iPop3DebugLevel)
+                                        LogToFile("readMailBox, isBlockedRecipient true: " & objCase.Persons_EMail & ", " & objCustomer.BlockedEmailRecipients, iPop3DebugLevel)
                                     End If
 
                                     If objCustomer.EMailRegistrationMailID <> 0 And objCustomer.NewCaseEMailList <> "" Then
@@ -1168,7 +1170,7 @@ Module DH_Helpdesk_Mail
                                                 objLogData.createEMailLog(iCaseHistory_Id, objCase.PerformerEMail, MailTemplates.CaseIsUpdated, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                             End If
                                         End If
-                                    ElseIf iFinishingCause_Id <> 0 And Len(objCase.Persons_EMail) > 6 Then
+                                    ElseIf iFinishingCause_Id <> 0 And Len(objCase.Persons_EMail) > 6 And Not isBlockedRecipient(objCase.Persons_EMail, objCustomer.BlockedEmailRecipients) Then
                                         objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.ClosedCase, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
                                         If Not objMailTemplate Is Nothing Then
@@ -2012,6 +2014,14 @@ Module DH_Helpdesk_Mail
         Try
             If Not message Is Nothing Then
 
+                If Directory.Exists(sFolder) = False Then
+                    Directory.CreateDirectory(sFolder)
+                End If
+
+                If Directory.Exists(sFolder & "\html") = False Then
+                    Directory.CreateDirectory(sFolder & "\html")
+                End If
+
                 If message.HasBodyHtml Then
 
                     sBodyHtml = message.BodyHtml
@@ -2021,14 +2031,6 @@ Module DH_Helpdesk_Mail
                     'Dim apa As String = "/<body[^>]*>((.|[\n\r])*)<\/body>/im"
 
                     sBodyHtml = Regex.Replace(sBodyHtml, "<base.*?>", "")
-
-                    If Directory.Exists(sFolder) = False Then
-                        Directory.CreateDirectory(sFolder)
-                    End If
-
-                    If Directory.Exists(sFolder & "\html") = False Then
-                        Directory.CreateDirectory(sFolder & "\html")
-                    End If
 
                     ' Skapa fil
                     sFileName = sCaseNumber & ".htm"
@@ -2079,6 +2081,7 @@ Module DH_Helpdesk_Mail
                                 End If
                             End If
                         Next
+
                     End If
 
                     Dim objFile As StreamWriter
@@ -2088,8 +2091,19 @@ Module DH_Helpdesk_Mail
                     objFile.Write(sBodyHtml)
                     objFile.Close()
 
+                Else
+                    ' Skapa fil
+                    Dim objFile As StreamWriter
+                    sFileName = sCaseNumber & ".htm"
+                    Dim htmlString As String = System.Net.WebUtility.HtmlEncode(message.BodyText).Replace(vbLf, "<br />")
+                    htmlString = "<font face=verdana>" & htmlString & "</font>"
+                    objFile = New StreamWriter(sFolder & "\html\" & sFileName, False, UnicodeEncoding.UTF8)
+                    objFile.Write(htmlString)
+                    objFile.Close()
 
                 End If
+
+
             End If
 
         Catch ex As Exception
@@ -2117,70 +2131,60 @@ Module DH_Helpdesk_Mail
 
         Try
             If Not message Is Nothing Then
-                If message.HasBodyHtml Then
 
-                    sBodyHtml = message.BodyHtml
-                    sBodyHtml = Regex.Replace(sBodyHtml, "<base.*?>", "")
-
-                    If Directory.Exists(sFolder) = False Then
-                        Directory.CreateDirectory(sFolder)
-                    End If
-
-                    If Directory.Exists(sFolder & "\Mail") = False Then
-                        Directory.CreateDirectory(sFolder & "\Mail")
-                    End If
-
-                    ' Skapa fil                   
-                    pdfFileName = sCaseNumber & ".pdf"
-
-                    'Winovative
-
-                    Dim htmlToPdfConverter As New HtmlToPdfConverter()
-
-                    ' Set license key received after purchase to use the converter in licensed mode
-                    ' Leave it not set to use the converter in demo mode
-                    'htmlToPdfConverter.LicenseKey = "xUtbSltKWkpbW0RaSllbRFtYRFNTU1M="
-                    htmlToPdfConverter.LicenseKey = "K6W2pLWksra3tqS1saq0pLe1qrW2qr29vb2ktA=="
-
-                    ' Set PDF page size which can be a predefined size like A4 or a custom size in points 
-                    ' Leave it not set to have a default A4 PDF page
-                    'htmlToPdfConverter.PdfDocumentOptions.PdfPageSize = SelectedPdfPageSize()
-                    ' Enable header in the generated PDF document
-                    'htmlToPdfConverter.PdfDocumentOptions.ShowHeader = True
-
-                    ' Optionally add a space between header and the page body
-                    ' The spacing for first page and the subsequent pages can be set independently
-                    ' Leave this option not set for no spacing
-                    'htmlToPdfConverter.PdfDocumentOptions.Y = Single.Parse(5)
-                    'htmlToPdfConverter.PdfDocumentOptions.TopSpacing = Single.Parse(0)
-
-
-                    'DrawHeader(sFolder & "\html\" & "HeaderFile.htm", htmlToPdfConverter, True)
-
-                    ' Convert HTML to PDF using the settings above
-                    Dim outPdfFile As String = sFolder & "\Mail\" & sCaseNumber & ".pdf"
-                    Try
-
-                        Dim url As String = sFolder & "\html\" & sCaseNumber & ".htm"
-
-                        ' Convert the HTML page given by an URL to a PDF document in a memory buffer
-                        Dim outPdfBuffer() As Byte = htmlToPdfConverter.ConvertUrl(url)
-
-                        ' Write the memory buffer in a PDF file
-                        File.WriteAllBytes(outPdfFile, outPdfBuffer)
-
-                    Catch ex As Exception
-                        ' The HTML to PDF conversion failed                       
-                        LogError(String.Format("HTML to PDF Error. {0}", ex.Message), objCustomer)
-                    End Try
-
-                    ' Open the created PDF document in default PDF viewer
-                    'Try
-                    '    Process.Start(outPdfFile)
-                    'Catch ex As Exception
-                    '    LogError(String.Format("Cannot open created PDF file '{0}'. {1}", outPdfFile, ex.Message))
-                    'End Try
+                If Directory.Exists(sFolder) = False Then
+                    Directory.CreateDirectory(sFolder)
                 End If
+
+                If Directory.Exists(sFolder & "\Mail") = False Then
+                    Directory.CreateDirectory(sFolder & "\Mail")
+                End If
+
+                ' Skapa fil                   
+                pdfFileName = sCaseNumber & ".pdf"
+
+                'Winovative
+
+                Dim htmlToPdfConverter As New HtmlToPdfConverter()
+
+                ' Set license key received after purchase to use the converter in licensed mode
+                ' Leave it not set to use the converter in demo mode
+                'htmlToPdfConverter.LicenseKey = "xUtbSltKWkpbW0RaSllbRFtYRFNTU1M="
+                htmlToPdfConverter.LicenseKey = "K6W2pLWksra3tqS1saq0pLe1qrW2qr29vb2ktA=="
+
+                ' Set PDF page size which can be a predefined size like A4 or a custom size in points 
+                ' Leave it not set to have a default A4 PDF page
+                'htmlToPdfConverter.PdfDocumentOptions.PdfPageSize = SelectedPdfPageSize()
+                ' Enable header in the generated PDF document
+                'htmlToPdfConverter.PdfDocumentOptions.ShowHeader = True
+
+                ' Optionally add a space between header and the page body
+                ' The spacing for first page and the subsequent pages can be set independently
+                ' Leave this option not set for no spacing
+                'htmlToPdfConverter.PdfDocumentOptions.Y = Single.Parse(5)
+                'htmlToPdfConverter.PdfDocumentOptions.TopSpacing = Single.Parse(0)
+
+
+                'DrawHeader(sFolder & "\html\" & "HeaderFile.htm", htmlToPdfConverter, True)
+
+                ' Convert HTML to PDF using the settings above
+                Dim outPdfFile As String = sFolder & "\Mail\" & sCaseNumber & ".pdf"
+                Try
+
+                    Dim url As String = sFolder & "\html\" & sCaseNumber & ".htm"
+
+                    ' Convert the HTML page given by an URL to a PDF document in a memory buffer
+                    Dim outPdfBuffer() As Byte = htmlToPdfConverter.ConvertUrl(url)
+
+                    ' Write the memory buffer in a PDF file
+                    File.WriteAllBytes(outPdfFile, outPdfBuffer)
+
+                Catch ex As Exception
+                    ' The HTML to PDF conversion failed                       
+                    LogError(String.Format("HTML to PDF Error. {0}", ex.Message), objCustomer)
+                End Try
+
+
             End If
 
         Catch ex As Exception
@@ -2386,6 +2390,7 @@ Module DH_Helpdesk_Mail
 
     End Function
 
+
     Private Function isBlockedRecipient(sEMail As String, sBlockedEMailRecipents As String) As Boolean
         ' Return False if sEMail or sBlockedEMailRecipients are empty or contain invalid characters
         If String.IsNullOrWhiteSpace(sEMail) Or String.IsNullOrWhiteSpace(sBlockedEMailRecipents) Then
@@ -2397,22 +2402,16 @@ Module DH_Helpdesk_Mail
             Return False
         End If
 
-        isBlockedRecipient = False
-
-        If sBlockedEMailRecipents = "" Then
-            isBlockedRecipient = False
-        Else
-            For i As Integer = 0 To aEMails.Length - 1
-                If aEMails(i).ToString() <> "" Then
-                    If InStr(sEMail, aEMails(i).ToString(), CompareMethod.Text) <> 0 Then
-
-                        isBlockedRecipient = True
-                        Exit For
-                    End If
+        For Each pattern As String In aEMails
+            If Not String.IsNullOrWhiteSpace(pattern) Then
+                ' Check if sEMail contains the pattern using a case-insensitive comparison
+                If sEMail.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) >= 0 Then
+                    Return True
                 End If
+            End If
+        Next
 
-            Next
-        End If
+        Return False
     End Function
 
     Private Function isValidRecipient(sEMail As String, sAllowedEMailRecipents As String) As Boolean
@@ -2624,20 +2623,28 @@ Module DH_Helpdesk_Mail
         If objErrorLogFile IsNot Nothing Then
             objErrorLogFile.WriteLine("{0}: {1}", Now(), msg)
         End If
-        SendErrorMail(msg)
+        'check if objCustomer not is null
+        If objCustomer IsNot Nothing Then
+            SendErrorMail(msg, objCustomer)
+        End If
+
     End Sub
 
-    Private Sub SendErrorMail(msg As String)
+    Private Sub SendErrorMail(msg As String, objCustomer As Customer)
         Try
-            Dim smtpServer As String = GetAppSettingValue("DefaultSmtpServer")
             Dim sConnectionstring As String = ConfigurationManager.ConnectionStrings("Helpdesk")?.ConnectionString
-            Dim toAddress As String = GetAppSettingValue("ErrorMailTo")
-            Dim fromAddress As String = GetAppSettingValue("ErrorMailFrom")
-            If (Not IsNullOrEmpty(smtpServer) And Not IsNullOrEmpty(toAddress) And Not IsNullOrEmpty(fromAddress)) Then
+            Dim objGlobalSettingsData As New GlobalSettingsData
+            MGlobal.gsConnectionString = sConnectionstring
+            Dim objGlobalSettings As GlobalSettings
+            objGlobalSettings = objGlobalSettingsData.getGlobalSettings()
+
+            Dim toAddress As String = objCustomer.ErrorMailTo
+            Dim fromAddress As String = objCustomer.HelpdeskEMail
+            If (Not IsNullOrEmpty(objGlobalSettings.SMTPServer) And Not IsNullOrEmpty(toAddress) And Not IsNullOrEmpty(fromAddress)) Then
 
                 Try
                     Dim objMail As New Mail
-                    objMail.SendErrorMail(fromAddress, toAddress, "Error in M2T", msg, sConnectionstring, smtpServer)
+                    objMail.SendErrorMail(fromAddress, toAddress, "Error in M2T", msg, sConnectionstring, objGlobalSettings.SMTPServer)
 
                 Catch ex As Exception
                     If objErrorLogFile IsNot Nothing Then

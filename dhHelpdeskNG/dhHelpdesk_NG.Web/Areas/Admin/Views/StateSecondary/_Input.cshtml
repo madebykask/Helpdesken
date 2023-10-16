@@ -29,13 +29,22 @@
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td class="span3">
+                                        @Translation.Get("Alternativt namn", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        @Html.TextBoxFor(model => model.StateSecondary.AlternativeStateSecondaryName, new { maxlength = "50" })
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td>
                                         @Translation.Get("Ärende", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="StateSecondary.IncludeInCaseStatistics" @(Model.StateSecondary.IncludeInCaseStatistics == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.IncludeInCaseStatistics" value="0" />
-                                        &nbsp;@Translation.Get("Fortsätt räkna tid om aktuell understatus är vald", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="StateSecondary.IncludeInCaseStatistics" @(Model.StateSecondary.IncludeInCaseStatistics == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="StateSecondary.IncludeInCaseStatistics" value="0" />
+                                            &nbsp;@Translation.Get("Fortsätt räkna tid om aktuell understatus är vald", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -43,10 +52,11 @@
                                     <td>
                                         @Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="StateSecondary.ResetOnExternalUpdate" @(Model.StateSecondary.ResetOnExternalUpdate == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.ResetOnExternalUpdate" value="0" />
-                                        &nbsp;@Translation.Get("Ta bort understatus när anmälaren uppdaterar ärendet", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="StateSecondary.ResetOnExternalUpdate" @(Model.StateSecondary.ResetOnExternalUpdate == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="StateSecondary.ResetOnExternalUpdate" value="0" />
+                                            &nbsp;@Translation.Get("Ta bort understatus när anmälaren uppdaterar ärendet", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -54,9 +64,10 @@
                                     <td>
                                         @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="StateSecondary.IsDefault" @(Model.StateSecondary.IsDefault == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.IsDefault" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="StateSecondary.IsDefault" @(Model.StateSecondary.IsDefault == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="StateSecondary.IsDefault" value="0" />
                                         </label>
                                     </td>
                                 </tr>
@@ -64,9 +75,10 @@
                                     <td>
                                         @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="StateSecondary.IsActive" @(Model.StateSecondary.IsActive == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.IsActive" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="StateSecondary.IsActive" @(Model.StateSecondary.IsActive == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="StateSecondary.IsActive" value="0" />
                                         </label>
                                     </td>
                                 </tr>
@@ -81,10 +93,11 @@
                                     <td>
                                         @Translation.Get("E-post", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="StateSecondary.NoMailToNotifier" @(Model.StateSecondary.NoMailToNotifier == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.NoMailToNotifier" value="0" />
-                                        &nbsp;@Translation.Get("Skicka mail med extern notering till anmälaren", Enums.TranslationSource.TextTranslation)
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="StateSecondary.NoMailToNotifier" @(Model.StateSecondary.NoMailToNotifier == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="StateSecondary.NoMailToNotifier" value="0" />
+                                            &nbsp;@Translation.Get("Skicka mail med extern notering till anmälaren", Enums.TranslationSource.TextTranslation)
                                         </label>
                                     </td>
                                 </tr>
@@ -93,50 +106,165 @@
                                         @Translation.Get("Påminnelse anmälare", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td>
-                                        @Translation.Get("Skicka påminnelse efter", Enums.TranslationSource.TextTranslation)
-                                        &nbsp;        
-                                        @Html.DropDownListFor(model => model.StateSecondary.ReminderDays, Model.ReminderDays, new { style = "width: 60px;" })&nbsp;
-                                        &nbsp;
+                                        <div style="width: 100%">
+                                            @Translation.Get("Skicka påminnelse efter", Enums.TranslationSource.TextTranslation)
+                                        </div>
+                                        
+                                        @Html.DropDownListFor(model => model.StateSecondary.ReminderDays, Model.ReminderDays, new { style = "width: 60px;" })
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
                                     </td>
                                 </tr>
                                 <tr>
+                                    <td>
+                                        @Translation.Get("Auto avslut", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td>
+                                        <div style="width: 100%">
+                                            @Translation.Get("Avsluta automatiskt efter", Enums.TranslationSource.TextTranslation)
+                                        </div>
+                                        
+                                        @Html.DropDownListFor(model => model.StateSecondary.AutocloseDays, Model.AutocloseDays, new { style = "width: 60px;" })
+                                        @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
+                                    <div id="autoCloseError" style="display:none;color:red;">@Translation.GetCoreTextTranslation("Avslutsdagar måste vara större än påminnelse dagar")</div>
+                                    </td>
+                                </tr>
+                                <tr id="divFinishingTypeOuterContainer">
+                                    <td>
+                                        @Translation.GetCoreTextTranslation("Avslutsorsak")
+                                    </td>
+                                    <td>
+                                        <div id="divFinishingType" class="btn-group dropdown-menu-parent">
+                                            <div class="btn" id="divBreadcrumbs_FinishingType">
+                                                @(Model.StateSecondary.FinishingCause_Id == null ? Translation.GetCoreTextTranslation("--") : Model.StateSecondary.FinishingCause.Name)
+                                            </div>
+                                            <button class="btn dropdown-toggle" data-toggle="dropdown">
+                                                <span class="caret"></span>
+                                            </button>
+                                            <ul class="dropdown-menu subddMenu parentddMenu" style="z-index:99999999999;">
+                                                <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
+                                                @Html.FinishingCauseDropdownButtonString(Model.FinishingCauses)
+                                            </ul>
+                                            @Html.HiddenFor(model => Model.StateSecondary.FinishingCause_Id)
+                                        </div>
+                                        <div id="closingTypeError" style="display:none;color:red;">@Translation.GetCoreTextTranslation("Avslutsorsak måste anges på lägsta nivå")</div>
+                                    </td>
+                                </tr>
+                                <tr>
                                     <td class="span3">
-                                        @Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)
+                                        @*@Translation.Get("E-post mall", Enums.TranslationSource.TextTranslation)*@
                                     </td>
                                     <td class="span9">
-                                        @Html.DropDownListFor(model => model.StateSecondary.MailTemplate_Id, Model.MailTemplates, "")
+                                        @*@Html.DropDownListFor(model => model.StateSecondary.MailTemplate_Id, Model.MailTemplates, "")*@
                                     </td>
                                 </tr>
                             </table>
-                        </div>
-                    </div>
-                    <h4>@Translation.Get("Regler", Enums.TranslationSource.TextTranslation)</h4>
-                    <div class="row">
-                        <div class="span12">
-                            <table class="tableform">
-                                <tr>
-                                    <td class="span3">
-                                        @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td class="span9">
-                                        @Translation.Get("Nedanstående värde ändras när aktuell understatus väljs", Enums.TranslationSource.TextTranslation)<br />
-                                        @Html.DropDownListFor(model => model.StateSecondary.WorkingGroup_Id, Model.WorkingGroups, "")
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="span3">@Translation.GetCoreTextTranslation("Beräkna nytt bevakningsdatum")</td>
-                                    <td><input type="checkbox" name="StateSecondary.RecalculateWatchDate" @(Model.StateSecondary.RecalculateWatchDate == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="StateSecondary.RecalculateWatchDate" value="0" /></td>
-                                </tr>
-                            </table>
-                            @Html.HiddenFor(model => model.StateSecondary.Customer_Id)
-                            @Html.HiddenFor(model => model.StateSecondary.Id)
+                                </div>
+                            </div>
+                            <h4>@Translation.Get("Regler", Enums.TranslationSource.TextTranslation)</h4>
+                            <div class="row">
+                                <div class="span12">
+                                    <table class="tableform">
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.Get("Driftgrupp", Enums.TranslationSource.TextTranslation)
+                                            </td>
+                                            <td class="span9">
+                                                @Translation.Get("Nedanstående värde ändras när aktuell understatus väljs", Enums.TranslationSource.TextTranslation)<br />
+                                                @Html.DropDownListFor(model => model.StateSecondary.WorkingGroup_Id, Model.WorkingGroups, "")
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="span3">@Translation.GetCoreTextTranslation("Beräkna nytt bevakningsdatum")</td>
+                                            <td><input type="checkbox" name="StateSecondary.RecalculateWatchDate" @(Model.StateSecondary.RecalculateWatchDate == 1 ? "checked=checked" : "") value="1"/>
+                                                <input type="hidden" name="StateSecondary.RecalculateWatchDate" value="0" /></td>
+                                        </tr>
+                                    </table>
+                                    @Html.HiddenFor(model => model.StateSecondary.Customer_Id)
+                                    @Html.HiddenFor(model => model.StateSecondary.Id)
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-</div>
+
+<script>
+    $(document).ready(function () {
+        var $finishTypeContainer = $('#divFinishingType');
+        var $finishTypeId = $("input[name='StateSecondary.FinishingCause_Id']");
+        var $finishTypeButton = $('#divBreadcrumbs_FinishingType');
+        $("#autoCloseError").hide();
+
+        $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var value = $(this).attr('value');
+            var text = $(this).text();
+            $finishTypeId.val(value);
+            $finishTypeButton.text(text);
+            console.log(value)
+            if ($(this).next("ul").length > 0) {
+                console.log(value)
+                $finishTypeId.val("");
+                $finishTypeButton.text("--");
+                $("#saveBtn").hide();
+                $("#closingTypeError").show();
+            }
+            else {
+                $("#saveBtn").show();
+                $("#closingTypeError").hide();
+            }
+        });
+
+
+        $("#StateSecondary_AutocloseDays").change(function () {
+            var autocloseDays = parseInt($(this).val(), 10);
+            var reminderDays = $("#StateSecondary_ReminderDays").val();
+            reminderDays = parseInt(reminderDays, 10);
+            if (autocloseDays > 0  && autocloseDays <= reminderDays)
+            {
+                $("#saveBtn").hide();
+                $("#autoCloseError").show();
+                $("#divFinishingTypeOuterContainer").hide();
+                $finishTypeId.val(undefined);
+                
+            } else {
+                $("#saveBtn").show();
+                $("#autoCloseError").hide();
+                if (autocloseDays <= 0) {
+                    $("#divFinishingTypeOuterContainer").hide();
+                    $finishTypeId.val(undefined);
+                } else {
+                    $("#divFinishingTypeOuterContainer").show();
+                }
+            }
+            
+        }).trigger("change");
+
+        $("#StateSecondary_ReminderDays").change(function () {
+            var reminderDays = parseInt($(this).val(), 10);
+            var autocloseDays = $("#StateSecondary_AutocloseDays").val();
+            autocloseDays = parseInt(autocloseDays, 10);
+            //console.log("Avslutsdagar: " + autocloseDays + "ReminderDays: " + reminderDays);
+            if (autocloseDays !== 0 && reminderDays > autocloseDays) {
+                $("#autoCloseError").show();
+                $("#saveBtn").hide();
+                $("#divFinishingTypeOuterContainer").hide();
+            }
+            else {
+                $("#saveBtn").show();
+                if (autocloseDays > 0) {
+                    $("#autoCloseError").hide();
+                    $("#divFinishingTypeOuterContainer").show();
+                }
+                else {
+                    $("#autoCloseError").hide();
+                    $("#divFinishingTypeOuterContainer").hide();
+                }
+                
+            }
+
+        });
+    });
+</script>
 

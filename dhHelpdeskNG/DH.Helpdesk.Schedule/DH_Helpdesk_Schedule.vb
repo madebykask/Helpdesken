@@ -4,6 +4,9 @@ Imports DH.Helpdesk.Library
 Imports System.IO
 Imports DH.Helpdesk.Library.SharedFunctions
 Imports DH.Helpdesk.Common.Constants
+Imports DH.Helpdesk.Common.Enums
+Imports System.Linq
+Imports DH.Helpdesk.Common.Extensions.[Object]
 
 Module DH_Helpdesk_Schedule
     'Private objLogFile As StreamWriter
@@ -114,6 +117,18 @@ Module DH_Helpdesk_Schedule
                     openLogFile()
                     objLogFile.WriteLine(Now() & ", Questionnaire")
                     sendQuestionnaire(sConnectionstring)
+                    closeLogFile()
+                Case 13
+                    giLoglevel = 1
+                    openLogFile()
+                    objLogFile.WriteLine(Now() & ", CaseAutoClose")
+                    caseAutoClose(sConnectionstring)
+                    closeLogFile()
+                Case 14
+                    giLoglevel = 1
+                    openLogFile()
+                    objLogFile.WriteLine(Now() & ", Case Statistics")
+                    sendCaseStatistics(sConnectionstring)
                     closeLogFile()
                 Case Else
                     openLogFile()
@@ -446,10 +461,118 @@ Module DH_Helpdesk_Schedule
                     Dim objMail As New Mail
                     Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
+                    objLogFile.WriteLine(Now() & ", caseReminder, Case:" & objCase.Casenumber.ToString & ", to: " & objCase.Persons_EMail)
+
                     objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, SharedFunctions.EMailType.EMailReminderNotifier, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                 End If
             End If
 
+        Next
+        'End If
+
+    End Sub
+
+    Private Sub caseAutoClose(ByVal sConnectionString As String)
+        Dim objGlobalSettingsData As New GlobalSettingsData
+        Dim objGlobalSettings As GlobalSettings
+        Dim objCaseData As New CaseData
+        Dim objCase As CCase
+        Dim objCustomerData As New CustomerData
+        Dim objCustomer As Customer
+        Dim objMailTemplateData As New MailTemplateData
+        Dim objMailTemplate As MailTemplate
+        Dim objLogData As New LogData
+        Dim objTextTranslationData As New TextTranslationData
+        Dim objLog As New Log
+        Dim sMessageId As String
+        Dim sEmailList As String = ""
+
+        gsConnectionString = sConnectionString
+
+        ' Hämta globala inställningar
+        objGlobalSettings = objGlobalSettingsData.getGlobalSettings()
+        giDBType = objGlobalSettings.DBType
+
+        ' Hämta ärenden
+        Dim colCase As Collection = objCaseData.getCaseAutoClose
+
+        For i As Integer = 1 To colCase.Count
+            objCase = colCase(i)
+
+            If objCase.StateSecondary_FinishingCause_Id IsNot Nothing Then
+
+                objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber)
+
+                Dim iCaseHistory_Id As Integer = objCaseData.saveCaseHistory(objCase.Id, "DH Helpdesk")
+
+                objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
+
+                ' Save Logs (Logga händelsen)
+                Dim iLog_Id As Integer = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", "", 0, "DH Helpdesk", iCaseHistory_Id, objCase.StateSecondary_FinishingCause_Id)
+                objCaseData.closeCase(objCase)
+
+                objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailCaseClosed, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+
+                If objMailTemplate IsNot Nothing Then
+                    If objCase.Persons_EMail <> "" Then
+                        If objMailTemplate.SendMethod = "1" Then
+                            sEmailList = objCase.Persons_EMail
+                        Else
+                            sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+
+                            Dim sSendTime As DateTime = Date.Now()
+                            Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                            Dim objMail As New Mail
+                            Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
+
+                            objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+
+                        End If
+
+                    End If
+
+
+                    Dim followers As List(Of String) = objCaseData.getCaseExtraFollowers(objCase.Id)
+
+                    If followers.Count > 0 Then
+                        For Each follower As String In followers
+                            If objMailTemplate.SendMethod = "1" Then
+                                If sEmailList = "" Then
+                                    sEmailList = follower
+                                Else
+                                    sEmailList = sEmailList & ";" & follower
+                                End If
+
+                            Else
+                                sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+
+                                Dim sSendTime As DateTime = Date.Now()
+                                Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                                Dim objMail As New Mail
+                                Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, follower, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
+
+                                objLogData.createEMailLog(iCaseHistory_Id, follower, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+
+                            End If
+                        Next
+
+                    End If
+
+                    If sEmailList <> "" Then
+                        sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+
+                        Dim sSendTime As DateTime = Date.Now()
+                        Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                        Dim objMail As New Mail
+                        Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, sEmailList, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
+
+                        objLogData.createEMailLog(iCaseHistory_Id, sEmailList, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+
+                    End If
+
+                End If
+
+            End If
         Next
         'End If
 
@@ -921,6 +1044,10 @@ Module DH_Helpdesk_Schedule
         Dim objGlobalSettings As GlobalSettings
         Dim objCustomerData As New CustomerData
         Dim objCustomer As Customer
+        Dim objPriorityData As New PriorityData
+        Dim objPriority As Priority
+        Dim objCaseData As New CaseData
+        Dim objCase As CCase
 
         gsConnectionString = sConnectionString
 
@@ -931,226 +1058,192 @@ Module DH_Helpdesk_Schedule
 
         Dim colCustomer = objCustomerData.getCustomers()
 
-        For i = 1 To colCustomer.Count
+        For i = 0 To colCustomer.Count - 1
             objCustomer = colCustomer(i)
 
             If objCustomer.CaseStatisticsEMailList <> "" Then
+                Dim sStatistics As String
+                Dim iWorkingDayStart As Integer = objCustomer.WorkingDayStart
+                Dim iWorkingDayEnd = objCustomer.WorkingDayEnd
+                Dim iWorkingDayLength As Integer = CInt(iWorkingDayEnd) - CInt(iWorkingDayStart)
+                Dim vCaseInfo As List(Of KeyValuePair(Of String, Integer)) = New List(Of KeyValuePair(Of String, Integer))
+                Dim vPriority As List(Of KeyValuePair(Of String, Integer)) = New List(Of KeyValuePair(Of String, Integer))
+
+                Dim iMaxSolutionTime As Integer = 0
+                Dim iNumberOfPrioritiesLessThan1WorkingDay As Integer = 0
+
+                ' Hämta in prioriteter
+                Dim colPriority As Collection = objPriorityData.GetPriorityByCustomerId(objCustomer.Id)
+
+                If colPriority IsNot Nothing Then
+                    For j = 1 To colPriority.Count
+                        objPriority = colPriority(j)
+
+                        If objPriority.SolutionTime > iMaxSolutionTime Then
+                            iMaxSolutionTime = objPriority.SolutionTime
+                        End If
+
+                        ' Lägg in prioriteter som har mindre än 1 arbetsdags lösningstid
+                        If objPriority.SolutionTime <> 0 And objPriority.SolutionTime < iWorkingDayLength Then
+                            iNumberOfPrioritiesLessThan1WorkingDay = iNumberOfPrioritiesLessThan1WorkingDay + 1
+
+                            vPriority.Add(New KeyValuePair(Of String, Integer)(objPriority.Name, objPriority.SolutionTime))
+                        End If
+                    Next
+                End If
+
+                ' Skapa array som ska innehålla statistikinformation
+                Dim vStatistics As List(Of KeyValuePair(Of String, Integer)) = New List(Of KeyValuePair(Of String, Integer))
+
+                vStatistics.Add(New KeyValuePair(Of String, Integer)("Ärenden", 0))
+                vStatistics.Add(New KeyValuePair(Of String, Integer)("Aktiva", 0))
+                vStatistics.Add(New KeyValuePair(Of String, Integer)("Vilande", 0))
+                vStatistics.Add(New KeyValuePair(Of String, Integer)("Varnade", 0))
+                vStatistics.Add(New KeyValuePair(Of String, Integer)("Bevakade", 0))
+
+                ' Skapa array med prioriteter
+                If iMaxSolutionTime <> 0 Then
+                    vCaseInfo.Add(New KeyValuePair(Of String, Integer)("0 (Akut)", 0))
+
+                    For Each pair As KeyValuePair(Of String, Integer) In vPriority
+                        vCaseInfo.Add(New KeyValuePair(Of String, Integer)(pair.Key, 0))
+                    Next
+
+                    'For i = 1 + iNumberOfPrioritiesLessThan1WorkingDay To iMaxSolutionTime + iNumberOfPrioritiesLessThan1WorkingDay
+                    '    vCaseInfo(i, 0) = i - iNumberOfPrioritiesLessThan1WorkingDay
+                    '    vCaseInfo(i, 1) = 0
+                    'Next
+                End If
+
+
+
+                Dim colCases = objCaseData.getCasesByCustomer(objCustomer.Id)
+
+                If colCases IsNot Nothing Then
+                    For j = 1 To colCases.Count
+                        objCase = colCases(j)
+
+                        Dim iSolutionTime As Integer = 0
+
+                        If CLng(iMaxSolutionTime) <> 0 Then
+                            If Not IsDate(objCase.WatchDate) And Not IsDate(objCase.FinishingDate) And (objCase.StateSecondary_Id = 0 Or objCase.IncludeInCaseStatistics = 1) And Not objCase.Priority_Id = 0 And iSolutionTime <> 0 Then
+                                Dim iLeadTime As Integer = objCaseData.LeadTimeMinutes(DateAdd("n", objCase.ExternalTime, objCase.RegTime), Now(), iWorkingDayStart, iWorkingDayEnd, objCase.HolidayHeader_Id)
+
+
+                                If iLeadTime >= iSolutionTime Then
+
+                                    vCaseInfo(0) = New KeyValuePair(Of String, Integer)(vCaseInfo(0).Key, vCaseInfo(0).Value + 1)
+
+                                    ' Lägg till i akutlistan
+                                    'If iNrOfUrgentCases = 0 Then
+                                    '    ReDim vUrgent(0)
+                                    'Else
+                                    '    ReDim Preserve vUrgent(iNrOfUrgentCases)
+                                    'End If
+
+                                    'vUrgent(iNrOfUrgentCases) = rsStatistics("Id")
+
+                                    'iNrOfUrgentCases = iNrOfUrgentCases + 1
+                                Else
+                                    For k As Integer = 0 To vCaseInfo.Count - 1
+                                        If i <= CInt(iNumberOfPrioritiesLessThan1WorkingDay) Then
+                                            If iSolutionTime - iLeadTime <= vCaseInfo(k).Key Then
+                                                vCaseInfo(k) = New KeyValuePair(Of String, Integer)(vCaseInfo(k).Key, vCaseInfo(k).Value + 1)
+
+                                                Exit For
+                                            End If
+                                        Else
+
+                                            If iSolutionTime - iLeadTime <= CInt((CInt(vCaseInfo(k).Key) + 1) * iWorkingDayLength) Then
+                                                vCaseInfo(k) = New KeyValuePair(Of String, Integer)(vCaseInfo(k).Key, vCaseInfo(k).Value + 1)
+
+                                                Exit For
+                                            End If
+                                        End If
+                                    Next
+
+                                End If
+                            End If
+                        End If
+
+                        If IsDate(objCase.WatchDate) And Not IsDate(objCase.FinishingDate) Then
+                            ' Bevakning
+                            vStatistics(4) = New KeyValuePair(Of String, Integer)(vStatistics(4).Key, vStatistics(4).Value + 1)
+
+                        ElseIf objCase.StateSecondary_Id <> 0 And objCase.IncludeInCaseStatistics <> 1 And Not IsDate(objCase.FinishingDate) Then
+                            ' Vilande
+                            vStatistics(2) = New KeyValuePair(Of String, Integer)(vStatistics(2).Key, vStatistics(2).Value + 1)
+                        End If
+
+                        If objCase.Status <> 0 Then
+                            If objCase.Status > 1 And Not IsDate(objCase.FinishingDate) Then
+                                ' Varnade
+                                vStatistics(3) = New KeyValuePair(Of String, Integer)(vStatistics(3).Key, vStatistics(3).Value + 1)
+                            End If
+                        End If
+
+                        If (objCase.StateSecondary_Id = 0 Or objCase.IncludeInCaseStatistics = 1) And Not IsDate(objCase.FinishingDate) And Not IsDate(objCase.WatchDate) Then
+                            vStatistics(1) = New KeyValuePair(Of String, Integer)(vStatistics(1).Key, vStatistics(1).Value + 1)
+                        End If
+
+                        ' Totalt
+                        vStatistics(0) = New KeyValuePair(Of String, Integer)(vStatistics(0).Key, vStatistics(0).Value + 1)
+
+                    Next
+
+                    sStatistics = "<TABLE><TR><TD Class=""Celltext"">"
+                    sStatistics = sStatistics & "Aktiva ärenden:</TD><TD Class=""Celltext"">" & vStatistics(0).Value & "</TD></TR>"
+                    sStatistics = sStatistics & "<TR><TD Class=""Celltext"">Vilande:</TD><TD Class=""Celltext"">" & vStatistics(1).Value & "</TD></TR>"
+                    sStatistics = sStatistics & "<TR><TD Class=""Celltext"">Varnade:</TD><TD Class=""Celltext"">" & vStatistics(2).Value & "</TD></TR>"
+                    sStatistics = sStatistics & "<TR><TD Class=""Celltext"">Bevakade:</TD><TD Class=""Celltext"">" & vStatistics(4).Value & "</TD></TR>"
+                    sStatistics = sStatistics & "<TR><TD Class=""Celltext"">Totalt:</TD><TD Class=""Celltext"">" & vStatistics(0).Value & "</TD></TR></TABLE>"
+
+                    sStatistics = sStatistics & "<BR><B>Antal ärenden per återstående åtgärdstid (dagar)</B><BR>"
+
+                    sStatistics = sStatistics & "<TABLE>"
+
+                    'For k = 0 To CLng(iMaxSolutionTime)
+                    '    sStatistics = sStatistics & "<TR><TD Class=""Celltext"">" & vCaseInfo(k).Key & "</TD><TD Class=""Celltext"">" & vCaseInfo(k).Value & "</TD></TR>"
+                    'Next
+
+                    sStatistics = sStatistics & "</TABLE>"
+
+
+                    If IsValidEmailAddress(objCustomer.CaseStatisticsEMailList) = True Then
+                        Dim objMail As New Mail
+
+                        Dim sMessageId As String = createMessageId(objCustomer.HelpdeskEMail)
+
+                        Dim sRet_SendMail As String = objMail.Send(objCustomer.HelpdeskEMail, Replace(objCustomer.CaseStatisticsEMailList, vbCrLf, ""), "Ärendestatistik - " & objCustomer.Name & " - " & DateTime.Now.Year & "-" & DateTime.Now.Month & "-" & DateTime.Now.Day, "<FONT face=""MS Sans Serif"" size=2>" & sStatistics & "</FONT>", objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
+                    End If
+                End If
+
+                '    sSQLCase = "Select tblCase.Id, " &
+                '                "CaseNumber, " &
+                '                "Priority_Id, " &
+                '                "FinishingDate, " &
+                '                "StateSecondary_Id, " &
+                '                "ExternalTime, " &
+                '                "RegTime, " &
+                '                "IsNull(SolutionTime, 0) As SolutionTime, " &
+                '                "tblCase.Status, " &
+                '                "IncludeInCaseStatistics, " &
+                '                "Watchdate " &
+
+                '"FROM tblCase " &
+                '    "LEFT OUTER JOIN tblPriority On tblCase.Priority_Id = tblPriority.Id " &
+                '    "LEFT OUTER JOIN tblStateSecondary On tblCase.StateSecondary_Id = tblStateSecondary.Id " &
+                '"WHERE tblCase.Customer_Id=" & rsCustomer("Id") & " " &
+                '    "And tblCase.FinishingDate Is NULL And tblCase.Deleted=0 "
+
+                '    rsStatistics.Open(sSQLCase, conDH_Support)
+
+
 
             End If
         Next
 
 
-        '   If Not isEmptyRecordset(rsCustomer) Then
-        '       Do Until rsCustomer.EOF
-        '           iWorkingDayStart = rsCustomer("WorkingDayStart")
-        '           iWorkingDayEnd = rsCustomer("WorkingDayEnd")
-        '           iWorkingDayLength = CInt(iWorkingDayEnd) - CInt(iWorkingDayStart)
-        '           vCaseInfo = Empty
-        '           vPriority = Empty
-        '           iMaxSolutionTime = 0
-        '           iNumberOfPrioritiesLessThan1WorkingDay = 0
-
-        '           ' Hämta in prioriteter
-        '           sSQL = "SELECT  MAX(SolutionTime) AS SolutionTime FROM tblPriority"
-        '           sSQL = sSQL & " WHERE Customer_Id=" & rsCustomer("Id")
-
-        '           rsStatistics.Open(sSQL, conDH_Support)
-
-        '           If Not IsNull(rsStatistics("SolutionTime")) Then
-        '               iMaxSolutionTime = CLng(CLng(rsStatistics("SolutionTime")) / iWorkingDayLength)
-        '           End If
-        '           rsStatistics.Close()
-
-        '           ' Hämta in antalet prioriteter som har mindre än 1 arbetsdags lösningstid
-        '           sSQL = "SELECT SolutionTime " & _
-        '                   "FROM tblPriority "
-
-        '           If iCustomer_Id <> "" Then
-        '               sSQL = sSQL & " WHERE Customer_Id=" & rsCustomer("Id")
-        '           End If
-
-        '           sSQL = sSQL & " GROUP BY SolutionTime " & _
-        '                           "HAVING (SolutionTime <> 0) AND (SolutionTime < " & iWorkingDayLength & ") " & _
-        '                           "ORDER BY SolutionTime "
-
-        '           rsStatistics.Open(sSQL, conDH_Support)
-
-        '           If Not IsEmptyRecordset(rsStatistics) Then
-        '               i = 0
-        '               iMinSolutionTime = rsStatistics("SolutionTime")
-        '               Do Until rsStatistics.EOF
-        '                   If i = 0 Then
-        '                       ReDim vPriority(0, 0)
-        '                   Else
-        '                       ReDim Preserve vPriority(0, i)
-        '                   End If
-
-        '                   vPriority(0, i) = rsStatistics("SolutionTime")
-
-        '                   i = i + 1
-        '                   rsStatistics.MoveNext()
-        '               Loop
-
-        '               iNumberOfPrioritiesLessThan1WorkingDay = i
-        '           End If
-
-        '           rsStatistics.Close()
-
-        '           ' Skapa array som ska innehålla statistikinformation
-        '           ReDim vStatistics(4, 1)
-
-        '           vStatistics(0, 0) = "Ärenden"
-        '           vStatistics(1, 0) = "Aktiva"
-        '           vStatistics(2, 0) = "Vilande"
-        '           vStatistics(3, 0) = "Varnade"
-        '           vStatistics(4, 0) = "Bevakade"
-        '           vStatistics(0, 1) = 0
-        '           vStatistics(1, 1) = 0
-        '           vStatistics(2, 1) = 0
-        '           vStatistics(3, 1) = 0
-        '           vStatistics(4, 1) = 0
-
-        '           ' Skapa array med prioriteter
-        '           If CLng(iMaxSolutionTime) <> 0 Then
-        '               ReDim vCaseInfo(iMaxSolutionTime + iNumberOfPrioritiesLessThan1WorkingDay, 1)
-
-        '               vCaseInfo(0, 0) = "0 (Akut)"
-        '               vCaseInfo(0, 1) = 0
-
-        '               For i = 1 To iNumberOfPrioritiesLessThan1WorkingDay
-        '                   vCaseInfo(i, 0) = vPriority(0, i - 1)
-        '                   vCaseInfo(i, 1) = 0
-        '               Next
-
-        '               For i = 1 + iNumberOfPrioritiesLessThan1WorkingDay To iMaxSolutionTime + iNumberOfPrioritiesLessThan1WorkingDay
-        '                   vCaseInfo(i, 0) = i - iNumberOfPrioritiesLessThan1WorkingDay
-        '                   vCaseInfo(i, 1) = 0
-        '               Next
-        '           End If
-
-        '           sSQLCase = "SELECT tblCase.Id, " & _
-        '                               "CaseNumber, " & _
-        '                               "Priority_Id, " & _
-        '                               "FinishingDate, " & _
-        '                               "StateSecondary_Id, " & _
-        '                               "ExternalTime, " & _
-        '                               "RegTime, " & _
-        '                               "IsNull(SolutionTime, 0) AS SolutionTime, " & _
-        '                               "tblCase.Status, " & _
-        '                               "IncludeInCaseStatistics, " & _
-        '                               "Watchdate " & _
-        '               "FROM tblCase " & _
-        '                   "LEFT OUTER JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id " & _
-        '                   "LEFT OUTER JOIN tblStateSecondary ON tblCase.StateSecondary_Id = tblStateSecondary.Id " & _
-        '               "WHERE tblCase.Customer_Id=" & rsCustomer("Id") & " " & _
-        '                   "AND tblCase.FinishingDate IS NULL AND tblCase.Deleted=0 "
-
-        '           rsStatistics.Open(sSQLCase, conDH_Support)
-
-        '           If Not isEmptyRecordset(rsStatistics) Then
-        '               Do Until rsStatistics.EOF
-
-        '                   If CLng(iMaxSolutionTime) <> 0 Then
-        '                       If Not IsDate(rsStatistics("Watchdate")) And Not IsDate(rsStatistics("FinishingDate")) And (isNull(rsStatistics("StateSecondary_Id")) Or rsStatistics("IncludeInCaseStatistics") = "1") And Not IsNull(rsStatistics("Priority_Id")) And rsStatistics("SolutionTime") <> 0 Then
-        '                           iLeadTime = LeadTime(DateAdd("n", rsStatistics("ExternalTime"), rsStatistics("RegTime")), Now(), iWorkingDayStart, iWorkingDayEnd)
-
-        '                           If CInt(iLeadTime) >= CInt(rsStatistics("SolutionTime")) Then
-
-        '                               vCaseInfo(0, 1) = vCaseInfo(0, 1) + 1
-
-        '                               ' Lägg till i akutlistan
-        '                               If iNrOfUrgentCases = 0 Then
-        '                                   ReDim vUrgent(0)
-        '                               Else
-        '                                   ReDim Preserve vUrgent(iNrOfUrgentCases)
-        '                               End If
-
-        '                               vUrgent(iNrOfUrgentCases) = rsStatistics("Id")
-
-        '                               iNrOfUrgentCases = iNrOfUrgentCases + 1
-        '                           Else
-        '                               For i = 1 To UBound(vCaseInfo)
-        '                                   If i <= CInt(iNumberOfPrioritiesLessThan1WorkingDay) Then
-        '                                       If CInt(rsStatistics("SolutionTime") - iLeadTime) <= CInt(vCaseInfo(i, 0)) Then
-        '                                           vCaseInfo(i, 1) = vCaseInfo(i, 1) + 1
-
-        '                                           Exit For
-        '                                       End If
-        '                                   Else
-
-        '                                       If CInt(rsStatistics("SolutionTime") - iLeadTime) <= CInt((CInt(vCaseInfo(i, 0)) + 1) * iWorkingDayLength) Then
-        '                                           vCaseInfo(i, 1) = vCaseInfo(i, 1) + 1
-
-        '                                           Exit For
-        '                                       End If
-        '                                   End If
-        '                               Next
-
-        '                           End If
-        '                       End If
-        '                   End If
-
-        '                   If IsDate(rsStatistics("Watchdate")) And Not IsDate(rsStatistics("Finishingdate")) Then
-        '                       ' Bevakning
-        '                       vStatistics(4, 1) = vStatistics(4, 1) + 1
-        '                   ElseIf Not IsNull(rsStatistics("StateSecondary_Id")) And rsStatistics("IncludeInCaseStatistics") <> "1" And Not IsDate(rsStatistics("Finishingdate")) Then
-        '                       ' Vilande
-        '                       vStatistics(2, 1) = CLng(vStatistics(2, 1)) + 1
-        '                   End If
-
-        '                   If Not IsNull(rsStatistics("Status")) Then
-        '                       If CLng(rsStatistics("Status")) > 1 And Not IsDate(rsStatistics("Finishingdate")) Then
-        '                           ' Varnade
-        '                           vStatistics(3, 1) = CLng(vStatistics(3, 1)) + 1
-        '                       End If
-        '                   End If
-
-        '                   If (IsNull(rsStatistics("StateSecondary_Id")) Or rsStatistics("IncludeInCaseStatistics") = "1") And Not (IsDate(rsStatistics("Finishingdate"))) And Not IsDate(rsStatistics("Watchdate")) Then
-        '                       vStatistics(1, 1) = CLng(vStatistics(1, 1)) + 1
-        '                   End If
-
-        '                   ' Totalt
-        '                   vStatistics(0, 1) = CLng(vStatistics(0, 1)) + 1
-
-        '                   rsStatistics.MoveNext()
-        '               Loop
-
-        '               sStatistics = "<TABLE><TR><TD Class=""Celltext"">"
-        '               sStatistics = sStatistics & "Aktiva ärenden:</TD><TD Class=""Celltext"">" & vStatistics(1, 1) & "</TD></TR>"
-        '               sStatistics = sStatistics & "<TR><TD Class=""Celltext"">Vilande:</TD><TD Class=""Celltext"">" & vStatistics(2, 1) & "</TD></TR>"
-        '               sStatistics = sStatistics & "<TR><TD Class=""Celltext"">Varnade:</TD><TD Class=""Celltext"">" & vStatistics(3, 1) & "</TD></TR>"
-        '               sStatistics = sStatistics & "<TR><TD Class=""Celltext"">Bevakade:</TD><TD Class=""Celltext"">" & vStatistics(4, 1) & "</TD></TR>"
-        '               sStatistics = sStatistics & "<TR><TD Class=""Celltext"">Totalt:</TD><TD Class=""Celltext"">" & vStatistics(0, 1) & "</TD></TR></TABLE>"
-
-        '               If Not IsEmpty(vCaseInfo) Then
-        '                   sStatistics = sStatistics & "<BR><B>Antal ärenden per återstående åtgärdstid (dagar)</B><BR>"
-
-        '                   sStatistics = sStatistics & "<TABLE>"
-
-        '                   For i = 0 To CLng(iMaxSolutionTime)
-        '                       sStatistics = sStatistics & "<TR><TD Class=""Celltext"">" & vCaseInfo(i, 0) & "</TD><TD Class=""Celltext"">" & vCaseInfo(i, 1) & "</TD></TR>"
-        '                   Next
-
-        '                   sStatistics = sStatistics & "</TABLE>"
-        '               End If
-
-        '               If isValidEMailAddress(rsCustomer("CaseStatisticsEMailList")) = True Then
-
-        'sendMail_CDOSYS rsCustomer("HelpdeskEMail"), Replace(rsCustomer("CaseStatisticsEMailList"), vbCrLf, ""), "Ärendestatistik - " & rsCustomer("Name") & " - " & DatePart("yyyy", Date) & "-" & Lpad(DatePart("m", Date), "0", 2) & "-" & Lpad(DatePart("d", Date), "0", 2), "<FONT face=""MS Sans Serif"" size=2>" & sStatistics & "</FONT>"
-        '               End If
-        '           End If
-
-        '           rsStatistics.Close()
-
-        '           ' Logga aktiviteten
-        '           sSQL = "INSERT INTO tblLogProgram (Log_Type, Customer_Id, LogText, RegTime) " & _
-        '                   "VALUES(4, " & rsCustomer("Id") & ", '" & sStatistics & "', getDate())"
-
-        '           conDH_Support.Execute sSQL
-
-        '           rsCustomer.MoveNext()
-        '       Loop
-        '   End If
     End Sub
 
     Private Sub openLogFile()

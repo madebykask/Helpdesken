@@ -10,10 +10,9 @@
         public int? Customer_Id { get; set; }
         public int? OrderType_Id { get; set; }
         public int IsStandard { get; set; }
-
         public bool IncludeLogText_External { get; set; }
         public int MailID { get; set; }
-
+        public int SendMethod { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
         public Guid MailTemplateGUID { get; set; }

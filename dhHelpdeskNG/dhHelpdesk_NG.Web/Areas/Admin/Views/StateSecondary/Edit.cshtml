@@ -8,25 +8,38 @@
     <div class="secnavs fixed">
         <div class="pull-left">
             <ul class="secnav">
-                <li>@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.StateSecondary.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
-                <li>@Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
-         new { id = Model.StateSecondary.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })</li>
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.StateSecondary.Customer_Id }, new { @class = "btn" })</li>
-            </ul>
-        </div>
+                <li id="saveBtn">@Html.ActionLink(Translation.Get("Spara", Enums.TranslationSource.TextTranslation), "edit", new { id = Model.StateSecondary.Id }, new { onclick = "$('#target').submit();return false;", @class = "btn" })</li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete",
+     new { id = Model.StateSecondary.Id }, new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })
+            </li>
+            <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "index", new { customerId = Model.StateSecondary.Customer_Id }, new { @class = "btn" })</li>
+        </ul>
     </div>
-    @Html.Partial("_Input", Model)
+</div>
+@Html.Partial("_Input", Model)
 }
 @section Scripts {
     <script type="text/javascript">
 
+
         $(function () {
+
+            // Include hidden inputs in validation
+            $.validator.setDefaults({
+                ignore: []
+            });
+
             var validator = $("#target").validate({
                 rules: {
                     "StateSecondary.Name": {
                         required: true
+                    },
+                    "StateSecondary.FinishingCause_Id": {
+                        requireFinishingCause: true
                     }
                 },
+
                 messages: {
                     "StateSecondary.Name": {
                         required: "@Translation.GetForJS("Du måste ange en understatus", Enums.TranslationSource.TextTranslation)"
@@ -35,8 +48,15 @@
             submitHandler: function (form) {
                 form.submit();
             }
-        });
+
+            });
+
+            // Add a custom validation method
+            $.validator.addMethod("requireFinishingCause", function (value, element, param) {
+                var autocloseDays = parseInt($("#StateSecondary_AutocloseDays").val(), 10);
+                return autocloseDays <= 0 || (autocloseDays > 0 && value !== '');
+                }, "@Translation.GetForJS("Du måste ange en avslutsorsak", Enums.TranslationSource.TextTranslation)");
     });
 
-</script>
+    </script>
 }

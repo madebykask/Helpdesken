@@ -8391,6 +8391,188 @@ If not exists (select * from tblTextTranslation where text_id = 2141 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2141, 2, 'Include full history')
 GO
 
+If not exists (select * from tbltext where id = 2142)
+	insert into tbltext (id, TextString) VALUES (2142, 'Auto avslut')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2142 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2142, 2, 'Auto close')
+GO
+
+If not exists (select * from tbltext where id = 2143)
+	insert into tbltext (id, TextString) VALUES (2143, 'Avsluta automatiskt efter')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2143 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2143, 2, 'Automatically close after')
+GO
+
+If not exists (select * from tbltext where id = 2144)
+	insert into tbltext (id, TextString) VALUES (2144, 'Port')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2144 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2144, 2, 'Port')
+GO
+
+If not exists (select * from tbltext where id = 2145)
+	insert into tbltext (id, TextString) VALUES (2145, 'Felsökningsnivå')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2145 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2145, 2, 'Debug level')
+GO
+
+If not exists (select * from tbltext where id = 2146)
+	insert into tbltext (id, TextString) VALUES (2146, 'Fysisk sökväg')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2146 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2146, 2, 'Physical path')
+GO
+
+If not exists (select * from tbltext where id = 2147)
+	insert into tbltext (id, TextString) VALUES (2147, 'E-post sökväg')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2147 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2147, 2, 'Email path')
+GO
+
+If not exists (select * from tbltext where id = 2148)
+	insert into tbltext (id, TextString) VALUES (2148, 'E-post prefix')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2148 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2148, 2, 'Email prefix')
+GO
+
+If not exists (select * from tbltext where id = 2149)
+	insert into tbltext (id, TextString) VALUES (2149, 'E-post sökväg arkiv')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2149 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2149, 2, 'Email path archive')
+GO
+
+If not exists (select * from tbltext where id = 2150)
+	insert into tbltext (id, TextString) VALUES (2150, 'E-post server protokoll')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2150 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2150, 2, 'Email server protocol')
+GO
+
+If not exists (select * from tbltext where id = 2151)
+	insert into tbltext (id, TextString) VALUES (2151, 'Inget lösenord')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2151 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2151, 2, 'No password')
+GO
+
+If not exists (select * from tbltext where id = 2152)
+	insert into tbltext (id, TextString) VALUES (2152, 'Lösenord satt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2152 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2152, 2, 'Password set')
+GO
+
+If not exists (select * from tbltext where id = 2153)
+	insert into tbltext (id, TextString) VALUES (2153, 'Applikations Id')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2153 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2153, 2, 'Application Id')
+GO
+
+If not exists (select * from tbltext where id = 2154)
+	insert into tbltext (id, TextString) VALUES (2154, 'Hemlig nyckel')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2154 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2154, 2, 'Secret key')
+GO
+
+If not exists (select * from tbltext where id = 2155)
+	insert into tbltext (id, TextString) VALUES (2155, 'Tenant Id')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2155 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2155, 2, 'Tenant Id')
+GO
+
+If not exists (select * from tbltext where id = 2156)
+	insert into tbltext (id, TextString) VALUES (2156, 'Använd Ews')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2156 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2156, 2, 'Use Ews')
+GO
+
+If not exists (select * from tbltext where id = 2157)
+	insert into tbltext (id, TextString) VALUES (2157, 'Windows söktjänst')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2157 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2157, 2, 'Windows search service')
+GO
+
+If not exists (select * from tbltext where id = 2158)
+	insert into tbltext (id, TextString) VALUES (2158, 'Blockerade adresser / del av adress')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2158 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2158, 2, 'Blocked addresses / part of address')
+GO
+
+If not exists (select * from tbltext where id = 2159)
+	insert into tbltext (id, TextString) VALUES (2159, 'Svarsavgränsare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2159 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2159, 2, 'Answer delimiter')
+GO
+
+If not exists (select * from tbltext where id = 2160)
+	insert into tbltext (id, TextString) VALUES (2160, 'Nyckelord koppla rubrik')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2160 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2160, 2, 'Headline key word')
+GO
+
+If not exists (select * from tbltext where id = 2161)
+	insert into tbltext (id, TextString) VALUES (2161, 'Skicka registreringsmail till anmälare')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2161 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2161, 2, 'Send new case email to initiator')
+GO
+
+If not exists (select * from tbltext where id = 2162)
+	insert into tbltext (id, TextString) VALUES (2162, 'Avancerad Mail2Ticket')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2162 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2162, 2, 'Advanced Mail2Ticket')
+GO
+
+If not exists (select * from tbltext where id = 2163)
+	insert into tbltext (id, TextString) VALUES (2163, 'Felmeddelanden skickas till')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2163 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2163, 2, 'Send error message to')
+GO
+
+If not exists (select * from tbltext where id = 2164)
+	insert into tbltext (id, TextString) VALUES (2164, 'Lämna tomt om inget fel-mejl ska skickas')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2164 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2164, 2, 'Leave blank if no alert should be sent')
+GO
+
+If not exists (select * from tbltext where id = 2165)
+	insert into tbltext (id, TextString) VALUES (2165, 'Katalog')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2165 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2165, 2, 'Folder')
+GO
+
+If not exists (select * from tbltext where id = 2166)
+	insert into tbltext (id, TextString) VALUES (2166, 'Avslutsdagar måste vara större än påminnelse dagar')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2166 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2166, 2, 'Closing days must be greater than Reminder days')
+GO
+
+If not exists (select * from tbltext where id = 2167)
+	insert into tbltext (id, TextString) VALUES (2167, 'Avslutsorsak måste anges på lägsta nivå')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2167 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2167, 2, 'Closing reason must be specified at the lowest level')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

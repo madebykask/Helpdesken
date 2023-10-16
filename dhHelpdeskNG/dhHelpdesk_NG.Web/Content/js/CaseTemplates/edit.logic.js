@@ -229,27 +229,27 @@ $(function () {
     checkScheduleChange();
     $("[name$=ScheduleType]").change(checkScheduleChange);
 
-    $("#Casesolution_ShowInsideCase").click(function () {
-        if ($('#Casesolution_ShowInsideCase').is(':checked')) {
-            $(".hideOnInsideCase").show();
-            $("#CaseSolution_ConnectedButton").prop("disabled", false);
-            $("#savaAndClose").prop("disabled", false);
-            removeOptionByValue('savaAndClose', '-2'); // remove temporary option
-        }else{
-            $("#CaseSolution_ConnectedButton").prop("disabled", true);
-            $(".hideOnInsideCase").hide();
+    //$("#Casesolution_ShowInsideCase").click(function () {
+    //    if ($('#Casesolution_ShowInsideCase').is(':checked')) {
+    //        $(".hideOnInsideCase").show();
+    //        $("#CaseSolution_ConnectedButton").prop("disabled", false);
+    //        $("#savaAndClose").prop("disabled", false);
+    //        removeOptionByValue('savaAndClose', '-2'); // remove temporary option
+    //    }else{
+    //        $("#CaseSolution_ConnectedButton").prop("disabled", true);
+    //        $(".hideOnInsideCase").hide();
 
-            // Add temporary option 
-            var opt = document.createElement("option");
-            opt.value = "-2";
-            opt.text = saveDropDownCaption;
-            var elm = document.getElementById("savaAndClose");
-            elm.options.add(opt);
-            $("#savaAndClose").val("-2");
-            $("#savaAndClose").prop("disabled", true);
-            $("#CaseSolution_ConnectedButton").val("");
-        }
-    });
+    //        // Add temporary option 
+    //        var opt = document.createElement("option");
+    //        opt.value = "-2";
+    //        opt.text = saveDropDownCaption;
+    //        var elm = document.getElementById("savaAndClose");
+    //        elm.options.add(opt);
+    //        $("#savaAndClose").val("-2");
+    //        $("#savaAndClose").prop("disabled", true);
+    //        $("#CaseSolution_ConnectedButton").val("");
+    //    }
+    //});
 
     function removeOptionByValue(id, value) {
         var select = document.getElementById(id);

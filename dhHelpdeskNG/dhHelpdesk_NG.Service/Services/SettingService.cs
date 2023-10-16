@@ -14,7 +14,6 @@ namespace DH.Helpdesk.Services.Services
 {
     using System;
     using System.Collections.Generic;
-
     using DH.Helpdesk.BusinessData.Models.Customer;
     using DH.Helpdesk.Dal.Infrastructure;
     using DH.Helpdesk.Dal.Repositories;
@@ -155,6 +154,7 @@ namespace DH.Helpdesk.Services.Services
         /// </param>
         public void SaveSetting(Setting setting, out IDictionary<string, string> errors)
         {
+            //From Customersettingscontroller
             if (setting == null)
             {
                 throw new ArgumentNullException("setting");
@@ -165,8 +165,6 @@ namespace DH.Helpdesk.Services.Services
             setting.ADSyncURL = setting.ADSyncURL ?? string.Empty;
             setting.CaseOverviewInfo = setting.CaseOverviewInfo ?? string.Empty;
             setting.DSN_Sync = setting.DSN_Sync ?? string.Empty;
-            setting.EMailAnswerSeparator = setting.EMailAnswerSeparator ?? string.Empty;
-            setting.EMailSubjectPattern = setting.EMailSubjectPattern ?? string.Empty;
             setting.LDAPBase = setting.LDAPBase ?? string.Empty;
             setting.LDAPFilter = setting.LDAPFilter ?? string.Empty;
             setting.LDAPPassword = setting.LDAPPassword ?? string.Empty;
@@ -174,12 +172,22 @@ namespace DH.Helpdesk.Services.Services
             setting.POP3EMailPrefix = setting.POP3EMailPrefix ?? string.Empty;
             setting.POP3Password = setting.POP3Password ?? string.Empty;
             setting.POP3Server = setting.POP3Server ?? string.Empty;
+            setting.POP3Port = setting.POP3Port;
             setting.POP3UserName = setting.POP3UserName ?? string.Empty;
             setting.SMSEMailDomain = setting.SMSEMailDomain ?? string.Empty;
             setting.SMSEMailDomainPassword = setting.SMSEMailDomainPassword ?? string.Empty;
             setting.SMSEMailDomainUserId = setting.SMSEMailDomainUserId ?? string.Empty;
             setting.SMSEMailDomainUserName = setting.SMSEMailDomainUserName ?? string.Empty;
             setting.XMLFileFolder = setting.XMLFileFolder ?? string.Empty;
+            setting.ErrorMailTo = setting.ErrorMailTo ?? string.Empty;
+            setting.EMailFolder = setting.EMailFolder ?? string.Empty;
+            setting.EMailFolderArchive = setting.EMailFolderArchive ?? string.Empty;
+            setting.EMailAnswerSeparator = setting.EMailAnswerSeparator ?? string.Empty;
+            setting.EMailSubjectPattern = setting.EMailSubjectPattern ?? string.Empty;
+            setting.BlockedEmailRecipients = setting.BlockedEmailRecipients ?? string.Empty;
+            setting.BatchEmail = setting.BatchEmail;
+
+
 
             if (setting.QuickNewCaseLinkText == null)
                 setting.QuickNewCaseLinkText = "+";
@@ -218,6 +226,7 @@ namespace DH.Helpdesk.Services.Services
         /// </param>
         public void SaveSettingForCustomerEdit(Setting setting, out IDictionary<string, string> errors)
         {
+            //From Customercontroller
             if (setting == null)
             {
                 throw new ArgumentNullException("setting");
@@ -230,6 +239,7 @@ namespace DH.Helpdesk.Services.Services
             setting.DSN_Sync = setting.DSN_Sync ?? string.Empty;
             setting.EMailAnswerSeparator = setting.EMailAnswerSeparator ?? string.Empty;
             setting.EMailSubjectPattern = setting.EMailSubjectPattern ?? string.Empty;
+            setting.BlockedEmailRecipients = setting.BlockedEmailRecipients ?? string.Empty;
             setting.LDAPBase = setting.LDAPBase ?? string.Empty;
             setting.LDAPFilter = setting.LDAPFilter ?? string.Empty;
             setting.LDAPPassword = setting.LDAPPassword ?? string.Empty;

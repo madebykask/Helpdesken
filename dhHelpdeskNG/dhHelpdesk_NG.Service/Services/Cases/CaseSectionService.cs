@@ -26,6 +26,10 @@ namespace DH.Helpdesk.Services.Services.Cases
             var caseSections = _caseSectionsRepository.GetCaseSections(customerId);
             return MapCaseSectionToCaseSectionModel(caseSections, languageId);
         }
+        public List<CaseSection> GetAllCaseSections(int customerId)
+        {
+            return _caseSectionsRepository.GetCaseSections(customerId);
+        }
 
         public async Task<List<CaseSectionModel>> GetCaseSectionsAsync(int customerId, int languageId)
         {
@@ -118,6 +122,43 @@ namespace DH.Helpdesk.Services.Services.Cases
         }
 
         public void SaveCaseSections(int languageId, IEnumerable<CaseSectionModel> caseSections, int customerId)
+        {
+            foreach (var section in caseSections)
+            {
+                if (section.Id > 0)
+                {
+                    var sect = _caseSectionsRepository.GetCaseSection(section.Id, section.CustomerId);
+                    var sectLng = sect.CaseSectionLanguages.SingleOrDefault(x => x.CaseSection_Id == section.Id && x.Language_Id == languageId);
+                    if (sectLng == null)
+                    {
+                        sect.CaseSectionLanguages.Add(new CaseSectionLanguage
+                        {
+                            CaseSection_Id = section.Id,
+                            Language_Id = languageId,
+                            Label = section.SectionHeader
+                        });
+                    }
+                    else
+                    {
+                        sectLng.Label = section.SectionHeader;
+                    }
+                }
+                else
+                {
+                    var sectionId = SaveCaseSection(section);
+                    var newSectLng = new CaseSectionLanguage
+                    {
+                        CaseSection_Id = sectionId,
+                        Language_Id = languageId,
+                        Label = section.SectionHeader
+                    };
+                    var sect = _caseSectionsRepository.GetCaseSection(sectionId, section.CustomerId);
+                    sect.CaseSectionLanguages.Add(newSectLng);
+                }
+            }
+            _caseSectionsRepository.ApplyChanges();
+        }
+        public void SaveCaseSectionLang(int languageId, IEnumerable<CaseSectionModel> caseSections, int customerId)
         {
             foreach (var section in caseSections)
             {
@@ -341,5 +382,6 @@ namespace DH.Helpdesk.Services.Services.Cases
         void SaveCaseSections(int languageId, IEnumerable<CaseSectionModel> caseSections, int customerId);
         CaseSectionInfo GetSectionInfoByField(string fieldName);
         string GetDefaultHeaderName(CaseSectionType type);
+        List<CaseSection> GetAllCaseSections(int customerId);
     }
 }

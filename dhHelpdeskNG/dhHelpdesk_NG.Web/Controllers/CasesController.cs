@@ -1164,6 +1164,10 @@ namespace DH.Helpdesk.Web.Controllers
                         {
                             jsRow.Add(col.name, outputFormatter.StripHTML(searchCol.StringValue));
                         }
+                        else if (searchCol.Key == "AgreedDate" || searchCol.Key == "PlanDate")
+                        {
+                            jsRow.Add(col.name, searchCol.StringValue);
+                        }
                         else
                         {
                             jsRow.Add(col.name, outputFormatter.FormatField(searchCol));
@@ -1860,7 +1864,16 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (SessionFacade.CurrentUser != null)
             {
-
+                var userDeps = _departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
+                if (userDeps != null && userDeps.Count > 0)
+                {
+                    //Check if the user has access to the case due to restrictions by department
+                    if (!userDeps.Any(x => x.Id == c.Department_Id))
+                    {
+                        return new RedirectResult("~/Error/Unathorized");
+                    }
+                }
+                //Instead of this we use the UserCasePermissions attribute
                 //var isAuthorised = _userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, id);
                 //if(!isAuthorised)
                 //{
@@ -3792,12 +3805,29 @@ namespace DH.Helpdesk.Web.Controllers
         /// <returns></returns>
         private int Save(CaseEditInput m)
         {
+
             var utcNow = DateTime.UtcNow;
             var movedFromCustomerId = m.MovedFromCustomerId;
 #pragma warning disable 0618
             var case_ = m.case_;
 #pragma warning restore 0618
             var caseLog = m.caseLog;
+            //Replace empty string with ""
+            if(!String.IsNullOrEmpty(caseLog.TextExternal))
+            {
+                if (caseLog.TextExternal.RemoveHtmlTags() == "")
+                {
+                    caseLog.TextExternal = "";
+                }
+            }
+            if (!String.IsNullOrEmpty(caseLog.TextInternal))
+            {
+                if(caseLog.TextInternal.RemoveHtmlTags() == "")
+                {
+                    caseLog.TextInternal = "";
+                }
+
+            }
             var caseMailSetting = m.caseMailSetting;
             var updateNotifierInformation = m.updateNotifierInformation;
             m.caseFieldSettings = _caseFieldSettingService.GetCaseFieldSettings(case_.Customer_Id);
@@ -5625,6 +5655,24 @@ namespace DH.Helpdesk.Web.Controllers
                 customerCaseSolutions.Where(x => x.ConnectedButton == 0 && x.Status > 0)
                     .Select(x => x.CaseSolutionId)
                     .ToList();
+
+            if (m.ChildCaseViewModel != null)
+            {
+                var closedChildCasesCount = m.ClosedChildCasesCount;
+                var totalChildCases = m.ChildCaseViewModel.ChildCaseList.Where(x => x.Indepandent == false).Count();
+                bool hasUnclosedChildren = closedChildCasesCount != totalChildCases;
+
+                if (hasUnclosedChildren)
+                {
+                    workflowCaseSolutionIds = customerCaseSolutions
+                        .Where(x => x.ConnectedButton == 0
+                                 && x.Status > 0
+                                 && x.HasFinishingCauseId == false)
+                        .Select(x => x.CaseSolutionId)
+                        .ToList();
+                }
+            }
+
 
 #pragma warning disable 0618
             if (m.case_.FinishingDate == null)

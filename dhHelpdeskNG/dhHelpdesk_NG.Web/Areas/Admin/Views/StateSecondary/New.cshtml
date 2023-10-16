@@ -23,6 +23,9 @@
                 rules: {
                     "StateSecondary.Name": {
                         required: true
+                    },
+                    "StateSecondary.FinishingCause_Id": {
+                        requireFinishingCause: true
                     }
                 },
                 messages: {
@@ -33,8 +36,15 @@
             submitHandler: function (form) {
                 form.submit();
             }
-        });
+
+            });
+
+            // Add a custom validation method
+            $.validator.addMethod("requireFinishingCause", function (value, element, param) {
+                var autocloseDays = parseInt($("#StateSecondary_AutocloseDays").val(), 10);
+                return autocloseDays <= 0 || (autocloseDays > 0 && value !== '');
+                }, "@Translation.GetForJS("Du måste ange en avslutsorsak", Enums.TranslationSource.TextTranslation)");
     });
 
-</script>
+    </script>
 }

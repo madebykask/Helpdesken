@@ -18,6 +18,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
     using DH.Helpdesk.Domain.MailTemplates;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.BusinessData.Models.Shared;
+    using DH.Helpdesk.Services.Services.Cases;
+    using DH.Helpdesk.BusinessData.Models.Case.CaseSections;
+    using DH.Helpdesk.Domain.Cases;
+    using static Thinktecture.IdentityModel.Constants.OAuth2Constants;
 
     public class CustomerController : BaseController
     {
@@ -41,6 +45,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IComputerService _computerService;
         private readonly IMailTemplateService _mailTemplateService;
         private readonly IInventoryService _inventoryService;
+        private readonly IRegistrationSourceCustomerService _registrationSourceCustomerService;
+        private readonly IDocumentService _documentService;
+        private readonly IInfoService _infoService;
+        private readonly ICaseSectionService _caseSectionService;
 
         public CustomerController(
             ICaseFieldSettingService caseFieldSettingService,
@@ -63,7 +71,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             IComputerService computerService,
             IMailTemplateService mailTemplateService,
             IMasterDataService masterDataService,
-            IInventoryService inventoryService)
+            IInventoryService inventoryService,
+            IRegistrationSourceCustomerService registrationSourceCustomerService,
+            IDocumentService documentService,
+            IInfoService infoService,
+            ICaseSectionService caseSectionService)
             : base(masterDataService)
         {
             this._caseFieldSettingService = caseFieldSettingService;
@@ -86,11 +98,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             this._computerService = computerService;
             this._mailTemplateService = mailTemplateService;
             _inventoryService = inventoryService;
+            _registrationSourceCustomerService = registrationSourceCustomerService;
+            _documentService = documentService;
+            _infoService = infoService;
+            _caseSectionService = caseSectionService;
         }
 
         [CustomAuthorize(Roles = "3,4")]
         public ActionResult Index()
         {
+
             var model = this.IndexViewModel();
 
             //If administrator. return all customers, else: return only customers that user is assigned to.
@@ -145,17 +162,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         [CustomAuthorize(Roles = "3,4")]
         [HttpPost]
-        public ActionResult New(Customer customer)
+        public ActionResult New(CustomerInputViewModel customerModel)
         {
             IDictionary<string, string> errors = new Dictionary<string, string>();
-            this._customerService.SaveNewCustomerToGetId(customer, out errors);
-
-            var newCustomerSetting = new Setting()
-            {
-                Customer_Id = customer.Id,
-                ModuleCase = 1,
-                CaseComplaintDays = 14
-            };
+            
+            this._customerService.SaveNewCustomerToGetId(customerModel.Customer, out errors);
+            var customer = customerModel.Customer;
+            var newCustomerSetting = customerModel.Setting;
+            newCustomerSetting.Customer_Id = customer.Id;
+            newCustomerSetting.ModuleCase = 1;
+            newCustomerSetting.CaseComplaintDays = 14;
 
             //Get mandatory Finishingcause 'Sammanfogat ärende' from logged in customer
             var mergedFinishingCause = _finishingCauseService.GetMergedFinishingCause(SessionFacade.CurrentCustomer.Id);
@@ -195,7 +211,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
 
 
-            //Get values from "default" customer
+            //Get values from "default" customer - Does not work...
             var caseFieldSettingsToCopy = this._caseFieldSettingService.GetCaseFieldSettingsForDefaultCust();
 
 
@@ -316,6 +332,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         [HttpGet]
         public ActionResult Edit(int id)
         {
+
             var customer = this._customerService.GetCustomer(id);
 
             if (customer == null)
@@ -381,6 +398,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 setting.IsUserFirstLastNameRepresentation = vmodel.UserFirstLastNameRepresentationId == UserFirstLastNameModes.LastFirstNameMode ? 0 : 1;
                 setting.CalcSolvedInTimeByLatestSLADate = vmodel.Setting.CalcSolvedInTimeByLatestSLADate;
                 setting.BatchEmail = vmodel.Setting.BatchEmail;
+                setting.BlockedEmailRecipients = vmodel.Setting.BlockedEmailRecipients;
+                setting.EMailAnswerSeparator = vmodel.Setting.EMailAnswerSeparator;
+                setting.EMailSubjectPattern = vmodel.Setting.EMailSubjectPattern;
             }
 
             IDictionary<string, string> errors;
@@ -777,7 +797,30 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             else
                 errors.Add("Setting.LDAPPassword", @Translation.Get("Angivna ord stämmer ej överens", Enums.TranslationSource.TextTranslation));
         }
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpPost]
+        public void SavePop3Password(int id, string newPassword, string confirmPassword)
+        {
+            var setting = this._settingService.GetCustomerSetting(id);
 
+            if (setting == null)
+            {
+                setting = new Setting() { Customer_Id = id };
+                setting.CaseFiles = 6;
+                setting.ComputerUserInfoListLocation = 1;
+                setting.ModuleCase = 1;
+            }
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            if (newPassword == confirmPassword)
+            {
+                setting.POP3Password = newPassword;
+                this._settingService.SaveSetting(setting, out errors);
+            }
+            else
+                errors.Add("Setting.LDAPPassword", @Translation.Get("Angivna ord stämmer ej överens", Enums.TranslationSource.TextTranslation));
+        }
         [HttpPost]
         public int CopyCustomer(int id, string customerNumber, string customerName, string customerEmail)
         {
@@ -794,6 +837,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Status = customerToCopy.Status,
                 CommunicateWithNotifier = customerToCopy.CommunicateWithNotifier,
                 CommunicateWithPerformer = customerToCopy.CommunicateWithPerformer,
+
             };
 
             IDictionary<string, string> errors = new Dictionary<string, string>();
@@ -866,8 +910,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ModuleCaseInvoice = customerToCopySettings.ModuleCaseInvoice,
                 PreventToSaveCaseWithInactiveValue = customerToCopySettings.PreventToSaveCaseWithInactiveValue,
                 ShowOUsOnDepartmentFilter = customerToCopySettings.ShowOUsOnDepartmentFilter,
-                FileIndexingServerName = customerToCopySettings.FileIndexingServerName,
-                FileIndexingCatalogName = customerToCopySettings.FileIndexingCatalogName,
+                FileIndexingServerName = "",
+                FileIndexingCatalogName = "",
                 BatchEmail = customerToCopySettings.BatchEmail,
                 BulletinBoardWGRestriction = customerToCopySettings.BulletinBoardWGRestriction,
                 CalendarWGRestriction = customerToCopySettings.CalendarWGRestriction,
@@ -880,7 +924,71 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 ShowQuickNewCaseLink = customerToCopySettings.ShowQuickNewCaseLink,
                 QuickNewCaseLinkText = customerToCopySettings.QuickNewCaseLinkText,
                 QuickNewCaseLinkUrl = customerToCopySettings.QuickNewCaseLinkUrl,
+                EMailSubjectPattern = customerToCopySettings.EMailSubjectPattern,
+                EMailAnswerSeparator = customerToCopySettings.EMailAnswerSeparator,
+                BlockedEmailRecipients = "noreply;",
+                ErrorMailTo = "",
+                SharePointClientId = "N/A",
+                SharePointDriveId = "N/A",
+                SharePointSiteId = "N/A",
+                SharePointUserName = "N/A",
+                SharePointPassword = "N/A",
+                SharePointFolderId = "N/A",
+                SharePointSecretKey = "N/A",
+                SharePointTenantId = "N/A",
+                SharePointScope = "N/A",
+                CalcSolvedInTimeByLatestSLADate = customerToCopySettings.CalcSolvedInTimeByLatestSLADate,
+
             };
+            //Selfservice settings to copy
+            newCustomerToSave.ShowCaseOnExternalPage = customerToCopy.ShowCaseOnExternalPage;
+            newCustomerToSave.ShowCasesOnExternalPage = customerToCopy.ShowCasesOnExternalPage;
+            newCustomerToSave.ShowFAQOnExternalPage = customerToCopy.ShowFAQOnExternalPage;
+            newCustomerToSave.ShowDocumentsOnExternalPage = customerToCopy.ShowDocumentsOnExternalPage;
+            newCustomerToSave.ShowHelpOnExternalPage = customerToCopy.ShowHelpOnExternalPage;
+            newCustomerToSave.ShowCoWorkersOnExternalPage = customerToCopy.ShowCoWorkersOnExternalPage;
+            newCustomerToSave.GroupCaseTemplates = customerToCopy.GroupCaseTemplates;
+            newCustomerToSave.ShowOperationalLogOnExtPage = customerToCopy.ShowOperationalLogOnExtPage;
+            newCustomerToSave.ShowCalenderOnExtPage = customerToCopy.ShowCalenderOnExtPage;
+            newCustomerToSave.ShowBulletinBoardOnExtPage = customerToCopy.ShowBulletinBoardOnExtPage;
+            newCustomerToSave.ShowCaseActionsPanelOnTop = customerToCopy.ShowCaseActionsPanelOnTop;
+            newCustomerToSave.ShowCaseActionsPanelAtBottom = customerToCopy.ShowCaseActionsPanelAtBottom;
+            newCustomerToSave.UseInitiatorAutocomplete = customerToCopy.UseInitiatorAutocomplete;
+            newCustomerToSave.UseInternalLogNoteOnExternalPage = customerToCopy.UseInternalLogNoteOnExternalPage;
+            newCustomerToSave.FetchPcNumber = customerToCopy.FetchPcNumber;
+            newCustomerToSave.RestrictUserToGroupOnExternalPage = customerToCopy.RestrictUserToGroupOnExternalPage;
+            newCustomerToSave.FetchDataFromApiOnExternalPage = customerToCopy.FetchDataFromApiOnExternalPage;
+            newCustomerToSave.MyCasesRegistrator = customerToCopy.MyCasesRegistrator;
+            newCustomerToSave.MyCasesInitiator = customerToCopy.MyCasesInitiator;
+            newCustomerToSave.MyCasesFollower = customerToCopy.MyCasesFollower;
+            newCustomerToSave.WorkingDayStart = customerToCopy.WorkingDayStart;
+            newCustomerToSave.WorkingDayEnd = customerToCopy.WorkingDayEnd;
+
+            //Selfservice infotexts to copy
+            var infoTexts = this._infoService.GetAllInfoTexts(customerToCopy.Id);
+            foreach( var info in infoTexts )
+            {
+                var newInfoText = new InfoText();
+                newInfoText.Customer_Id = newCustomerToSave.Id;
+                newInfoText.Name = info.Name;
+                newInfoText.Type = info.Type;
+                newInfoText.Language_Id = info.Language_Id;
+
+                this._infoService.SaveInfoText(newInfoText,  out errors);
+            }
+
+            //Document types to copy
+            var allDocumentCategories = _documentService.GetDocumentCategories(customerToCopy.Id);
+
+            foreach (var cat in allDocumentCategories)
+            {
+                var catToCopy = new DocumentCategory();
+                catToCopy.Customer_Id = newCustomerToSave.Id;
+                catToCopy.Name = cat.Name;
+                catToCopy.CreatedByUser_Id = SessionFacade.CurrentUser.Id;
+                catToCopy.ShowOnExternalPage = cat.ShowOnExternalPage;
+                _documentService.SaveDocumentCategory(catToCopy, out errors);
+            }
 
             //Get CaseSettings to copy
             var caseSettingsToCopy = this._caseSettingsService.GetCaseSettings(customerToCopy.Id, null, null);
@@ -899,7 +1007,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 this._caseSettingsService.SaveCaseSetting(newCustomerCaseSetting, out errors);
             }
+            var registrationSourceToCopy = this._registrationSourceCustomerService.GetRegistrationSources(customerToCopy.Id);
+            foreach(var reg in registrationSourceToCopy)
+            {
+                var newRegistrationSourceCustomer = new RegistrationSourceCustomer() { };
+                newRegistrationSourceCustomer.Customer_Id = newCustomerToSave.Id;
+                newRegistrationSourceCustomer.SourceName = reg.SourceName;
+                newRegistrationSourceCustomer.SystemCode = reg.SystemCode;
+                newRegistrationSourceCustomer.IsActive = reg.IsActive;
 
+                this._registrationSourceCustomerService.SaveRegistrationSourceCustomer(newRegistrationSourceCustomer, out errors);
+            }
             //Get CaseFieldSettings to copy
             var caseFieldSettingsToCopy = this._caseFieldSettingService.GetCaseFieldSettings(customerToCopy.Id);
 
@@ -952,6 +1070,31 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     }
                 }
             }
+
+            // caseSections 
+            //var listOfCaseSectionsToCopy = new List<CaseSectionModel>();
+            //var caseSectionsToCopy = _caseSectionService.GetCaseSections(customerToCopy.Id,customerToCopy.Language_Id);
+
+            //foreach (var cs in caseSectionsToCopy)
+            //{
+            //    // Get new caseSectionFields for the new customer based on caseFieldSettings
+            //    var caseSectionFieldsToCopy = _caseFieldSettingService.GetCaseFieldSettings(customerToCopy.Id);
+            //    var newCustomerCaseSection = new CaseSectionModel()
+            //    {
+            //        CustomerId = newCustomerToSave.Id,
+            //        SectionHeader = cs.SectionHeader,
+            //        IsEditCollapsed = cs.IsEditCollapsed,
+            //        IsNewCollapsed = cs.IsNewCollapsed,
+            //        SectionType = cs.SectionType,
+            //        CaseSectionFields = cs.CaseSectionFields, //This is wrong, we have to get the new CaseSectionFields
+            //    };
+            //    _caseSectionService.SaveCaseSection(newCustomerCaseSection);
+            //}
+            //foreach (var l in language)
+            //{
+            //    var caseSectionsforNewCustomer = _caseSectionService.GetCaseSections(newCustomerToSave.Id, l.Id);
+            //    _caseSectionService.SaveCaseSections(l.Id, caseSectionsforNewCustomer, newCustomerToSave.Id);
+            //}
 
             // Get ComputerUserFieldSettings
             var computerUserFieldSettingsToCopy = this._computerService.GetComputerUserFieldSettings(customerToCopy.Id);
@@ -1030,7 +1173,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             newCustomerToSave.UsersAvailable = customerToCopy.UsersAvailable;
 
             //Get Casetype to copy
-            var caseTypesToCopy = this._caseTypeService.GetCaseTypes(customerToCopy.Id).Where(x => x.Parent_CaseType_Id == null);
+            var caseTypesToCopy = this._caseTypeService.GetCaseTypes(customerToCopy.Id).Where(x => x.Parent_CaseType_Id == null && x.IsActive == 1);
 
             foreach (var ct in caseTypesToCopy)
             {
@@ -1041,6 +1184,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 newCustomerCaseType.IsDefault = ct.IsDefault;
                 newCustomerCaseType.RequireApproving = ct.RequireApproving;
                 newCustomerCaseType.ShowOnExternalPage = ct.ShowOnExternalPage;
+                newCustomerCaseType.ShowOnExtPageCases = ct.ShowOnExtPageCases;
                 newCustomerCaseType.IsEMailDefault = ct.IsEMailDefault;
                 newCustomerCaseType.AutomaticApproveTime = ct.AutomaticApproveTime;
                 newCustomerCaseType.User_Id = ct.User_Id;
@@ -1094,8 +1238,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             }
 
-            //Get Product area to copy
-            var productAreasToCopy = this._productAreaService.GetAllProductAreas(customerToCopy.Id);
+            //Get Product area to copy - Only get active?
+            var productAreasToCopy = this._productAreaService.GetAllProductAreas(customerToCopy.Id).Where(x => x.IsActive == 1);
 
             foreach (var p in productAreasToCopy)
             {
@@ -1104,13 +1248,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 newCustomerProductArea.Customer_Id = newCustomerToSave.Id;
                 newCustomerProductArea.Name = p.Name;
                 newCustomerProductArea.Parent_ProductArea_Id = p.Parent_ProductArea_Id;
+                newCustomerProductArea.ShowOnExternalPage = p.ShowOnExternalPage;
+                newCustomerProductArea.ShowOnExtPageCases = p.ShowOnExtPageCases;
                 newCustomerProductArea.IsActive = p.IsActive;
 
                 this._productAreaService.SaveProductArea(newCustomerProductArea, null, 0, out errors);
             }
 
             //Get StateSecondary to copy
-            var stateSecondariesToCopy = this._stateSecondaryService.GetStateSecondaries(customerToCopy.Id).ToList();
+             var stateSecondariesToCopy = this._stateSecondaryService.GetStateSecondaries(customerToCopy.Id).ToList();
 
             foreach (var ss in stateSecondariesToCopy)
             {
@@ -1122,6 +1268,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 newCustomerStateSecondaries.NoMailToNotifier = ss.NoMailToNotifier;
                 newCustomerStateSecondaries.ResetOnExternalUpdate = ss.ResetOnExternalUpdate;
                 newCustomerStateSecondaries.IsActive = ss.IsActive;
+                newCustomerStateSecondaries.AlternativeStateSecondaryName = ss.AlternativeStateSecondaryName;
 
                 this._stateSecondaryService.SaveStateSecondary(newCustomerStateSecondaries, out errors);
             }
@@ -1161,8 +1308,23 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 this._statusService.SaveStatus(newCustomerStatuses, out errors);
             }
 
-            //Get FinishingCause to copy
-            var finishingCausesToCopy = this._finishingCauseService.GetFinishingCauses(customerToCopy.Id);
+            //Get finisingCauseCategories to copy
+            var oldAndNewFinishingCategories = new Dictionary<int, int>();
+            var oldAndNewFinishingCauses = new Dictionary<int, int>();
+            var finisingCauseCategoriesToCopy = this._finishingCauseService.GetFinishingCauseCategories(customerToCopy.Id);
+            foreach (var fcc in finisingCauseCategoriesToCopy)
+            {
+                var newCustomerFinishingCauseCategory = new FinishingCauseCategory() { };
+
+                newCustomerFinishingCauseCategory.Customer_Id = newCustomerToSave.Id;
+                newCustomerFinishingCauseCategory.Name = fcc.Name;
+
+                newCustomerFinishingCauseCategory.Id = this._finishingCauseService.SaveFinishingCauseCategoryAndGetId(newCustomerFinishingCauseCategory, out errors);
+                oldAndNewFinishingCategories.Add(fcc.Id, newCustomerFinishingCauseCategory.Id);
+            }
+
+            //Get FinishingCause to copy, thopse with parent_finishingcause_id = null first
+            var finishingCausesToCopy = this._finishingCauseService.GetFinishingCauses(customerToCopy.Id).OrderBy(x => x.Parent_FinishingCause_Id);
 
             foreach (var fc in finishingCausesToCopy)
             {
@@ -1170,12 +1332,42 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
                 newCustomerFinishingCause.Customer_Id = newCustomerToSave.Id;
                 newCustomerFinishingCause.Name = fc.Name;
-                newCustomerFinishingCause.Parent_FinishingCause_Id = fc.Parent_FinishingCause_Id;
-                newCustomerFinishingCause.FinishingCauseCategory_Id = fc.FinishingCauseCategory_Id;
                 newCustomerFinishingCause.PromptUser = fc.PromptUser;
                 newCustomerFinishingCause.Merged = fc.Merged;
                 newCustomerFinishingCause.IsActive = fc.IsActive;
+                newCustomerFinishingCause.Id = this._finishingCauseService.SaveFinishingCauseAndGetId(newCustomerFinishingCause, out errors);
+                if(fc.FinishingCauseCategory_Id != null)
+                {
+                    //Check oldandnew
+                    if (oldAndNewFinishingCategories.TryGetValue(fc.FinishingCauseCategory_Id.Value, out var newFinishingCauseCategoryId))
+                    {
+                        // Set the FinishingCauseCategory_Id of newCustomerFinishingCause to the new Id
+                        newCustomerFinishingCause.FinishingCauseCategory_Id = newFinishingCauseCategoryId;
+                    }
+                }
+                if (fc.Parent_FinishingCause_Id != null)
+                {
+                    //What to do here? Compare names?
+                    oldAndNewFinishingCauses.Add(fc.Id, newCustomerFinishingCause.Id);
+                }
+                
                 this._finishingCauseService.SaveFinishingCause(newCustomerFinishingCause, out errors);
+            }
+            //Try to set parent_finishingcause_id
+
+            foreach (var fc in finishingCausesToCopy)
+            {
+                //if (fc.Parent_FinishingCause_Id != null)
+                //{
+                //    // Retrieve the new id using the mapping
+                //    var newId = oldAndNewFinishingCauses[fc.Id];
+                //    var newParentId = oldAndNewFinishingCauses[fc.Parent_FinishingCause_Id.Value];
+
+                //    // Fetch, update, and save the child with the new parent id
+                //    var childToUpdate = this._finishingCauseService.GetFinishingCause(newId);
+                //    childToUpdate.Parent_FinishingCause_Id = newParentId;
+                //    this._finishingCauseService.SaveFinishingCause(childToUpdate, out var errors);
+                //}
             }
 
             //Get CaseSolutionCategory to copy
@@ -1234,20 +1426,24 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 this._caseSolutionService.SaveCaseSolution(newCustomerCaseSolution, null, null, out errors);
             }
 
-            //Get Mailtemplate
-            for (var i = 1; i < 100; i++)
+            //Get All Mailtemplates where ordertype_id and accountActivity_id is null to copy
+            var allmails = _mailTemplateService.GetAllMailTemplatesForCustomer(customerToCopy.Id)
+                 .Where(x => x.MailID < 100 && x.MailID != 40 && x.MailID != 8)
+                 .GroupBy(x => x.MailID)
+                 .Select(g => g.FirstOrDefault());
+            foreach (var mt in allmails)
             {
-                var mailTemplateToCopy = this._mailTemplateService.GetMailTemplateForCopyCustomer(i, customerToCopy.Id);
+                var mailTemplateToCopy = this._mailTemplateService.GetMailTemplateForCopyCustomer(mt.MailID, customerToCopy.Id);
 
                 if (mailTemplateToCopy != null)
                 {
                     var mailTemplateToSave = new MailTemplateEntity
                     {
-                        //Id = id,
                         MailID = mailTemplateToCopy.MailID,
                         Customer_Id = newCustomerToSave.Id,
                         SendMethod = mailTemplateToCopy.SendMethod,
-                        IsStandard = mailTemplateToCopy.IsStandard, 
+                        IsStandard = mailTemplateToCopy.IsStandard,
+                        IncludeLogText_External = mailTemplateToCopy.IncludeLogText_External,
                     };
 
                     this._mailTemplateService.SaveMailTemplate(mailTemplateToSave, out errors);
@@ -1255,7 +1451,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     //Get MailTemplateLanguage
                     foreach (var l in language)
                     {
-                        var mailTemplateLanguageToCopy = _mailTemplateService.GetMailTemplateForCustomerAndLanguage(customerToCopy.Id, l.Id, mailTemplateToCopy.Id);
+                        var mailTemplateLanguageToCopy = _mailTemplateService.GetMailTemplateLanguage(mailTemplateToCopy.Id, l.Id);
 
                         if (mailTemplateLanguageToCopy != null)
                         {

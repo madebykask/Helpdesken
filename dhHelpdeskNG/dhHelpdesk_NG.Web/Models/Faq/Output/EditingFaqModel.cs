@@ -70,6 +70,7 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
         public string Id { get; private set; }
 
         [LocalizedRequired("Du måste ange ett svar")]
+        [LocalizedStringLength(3000)]
         public string Answer { get; private set; }
 
         public DropDownWithSubmenusContent Category { get; private set; }
@@ -80,7 +81,7 @@ namespace DH.Helpdesk.Web.Models.Faq.Output
 
         public bool InformationIsAvailableForNotifiers { get; private set; }
 
-        [LocalizedStringLength(1000)]
+        [LocalizedStringLength(3000)]
         public string InternalAnswer { get; private set; }
 
         [LocalizedRequired]

@@ -16,6 +16,7 @@
 
         void SaveInfoText(InfoText infoText, out IDictionary<string, string> errors);
         void Commit();
+        IList<InfoText> GetAllInfoTexts(int customerId);
     }
 
     public class InfoService : IInfoService
@@ -38,6 +39,10 @@
         public IList<InfoText> GetInfoTexts(int customerId, int languageId)
         {
             return this._infoTextRepository.GetMany(x => x.Customer_Id == customerId && x.Language_Id == languageId).ToList();
+        }
+        public IList<InfoText> GetAllInfoTexts(int customerId)
+        {
+            return this._infoTextRepository.GetMany(x => x.Customer_Id == customerId).ToList();
         }
 
         public InfoText GetInfoText(int id, int customerId, int languageId)

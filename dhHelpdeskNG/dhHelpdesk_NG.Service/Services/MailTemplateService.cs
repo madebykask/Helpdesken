@@ -37,6 +37,7 @@
         void SaveMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage,  bool update, out IDictionary<string, string> errors);
         void DeleteMailTemplateLanguage(MailTemplateLanguageEntity mailtemplatelanguage, out IDictionary<string, string> errors);
         void Commit();
+        IList<MailTemplateList> GetAllMailTemplatesForCustomer(int customerId);
 
         //void GetMailTemplateId();
     }
@@ -80,6 +81,11 @@
         public IList<MailTemplateList> GetMailTemplates(int customerId, int langaugeId)
         {
             return this._mailTemplateRepository.GetMailTemplates(customerId, langaugeId).ToList();
+        }
+
+        public IList<MailTemplateList> GetAllMailTemplatesForCustomer(int customerId)
+        {
+            return this._mailTemplateRepository.GetAllMailTemplatesForCustomer(customerId).ToList();
         }
 
         public CustomMailTemplate GetCustomMailTemplate(int mailTemplateId)
@@ -182,23 +188,23 @@
                 mailtemplatelanguage.MailTemplate.MailTemplateGUID = Guid.NewGuid();
                 update = false;
             }
+            //Had to comment this out because it was causing an error when trying to save a template - Katta 231009
+            //if (mailtemplatelanguage.MailTemplate.MailID == 14)
+            //{
+            //    var customersettings = this._settingService.GetCustomerSetting(mailtemplatelanguage.MailTemplate.Customer_Id.Value);
 
-            if (mailtemplatelanguage.MailTemplate.MailID == 14)
-            {
-                var customersettings = this._settingService.GetCustomerSetting(mailtemplatelanguage.MailTemplate.Customer_Id.Value);
+            //    if (mailtemplatelanguage.Body != "")
+            //    {
+            //        if (customersettings.CaseSMS == 0)
+            //            customersettings.CaseSMS = 1;
+            //    }
+            //    else
+            //    {
+            //        customersettings.CaseSMS = 0;
+            //    }
+            //    this._settingService.SaveSetting(customersettings, out errors);
 
-                if (mailtemplatelanguage.Body != "")
-                {
-                    if (customersettings.CaseSMS == 0)
-                        customersettings.CaseSMS = 1;
-                }
-                else
-                {
-                    customersettings.CaseSMS = 0;
-                }
-                this._settingService.SaveSetting(customersettings, out errors);
-
-            }
+            //}
 
             if (!update)
                 this._mailTemplateLanguageRepository.Add(mailtemplatelanguage);

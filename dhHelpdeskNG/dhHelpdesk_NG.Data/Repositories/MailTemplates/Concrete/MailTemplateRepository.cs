@@ -45,6 +45,24 @@ namespace DH.Helpdesk.Dal.Repositories.MailTemplates.Concrete
 
             return q;
         }
+        public IEnumerable<MailTemplateList> GetAllMailTemplatesForCustomer(int customerId)
+        {
+            var q = from m in this.DataContext.MailTemplates
+                    where m.Customer_Id == customerId
+                    orderby m.MailID
+                    select
+                        new MailTemplateList
+                        {
+                            Id = m.Id,
+                            Customer_Id = m.Customer_Id,
+                            MailID = m.MailID,
+                            IsStandard = m.IsStandard,
+                            SendMethod = (int)m.SendMethod,
+                            IncludeLogText_External = m.IncludeLogText_External,
+                        };
+
+            return q;
+        }
 
         public CustomMailTemplate GetCustomMailTemplate(int mailTemplateId)
         {

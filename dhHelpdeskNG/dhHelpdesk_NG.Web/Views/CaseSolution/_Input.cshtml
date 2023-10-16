@@ -177,7 +177,7 @@
                                             @Translation.Get("Visa på ärende", Enums.TranslationSource.TextTranslation)
                                         </td>
                                         <td class="checkbox" style="padding-left: 20px;">
-                                            <input type="checkbox" onclick="ShowHideCaseDiv(this)" name="Casesolution.ShowInsideCase" id="Casesolution_ShowInsideCase" @(Model.CaseSolution.ShowInsideCase != 0 ? "checked=checked" : "") value="1" style="margin-top: 8px" />
+                                            <input type="checkbox" name="Casesolution.ShowInsideCase" id="Casesolution_ShowInsideCase" @(Model.CaseSolution.ShowInsideCase != 0 ? "checked=checked" : "") value="1" style="margin-top: 8px" />
                                             <input type="hidden" name="Casesolution.ShowInsideCase" value="0" />
                                         </td>
                                     </tr>
@@ -191,7 +191,7 @@
                                         </td>
                                     </tr>
                                 </table>
-                                <div id="divShowCase" style="display:none; padding:0px;width:100%">
+                                <div id="divShowCase" style="padding:0px;width:100%">
                                     <div class="row">
                                         <div class="span12">
 
@@ -201,16 +201,16 @@
                                                         @Translation.Get("Koppla till åtgärd", Enums.TranslationSource.TextTranslation)
                                                     </td>
                                                     <td>
-                                                        <select id="savaAndClose" name="CaseSolution.SaveAndClose" @(Model.CaseSolution.ShowInsideCase == 1 ? "" : "disabled='true'")>
+                                                        <select id="savaAndClose" name="CaseSolution.SaveAndClose")>
                                                             @foreach (var action in Model.ActionList)
                                                             {
                                                                 <option value="@action.Value" @(action.Selected ? "selected" : "")> @action.Text </option>
                                                             }
 
-                                                            @if (Model.CaseSolution.ShowInsideCase != 1)
+                                                            @*@if (Model.CaseSolution.ShowInsideCase != 1)
                                                             {
                                                                 <option value="-2" selected> @saveDropDownText </option>
-                                                            }
+                                                            }*@
                                                         </select>
                                                     </td>
                                                 </tr>
@@ -219,14 +219,15 @@
                                                         @Translation.Get("Koppla till", Enums.TranslationSource.TextTranslation)
                                                     </td>
                                                     <td>
-                                                        @if (Model.CaseSolution.ShowInsideCase == 1)
-                                                        {
-                                                            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { @Id = "ConnectTo", @onchange = "GetSelectedTextValue(this)" })
-                                                        }
-                                                        else
-                                                        {
-                                                            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { @Id = "ConnectTo", disabled = "disabled", @onchange = "GetSelectedTextValue(this)" })
-                                                        }
+                                                        @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { @Id = "ConnectTo", @onchange = "GetSelectedTextValue(this)" })
+                                                        @*@if (Model.CaseSolution.ShowInsideCase == 1)
+        {
+            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { @Id = "ConnectTo", @onchange = "GetSelectedTextValue(this)" })
+        }
+        else
+        {
+            @Html.DropDownListFor(model => model.CaseSolution.ConnectedButton, Model.ButtonList, "", new { @Id = "ConnectTo", disabled = "disabled", @onchange = "GetSelectedTextValue(this)" })
+        }*@
 
                                                     </td>
                                                 </tr>
@@ -2705,23 +2706,23 @@
     }
 
 
-    function ShowHideCaseDiv(chk) {
+    //function ShowHideCaseDiv(chk) {
 
-        if (document.getElementById('Casesolution_ShowInsideCase').checked==true)
-        {
-            document.getElementById('divShowCase').style.display = 'block';
-            if(document.getElementById('ConnectTo').value==0  && document.getElementById('ConnectTo').value!='')
-            {
-                document.getElementById('divConditions').style.display = 'block';
-            }
-        }
-        else
-        {
-            document.getElementById('divConditions').style.display = 'none';
-            document.getElementById('divShowCase').style.display = 'none';
-        }
+    //    if (document.getElementById('Casesolution_ShowInsideCase').checked==true)
+    //    {
+    //        document.getElementById('divShowCase').style.display = 'block';
+    //        if(document.getElementById('ConnectTo').value==0  && document.getElementById('ConnectTo').value!='')
+    //        {
+    //            document.getElementById('divConditions').style.display = 'block';
+    //        }
+    //    }
+    //    else
+    //    {
+    //        document.getElementById('divConditions').style.display = 'none';
+    //        document.getElementById('divShowCase').style.display = 'none';
+    //    }
 
-    }
+    //}
 
     $(document).ready(function () {
         //TODO - Default Language
@@ -2733,23 +2734,14 @@
                 DisableControls();
             }
         }
-        //if (document.getElementById('languageList').value != defaultLanguage) {
-        //    DisableControls();
-        //}
-        if (document.getElementById('Casesolution_ShowInsideCase').checked)
-        {
-            if(document.getElementById('ConnectTo').value==0  && document.getElementById('ConnectTo').value!='')
-            {
-                document.getElementById('divConditions').style.display = 'block';
-            }
-
-
-            document.getElementById('divShowCase').style.display = 'block';
+ 
+        if (document.getElementById('ConnectTo').value == 0 && document.getElementById('ConnectTo').value != '') {
+            console.log("ConnectTo is 0");
+            document.getElementById('divConditions').style.display = 'block';
         }
-        else
-        {
+        else {
+            console.log("ConnectTo is not 0");
             document.getElementById('divConditions').style.display = 'none';
-            document.getElementById('divShowCase').style.display = 'none';
         }
 
     });
