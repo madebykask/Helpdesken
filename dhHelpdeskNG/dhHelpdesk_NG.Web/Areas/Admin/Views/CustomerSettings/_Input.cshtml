@@ -719,7 +719,7 @@
                                                 @Translation.GetCoreTextTranslation("Lösenord")
                                             </td>
                                             <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3Password, new { maxlength = "20", disabled = "disable" }) <input type="button" value="@Translation.Get("Byt lösenord", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword btn"
+                                                @Html.TextBoxFor(model => model.Setting.POP3Password, new { maxlength = "20", disabled = "disable" }) <input type="button" style="width:97px;" value="@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword btn"
                                                                                                                                                              onclick="ChangePasswordPop3()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
                                             </td>
                                             @*<td>
@@ -767,7 +767,8 @@
                                                 Ews Client Secret
                                             </td>
                                             <td>
-                                                @Html.TextBoxFor(model => model.Setting.EwsClientSecret, new { maxlength = "200", style = "width: 400px;" })
+                                                @Html.TextBoxFor(model => model.Setting.EwsClientSecret, new { maxlength = "200", disabled = "disable"}) <input type="button" style="width:97px;" value="@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)" name="changePasswordEws" class="changePassword btn"
+                                                                                                                                                                                          onclick="ChangeClientSecretEws()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
                                             </td>
                                         </tr>
                                         <tr>
@@ -781,6 +782,7 @@
 
                                     </tbody>
                                     @Html.HiddenFor(model => model.Setting.POP3Password)
+                                    @Html.HiddenFor(model => model.Setting.EwsClientSecret)
                                 }
                                 else
                                 {
@@ -993,10 +995,19 @@
 <div id="divPop3PasswordDialog" class="modal hide fade">
     <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>@Translation.GetCoreTextTranslation("Byt lösenord för Mail2Ticket")</h3>
+        <h3>@Translation.GetCoreTextTranslation("Ändra")  Mail2Ticket</h3>
     </div>
     <div class="modal-body">
         @Html.Partial("_ChangePasswordPop3", Model)
+    </div>
+</div>
+<div id="divChangeEwsClientSecret" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h3>@Translation.GetCoreTextTranslation("Ändra") Ews Client Secret</h3>
+    </div>
+    <div class="modal-body">
+        @Html.Partial("_ChangeEwsClientSecret", Model)
     </div>
 </div>
 <script type="text/javascript">
@@ -1060,6 +1071,36 @@
         mod.on("hide", function () {
             $("#divPop3PasswordDialog #btnSavePasswordPop3").off("click");
             $("#divPop3PasswordDialog #btnClosePop3").off("click");
+        });
+    }
+    function ChangeClientSecretEws() {
+
+        var mod = $('#divChangeEwsClientSecret').modal('show');
+
+        mod.find("#btnCloseEwsClientSecret").on("click", function (e) {
+            mod.modal('hide');
+        });
+
+        mod.find("#btnSaveEwsClientSecret").on("click", function (e) {
+            if ($('#NewEwsClientSecret').val() != $('#ConfirmEwsClientSecret').val()) {
+                var e = '@passChangeError';
+                ShowToastMessage(e, "Error");
+
+            } else {
+                $.post('/customersettings/SaveEwsClientSecret/', { id: $('#id_customer').val(), newPassword: $('#NewEwsClientSecret').val(), confirmPassword: $('#ConfirmEwsClientSecret').val() }, function (data) {
+                    var e = '@passChangeText';
+                    ShowToastMessage(e, "Alert");
+
+                    $('#NewEwsClientSecret').val('');
+                    $('#ConfirmEwsClientSecret').val('');
+                });
+            }
+            mod.modal('hide');
+        });
+
+        mod.on("hide", function () {
+            $("#divChangeEwsClientSecret #btnSaveEwsClientSecret").off("click");
+            $("#divChangeEwsClientSecret #btnCloseEwsClientSecret").off("click");
         });
     }
 

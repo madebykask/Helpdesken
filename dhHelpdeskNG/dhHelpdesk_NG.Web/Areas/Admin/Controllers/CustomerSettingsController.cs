@@ -111,6 +111,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             vmodel.Setting.Customer_Id = setting.Customer_Id;
             vmodel.Setting.LDAPPassword = setting.LDAPPassword.ToString();
             vmodel.Setting.POP3Password = setting.POP3Password.ToString();
+            vmodel.Setting.EwsClientSecret = setting.EwsClientSecret.ToString();
             vmodel.Setting.ComputerUserInfoListLocation = setting.ComputerUserInfoListLocation;
             vmodel.Setting.ModuleCase = setting.ModuleCase;
 
@@ -318,6 +319,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             model.Setting.LDAPPassword = WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString();
             model.Setting.POP3Password = WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString();
+            model.Setting.EwsClientSecret = WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString();
             #endregion
             return model;
         }
@@ -384,7 +386,36 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 this._settingService.SaveSetting(setting, out errors);
             }
             else
-                errors.Add("Setting.LDAPPassword", @Translation.Get("Angivna ord stämmer ej överens", Enums.TranslationSource.TextTranslation));
+            {
+                errors.Add("Setting.POP3Password", @Translation.Get("Angivna ord stämmer ej överens", Enums.TranslationSource.TextTranslation));
+            }
+        }
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpPost]
+        public void SaveEwsClientSecret(int id, string newPassword, string confirmPassword)
+        {
+            var setting = this._settingService.GetCustomerSetting(id);
+
+            if (setting == null)
+            {
+                setting = new DHDomain.Setting() { Customer_Id = id };
+                setting.CaseFiles = 6;
+                setting.ComputerUserInfoListLocation = 1;
+                setting.ModuleCase = 1;
+            }
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            if (newPassword == confirmPassword)
+            {
+                setting.EwsClientSecret = newPassword;
+                this._settingService.SaveSetting(setting, out errors);
+            }
+            else
+            {
+                errors.Add("Setting.EwsClientSecret", @Translation.Get("Angivna ord stämmer ej överens", Enums.TranslationSource.TextTranslation));
+            }
+               
         }
 
 
