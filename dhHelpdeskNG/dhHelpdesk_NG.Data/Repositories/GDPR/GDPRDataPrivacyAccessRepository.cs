@@ -6,7 +6,7 @@ namespace DH.Helpdesk.Dal.Repositories.GDPR
 {
     public interface IGDPRDataPrivacyAccessRepository : IRepository<GDPRDataPrivacyAccess>
     {
-        GDPRDataPrivacyAccess GetByUserId(int userId);
+        GDPRDataPrivacyAccess GetUserWithPrivacyPermissionsByUserId(int userId);
     }
 
     public class GDPRDataPrivacyAccessRepository : RepositoryBase<GDPRDataPrivacyAccess>, IGDPRDataPrivacyAccessRepository
@@ -20,9 +20,9 @@ namespace DH.Helpdesk.Dal.Repositories.GDPR
 
         #endregion
 
-        public GDPRDataPrivacyAccess GetByUserId(int userId)
+        public GDPRDataPrivacyAccess GetUserWithPrivacyPermissionsByUserId(int userId)
         {
-            var items = this.DataContext.GDPRDataPrivacyAccess.FirstOrDefault(x => x.User_Id == userId);
+            var items = this.DataContext.GDPRDataPrivacyAccess.FirstOrDefault(x => x.User_Id == userId && (x.DeletionPermission == 1 || x.AnonymizationPermission == 1));
             return items;
         }
     }

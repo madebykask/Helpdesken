@@ -20,7 +20,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Attributes
 
             var userId = SessionFacade.CurrentUser.Id;
             var privacyAccessService = DependencyResolver.Current.GetService<IGDPRDataPrivacyAccessService>();
-            var access = privacyAccessService.GetByUserId(userId);
+            var access = privacyAccessService.GetUserWithPrivacyPermissionsByUserId(userId);
 
             return access != null;
         }
