@@ -499,7 +499,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }
             }
 
-            var dataPrivacyAccess = _gdprDataPrivacyAccessService.GetByUserId(SessionFacade.CurrentUser.Id);
+            var dataPrivacyAccess = _gdprDataPrivacyAccessService.GetUserWithPrivacyPermissionsByUserId(SessionFacade.CurrentUser.Id);
 			var fileUploadWhiteList = _globalSettingService.GetFileUploadWhiteList();
 
             var model = new GlobalSettingIndexViewModel
@@ -1200,7 +1200,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private object GetDataPrivacyFavorites()
         {
             //Checking permissions for Deletion/Anonymization
-            var dataPrivacyAccess = _gdprDataPrivacyAccessService.GetByUserId(SessionFacade.CurrentUser.Id);
+            var dataPrivacyAccess = _gdprDataPrivacyAccessService.GetUserWithPrivacyPermissionsByUserId(SessionFacade.CurrentUser.Id);
             var favorites = _gdprFavoritesService.ListFavorites(dataPrivacyAccess);
             var items = favorites.ToSelectList().Select(x => new
             {
@@ -1245,7 +1245,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private DataPrivacyModel GetDataPrivacyModel()
         {
-            var userAccess = _gdprDataPrivacyAccessService.GetByUserId(SessionFacade.CurrentUser.Id);
+            var userAccess = _gdprDataPrivacyAccessService.GetUserWithPrivacyPermissionsByUserId(SessionFacade.CurrentUser.Id);
             if (userAccess == null)
                 return new DataPrivacyModel();
 

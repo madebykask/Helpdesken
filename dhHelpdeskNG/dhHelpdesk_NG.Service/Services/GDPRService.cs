@@ -27,7 +27,7 @@ namespace DH.Helpdesk.Services.Services
 
     public interface IGDPRDataPrivacyAccessService
     {
-        GDPRDataPrivacyAccess GetByUserId(int userId);
+        GDPRDataPrivacyAccess GetUserWithPrivacyPermissionsByUserId(int userId);
     }
 
     public interface IGDPRDataPrivacyCasesService
@@ -81,9 +81,9 @@ namespace DH.Helpdesk.Services.Services
 
         #region IGDPRDataPrivacyAccessService
 
-        public GDPRDataPrivacyAccess GetByUserId(int userId)
+        public GDPRDataPrivacyAccess GetUserWithPrivacyPermissionsByUserId(int userId)
         {
-            return _privacyAccessRepository.GetByUserId(userId);
+            return _privacyAccessRepository.GetUserWithPrivacyPermissionsByUserId(userId);
         }
 
         #endregion
