@@ -111,7 +111,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             vmodel.Setting.Customer_Id = setting.Customer_Id;
             vmodel.Setting.LDAPPassword = setting.LDAPPassword.ToString();
             vmodel.Setting.POP3Password = setting.POP3Password.ToString();
-            vmodel.Setting.EwsClientSecret = setting.EwsClientSecret.ToString();
+            vmodel.Setting.EwsClientSecret = setting.EwsClientSecret ?? string.Empty; 
             vmodel.Setting.ComputerUserInfoListLocation = setting.ComputerUserInfoListLocation;
             vmodel.Setting.ModuleCase = setting.ModuleCase;
 
