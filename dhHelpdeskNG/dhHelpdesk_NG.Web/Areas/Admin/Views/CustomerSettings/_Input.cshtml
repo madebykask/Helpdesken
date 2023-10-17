@@ -723,8 +723,8 @@
                                                                                                                                                              onclick="ChangePasswordPop3()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
                                             </td>
                                             @*<td>
-                        @Html.TextBoxFor(model => model.Setting.POP3Password, new { type = "password", maxlength = "40", style = "width: 400px;" })
-                    </td>*@
+                                                    @Html.TextBoxFor(model => model.Setting.POP3Password, new { type = "password", maxlength = "40", style = "width: 400px;" })
+                                                </td>*@
                                         </tr>
                                         <tr>
                                             <td>
@@ -767,8 +767,8 @@
                                                 Ews Client Secret
                                             </td>
                                             <td>
-                                                @Html.TextBoxFor(model => model.Setting.EwsClientSecret, new { maxlength = "200", disabled = "disable"}) <input type="button" style="width:97px;" value="@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)" name="changePasswordEws" class="changePassword btn"
-                                                                                                                                                                                          onclick="ChangeClientSecretEws()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
+                                                @Html.TextBoxFor(model => model.Setting.EwsClientSecret, new { maxlength = "200", disabled = "disable" }) <input type="button" style="width:97px;" value="@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)" name="changePasswordEws" class="changePassword btn"
+                                                                                                                                                                 onclick="ChangeClientSecretEws()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
                                             </td>
                                         </tr>
                                         <tr>
@@ -980,6 +980,7 @@
         </div>
     </div>
     @Html.HiddenFor(model => model.Setting.LDAPPassword)
+    @Html.HiddenFor(model => model.Setting.EwsClientSecret)
     @Html.HiddenFor(model => model.Setting.POP3Password)
     @Html.HiddenFor(model => model.Setting.MinRegWorkingTime)
 </div>
