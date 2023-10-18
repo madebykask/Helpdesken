@@ -1,4 +1,4 @@
-﻿--update DB from 5.3.58.0 to 5.4.0.0 version
+﻿--update DB from 5.3.58.0 to 5.4.0 version
 
 
 -- Add scripts to 5.3.58.1 here
@@ -241,7 +241,7 @@ GO
 
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.4.0.0'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.4.0'
 GO
 
 
