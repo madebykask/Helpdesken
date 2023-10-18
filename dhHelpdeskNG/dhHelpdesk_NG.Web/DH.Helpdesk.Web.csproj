@@ -2212,9 +2212,7 @@
     <Content Include="Content\themes\flick\images\ui-icons_ff0084_256x240.png" />
     <Content Include="Content\themes\flick\images\ui-icons_ffffff_256x240.png" />
     <Content Include="Content\themes\flick\jquery-ui-1.8.4.custom.css" />
-    <Content Include="favicon.ico">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    <Content Include="favicon.ico" />
     <Content Include="Content\fonts\fontawesome-webfont.svg" />
     <Content Include="fonts\fontawesome-webfont.svg" />
     <Content Include="FormLibContent\Areas\Netherlands\Views\Hiring\Predifened_CostCentre.xml" />
