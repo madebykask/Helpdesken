@@ -383,8 +383,8 @@
                             param: [1, ".log-field"],
                             depends: function (element) {
 
-                                var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
-                                || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
+                                var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "").replace(/<[^>]*>/g, "") !== ""
+                                    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "").replace(/<[^>]*>/g, "") !== "";
 
 
                                 var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
@@ -412,8 +412,8 @@
                             param: [1, ".log-field"],
                             depends: function (element) {
 
-                                    var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
-                                    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
+                                var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "").replace(/<[^>]*>/g, "") !== ""
+                                    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "").replace(/<[^>]*>/g, "") !== "";
 
                                     var timeSpentHour = $("#CaseLog_WorkingTimeHour").val().replace(/\r/g, "") !== "";
                                     var timeSpentMin = $("#CaseLog_WorkingTimeMinute").val().replace(/\r/g, "") !== "";
@@ -436,10 +436,8 @@
                             depends: function(element) {
                                 var setting = window.parameters.departmentInvoiceMandatory && window.parameters.showInvoiceTime;
 
-                                var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
-                                    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
-
-                                console.log("logPopulated", logPopulated)
+                                var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "").replace(/<[^>]*>/g, "") !== ""
+                                    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "").replace(/<[^>]*>/g, "") !== "";
 
                                 return setting && logPopulated;
                             }
@@ -450,8 +448,8 @@
                             param: [1, ".time-field"],
                             depends: function(element) {
                                 var setting = window.parameters.departmentInvoiceMandatory && window.parameters.showInvoiceTime;
-                                var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
-                                    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
+                                var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "").replace(/<[^>]*>/g, "") !== ""
+                                    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "").replace(/<[^>]*>/g, "") !== "";
 
                                 return setting && logPopulated;
                             }
@@ -462,8 +460,8 @@
                             param: [1, ".time-field"],
                             depends: function(element) {
                                 var setting = window.parameters.departmentInvoiceMandatory && window.parameters.showInvoiceOvertime;
-                                var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
-                                    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
+                                var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "").replace(/<[^>]*>/g, "") !== ""
+                                    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "").replace(/<[^>]*>/g, "") !== "";
 
                                 return setting && logPopulated;
                             }
@@ -474,8 +472,8 @@
                             param: [1, ".time-field"],
                             depends: function(element) {
                                 var setting = window.parameters.departmentInvoiceMandatory && window.parameters.showInvoiceOvertime;
-                                var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "") !== ""
-                                    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "") !== "";
+                                var logPopulated = $("#" + "@Html.IdFor(x => x.CaseLog.TextInternal)").val().replace(/\r/g, "").replace(/<[^>]*>/g, "") !== ""
+                                    || $("#" + "@Html.IdFor(x => x.CaseLog.TextExternal)").val().replace(/\r/g, "").replace(/<[^>]*>/g, "") !== "";
 
                                 return setting && logPopulated;
                             }
