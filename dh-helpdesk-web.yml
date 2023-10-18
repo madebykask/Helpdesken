@@ -3,7 +3,7 @@ trigger:
     include:
     - Release-*
 
-name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(Build.SourceVersion)
+name: $(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(Build.SourceVersion)
 
 pool:
   vmImage: 'windows-latest'
@@ -30,8 +30,8 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "##vso[task.setvariable variable=myVar;]foo"
-      Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)"
-      Write-Host "##vso[build.updatebuildnumber]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)"
+      Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(SourceVersionShort)"
+      Write-Host "##vso[build.updatebuildnumber]$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(SourceVersionShort)"
 
 
 - task: NuGetToolInstaller@1
@@ -50,8 +50,8 @@ steps:
     InsertAttributes: false
     FileEncoding: 'auto'
     WriteBOM: false
-    InformationalVersion: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)'
-    FileVersionNumber: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(development.versionRevision).$(SourceVersionShort)'
+    InformationalVersion: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(SourceVersionShort)'
+    FileVersionNumber: '$(development.versionMajor).$(development.versionMinor).$(development.versionSubMinor).$(SourceVersionShort)'
     LogLevel: 'verbose'
     FailOnWarning: false
     DisableTelemetry: false
