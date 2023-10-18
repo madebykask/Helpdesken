@@ -1,4 +1,5 @@
-﻿--update DB from 5.3.56 to 5.3.57 version
+﻿--update DB from 5.3.56 to 5.3.57.7 version
+
 RAISERROR ('Add Column SiteURL to tblSettings', 10, 1) WITH NOWAIT
 IF COL_LENGTH('dbo.tblSettings','SiteURL') IS NULL
 	BEGIN	 
@@ -1239,9 +1240,8 @@ END
 GO
 
 
-
 -- END HF 3
 
   -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.57'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.3.57.7'
 GO
