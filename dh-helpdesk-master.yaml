@@ -1,7 +1,7 @@
 trigger:
 - Master
 
-name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(Build.SourceVersion)
+name: $(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(Build.SourceVersion)
 
 pool:
   vmImage: 'windows-latest'
@@ -27,8 +27,8 @@ steps:
     targetType: 'inline'
     script: |
       Write-Host "##vso[task.setvariable variable=myVar;]foo"
-      Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(SourceVersionShort)"
-      Write-Host "##vso[build.updatebuildnumber]$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(SourceVersionShort)"
+      Write-Host "##vso[task.setvariable variable=ProjectBuildNumber;]$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(SourceVersionShort)"
+      Write-Host "##vso[build.updatebuildnumber]$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(SourceVersionShort)"
 
 
 - task: NuGetToolInstaller@1
@@ -47,8 +47,8 @@ steps:
     InsertAttributes: false
     FileEncoding: 'auto'
     WriteBOM: false
-    InformationalVersion: '$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(SourceVersionShort)'
-    FileVersionNumber: '$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(release.versionRevision).$(SourceVersionShort)'
+    InformationalVersion: '$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(SourceVersionShort)'
+    FileVersionNumber: '$(release.versionMajor).$(release.versionMinor).$(release.versionSubMinor).$(SourceVersionShort)'
     LogLevel: 'verbose'
     FailOnWarning: false
     DisableTelemetry: false
