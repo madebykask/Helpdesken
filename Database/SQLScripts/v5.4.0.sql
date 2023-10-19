@@ -1,4 +1,97 @@
-﻿--update DB from 5.3.58.2 to 5.4.0.0 version
+﻿--update DB from 5.3.58.0 to 5.4.0 version
+
+
+-- Add scripts to 5.3.58.1 here
+RAISERROR ('Add Column IncludeLogText_External to tblMailTemplate', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblMailTemplate','IncludeLogText_External') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblMailTemplate]
+		ADD IncludeLogText_External bit not null default 0
+	End
+Go
+
+RAISERROR ('Alter tblDepartment.SearchKey from 200 nvarchar to 400 nvarchar', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblDepartment','SearchKey') IS NOT NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblDepartment]
+		ALTER COLUMN SearchKey nvarchar(400) NULL
+	End
+Go
+
+--new for EctReports to Sharepoint for Ikea 2023-06-07
+RAISERROR ('Add Column SharePointSiteId to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','SharePointSiteId') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD SharePointSiteId nvarchar(200) null
+	End
+Go
+
+RAISERROR ('Add Column SharePointUserName to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','SharePointUserName') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD SharePointUserName nvarchar(200) null
+	End
+Go
+
+RAISERROR ('Add Column SharePointPassword to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','SharePointPassword') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD SharePointPassword nvarchar(200) null
+	End
+Go
+
+RAISERROR ('Add Column SharePointFolderId to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','SharePointFolderId') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD SharePointFolderId nvarchar(200) null
+	End
+Go
+
+RAISERROR ('Add Column SharePointDriveId to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','SharePointDriveId') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD SharePointDriveId nvarchar(200) null
+	End
+Go
+
+RAISERROR ('Add Column SharePointSecretKey to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','SharePointSecretKey') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD SharePointSecretKey nvarchar(200) null
+	End
+Go
+
+RAISERROR ('Add Column SharePointClientId to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','SharePointClientId') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD SharePointClientId nvarchar(200) null
+	End
+Go
+
+RAISERROR ('Add Column SharePointTenantId to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','SharePointTenantId') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD SharePointTenantId nvarchar(200) null
+	End
+Go
+
+RAISERROR ('Add Column SharePointScope to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','SharePointScope') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD SharePointScope nvarchar(200) null
+	End
+Go
+
+-- 5.4.0
 
 RAISERROR ('Add Column AutocloseDays to tblStateSecondary', 10, 1) WITH NOWAIT
 IF COL_LENGTH('dbo.tblStateSecondary','AutocloseDays') IS NULL
@@ -148,7 +241,7 @@ GO
 
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.4.0.0'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.4.0'
 GO
 
 
