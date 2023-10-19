@@ -52,6 +52,11 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Helpers
             var cookie = ctx.Request.Cookies[name] ?? new HttpCookie(name, value);
             cookie.Expires = expireTime != null ? DateTime.Now.Add(expireTime.Value) : DateTime.Now.AddYears(1);
             cookie.Value = value;
+            // Set the Secure flag if the request is made over HTTPS
+            if (ctx.Request.IsSecureConnection)
+            {
+                cookie.Secure = true;
+            }
             ctx.Response.Cookies.Set(cookie);
         }
         public static string HTMLToTableCell(this string input)
