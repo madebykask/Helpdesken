@@ -22,7 +22,7 @@
     <add key="webpages:Version" value="3.0.0.0" />
 	 
 	  <add key="SignOutUrl" value="" /> <!-- If value is set, logout option will show. Eg. https://www.example.com -->
-
+		<add key="InitFromSelfService" value="true" />
     <add key="CaseList" value="manager,coworkers" />
     <add key="CurrentApplication" value="SelfService" />
 	<add key="ShowCommunicationForSelfService" value="#{ShowCommunicationForSelfService}" />
