@@ -654,6 +654,7 @@ Module DH_Helpdesk_Mail
                                     LogToFile("HasBodyHtml ", 1)
                                     sBodyText = getInnerHtml(message.BodyHtml)
                                     Try
+                                        sBodyText = CleanHtml(sBodyText)
                                         sBodyText = CleanStyles(sBodyText)
                                     Catch ex As Exception
                                         'LogError("Error Cleanstyles " & ex.ToString(), Nothing)
@@ -2658,7 +2659,55 @@ Module DH_Helpdesk_Mail
 
 
     End Sub
+    Public Function CleanHtml(ByVal input As String) As String
+        Dim doc As New HtmlAgilityPack.HtmlDocument()
+        doc.LoadHtml(input)
 
+        ' Remove divs that only contain other divs Or br tags
+        Dim divNodes As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//div[not(*) or (*[self::div or self::br]) and not(text()[normalize-space()])]")
+        If divNodes IsNot Nothing Then
+            For Each emptydiv As HtmlNode In divNodes
+                If emptydiv.ParentNode IsNot Nothing Then
+                    For Each child As HtmlNode In emptydiv.ChildNodes
+                        emptydiv.ParentNode.InsertBefore(child, emptydiv)
+                    Next
+                    emptydiv.Remove()
+                End If
+            Next
+        End If
+
+        ' Remove <br> at the very start of the document
+        Dim firstNode As HtmlNode = doc.DocumentNode.ChildNodes.FirstOrDefault()
+        While firstNode IsNot Nothing AndAlso firstNode.Name = "br"
+            firstNode.Remove()
+            firstNode = doc.DocumentNode.ChildNodes.FirstOrDefault()
+        End While
+
+        ' Remove <br> at the very end of the document
+        Dim lastNode As HtmlNode = doc.DocumentNode.ChildNodes.LastOrDefault()
+        While lastNode IsNot Nothing AndAlso lastNode.Name = "br"
+            lastNode.Remove()
+            lastNode = doc.DocumentNode.ChildNodes.LastOrDefault()
+        End While
+
+        ' Remove <p><br></p> sequences
+        Dim pNodesWithBr As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//p[br and not(node()[2])]")
+        If pNodesWithBr IsNot Nothing Then
+            For Each p As HtmlNode In pNodesWithBr
+                p.Remove()
+            Next
+        End If
+
+        ' Remove empty p tags
+        Dim pNodes As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//p[not(node())]")
+        If pNodes IsNot Nothing Then
+            For Each p As HtmlNode In pNodes
+                p.Remove()
+            Next
+        End If
+
+        Return doc.DocumentNode.OuterHtml
+    End Function
     Public Function CleanStyles(ByVal input As String) As String
         If String.IsNullOrEmpty(input) Then
             Return input

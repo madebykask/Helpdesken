@@ -20,7 +20,7 @@
     <add key="dh_selfserviceaddress" value="#{SelfserviceAddress}" />
     <add key="dh_helpdeskaddress" value="#{HelpdeskAddress}" />
     <add key="webpages:Version" value="3.0.0.0" />
-	 
+		<add key="InitFromSelfService" value="true" />
 	  <add key="SignOutUrl" value="" /> <!-- If value is set, logout option will show. Eg. https://www.example.com -->
 
     <add key="CaseList" value="manager,coworkers" />
