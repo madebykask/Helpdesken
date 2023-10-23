@@ -471,7 +471,7 @@ namespace DH.Helpdesk.Dal.Repositories
             var output = searchQueryBld.ToString();
             return output;
         }
-
+            
         private string BuildFreeTextSearchCTEQuery(SearchQueryBuildContext ctx)
         {
             var strBld = new StringBuilder();
@@ -848,26 +848,27 @@ namespace DH.Helpdesk.Dal.Repositories
             var caseProgressConditions = BuildCaseProgressConditions(f, userId);
             if (!string.IsNullOrEmpty(caseProgressConditions))
                 sb.AppendLine(caseProgressConditions);
-
+            
             if (!string.IsNullOrWhiteSpace(f.FreeTextSearch))
             {
                 var text = f.FreeTextSearch.SafeForSqlInject();
                 sb.Append(" AND (");
                 sb.Append(this.GetSqlLike("[tblCase].[CaseNumber]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[ReportedBy]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Name]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_EMail]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_Phone]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Persons_CellPhone]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Place]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[InventoryLocation]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Caption]", text));
-                sb.AppendFormat(" OR [tblCase].[Description] LIKE '%{0}%'", text);
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblCase].[Miscellaneous]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[Department]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlLike("[tblDepartment].[DepartmentId]", text));
-                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", text);
-                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlLike("FormFieldValue", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblCase].[ReportedBy]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblCase].[Persons_Name]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblCase].[Persons_EMail]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblCase].[Persons_Phone]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblCase].[Persons_CellPhone]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblCase].[Place]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblCase].[InventoryLocation]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblCase].[Caption]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblCase].[Description]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblCase].[Miscellaneous]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblDepartment].[Department]", text));
+                sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblDepartment].[DepartmentId]", text));
+                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE CONTAINS([tblLog].[Text_Internal], N'\"*{0}*\"') OR CONTAINS([tblLog].[Text_External], N'\"*{0}*\"')))", text);
+                //sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", text);
+                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlContains("FormFieldValue", text));
                 sb.Append(") ");
             }
 
@@ -1612,6 +1613,29 @@ namespace DH.Helpdesk.Dal.Repositories
                 {
                     var formattedField = userLower ? $"LOWER({field})" : field;
                     sb.AppendFormat("({0} LIKE N'%{1}%')", formattedField, words[i].Trim());
+                    if (words.Length > 1 && i < words.Length - 1)
+                    {
+                        sb.AppendFormat(" {0} ", combinator);
+                    }
+                }
+
+                sb.Append(") ");
+            }
+
+            return sb.ToString();
+        }
+        private string GetSqlContains(string field, string text, string combinator = CaseSearchConstants.Combinator_OR, bool userLower = false)
+        {
+            var sb = new StringBuilder();
+            if (!string.IsNullOrEmpty(field) && !string.IsNullOrEmpty(text))
+            {
+                sb.Append(" (");
+                var words = GetSearchWords(text);
+
+                for (var i = 0; i < words.Length; i++)
+                {
+                    var formattedField = userLower ? $"LOWER({field})" : field;
+                    sb.AppendFormat("(CONTAINS({0}, N'\"*{1}*\"'))", formattedField, words[i].Trim());
                     if (words.Length > 1 && i < words.Length - 1)
                     {
                         sb.AppendFormat(" {0} ", combinator);
