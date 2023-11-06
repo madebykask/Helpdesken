@@ -239,6 +239,22 @@ BEGIN
 END
 GO
 
+RAISERROR ('Add Column ExternalEMailSubjectPattern to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','ExternalEMailSubjectPattern') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD ExternalEMailSubjectPattern nvarchar(1000) null
+	End
+Go
+
+RAISERROR ('Add Column ExternalCaseNumber to tblCase', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCase','ExternalCaseNumber') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblCase]
+		ADD ExternalCaseNumber nvarchar(100) null
+	End
+Go
+
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.4.0'
