@@ -3815,14 +3815,14 @@ namespace DH.Helpdesk.Web.Controllers
             //Replace empty string with ""
             if(!String.IsNullOrEmpty(caseLog.TextExternal))
             {
-                if (caseLog.TextExternal.RemoveHtmlTags() == "")
+                if (caseLog.TextExternal.RemoveEmptyTagsExceptImg() == "")
                 {
                     caseLog.TextExternal = "";
                 }
             }
             if (!String.IsNullOrEmpty(caseLog.TextInternal))
             {
-                if(caseLog.TextInternal.RemoveHtmlTags() == "")
+                if(caseLog.TextInternal.RemoveEmptyTagsExceptImg() == "")
                 {
                     caseLog.TextInternal = "";
                 }
