@@ -109,7 +109,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             }
             HtmlDocument doc = new HtmlDocument();
             doc.LoadHtml(input);
+            //Checking if there is any image tag in the html
             bool containsImgTag = doc.DocumentNode.SelectSingleNode("//img") != null;
+            //If no image or text, we shall not save a lognote
             if (string.IsNullOrWhiteSpace(doc.DocumentNode.InnerText) && !containsImgTag)
             {
                 return "";
