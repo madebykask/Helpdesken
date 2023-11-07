@@ -7,6 +7,7 @@ Imports System.Data
     Private miId As Integer
     Private msCaseGUID As String
     Private msCasenumber As Long
+    Private msExternalCasenumber As String
     Private miCustomer_Id As Integer
     Private miCaseType_Id As Integer
     Private msCaseTypeName As String
@@ -127,6 +128,9 @@ Imports System.Data
         miId = dr("Id")
         msCaseGUID = dr("CaseGUID").ToString
         msCasenumber = dr("CaseNumber")
+        If IsDBNull(dr("ExternalCaseNumber")) = False Then
+            msExternalCasenumber = dr("ExternalCasenumber")
+        End If
         miCustomer_Id = dr("Customer_Id")
         miCaseType_Id = dr("CaseType_Id")
         msCaseTypeName = dr("CaseType")
@@ -655,6 +659,15 @@ Imports System.Data
         End Get
         Set(ByVal Value As Long)
             msCasenumber = Value
+        End Set
+    End Property
+
+    Public Property ExternalCasenumber() As String
+        Get
+            Return msExternalCasenumber
+        End Get
+        Set(ByVal Value As String)
+            msExternalCasenumber = Value
         End Set
     End Property
 

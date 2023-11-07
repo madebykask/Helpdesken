@@ -33,7 +33,7 @@ Public Class CustomerData
 
                 sSQL = sSQL & "tblCaseType.Id AS EMailDefaultCaseType_Id, tblPriority.Id AS EMailDefaultPriority_Id, tblCategory.Id AS EMailDefaultCategory_Id, " &
                             "tblStatus.Id AS DefaultStatus_Id, tblStateSecondary.Id AS DefaultStateSecondary_Id, tblStateSecondary2.Id AS DefaultStateSecondary_Id2, " &
-                           "Null AS EMailDefaultDepartment_Id, tblSettings.EmailSubjectPattern, tblSettings.EMailAnswerSeparator, " &
+                           "Null AS EMailDefaultDepartment_Id, tblSettings.EmailSubjectPattern, tblSettings.ExternalEmailSubjectPattern, tblSettings.EMailAnswerSeparator, " &
                            "tblSettings.XMLLogLevel, tblSettings.XMLAllFiles, MailServerProtocol, EMailRegistrationMailID, tblSettings.EMailImportType, " &
                            "tblCustomer.OverWriteFromMasterDirectory, " &
                            "tblSettings.LDAPLogLevel, tblSettings.OpenCase_StateSecondary_Id, " &
@@ -305,7 +305,7 @@ Public Class CustomerData
                         "tblCaseType.Id AS EMailDefaultCaseType_Id, tblCategory.Id AS EMailDefaultCategory_Id, tblProductArea.Id AS EMailDefaultProductArea_Id, " &
                         "tblPriority.Id AS EMailDefaultPriority_Id, tblStatus.Id AS DefaultStatus_Id, tblStateSecondary.Id AS DefaultStateSecondary_Id, " &
                         "tblStateSecondary2.Id AS DefaultStateSecondary_Id2, " &
-                        "tblDepartment.Id AS EMailDefaultDepartment_Id, tblSettings.EmailSubjectPattern, tblSettings.EMailAnswerSeparator, " &
+                        "tblDepartment.Id AS EMailDefaultDepartment_Id, tblSettings.EmailSubjectPattern, tblSettings.ExternalEmailSubjectPattern, tblSettings.EMailAnswerSeparator, " &
                         "tblSettings.XMLFileFolder, tblSettings.XMLLogLevel, tblSettings.XMLAllFiles, MailServerProtocol, EMailRegistrationMailID, tblSettings.EMailImportType, " &
                         "tblCustomer.OverWriteFromMasterDirectory, tblSettings.LDAPLogLevel, tblSettings.OpenCase_StateSecondary_Id, " &
                         "tblSettings.LDAPUserName, tblSettings.LDAPPassword, tblSettings.LDAPBase, tblSettings.LDAPFilter, " &
@@ -362,7 +362,7 @@ Public Class CustomerData
                         "tblCaseType.Id AS EMailDefaultCaseType_Id, tblCategory.Id AS EMailDefaultCategory_Id, tblWorkingGroup.CreateCase_ProductArea_Id AS EMailDefaultProductArea_Id, " &
                         "tblPriority.Id AS EMailDefaultPriority_Id, tblStatus.Id AS DefaultStatus_Id, tblStateSecondary.Id AS DefaultStateSecondary_Id, " &
                         "tblStateSecondary2.Id AS DefaultStateSecondary_Id2, " &
-                        "tblDepartment.Id AS EMailDefaultDepartment_Id, tblSettings.EmailSubjectPattern, tblSettings.EMailAnswerSeparator, " &
+                        "tblDepartment.Id AS EMailDefaultDepartment_Id, tblSettings.EmailSubjectPattern, tblSettings.ExternalEmailSubjectPattern, tblSettings.EMailAnswerSeparator, " &
                         "tblSettings.XMLFileFolder, tblSettings.XMLLogLevel, tblSettings.XMLAllFiles, MailServerProtocol, EMailRegistrationMailID, " &
                         "tblCustomer.OverWriteFromMasterDirectory, tblSettings.LDAPLogLevel, tblSettings.OpenCase_StateSecondary_Id, " &
                         "tblSettings.LDAPUserName, tblSettings.LDAPPassword, tblSettings.LDAPBase, tblSettings.LDAPFilter, " &

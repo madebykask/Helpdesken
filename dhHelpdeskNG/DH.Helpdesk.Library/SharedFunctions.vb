@@ -376,7 +376,7 @@ Imports System.Text.RegularExpressions
             Return Left(sBodyText, iPos_new)
         End If
     End Function
-    
+
 
     Public Shared Function extractCaseNumberFromSubject(ByVal sSubject As String, ByVal sEMailSubjectPattern As String) As Integer
         Dim iPosCaseNumber As Integer
@@ -454,6 +454,80 @@ Imports System.Text.RegularExpressions
             End If
         Catch ex As Exception
             Return 0
+        End Try
+
+    End Function
+
+
+    Public Shared Function ExtractExternalCaseNumberFromSubject(ByVal sSubject As String, ByVal sExternalEMailSubjectPattern As String) As String
+        Dim iPosCaseNumber As Integer
+        Dim iPos As Integer
+        Dim sTemp As String = ""
+
+        Try
+            Dim vExternalEMailSubjectPattern() As String = sExternalEMailSubjectPattern.Split(";")
+
+            For Index As Integer = 0 To vExternalEMailSubjectPattern.Length - 1
+                sTemp = ""
+                ' Leta upp var #-tecknet finns
+                iPosCaseNumber = InStr(vExternalEMailSubjectPattern(Index), "#", CompareMethod.Text)
+
+                ' Om 1 då finns ärendenumret innan sökmönstret annars efter
+                If iPosCaseNumber = 1 Then
+                    ' Ta bort # från sökmönstret
+                    vExternalEMailSubjectPattern(Index) = Mid(vExternalEMailSubjectPattern(Index), 2)
+
+                    ' Leta upp var möstret börjar
+                    iPos = InStr(sSubject, vExternalEMailSubjectPattern(Index), CompareMethod.Text)
+
+                    ' Starta på iPos och stega till vänster tills mellanslag eller start av subject
+                    For i As Integer = iPos - 1 To 1 Step -1
+                        If Mid(sSubject, i, 1) <> " " Then
+                            sTemp = Mid(sSubject, i, 1) & sTemp
+                        Else
+                            Exit For
+                        End If
+                    Next
+                ElseIf iPosCaseNumber > 1 Then
+
+                    ' Ta bort # från sökmönstret
+                    vExternalEMailSubjectPattern(Index) = Left(vExternalEMailSubjectPattern(Index), iPosCaseNumber - 1)
+
+                    ' Leta upp var möstret börjar
+                    iPos = InStr(sSubject, vExternalEMailSubjectPattern(Index), CompareMethod.Text)
+
+                    If iPos > 0 Then
+                        iPos = iPos + Len(vExternalEMailSubjectPattern(Index))
+                        Dim iStart As Integer = iPos
+
+                        ' Starta på iPos och stega till höger tills mellanslag eller subject slut
+                        For i As Integer = iPos To Len(sSubject)
+                            If iPos = iStart And Mid(sSubject, i, 1) = " " Then
+                                Exit For
+                            End If
+                            If Mid(sSubject, i, 1) <> " " Then
+
+                                sTemp = sTemp & Mid(sSubject, i, 1)
+                            Else
+                                If iStart = iPos And Mid(sSubject, i, 1) <> " " And Mid(sSubject, i, 1) <> "" Then
+                                    Exit For
+                                End If
+                            End If
+                        Next
+                    End If
+
+                End If
+
+                If sTemp <> "" Then
+                    Return sTemp
+                End If
+            Next
+
+            If sTemp = "" Then
+                Return ""
+            End If
+        Catch ex As Exception
+            Return ""
         End Try
 
     End Function

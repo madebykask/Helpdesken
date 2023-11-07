@@ -255,6 +255,13 @@ IF COL_LENGTH('dbo.tblCase','ExternalCaseNumber') IS NULL
 	End
 Go
 
+RAISERROR ('Add Column ExternalCaseNumber to tblCaseHistory', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseHistory','ExternalCaseNumber') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblCaseHistory]
+		ADD ExternalCaseNumber nvarchar(100) null
+	End
+Go
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.4.0'
