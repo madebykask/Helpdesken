@@ -625,14 +625,14 @@ Module DH_Helpdesk_Mail
 
                                 If objCase Is Nothing Then
                                     ' Kontrollera om det är ett externt mail som ska hanteras
-                                    If objCustomer.ExternalEMailSubjectPattern <> "" Then
-                                        sExternalCaseNumber = ExtractExternalCaseNumberFromSubject(sSubject, objCustomer.ExternalEMailSubjectPattern)
-                                        LogToFile("ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
+                                    'If objCustomer.ExternalEMailSubjectPattern <> "" Then
+                                    '    sExternalCaseNumber = ExtractExternalCaseNumberFromSubject(sSubject, objCustomer.ExternalEMailSubjectPattern)
+                                    '    LogToFile("ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
 
-                                        If sExternalCaseNumber <> "" Then
-                                            objCase = objCaseData.getCaseByExternalCaseNumber(sExternalCaseNumber)
-                                        End If
-                                    End If
+                                    '    If sExternalCaseNumber <> "" Then
+                                    '        objCase = objCaseData.getCaseByExternalCaseNumber(sExternalCaseNumber)
+                                    '    End If
+                                    'End If
 
                                     ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
                                     If objCustomer.EMailSubjectPattern <> "" Then
@@ -690,7 +690,7 @@ Module DH_Helpdesk_Mail
                                 If objCase Is Nothing Then
                                     objCase = New CCase
 
-                                    objCase.ExternalCasenumber = sExternalCaseNumber
+                                    'objCase.ExternalCasenumber = sExternalCaseNumber
 
                                     objCase.Caption = Left(message.Subject.ToString(), 100)
                                     objCase.Description = sBodyText
