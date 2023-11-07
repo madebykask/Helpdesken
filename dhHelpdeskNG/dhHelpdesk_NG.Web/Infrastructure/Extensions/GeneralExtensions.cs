@@ -100,6 +100,27 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             return output;
 
         }
+        public static string RemoveEmptyTagsExceptImg(this string input)
+        {
+
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+            HtmlDocument doc = new HtmlDocument();
+            doc.LoadHtml(input);
+            //Checking if there is any image tag in the html
+            bool containsImgTag = doc.DocumentNode.SelectSingleNode("//img") != null;
+            //If no image or text, we shall not save a lognote
+            if (string.IsNullOrWhiteSpace(doc.DocumentNode.InnerText) && !containsImgTag)
+            {
+                return "";
+            }
+            else
+            {
+                return doc.DocumentNode.InnerHtml;
+            }
+        }
         public static string HTMLToTableCell(this string input)
         {
 

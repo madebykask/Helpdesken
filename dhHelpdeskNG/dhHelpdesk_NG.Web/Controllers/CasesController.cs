@@ -3812,17 +3812,18 @@ namespace DH.Helpdesk.Web.Controllers
             var case_ = m.case_;
 #pragma warning restore 0618
             var caseLog = m.caseLog;
-            //Replace empty string with ""
+
             if(!String.IsNullOrEmpty(caseLog.TextExternal))
             {
-                if (caseLog.TextExternal.RemoveHtmlTags() == "")
+                //Replace empty html without images or anything with ""
+                if (caseLog.TextExternal.RemoveEmptyTagsExceptImg() == "")
                 {
                     caseLog.TextExternal = "";
                 }
             }
             if (!String.IsNullOrEmpty(caseLog.TextInternal))
             {
-                if(caseLog.TextInternal.RemoveHtmlTags() == "")
+                if(caseLog.TextInternal.RemoveEmptyTagsExceptImg() == "")
                 {
                     caseLog.TextInternal = "";
                 }

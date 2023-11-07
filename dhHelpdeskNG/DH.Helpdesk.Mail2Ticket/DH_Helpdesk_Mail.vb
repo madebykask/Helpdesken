@@ -261,6 +261,7 @@ Module DH_Helpdesk_Mail
         'Dim j As Integer
         Dim iLog_Id As Integer
         Dim iCaseNumber As Integer
+        Dim sExternalCaseNumber As String = ""
         Dim iListCount As Integer = 0
         Dim objComputerUser As ComputerUser
         Dim bOrder As Boolean = False
@@ -429,8 +430,6 @@ Module DH_Helpdesk_Mail
                                 IMAPclient.Connect(objCustomer.POP3Server, objCustomer.POP3Port, SslMode.Explicit)
                             End If
 
-
-
                             If IsNullOrEmpty(objCustomer.POP3UserName) Or IsNullOrEmpty(objCustomer.POP3Password) Then
                                 LogError("Missing UserName Or Password", objCustomer)
                                 Exit For
@@ -454,7 +453,6 @@ Module DH_Helpdesk_Mail
                         End If
 
                         LogToFile("Connecting to " & objCustomer.POP3Server & " (" & ip & "):" & objCustomer.POP3Port & ", " & objCustomer.POP3UserName & ", EWS Mode: " & MailConnectionType.Ews, iPop3DebugLevel)
-
 
                         If eMailConnectionType = MailConnectionType.Pop3 Then
                             ' Inget stöd för POP3 längre
@@ -582,12 +580,6 @@ Module DH_Helpdesk_Mail
                                             sFromEMailAddress = objCU.EMail
                                         End If
 
-                                        'Dim objUserData As New UserData
-                                        'Dim objUser As User = objUserData.getUserByUserId(sUserId)
-
-                                        'If Not objUser Is Nothing Then
-                                        '    sFromEMailAddress = objUser.EMail
-                                        'End If
                                     End If
                                 End If
 
@@ -632,9 +624,18 @@ Module DH_Helpdesk_Mail
                                 End If
 
                                 If objCase Is Nothing Then
+                                    ' Kontrollera om det är ett externt mail som ska hanteras
+                                    'If objCustomer.ExternalEMailSubjectPattern <> "" Then
+                                    '    sExternalCaseNumber = ExtractExternalCaseNumberFromSubject(sSubject, objCustomer.ExternalEMailSubjectPattern)
+                                    '    LogToFile("ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
+
+                                    '    If sExternalCaseNumber <> "" Then
+                                    '        objCase = objCaseData.getCaseByExternalCaseNumber(sExternalCaseNumber)
+                                    '    End If
+                                    'End If
+
                                     ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
                                     If objCustomer.EMailSubjectPattern <> "" Then
-
                                         LogToFile("Subject: " & sSubject, iPop3DebugLevel)
 
                                         iCaseNumber = extractCaseNumberFromSubject(sSubject, objCustomer.EMailSubjectPattern)
@@ -647,9 +648,9 @@ Module DH_Helpdesk_Mail
                                     End If
                                 End If
 
-
-
                                 objComputerUser = objComputerUserData.getComputerUserByEMail(sFromEMailAddress, objCustomer.Id)
+
+
                                 If message.HasBodyHtml = True Then
                                     LogToFile("HasBodyHtml ", 1)
                                     sBodyText = getInnerHtml(message.BodyHtml)
@@ -688,6 +689,9 @@ Module DH_Helpdesk_Mail
 
                                 If objCase Is Nothing Then
                                     objCase = New CCase
+
+                                    'objCase.ExternalCasenumber = sExternalCaseNumber
+
                                     objCase.Caption = Left(message.Subject.ToString(), 100)
                                     objCase.Description = sBodyText
                                     objCase.CaseType_Id = objCustomer.EMailDefaultCaseType_Id
@@ -790,10 +794,6 @@ Module DH_Helpdesk_Mail
                                         LogError("Error creating Case in database: " & ex.Message.ToString(), objCustomer)
                                         Continue For
                                     End Try
-
-                                    'dhal i CaseHistory skall orginal från adressen hamna i CreatedByUser 
-                                    'iCaseHistory_Id = objCaseData.saveCaseHistory(objCase.Id, objCase.Persons_EMail.ToString())
-
 
                                     ' save caseisabout - Advanced
                                     If fieldsToUpdate.Count > 0 Then
@@ -1194,29 +1194,7 @@ Module DH_Helpdesk_Mail
                                             objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
 
                                         End If
-                                        'ElseIf casefinsihed = True And caseisactivated = True Then
-                                        '    objMailTemplate = objMailTemplateData.getMailTemplateById(MailTemplates.CaseIsActivated, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
-                                        '    If Not objMailTemplate Is Nothing Then
-                                        '        Dim objMail As New Mail
-                                        '        Dim objLog As New Log
-
-                                        '        ' Set appropriate log text property
-                                        '        objLog.Text_External = If(Not isInternalLogUsed, sBodyText, String.Empty)
-                                        '        objLog.Text_Internal = If(isInternalLogUsed, sBodyText, String.Empty)
-
-                                        '        sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-                                        '        sSendTime = Date.Now()
-
-                                        '        Dim sEMailLogGUID As String = Guid.NewGuid().ToString()
-
-                                        '        sRet_SendMail =
-                                        '        objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings,
-                                        '                         sMessageId, sEMailLogGUID, sConnectionstring, attachedFiles)
-
-                                        '        objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, MailTemplates.ClosedCase, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
-
-                                        '    End If
                                     End If
                                 End If
 

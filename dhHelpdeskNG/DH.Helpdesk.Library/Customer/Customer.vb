@@ -30,6 +30,7 @@
     Private miDefaultAdministratorExternalUser_Id As Integer
     Private miDefaultWorkingGroup_Id As Integer
     Private msEMailSubjectPattern As String
+    'Private msExternalEMailSubjectPattern As String = ""
     Private msEMailAnswerSeparator As String
     Private miEMailAnswerDestination As Integer
     Private miEMailRegistrationMailID As Integer
@@ -196,6 +197,12 @@
             Else
                 msEMailSubjectPattern = dr("EMailSubjectPattern")
             End If
+
+            'If IsDBNull(dr("ExternalEMailSubjectPattern")) Then
+            '    msExternalEMailSubjectPattern = ""
+            'Else
+            '    msExternalEMailSubjectPattern = dr("ExternalEMailSubjectPattern")
+            'End If
 
             If IsDBNull(dr("EMailAnswerSeparator")) Then
                 msEMailAnswerSeparator = ""
@@ -557,6 +564,15 @@
             msEMailSubjectPattern = Value
         End Set
     End Property
+
+    'Public Property ExternalEMailSubjectPattern() As String
+    '    Get
+    '        Return msExternalEMailSubjectPattern
+    '    End Get
+    '    Set(ByVal Value As String)
+    '        msExternalEMailSubjectPattern = Value
+    '    End Set
+    'End Property
 
     Public Property EMailAnswerSeparator() As String
         Get

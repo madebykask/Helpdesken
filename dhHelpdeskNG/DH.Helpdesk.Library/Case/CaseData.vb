@@ -716,6 +716,14 @@ Public Class CaseData
         End Try
     End Function
 
+    Public Function GetCaseByExternalCaseNumber(ByVal sExternalCaseNumber As String) As CCase
+        Try
+            Return getCaseById(sExternalCaseNumber:=sExternalCaseNumber)
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
+
     Public Function getCaseReminder() As Collection
         Try
 
@@ -773,7 +781,7 @@ Public Class CaseData
         End Try
     End Function
 
-    Private Function getCaseById(Optional iCaseId As Integer = 0, Optional ByVal sCaseGUID As String = "", Optional ByVal sMessageId As String = "", Optional ByVal iCaseNumber As Integer = 0, Optional ByVal sOrderMessageId As String = "") As CCase
+    Private Function getCaseById(Optional iCaseId As Integer = 0, Optional ByVal sCaseGUID As String = "", Optional ByVal sMessageId As String = "", Optional ByVal iCaseNumber As Integer = 0, Optional ByVal sOrderMessageId As String = "", Optional ByVal sExternalCaseNumber As String = "") As CCase
         Dim sSQL As String = ""
         Dim dt As DataTable
 
@@ -817,6 +825,8 @@ Public Class CaseData
                 sSQL = sSQL & "WHERE tblCase.CaseNumber=" & iCaseNumber
             ElseIf sOrderMessageId <> "" Then
                 sSQL = sSQL & "WHERE tblCase.Id IN (SELECT Id FROM tblCase WHERE CaseNumber IN (SELECT CaseNumber FROM tblOrder WHERE Id IN (SELECT Order_Id FROM tblOrderEmailLog WHERE MessageId='" & sOrderMessageId & "')))"
+            ElseIf sExternalCaseNumber <> "" Then
+                sSQL = sSQL & "WHERE tblCase.ExternalCaseNumber = '" & sExternalCaseNumber & "'"
             End If
 
             'If giDBType = 0 Then
@@ -926,7 +936,7 @@ Public Class CaseData
         Dim dr As DataRow
 
         Try
-            sSQL = "Select tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, " &
+            sSQL = "Select tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.ExternalCaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, " &
                         "tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, tblCase.Status, " &
                         "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name As CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
                         "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, " &
