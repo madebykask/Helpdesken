@@ -722,9 +722,6 @@
                                                 @Html.TextBoxFor(model => model.Setting.POP3Password, new { maxlength = "20", disabled = "disable" }) <input type="button" style="width:97px;" value="@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)" name="changePassword" class="changePassword btn"
                                                                                                                                                              onclick="ChangePasswordPop3()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
                                             </td>
-                                            @*<td>
-                                                    @Html.TextBoxFor(model => model.Setting.POP3Password, new { type = "password", maxlength = "40", style = "width: 400px;" })
-                                                </td>*@
                                         </tr>
                                         <tr>
                                             <td>
@@ -740,14 +737,6 @@
                                             </td>
                                             <td>
                                                 @Html.TextBoxFor(model => model.Setting.POP3DebugLevel, new { maxlength = "100", style = "width: 400px;" })
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                @Translation.GetCoreTextTranslation("E-post prefix")
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.POP3EMailPrefix, new { maxlength = "20", style = "width: 400px;" })
                                             </td>
                                         </tr>
 
@@ -783,6 +772,7 @@
                                     </tbody>
                                     @Html.HiddenFor(model => model.Setting.POP3Password)
                                     @Html.HiddenFor(model => model.Setting.EwsClientSecret)
+                                    @Html.HiddenFor(model => model.Setting.POP3EMailPrefix)
                                 }
                                 else
                                 {
