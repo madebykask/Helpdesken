@@ -627,10 +627,15 @@ Module DH_Helpdesk_Mail
                                     ' Kontrollera om det är ett externt mail som ska hanteras
                                     If objCustomer.ExternalEMailSubjectPattern <> "" Then
                                         sExternalCaseNumber = ExtractExternalCaseNumberFromSubject(sSubject, objCustomer.ExternalEMailSubjectPattern)
-                                        LogToFile("ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
 
                                         If sExternalCaseNumber <> "" Then
+                                            LogToFile("Found ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
+
                                             objCase = objCaseData.GetCaseByExternalCaseNumber(sExternalCaseNumber)
+
+                                            If Not objCase Is Nothing Then
+                                                LogToFile("Found existing case by ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
+                                            End If
                                         End If
                                     End If
 
