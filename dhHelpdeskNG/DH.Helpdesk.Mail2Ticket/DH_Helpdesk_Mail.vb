@@ -640,7 +640,7 @@ Module DH_Helpdesk_Mail
                                     End If
 
                                     ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
-                                    If objCustomer.EMailSubjectPattern <> "" Then
+                                    If objCustomer.EMailSubjectPattern <> "" And objCase Is Nothing Then
                                         LogToFile("Subject: " & sSubject, iPop3DebugLevel)
 
                                         iCaseNumber = extractCaseNumberFromSubject(sSubject, objCustomer.EMailSubjectPattern)
