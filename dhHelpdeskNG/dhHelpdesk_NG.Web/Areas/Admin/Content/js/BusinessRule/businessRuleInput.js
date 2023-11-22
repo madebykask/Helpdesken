@@ -57,7 +57,7 @@
             var validator = $form.data("validator");
 
             $.extend(validator.settings, {
-                ignore: ":hidden:not(.BR-chosen-single-select, .BR-chosen-select)",
+                ignore: ":hidden, .ignore-validation",
                 highlight: function (element, errorClass, validClass) {
                     var $element = $(element);
                     if ($element.hasClass("BR-chosen-single-select")
@@ -105,6 +105,9 @@
                 processTo: "",
                 subStatusFrom: "",
                 subStatusTo: "",
+
+                domainFrom: "",
+                domainTo: "",
 
                 emailTemplate: 0,
                 emailGroups: "",
@@ -189,6 +192,8 @@
                     'data.ProcessTo': data.processTo,
                     'data.SubStatusFrom': data.subStatusFrom,
                     'data.SubStatusTo': data.subStatusTo,
+                    'data.DomainFrom': data.domainFrom,
+                    'data.DomainTo': data.domainTo,
                     'data.EmailTemplate': data.emailTemplate,
                     'data.EmailGroups': data.emailGroups,
                     'data.WorkingGroups': data.workingGroups,

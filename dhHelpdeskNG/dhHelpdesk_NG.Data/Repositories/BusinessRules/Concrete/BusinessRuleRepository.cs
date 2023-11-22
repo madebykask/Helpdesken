@@ -113,6 +113,17 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         Sequence = 2
                     };
                     this.DbContext.BRConditions.Add(conditionEntity2);
+
+                    var conditionEntity3 = new BRConditionEntity()
+                    {
+                        Id = 0,
+                        Rule_Id = businessRule.Id,
+                        Field_Id = BRFieldType.Domain,
+                        FromValue = businessRule.DomainFrom,
+                        ToValue = businessRule.DomainTo,
+                        Sequence = 3
+                    };
+                    this.DbContext.BRConditions.Add(conditionEntity3);
                 }
                 else
                 {
@@ -166,6 +177,31 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         conditionEntity2.ToValue = businessRule.SubStatusTo.GetSelectedStr();                                                
                     }
 
+                    #endregion
+
+                    #region Save Domain
+                    var conditionEntity3 = this.DbContext.BRConditions.Where(c => c.Rule_Id == businessRule.Id && c.Field_Id == BRFieldType.Domain)
+                                                                      .FirstOrDefault();
+
+                    if (conditionEntity3 == null)
+                    {
+                        conditionEntity3 = new BRConditionEntity()
+                        {
+                            Id = 0,
+                            Rule_Id = businessRule.Id,
+                            Field_Id = BRFieldType.Domain,
+                            FromValue = businessRule.DomainFrom,
+                            ToValue = businessRule.DomainTo,
+                            Sequence = 3
+                        };
+
+                        this.DbContext.BRConditions.Add(conditionEntity3);
+                    }
+                    else
+                    {
+                        conditionEntity3.FromValue = businessRule.DomainFrom;
+                        conditionEntity3.ToValue = businessRule.DomainTo;
+                    }
                     #endregion
                 }
 

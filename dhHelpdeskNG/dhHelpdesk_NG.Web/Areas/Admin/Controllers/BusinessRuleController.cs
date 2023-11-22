@@ -244,7 +244,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 					ruleModel.ChangedByUserId = SessionFacade.CurrentUser.Id;
 				}
 
-				ruleModel.EventId = (int) BREventType.OnSaveCase;
 				if (ruleModel.Recipients == null)
 					ruleModel.Recipients = new List<string>().ToArray();
 
