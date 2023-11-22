@@ -91,7 +91,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 		[RequiredIfNotEmpty("SubStatusesFromValue", "lstSubStatusFrom")]
 		public ICollection<string> SubStatusesToValue { get; set; }
 
-		public int Sequence { get; set; }
+        //Domain
+        [LocalizedDisplay("Domän till")]
+        [RequiredIfNotEmpty("DomainToValue", "lstDomainTo")]
+        public string DomainFromValue { get; set; }
+
+        [LocalizedDisplay("Domän till")]
+        [RequiredIfNotEmpty("DomainFromValue", "lstDomainFrom")]
+        public string DomainToValue { get; set; }
+		//End of domain
+
+        public int Sequence { get; set; }
 	}
 
 	public class BRActionModel

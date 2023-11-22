@@ -5,6 +5,7 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,32 +62,32 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			model.Rules = rules.Select(x => new BusinessRuleListItemModel
 			{
 				RuleId = x.Id,
-				RuleName = x.RuleName,
-				//Action = String.Join(", ", x.Actions.ToArray()),
-				//Condition = String.Join(", ", x.Conditions.ToArray()),
-				ChangedBy = x.ChangedBy.GetFullName(),
-				ChangedOn = x.ChangedTime,
-				Event = "On Save Case",
-				IsActive = x.RuleActive
-			}).ToList();
+                RuleName = x.RuleName,
+                //Action = String.Join(", ", x.Actions.ToArray()),
+                //Condition = String.Join(", ", x.Conditions.ToArray()),
+                ChangedBy = x.ChangedBy.GetFullName(),
+                ChangedOn = x.ChangedTime,
+                Event = Enum.GetName(typeof(BREventType), x.Event),
+                IsActive = x.RuleActive
+            }).ToList();
 
-			return View(model);
+            return View(model);
 		}
 
 		[HttpGet]
 		public ActionResult NewRule(int customerId)
-		{
+        {
 			var model = new BusinessRuleInputModel
 			{
 				CustomerId = customerId,
-				Events = new List<BREvent> { new BREvent((int)BREventType.OnSaveCase, "On Save Case", true) },
-				Condition = new BRConditionModel
-				{
-					Sequence = 1
-				}
-			};
+				Events = DefineBREvents(),
+                Condition = new BRConditionModel
+                {
+                    Sequence = 1
+                }
+            };
 
-			var currentValue = new List<DdlModel>
+            var currentValue = new List<DdlModel>
 			{
 				new DdlModel {Value = BRConstItem.CURRENT_VALUE.ToString(), Text = "[CurrentValue]", Selected = false}
 			};
@@ -147,8 +148,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				RuleId = rule.Id,
 				CustomerId = rule.CustomerId,
 				RuleName = rule.RuleName,
-				Events = new List<BREvent> { new BREvent((int)BREventType.OnSaveCase, "On Save Case", true) },
-				ContinueOnSuccess = rule.ContinueOnSuccess,
+				Events = DefineBREvents(),
+                ContinueOnSuccess = rule.ContinueOnSuccess,
 				ContinueOnError = rule.ContinueOnError,
 				IsActive = rule.RuleActive,
 				Sequence = rule.RuleSequence
@@ -363,7 +364,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			return emailTemplateList;
 		}
 
-		#endregion Private
+        private List<BREvent> DefineBREvents()
+        {
+            return new List<BREvent> {
+                    new BREvent((int)BREventType.OnSaveCase, "On Save Case", true),
+                    new BREvent((int)BREventType.OnCreateCase, "On Create Case", false)};
 
-	}
+        }
+
+        #endregion Private
+
+    }
 }

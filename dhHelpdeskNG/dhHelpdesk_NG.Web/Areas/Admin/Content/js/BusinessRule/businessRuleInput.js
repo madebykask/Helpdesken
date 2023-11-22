@@ -17,6 +17,20 @@
         var elContinueOnSuccess = "#continueOnSuccess";
         var elContinueOnError = "#continueOnError";
         var elIsRuleActive = "#isRuleActive";
+
+        var elBRProcess = "#BRProcess";
+        var elBRSubStatus = "#BRSubStatus";
+        var elBRDomain = "#BRDomain"
+
+        var elBRActionMailTemplate = "#BRActionMailTemplate";
+        var elBRActionEmailGroup = "#BRActionEmailGroup";
+        var elBRActionWorkingGroup = "#BRActionWorkingGroup";
+        var elBRActionAdministrator = "#BRActionAdministrator";
+        var elBRActionRecipients = "#BRActionRecipients";
+        var elBRActionCreatedBy = "#BRActionCreatedBy";
+        var elBRActionRegistrator = "#BRActionRegistrator";
+        var elBRActionAbout = "#BRActionAbout";
+
         
         var elProcessFromDropDown = "#lstProcessFrom";
         var elProcessToDropDown = "#lstProcessTo";
@@ -200,9 +214,47 @@
             var $form = $("#newRule");
 
             return $form.validate().form();
-        }          
+        }
+
+        dhHelpdesk.businessRule.setupEvent = function () {
+            var selectedValue = $(elEventsDropDown).val();
+
+            if (selectedValue === '1') {
+                $(elBRProcess).show();
+                $(elBRSubStatus).show();
+                $(elBRDomain).hide();
+
+                $(elBRActionMailTemplate).show();
+                $(elBRActionEmailGroup).show();
+                $(elBRActionWorkingGroup).show();
+                $(elBRActionAdministrator).show();
+                $(elBRActionRecipients).show();
+                $(elBRActionCreatedBy).show();
+                $(elBRActionRegistrator).show();
+                $(elBRActionAbout).show();
+
+            } else if (selectedValue === '2') {
+                $(elBRProcess).hide();
+                $(elBRSubStatus).hide();
+                $(elBRDomain).show();
+
+                $(elBRActionMailTemplate).hide();
+                $(elBRActionEmailGroup).hide();
+                $(elBRActionWorkingGroup).hide();
+                $(elBRActionAdministrator).show();
+                $(elBRActionRecipients).hide();
+                $(elBRActionCreatedBy).hide();
+                $(elBRActionRegistrator).hide();
+                $(elBRActionAbout).hide();
+
+
+
+            }
+        };
 
         dhHelpdesk.businessRule.init = function () {
+
+            console.log("Start")
            
             var saveButton = $(elBtnSaveRule);
 
@@ -226,7 +278,13 @@
                 $(evt.target).trigger("focusout");
             });
 
-            $(".BR-text").css("width","335px");
+            $(".BR-text").css("width", "335px");
+
+            $(elEventsDropDown).change(function () {
+                dhHelpdesk.businessRule.setupEvent();
+            });
+
+            dhHelpdesk.businessRule.setupEvent();
            
         }
 
