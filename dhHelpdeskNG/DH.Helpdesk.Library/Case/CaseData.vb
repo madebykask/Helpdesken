@@ -417,7 +417,7 @@ Public Class CaseData
         Try
 
             ' Skapa nytt ärende
-            sSQL = "INSERT INTO tblCase(CaseGUID, CaseType_Id, Customer_Id, ProductArea_Id,Category_Id, Region_Id, ReportedBy, Department_Id, OU_Id, " &
+            sSQL = "INSERT INTO tblCase(CaseGUID, ExternalCaseNumber, CaseType_Id, Customer_Id, ProductArea_Id,Category_Id, Region_Id, ReportedBy, Department_Id, OU_Id, " &
                             "Project_Id, System_Id, Urgency_Id, Impact_Id, Supplier_Id, SMS, Cost, OtherCost, Problem_Id, Change_Id, CausingPartId, Verified, VerifiedDescription, SolutionRate," &
                             "InventoryType, InventoryLocation, Currency, ContactBeforeAction, FinishingDescription, " &
                             "Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Place, UserCode, CostCentre, InventoryNumber, InvoiceNumber, " &
@@ -425,6 +425,7 @@ Public Class CaseData
                             "WatchDate, PlanDate, AgreedDate, FinishingDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id, RegUserName, CaseSolution_Id, RegTime, ChangeTime) " &
                         "VALUES(" &
                             getDBStringPrefix() & "'" & objCase.CaseGUID & "', " &
+                            getDBStringPrefix() & "'" & objCase.ExternalCasenumber & "', " &
                             objCase.CaseType_Id & ", " &
                             objCase.Customer_Id & ", "
 
@@ -786,7 +787,7 @@ Public Class CaseData
         Dim dt As DataTable
 
         Try
-            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
+            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.ExternalCaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
                        "tblCase.Project_Id, tblCase.System_Id, tblCase.Urgency_Id, tblCase.Impact_Id, tblCase.Supplier_Id, tblCase.SMS, tblCase.VerifiedDescription, tblCase.SolutionRate, " &
                        "tblCase.InventoryType, tblCase.InventoryLocation, tblCase.Cost, tblCase.OtherCost, tblCase.Currency, tblCase.ContactBeforeAction, tblCase.Change_Id, tblCase.Problem_Id, " &
@@ -1027,7 +1028,7 @@ Public Class CaseData
             ' Lägg in den nya posten i historiken
 
             sSQL = "INSERT INTO tblCaseHistory(CaseHistoryGUID, Case_Id, ReportedBy, Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Customer_Id, Region_Id, Department_Id, OU_Id, Place, UserCode, InventoryNumber, InventoryType," &
-                          "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber, Caption, Description," &
+                          "InventoryLocation, Casenumber, ExternalCaseNumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber, Caption, Description," &
                           "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, Cost, OtherCost, Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id," &
                           "ProjectSchedule_Id, Verified, VerifiedDescription, SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, FinishingDescription, FollowUpDate," &
                           "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, RegUserId, RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, CreatedDate, CreatedByUser, CausingPartId, " &
@@ -1036,7 +1037,7 @@ Public Class CaseData
                           "IsAbout_CostCentre, IsAbout_Place) " &
                        "Select top 1  '" & sCaseHistoryGUID & "', " & iCase_Id & " , " &
                                 "c.ReportedBy, c.Persons_Name, c.Persons_EMail, c.Persons_Phone, c.Persons_CellPhone, Customer_Id, c.Region_Id, c.Department_Id, c.OU_Id, c.Place, c.UserCode, InventoryNumber, InventoryType," &
-                              "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber,  Caption, Description," &
+                              "InventoryLocation, Casenumber, ExternalCaseNumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber,  Caption, Description," &
                               "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, c.Cost, OtherCost, Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id, " &
                               "ProjectSchedule_Id, Verified, VerifiedDescription, SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, FinishingDescription, FollowUpDate, " &
                               "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, RegUserId, RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "', CausingPartId, " &

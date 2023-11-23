@@ -625,17 +625,22 @@ Module DH_Helpdesk_Mail
 
                                 If objCase Is Nothing Then
                                     ' Kontrollera om det är ett externt mail som ska hanteras
-                                    'If objCustomer.ExternalEMailSubjectPattern <> "" Then
-                                    '    sExternalCaseNumber = ExtractExternalCaseNumberFromSubject(sSubject, objCustomer.ExternalEMailSubjectPattern)
-                                    '    LogToFile("ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
+                                    If objCustomer.ExternalEMailSubjectPattern <> "" Then
+                                        sExternalCaseNumber = ExtractExternalCaseNumberFromSubject(sSubject, objCustomer.ExternalEMailSubjectPattern)
 
-                                    '    If sExternalCaseNumber <> "" Then
-                                    '        objCase = objCaseData.getCaseByExternalCaseNumber(sExternalCaseNumber)
-                                    '    End If
-                                    'End If
+                                        If sExternalCaseNumber <> "" Then
+                                            LogToFile("Found ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
+
+                                            objCase = objCaseData.GetCaseByExternalCaseNumber(sExternalCaseNumber)
+
+                                            If Not objCase Is Nothing Then
+                                                LogToFile("Found existing case by ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
+                                            End If
+                                        End If
+                                    End If
 
                                     ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
-                                    If objCustomer.EMailSubjectPattern <> "" Then
+                                    If objCustomer.EMailSubjectPattern <> "" And objCase Is Nothing Then
                                         LogToFile("Subject: " & sSubject, iPop3DebugLevel)
 
                                         iCaseNumber = extractCaseNumberFromSubject(sSubject, objCustomer.EMailSubjectPattern)
@@ -690,7 +695,7 @@ Module DH_Helpdesk_Mail
                                 If objCase Is Nothing Then
                                     objCase = New CCase
 
-                                    'objCase.ExternalCasenumber = sExternalCaseNumber
+                                    objCase.ExternalCasenumber = sExternalCaseNumber
 
                                     objCase.Caption = Left(message.Subject.ToString(), 100)
                                     objCase.Description = sBodyText
