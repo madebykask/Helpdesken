@@ -1153,25 +1153,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             }
 
-            //Get CustomerUser to copy
-            var customerUserToCopy = this._customerUserService.GetCustomerUsersForCustomer(customerToCopy.Id);
-
-            foreach (var cu in customerUserToCopy)
-            {
-                var newCustomerCustomerUser = new CustomerUser() { };
-
-                newCustomerCustomerUser.Customer_Id = newCustomerToSave.Id;
-                newCustomerCustomerUser.User_Id = cu.User_Id;
-                newCustomerCustomerUser.CasePerformerFilter = string.Empty;
-                newCustomerCustomerUser.ShowOnStartPage = cu.ShowOnStartPage;
-                newCustomerCustomerUser.UserInfoPermission = cu.UserInfoPermission;
-                //todo: add missing customer user settings
-                this._customerUserService.SaveCustomerUserForCopy(newCustomerCustomerUser, out errors);
-            }
-
-            //Get CustomerUser to copy
-            newCustomerToSave.UsersAvailable = customerToCopy.UsersAvailable;
-
             //Get Casetype to copy
             var caseTypesToCopy = this._caseTypeService.GetCaseTypes(customerToCopy.Id).Where(x => x.Parent_CaseType_Id == null && x.IsActive == 1);
 
