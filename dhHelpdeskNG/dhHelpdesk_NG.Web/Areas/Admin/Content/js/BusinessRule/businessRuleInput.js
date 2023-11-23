@@ -38,6 +38,9 @@
         var elSubStatusFromDropDown = "#lstSubStatusFrom";
         var elSubStatusToDropDown = "#lstSubStatusTo";
 
+        var elDomainTo = "#lstDomainTo";
+        var elDomainFrom = "#lstDomainFrom";
+
         var elEmailTemplatsDropDown = "#lstEmailTemplates";
         var elEmailGroupsDropDown = "#lstEmailGroups";
         var elWorkingGroupsDropDown = "#lstWorkingGroups";
@@ -168,6 +171,9 @@
             data.initiator = $(elInitiator).bootstrapSwitch("state");
             data.caseIsAbout = $(elCaseIsAbout).bootstrapSwitch("state");
 
+            data.domainFrom = $(elDomainFrom).val();
+            data.domainTo = $(elDomainTo).val();
+
             return data;
         };       
       
@@ -258,8 +264,6 @@
         };
 
         dhHelpdesk.businessRule.init = function () {
-
-            console.log("Start")
            
             var saveButton = $(elBtnSaveRule);
 

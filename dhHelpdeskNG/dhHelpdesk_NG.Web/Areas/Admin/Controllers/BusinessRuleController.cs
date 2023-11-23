@@ -62,32 +62,32 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			model.Rules = rules.Select(x => new BusinessRuleListItemModel
 			{
 				RuleId = x.Id,
-                RuleName = x.RuleName,
-                //Action = String.Join(", ", x.Actions.ToArray()),
-                //Condition = String.Join(", ", x.Conditions.ToArray()),
-                ChangedBy = x.ChangedBy.GetFullName(),
-                ChangedOn = x.ChangedTime,
-                Event = Enum.GetName(typeof(BREventType), x.Event),
-                IsActive = x.RuleActive
-            }).ToList();
+				RuleName = x.RuleName,
+				//Action = String.Join(", ", x.Actions.ToArray()),
+				//Condition = String.Join(", ", x.Conditions.ToArray()),
+				ChangedBy = x.ChangedBy.GetFullName(),
+				ChangedOn = x.ChangedTime,
+				Event = Enum.GetName(typeof(BREventType), x.Event),
+				IsActive = x.RuleActive
+			}).ToList();
 
-            return View(model);
+			return View(model);
 		}
 
 		[HttpGet]
 		public ActionResult NewRule(int customerId)
-        {
+		{
 			var model = new BusinessRuleInputModel
 			{
 				CustomerId = customerId,
 				Events = DefineBREvents(),
-                Condition = new BRConditionModel
-                {
-                    Sequence = 1
-                }
-            };
+				Condition = new BRConditionModel
+				{
+					Sequence = 1
+				}
+			};
 
-            var currentValue = new List<DdlModel>
+			var currentValue = new List<DdlModel>
 			{
 				new DdlModel {Value = BRConstItem.CURRENT_VALUE.ToString(), Text = "[CurrentValue]", Selected = false}
 			};
@@ -148,8 +148,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				RuleId = rule.Id,
 				CustomerId = rule.CustomerId,
 				RuleName = rule.RuleName,
-				Events = DefineBREvents(),
-                ContinueOnSuccess = rule.ContinueOnSuccess,
+				Events = DefineBREvents(rule.EventId),
+				ContinueOnSuccess = rule.ContinueOnSuccess,
 				ContinueOnError = rule.ContinueOnError,
 				IsActive = rule.RuleActive,
 				Sequence = rule.RuleSequence
@@ -189,7 +189,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				ProcessesToValue = processList.Where(x => rule.ProcessTo.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				SubStatusesFromValue = subStatusList.Where(x => rule.SubStatusFrom.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				SubStatusesToValue = subStatusList.Where(x => rule.SubStatusTo.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
-				Sequence = 1
+				Sequence = 1,
+				DomainFromValue = rule.DomainFrom,
+				DomainToValue = rule.DomainTo,
 			};
 
 			var emailTemplateList = GetEmailTemplatesList(rule.CustomerId);
@@ -209,12 +211,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			{
 				Id = 0,
 				RuleId = rule.Id,
-				ActionTypeId = BRActionType.SendEmail,
+				ActionTypeId = rule.EventId,
 				EmailTemplateId = rule.EmailTemplate,
 				EMailGroupIds = emailGroupList.Where(x => rule.EmailGroups.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				WorkingGroupIds = workingGroups.Where(x => rule.WorkingGroups.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				AdministratorIds = allAdmins.Where(x => rule.Administrators.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
-				Recipients = string.Join(BRConstItem.Email_Separator, rule.Recipients),
+				Recipients = rule.Recipients != null ? string.Join(BRConstItem.Email_Separator, rule.Recipients) : null,
 				CaseCreator = rule.CaseCreator,
 				Initiator = rule.Initiator,
 				CaseIsAbout = rule.CaseIsAbout,
@@ -363,15 +365,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			return emailTemplateList;
 		}
 
-        private List<BREvent> DefineBREvents()
-        {
-            return new List<BREvent> {
-                    new BREvent((int)BREventType.OnSaveCase, "On Save Case", true),
-                    new BREvent((int)BREventType.OnCreateCase, "On Create Case", false)};
+		private List<BREvent> DefineBREvents(int selectedId = 1)
+		{
+			return new List<BREvent>
+			{
+				new BREvent((int)BREventType.OnSaveCase, "On Save Case", selectedId == (int)BREventType.OnSaveCase),
+				new BREvent((int)BREventType.OnCreateCase, "On Create Case", selectedId == (int)BREventType.OnCreateCase)
+			};
 
-        }
+			#endregion Private
 
-        #endregion Private
-
-    }
+		}
+	}
 }
