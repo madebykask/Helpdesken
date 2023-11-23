@@ -132,7 +132,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
 		public ICollection<string> AdministratorIds { get; set; }
 
-		public string Recipients { get; set; }
+        public int? Administrator { get; set; }
+
+        public string Recipients { get; set; }
 
 		public bool CaseCreator { get; set; }
 

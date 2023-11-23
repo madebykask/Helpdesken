@@ -25,7 +25,10 @@
         var elBRActionMailTemplate = "#BRActionMailTemplate";
         var elBRActionEmailGroup = "#BRActionEmailGroup";
         var elBRActionWorkingGroup = "#BRActionWorkingGroup";
+
         var elBRActionAdministrator = "#BRActionAdministrator";
+        var elBRActionAdministratorSingleSelect = "#BRActionAdministratorSingleSelect";
+
         var elBRActionRecipients = "#BRActionRecipients";
         var elBRActionCreatedBy = "#BRActionCreatedBy";
         var elBRActionRegistrator = "#BRActionRegistrator";
@@ -234,6 +237,7 @@
                 $(elBRProcess).show();
                 $(elBRSubStatus).show();
                 $(elBRDomain).hide();
+                $(elBRActionAdministratorSingleSelect).hide();
 
                 $(elBRActionMailTemplate).show();
                 $(elBRActionEmailGroup).show();
@@ -248,11 +252,12 @@
                 $(elBRProcess).hide();
                 $(elBRSubStatus).hide();
                 $(elBRDomain).show();
+                $(elBRActionAdministratorSingleSelect).show();
 
                 $(elBRActionMailTemplate).hide();
                 $(elBRActionEmailGroup).hide();
                 $(elBRActionWorkingGroup).hide();
-                $(elBRActionAdministrator).show();
+                $(elBRActionAdministrator).hide();
                 $(elBRActionRecipients).hide();
                 $(elBRActionCreatedBy).hide();
                 $(elBRActionRegistrator).hide();

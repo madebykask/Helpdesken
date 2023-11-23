@@ -40,6 +40,14 @@
                 @Html.ListBoxExtendedOptionsFor(x => x.AdministratorIds, (List<DdlModel>)@ViewBag.Administrators, new { @id = "lstAdministrators", @name = "lstAdministrators", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
             </td>
         </tr>
+        <tr id="BRActionAdministratorSingleSelect">
+            <td>
+                @Translation.Get("Administrator")
+            </td>
+            <td>
+                @Html.DropDownListFor(x => x.Administrator, (List<DdlModel>)@ViewBag.Administrators, "", new { @id = "lstAdministrators", name = "lstAdministrators", @class = "BR-chosen-single-select" })
+            </td>
+        </tr>
         <tr id="BRActionRecipients">
             <td class="span2">
                 @Translation.Get("Recipients", Enums.TranslationSource.TextTranslation)
