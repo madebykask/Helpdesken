@@ -63,6 +63,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
         public string WorkingGroups { get; set; }
 
+        public string Administrator { get; set; }
+
         public string Administrators { get; set; }
 
         public string Recipients { get; set; }
@@ -72,6 +74,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         public string Initiator { get; set; }
 
         public string CaseIsAbout { get; set; }
+
+        public string Equals { get; set; }
     }
 
    
@@ -103,6 +107,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
             ret.EmailGroups.AddItems(it.EmailGroups, false);
             ret.WorkingGroups.AddItems(it.WorkingGroups, false);
             ret.Administrators.AddItems(it.Administrators, false);
+
+            if (!string.IsNullOrEmpty(it.Administrator))
+            {
+                ret.Administrators.AddItem(Int32.Parse(it.Administrator));
+            }
             
             if (!string.IsNullOrEmpty(it.Recipients))                
                 ret.Recipients = it.Recipients.Split(_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
@@ -111,8 +120,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
             ret.Initiator = bool.Parse(it.Initiator);
             ret.CaseIsAbout = bool.Parse(it.CaseIsAbout);
 
-            ret.DomainFrom = it.DomainFrom;
-            ret.DomainTo = it.DomainTo;
+            ret.DomainFrom = it.Equals;
+            ret.DomainTo = it.Equals;
 
             //Set eventID
             ret.EventId = int.Parse(it.EventId);

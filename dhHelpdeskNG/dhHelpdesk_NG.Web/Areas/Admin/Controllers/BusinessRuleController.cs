@@ -190,9 +190,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				SubStatusesFromValue = subStatusList.Where(x => rule.SubStatusFrom.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				SubStatusesToValue = subStatusList.Where(x => rule.SubStatusTo.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				Sequence = 1,
-				DomainFromValue = rule.DomainFrom,
-				DomainToValue = rule.DomainTo,
-			};
+                Equals = rule.DomainFrom
+            };
 
 			var emailTemplateList = GetEmailTemplatesList(rule.CustomerId);
 			ViewBag.EMailTemplates = emailTemplateList.OrderBy(x => x.Text).ToList();

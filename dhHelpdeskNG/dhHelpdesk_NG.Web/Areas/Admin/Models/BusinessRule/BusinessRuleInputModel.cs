@@ -101,6 +101,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         public string DomainToValue { get; set; }
 		//End of domain
 
+		public string Equals { get; set; }
+
         public int Sequence { get; set; }
 	}
 

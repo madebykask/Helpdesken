@@ -18,9 +18,8 @@
         var elContinueOnError = "#continueOnError";
         var elIsRuleActive = "#isRuleActive";
 
-        var elBRProcess = "#BRProcess";
-        var elBRSubStatus = "#BRSubStatus";
-        var elBRDomain = "#BRDomain"
+        var elCondition1 = "#BRCondition1";
+        var elCondition2 = "#BRCondition2";
 
         var elBRActionMailTemplate = "#BRActionMailTemplate";
         var elBRActionEmailGroup = "#BRActionEmailGroup";
@@ -41,8 +40,7 @@
         var elSubStatusFromDropDown = "#lstSubStatusFrom";
         var elSubStatusToDropDown = "#lstSubStatusTo";
 
-        var elDomainTo = "#lstDomainTo";
-        var elDomainFrom = "#lstDomainFrom";
+        var elDomainEquals = "#lstEquals";
 
         var elEmailTemplatsDropDown = "#lstEmailTemplates";
         var elEmailGroupsDropDown = "#lstEmailGroups";
@@ -112,13 +110,13 @@
                 subStatusFrom: "",
                 subStatusTo: "",
 
-                domainFrom: "",
-                domainTo: "",
+                equals: "",
 
                 emailTemplate: 0,
                 emailGroups: "",
                 workingGroups: "",
                 administrators: "",
+                administrator: "",
                 recipients: "",
                 caseCreator: true,
                 initiator: true,
@@ -174,8 +172,14 @@
             data.initiator = $(elInitiator).bootstrapSwitch("state");
             data.caseIsAbout = $(elCaseIsAbout).bootstrapSwitch("state");
 
-            data.domainFrom = $(elDomainFrom).val();
-            data.domainTo = $(elDomainTo).val();
+            data.customerId = $(elCustomerId).val();
+
+            data.equals = $(elDomainEquals).val();
+
+            $(elBRActionAdministratorSingleSelect + " option:selected").each(function () {
+                data.administrator = $(this).val();
+            });
+
 
             return data;
         };       
@@ -201,12 +205,12 @@
                     'data.ProcessTo': data.processTo,
                     'data.SubStatusFrom': data.subStatusFrom,
                     'data.SubStatusTo': data.subStatusTo,
-                    'data.DomainFrom': data.domainFrom,
-                    'data.DomainTo': data.domainTo,
+                    'data.Equals': data.equals,
                     'data.EmailTemplate': data.emailTemplate,
                     'data.EmailGroups': data.emailGroups,
                     'data.WorkingGroups': data.workingGroups,
                     'data.Administrators': data.administrators,
+                    'data.Administrator': data.administrator,
                     'data.Recipients': data.recipients,
                     'data.CaseCreator': data.caseCreator,
                     'data.Initiator': data.initiator,
@@ -234,9 +238,9 @@
             var selectedValue = $(elEventsDropDown).val();
 
             if (selectedValue === '1') {
-                $(elBRProcess).show();
-                $(elBRSubStatus).show();
-                $(elBRDomain).hide();
+                $(elCondition1).show();
+                $(elCondition2).hide();
+
                 $(elBRActionAdministratorSingleSelect).hide();
 
                 $(elBRActionMailTemplate).show();
@@ -249,9 +253,10 @@
                 $(elBRActionAbout).show();
 
             } else if (selectedValue === '2') {
-                $(elBRProcess).hide();
-                $(elBRSubStatus).hide();
-                $(elBRDomain).show();
+
+                $(elCondition1).hide();
+                $(elCondition2).show();
+
                 $(elBRActionAdministratorSingleSelect).show();
 
                 $(elBRActionMailTemplate).hide();
