@@ -401,6 +401,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 setting.BlockedEmailRecipients = vmodel.Setting.BlockedEmailRecipients;
                 setting.EMailAnswerSeparator = vmodel.Setting.EMailAnswerSeparator;
                 setting.EMailSubjectPattern = vmodel.Setting.EMailSubjectPattern;
+                setting.ExternalEMailSubjectPattern = vmodel.Setting.ExternalEMailSubjectPattern;
             }
 
             IDictionary<string, string> errors;
@@ -925,6 +926,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 QuickNewCaseLinkText = customerToCopySettings.QuickNewCaseLinkText,
                 QuickNewCaseLinkUrl = customerToCopySettings.QuickNewCaseLinkUrl,
                 EMailSubjectPattern = customerToCopySettings.EMailSubjectPattern,
+                ExternalEMailSubjectPattern = customerToCopySettings.ExternalEMailSubjectPattern,
                 EMailAnswerSeparator = customerToCopySettings.EMailAnswerSeparator,
                 BlockedEmailRecipients = "noreply;",
                 ErrorMailTo = "",

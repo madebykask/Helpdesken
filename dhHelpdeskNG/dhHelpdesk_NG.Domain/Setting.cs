@@ -104,6 +104,7 @@ namespace DH.Helpdesk.Domain
         public string DSN_Sync { get; set; }
         public string EMailAnswerSeparator { get; set; }
         public string EMailSubjectPattern { get; set; }
+        public string ExternalEMailSubjectPattern { get; set; }
         public int IntegrationType { get; set; }
         public string LDAPBase { get; set; }
         public string LDAPFilter { get; set; }
