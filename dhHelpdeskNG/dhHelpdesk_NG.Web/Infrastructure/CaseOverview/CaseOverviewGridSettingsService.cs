@@ -57,7 +57,7 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
                 UserFields.IsAbout_CostCentre.ToLower(),
                 UserFields.IsAbout_Department.ToLower(),
                 UserFields.IsAbout_OU.ToLower(),
-                UserFields.IsAbout_Persons_CellPhone.ToLower(),
+                //UserFields.IsAbout_Persons_CellPhone.ToLower(),
                 UserFields.IsAbout_Persons_Email.ToLower(),
                 UserFields.IsAbout_Persons_Phone.ToLower(),
                 UserFields.IsAbout_Place.ToLower(),

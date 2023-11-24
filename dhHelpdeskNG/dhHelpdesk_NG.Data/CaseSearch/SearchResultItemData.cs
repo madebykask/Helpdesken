@@ -65,6 +65,7 @@ namespace DH.Helpdesk.Dal.Repositories
         //isabout
         public string IsAbout_ReportedBy { get; set; }
         public string IsAbout_Persons_Name { get; set; }
+        public string IsAbout_Persons_CellPhone { get; set; }
 
         //users
         public string Performer_User_Id { get; set; }

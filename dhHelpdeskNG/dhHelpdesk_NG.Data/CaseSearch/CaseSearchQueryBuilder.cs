@@ -361,6 +361,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 columns.Add("tblCaseIsAbout.ReportedBy as IsAbout_ReportedBy");
                 columns.Add("tblCaseIsAbout.Person_Name as IsAbout_Persons_Name");
+                columns.Add("tblCaseIsAbout.Person_CellPhone as IsAbout_Persons_CellPhone");
                 columns.Add("tblCase.AgreedDate");
 
                 if (customerSettings != null)

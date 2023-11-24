@@ -78,6 +78,7 @@
             
             UserFields.IsAbout_User,
             UserFields.IsAbout_Persons_Name,
+            UserFields.IsAbout_Persons_CellPhone,
             OtherFields.Problem,
             OtherFields.Project  
         };
