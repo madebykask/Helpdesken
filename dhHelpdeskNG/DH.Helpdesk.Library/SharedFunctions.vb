@@ -497,7 +497,7 @@ Imports System.Text.RegularExpressions
                     iPos = InStr(sSubject, vExternalEMailSubjectPattern(Index), CompareMethod.Text)
 
                     If iPos > 0 Then
-                        iPos = iPos + Len(vExternalEMailSubjectPattern(Index))
+                        iPos += Len(vExternalEMailSubjectPattern(Index))
                         Dim iStart As Integer = iPos
 
                         ' Starta på iPos och stega till höger tills mellanslag eller subject slut
@@ -505,9 +505,9 @@ Imports System.Text.RegularExpressions
                             If iPos = iStart And Mid(sSubject, i, 1) = " " Then
                                 Exit For
                             End If
-                            If Mid(sSubject, i, 1) <> " " Then
 
-                                sTemp = sTemp & Mid(sSubject, i, 1)
+                            If Mid(sSubject, i, 1) <> " " Then
+                                sTemp &= Mid(sSubject, i, 1)
                             Else
                                 If iStart = iPos And Mid(sSubject, i, 1) <> " " And Mid(sSubject, i, 1) <> "" Then
                                     Exit For
