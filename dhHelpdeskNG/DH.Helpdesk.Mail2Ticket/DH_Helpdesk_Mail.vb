@@ -1955,15 +1955,22 @@ Module DH_Helpdesk_Mail
                                     'LogToFile("Saved file: " & sContentLocation, 1)
                                     Dim imgHref As String = ""
                                     Dim bData As Byte()
+
+
                                     Dim newImagePath = ResizeImage(sContentLocation, sFolder, iFileCount, sFileExtension)
-                                    'LogToFile("Rezised image file: " & newImagePath, 1)
-                                    Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(newImagePath))
-                                    bData = br.ReadBytes(br.BaseStream.Length)
-                                    Dim base64String As String = Convert.ToBase64String(bData, 0, bData.Length)
+
+
+                                    ' Properly handling the file read operation
+                                    Using fs As FileStream = File.OpenRead(newImagePath)
+                                        ReDim bData(CInt(fs.Length) - 1)
+                                        fs.Read(bData, 0, bData.Length)
+                                    End Using ' FileStream is disposed of here, releasing the file
+
+                                    Dim base64String As String = Convert.ToBase64String(bData)
                                     imgHref = "data:image/png;base64," & base64String
-                                    br.Close()
+
                                     sBodyHtml = sBodyHtml.Replace(sContentId, imgHref)
-                                    'LogToFile("Created Base64 images for case: " & sFolder, 1)
+
                                 End If
                             End If
                         Next
@@ -2817,44 +2824,44 @@ Module DH_Helpdesk_Mail
 
     End Function
     Private Function ResizeImage(contentLocation As String, folder As String, iFileCount As Integer, fileExtension As String) As String
+        Dim newFilePath As String = System.IO.Path.Combine(folder, $"{iFileCount}_small.{fileExtension}")
 
+        ' The 'Using' block ensures that IDisposable objects are correctly disposed, releasing resources
+        Using originalImage As Bitmap = New Bitmap(contentLocation) ' Load the original image
 
-        ' Load the original image
-        Dim originalImage As Bitmap = New Bitmap(contentLocation)
+            Dim newWidth As Integer = 500
+            Dim newHeight As Integer = originalImage.Height
 
-        Dim newWidth As Integer = 500
-        Dim newHeight As Integer = originalImage.Height
-        If originalImage.Width > newWidth Then
-            newHeight = originalImage.Height * newWidth / originalImage.Width
-        Else
-            newWidth = originalImage.Width
-        End If
+            ' Calculate the new dimensions
+            If originalImage.Width > newWidth Then
+                newHeight = originalImage.Height * newWidth / originalImage.Width
+            Else
+                newWidth = originalImage.Width
+            End If
 
-        'Hängslen och byxor
-        If newHeight = 0 Then
-            newHeight = 1
-        End If
+            ' Fallback to prevent zero dimensions
+            newHeight = If(newHeight = 0, 1, newHeight)
+            newWidth = If(newWidth = 0, 1, newWidth)
 
-        If newWidth = 0 Then
-            newWidth = 1
-        End If
-        ' Create a new Bitmap object with the new width and height
-        Dim newImage As New Bitmap(originalImage, newWidth, newHeight)
+            ' Using statement ensures proper disposal of newImage instance after usage
+            Using newImage As New Bitmap(newWidth, newHeight)
 
-        ' Create a Graphics object for the new image
-        Dim graphics As Graphics = Graphics.FromImage(newImage)
+                ' Using statement for proper disposal of graphics object
+                Using graphics As Graphics = Graphics.FromImage(newImage)
 
-        ' Set the interpolation mode to high quality
-        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic
+                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic
 
-        ' Draw the original image on the new image using the specified width and height
-        graphics.DrawImage(originalImage, 0, 0, newWidth, newHeight)
+                    ' Draw the original image on the new image using the specified width and height
+                    graphics.DrawImage(originalImage, 0, 0, newWidth, newHeight)
+                End Using ' Graphics object is disposed here
 
-        Dim newFilePath As String = folder & "\" & iFileCount & "_small" & "." & fileExtension
-        newImage.Save(newFilePath)
+                newImage.Save(newFilePath) ' Save the new image
+            End Using ' New Image object is disposed here
+
+        End Using ' Original Bitmap object is disposed here
+
         Return newFilePath
     End Function
-
 
 End Module
 
