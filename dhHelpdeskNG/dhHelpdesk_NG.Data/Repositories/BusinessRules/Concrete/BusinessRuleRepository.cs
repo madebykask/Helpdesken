@@ -757,5 +757,34 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                 .Where(r => r.Customer_Id == customerId)
                 .OrderBy(x => x.Name).ToList();
         }
+
+        public void DeleteRule(int ruleId)
+        {
+            var ruleEntity = this.DbContext.BRRules.FirstOrDefault(r => r.Id == ruleId);
+            if (ruleEntity != null)
+            {
+                // Since the ON DELETE CASCADE is not set for action parameters, manually delete them.
+                var actionIds = this.DbContext.BRActions
+                                  .Where(a => a.Rule_Id == ruleId)
+                                  .Select(a => a.Id)
+                                  .ToList();
+
+                var actionParamEntities = this.DbContext.BRActionParams
+                                            .Where(p => actionIds.Contains(p.RuleAction_Id))
+                                            .ToList();
+
+                foreach (var actionParamEntity in actionParamEntities)
+                {
+                    this.DbContext.BRActionParams.Remove(actionParamEntity);
+                }
+
+                // Directly remove the rule. This will cascade and remove related rule actions and conditions.
+                this.DbContext.BRRules.Remove(ruleEntity);
+
+                this.DbContext.SaveChanges();
+            }
+
+            this.Commit();
+        }
     }
 }

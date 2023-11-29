@@ -21,7 +21,11 @@
         <div class="pull-left">
             <ul class="secnav">
                 <li><input id="btnSaveRule" type="button" class="btn" value="@Translation.Get("Spara", Enums.TranslationSource.TextTranslation)" /> </li>
-                <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", new { customerId = Model.CustomerId }, new { @class = "btn" })</li>
+                <li>
+                    @Html.ActionLink(Translation.Get("Ta bort", Enums.TranslationSource.TextTranslation), "delete", new { id = Model.RuleId },
+                    new { @class = "btn deleteDialog", deleteDialogText = Translation.Get("Är du säker på att du vill ta bort aktuell post", Enums.TranslationSource.TextTranslation) })
+            </li>
+            <li>@Html.ActionLink(Translation.Get("Avbryt", Enums.TranslationSource.TextTranslation), "Index", new { customerId = Model.CustomerId }, new { @class = "btn" })</li>
             </ul>
         </div>
     </div>         

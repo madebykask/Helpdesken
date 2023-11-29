@@ -256,26 +256,45 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			return Json("false", JsonRequestBehavior.AllowGet);
 		}
 
-		#endregion
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            var rule = this._businessRuleService.GetRule(id);
 
-		#region Private
+            if (this._businessRuleService.DeleteBusinessRule(id) == DeleteMessage.Success)
+			{
 
-		//private string SerializeRuleAction(string emailTemplate, SelectedItems emailGroups, SelectedItems workingGroups, SelectedItems administrators, string[] recipients)
-		//{
+				return RedirectToAction("Index", new { customerId = rule.CustomerId});
 
-		//}
+            }
 
-		//private string SerializeRuleCondition(BRActionModel action)
-		//{
+            else
+            {
+                this.TempData.Add("Error", "");
+                return RedirectToAction("EditRule", new { id = rule.Id });
+            }
+        }
 
-		//}
+        #endregion
 
-		//private string SerializeRuleEvent(BRActionModel action)
-		//{
+        #region Private
 
-		//}
+        //private string SerializeRuleAction(string emailTemplate, SelectedItems emailGroups, SelectedItems workingGroups, SelectedItems administrators, string[] recipients)
+        //{
 
-		private List<DdlModel> GetSubStatusesList(int customerId, List<DdlModel> fieldItems)
+        //}
+
+        //private string SerializeRuleCondition(BRActionModel action)
+        //{
+
+        //}
+
+        //private string SerializeRuleEvent(BRActionModel action)
+        //{
+
+        //}
+
+        private List<DdlModel> GetSubStatusesList(int customerId, List<DdlModel> fieldItems)
 		{
 			var subStatusList = fieldItems.Union(_subStatusService.GetStateSecondaries(customerId).Select(s => new DdlModel
 			{
