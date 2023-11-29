@@ -63,10 +63,10 @@
 <table id="BRCondition2" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
-            <th style="width:10%">
+            <th style="width:15%">
                 Attribute
             </th>
-            <th style="width:25%">
+            <th style="width:20%">
                 Equals
             </th>
             <th style="width:25%">
@@ -80,7 +80,10 @@
     <tbody>
         <tr>
             <td>
-                @Translation.Get("Domain")
+                @Translation.Get("Domain/Email pattern")
+                <span class="icon-info-sign ml15" rel="tooltip"
+                      title=""
+                      data-original-title='@Translation.GetCoreTextTranslation("Enter a domain (e.g., 'gmail.com') or specific email addresses separated by semicolons (e.g., 'user@example.com; another@example.com').")'></span>
             </td>
             <td>
                 @Html.TextBoxFor(m => Model.Equals, new { id = "lstEquals", @class = "BR-text" })
@@ -92,3 +95,5 @@
 
     </tbody>
 </table>
+
+
