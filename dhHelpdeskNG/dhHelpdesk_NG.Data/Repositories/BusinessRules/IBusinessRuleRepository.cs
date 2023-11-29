@@ -18,5 +18,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules
         IList<BusinessRuleModel> GetRules(int customerId, BREventType ccurredEvent);
 
         IList<BRRuleEntity> GetRuleReadList(int customerId);
+
+        void DeleteRule(int ruleId);
     }
 }

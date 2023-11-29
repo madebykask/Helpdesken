@@ -6,5 +6,7 @@
 
        public static readonly string SubStatus = "StateSecondary_Id";
 
-   }
+       public static readonly string Domain = "Domain";
+
+    }
 }
