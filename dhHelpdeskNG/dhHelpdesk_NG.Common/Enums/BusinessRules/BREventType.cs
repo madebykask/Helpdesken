@@ -3,6 +3,6 @@
    public enum BREventType
    {
         OnSaveCase = 1,
-        OnCreateCase = 2
+        OnCreateCaseM2T = 2
     }
 }

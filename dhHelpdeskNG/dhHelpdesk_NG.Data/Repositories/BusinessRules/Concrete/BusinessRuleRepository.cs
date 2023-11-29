@@ -85,7 +85,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                 if (actResult != "")
                     return actResult;
             }
-            else if (businessRule.EventId == (int)BREventType.OnCreateCase)
+            else if (businessRule.EventId == (int)BREventType.OnCreateCaseM2T)
             {
                 var actResult = SaveBRActionsEditCaseField(businessRule, isNew);
                 if (actResult != "")

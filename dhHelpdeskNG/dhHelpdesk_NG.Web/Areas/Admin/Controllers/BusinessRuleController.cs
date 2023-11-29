@@ -388,7 +388,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			return new List<BREvent>
 			{
 				new BREvent((int)BREventType.OnSaveCase, "On Save Case", selectedId == (int)BREventType.OnSaveCase),
-				new BREvent((int)BREventType.OnCreateCase, "On Create Case", selectedId == (int)BREventType.OnCreateCase)
+				new BREvent((int)BREventType.OnCreateCaseM2T, "On Create Case (M2T)", selectedId == (int)BREventType.OnCreateCaseM2T)
 			};
 
 			#endregion Private
