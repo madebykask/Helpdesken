@@ -11,7 +11,7 @@ Module Module1
 
 
         ' Call the ProcessCase method
-        Dim result As String = caseProcessor.RunBusinessRules(caseBridge)
+        Dim result As DH.Helpdesk.Mail2TicketCSharpBridge.Models.CaseBridge = caseProcessor.RunBusinessRules(caseBridge)
 
         Console.WriteLine(result)
         Console.ReadLine()

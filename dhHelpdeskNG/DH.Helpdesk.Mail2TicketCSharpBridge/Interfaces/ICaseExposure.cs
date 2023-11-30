@@ -9,6 +9,6 @@ namespace DH.Helpdesk.Mail2TicketCSharpBridge.Interfaces
 {
     public interface ICaseExposure
     {
-        string RunBusinessRules(CaseBridge caseObj);
+        CaseBridge RunBusinessRules(CaseBridge caseObj);
     }
 }
