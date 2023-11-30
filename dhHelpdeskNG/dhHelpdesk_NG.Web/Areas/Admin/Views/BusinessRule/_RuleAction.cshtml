@@ -9,14 +9,14 @@
 
 <table>
     <tbody>
-        <tr>
+        <tr id="BRActionMailTemplate">
             <td class="span2"> @Translation.Get("Mail Template") </td>
             <td>
                 @Html.DropDownListFor(x => x.EmailTemplateId, (List<SelectListItem>)@ViewBag.EMailTemplates, "", new { @id = "lstEmailTemplates", name = "lstEmailTemplates", @class = "BR-chosen-single-select" })
                 @Html.ValidationMessageFor(x => x.EmailTemplateId)
             </td>
         </tr>
-        <tr>
+        <tr id="BRActionEmailGroup">
             <td>
                 @Translation.Get("Email Group")
             </td>
@@ -24,7 +24,7 @@
                 @Html.ListBoxExtendedOptionsFor(x => x.EMailGroupIds, (List<DdlModel>)@ViewBag.EMailGroups, new { @id = "lstEmailGroups", @name = "lstEmailGroups", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
             </td>
         </tr>
-        <tr>
+        <tr id="BRActionWorkingGroup">
             <td>
                 @Translation.Get("Working Group")
             </td>
@@ -32,7 +32,7 @@
                 @Html.ListBoxExtendedOptionsFor(x => x.WorkingGroupIds, (List<DdlModel>)@ViewBag.WorkingGroups, new { @id = "lstWorkingGroups", @name = "lstWorkingGroups", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
             </td>
         </tr>
-        <tr>
+        <tr id="BRActionAdministrator">
             <td>
                 @Translation.Get("Administrator")
             </td>
@@ -40,7 +40,15 @@
                 @Html.ListBoxExtendedOptionsFor(x => x.AdministratorIds, (List<DdlModel>)@ViewBag.Administrators, new { @id = "lstAdministrators", @name = "lstAdministrators", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
             </td>
         </tr>
-        <tr>
+        <tr id="BRActionAdministratorSingleSelect">
+            <td>
+                @Translation.Get("Administrator")
+            </td>
+            <td>
+                @Html.DropDownListFor(x => x.Administrator, (List<DdlModel>)@ViewBag.Administrators, "", new { @id = "lstAdministrators", name = "lstAdministrators", @class = "BR-chosen-single-select" })
+            </td>
+        </tr>
+        <tr id="BRActionRecipients">
             <td class="span2">
                 @Translation.Get("Recipients", Enums.TranslationSource.TextTranslation)
             </td>
@@ -48,7 +56,7 @@
                 @Html.TextBoxFor(m => Model.Recipients, new { id = "recipients", @class = "BR-text" })
             </td>
         </tr>
-        <tr>
+        <tr id="BRActionCreatedBy">
             <td class="span2">
                 @Translation.Get("Skapad av", Enums.TranslationSource.TextTranslation)
             </td>
@@ -56,7 +64,7 @@
                 @Html.CheckBoxFor(m => Model.CaseCreator, new { @class = "switchcheckbox", id = "caseCreator" })
             </td>
         </tr>
-        <tr>
+        <tr id="BRActionRegistrator">
             <td class="span2">
                 @Translation.Get("Anmälare", Enums.TranslationSource.TextTranslation)
             </td>
@@ -64,7 +72,7 @@
                 @Html.CheckBoxFor(m => Model.Initiator, new { @class = "switchcheckbox", id = "initiator" })
             </td>
         </tr>
-        <tr>
+        <tr id="BRActionAbout">
             <td class="span2">
                 @Translation.Get("Angående", Enums.TranslationSource.TextTranslation)
             </td>

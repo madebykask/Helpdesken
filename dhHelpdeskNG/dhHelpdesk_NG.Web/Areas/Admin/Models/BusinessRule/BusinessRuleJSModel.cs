@@ -49,11 +49,21 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 		[RequiredIfNotEmpty("SubStatusFrom")]
 		public string SubStatusTo { get; set; }
 
+        [LocalizedDisplay("Domän från")]
+        [RequiredIfNotEmpty("DomainTo")]
+        public string DomainFrom { get; set; }
+
+        [LocalizedDisplay("Domän till")]
+        [RequiredIfNotEmpty("DomainFrom")]
+        public string DomainTo { get; set; }
+
         public string EmailTemplate { get; set; }
 
         public string EmailGroups { get; set; }
 
         public string WorkingGroups { get; set; }
+
+        public string Administrator { get; set; }
 
         public string Administrators { get; set; }
 
@@ -64,6 +74,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         public string Initiator { get; set; }
 
         public string CaseIsAbout { get; set; }
+
+        public string Equals { get; set; }
     }
 
    
@@ -87,10 +99,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
             ret.SubStatusFrom.AddItems(it.SubStatusFrom, false);
             ret.SubStatusTo.AddItems(it.SubStatusTo, false);
 
-            ret.EmailTemplate = int.Parse(it.EmailTemplate);
+            if (it.EmailTemplate != null)
+            {
+                ret.EmailTemplate = int.Parse(it.EmailTemplate);
+            }
+            
             ret.EmailGroups.AddItems(it.EmailGroups, false);
             ret.WorkingGroups.AddItems(it.WorkingGroups, false);
             ret.Administrators.AddItems(it.Administrators, false);
+
+            if (!string.IsNullOrEmpty(it.Administrator))
+            {
+                ret.Administrators.AddItem(Int32.Parse(it.Administrator));
+            }
             
             if (!string.IsNullOrEmpty(it.Recipients))                
                 ret.Recipients = it.Recipients.Split(_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
@@ -98,6 +119,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
             ret.CaseCreator = bool.Parse(it.CaseCreator);
             ret.Initiator = bool.Parse(it.Initiator);
             ret.CaseIsAbout = bool.Parse(it.CaseIsAbout);
+
+            ret.DomainFrom = it.Equals;
+            ret.DomainTo = it.Equals;
+
+            //Set eventID
+            ret.EventId = int.Parse(it.EventId);
             
             return ret;
         }

@@ -53,6 +53,10 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
 
         public SelectedItems SubStatusTo { get; set; }
 
+        public string DomainFrom { get; set; }
+
+        public string DomainTo { get; set; }
+
         public int EmailTemplate { get; set; }
 
         public SelectedItems EmailGroups { get; set; }

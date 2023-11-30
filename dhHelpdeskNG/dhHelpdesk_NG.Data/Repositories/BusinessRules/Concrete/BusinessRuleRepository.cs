@@ -79,9 +79,20 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
             if (conResult != "")
                 return conResult;
 
-            var actResult = SaveBRActions(businessRule, isNew);
-            if (actResult != "")
-                return actResult;
+            if (businessRule.EventId == (int)BREventType.OnSaveCase)
+            {
+                var actResult = SaveBRActionsSendEmail(businessRule, isNew);
+                if (actResult != "")
+                    return actResult;
+            }
+            else if (businessRule.EventId == (int)BREventType.OnCreateCaseM2T)
+            {
+                var actResult = SaveBRActionsEditCaseField(businessRule, isNew);
+                if (actResult != "")
+                    return actResult;
+            }
+
+
             
             return string.Empty;
         }
@@ -113,6 +124,17 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         Sequence = 2
                     };
                     this.DbContext.BRConditions.Add(conditionEntity2);
+
+                    var conditionEntity3 = new BRConditionEntity()
+                    {
+                        Id = 0,
+                        Rule_Id = businessRule.Id,
+                        Field_Id = BRFieldType.Domain,
+                        FromValue = businessRule.DomainFrom,
+                        ToValue = businessRule.DomainTo,
+                        Sequence = 3
+                    };
+                    this.DbContext.BRConditions.Add(conditionEntity3);
                 }
                 else
                 {
@@ -167,6 +189,31 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                     }
 
                     #endregion
+
+                    #region Save Domain
+                    var conditionEntity3 = this.DbContext.BRConditions.Where(c => c.Rule_Id == businessRule.Id && c.Field_Id == BRFieldType.Domain)
+                                                                      .FirstOrDefault();
+
+                    if (conditionEntity3 == null)
+                    {
+                        conditionEntity3 = new BRConditionEntity()
+                        {
+                            Id = 0,
+                            Rule_Id = businessRule.Id,
+                            Field_Id = BRFieldType.Domain,
+                            FromValue = businessRule.DomainFrom == null ? "" : businessRule.DomainFrom,
+                            ToValue = businessRule.DomainTo == null ? "" : businessRule.DomainTo,
+                            Sequence = 3
+                        };
+
+                        this.DbContext.BRConditions.Add(conditionEntity3);
+                    }
+                    else
+                    {
+                        conditionEntity3.FromValue = businessRule.DomainFrom;
+                        conditionEntity3.ToValue = businessRule.DomainTo;
+                    }
+                    #endregion
                 }
 
                 this.Commit();
@@ -179,7 +226,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
             return string.Empty;
         }
 
-        private string SaveBRActions(BusinessRuleModel businessRule, bool isNew)
+        private string SaveBRActionsSendEmail(BusinessRuleModel businessRule, bool isNew)
         {
             try
             {
@@ -215,7 +262,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                 }
                 this.Commit();
 
-                var resultActionParam = SaveBRActionParams(businessRule, isNew);
+                var resultActionParam = SaveBRActionParamsSendEmail(businessRule, isNew);
                 if (resultActionParam != "")
                     return resultActionParam;
             }
@@ -227,7 +274,55 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
             return string.Empty;
         }
 
-        private string SaveBRActionParams(BusinessRuleModel businessRule, bool isNew)
+        private string SaveBRActionsEditCaseField(BusinessRuleModel businessRule, bool isNew)
+        {
+            try
+            {
+                if (isNew)
+                {
+                    var actionEntity1 = new BRActionEntity()
+                    {
+                        Id = 0,
+                        Rule_Id = businessRule.Id,
+                        ActionType_Id = BRActionType.EditCaseField,
+                        Sequence = 1
+                    };
+                    this.DbContext.BRActions.Add(actionEntity1);
+                }
+                else
+                {
+                    #region Save Action
+                    var actionEntity1 = this.DbContext.BRActions.Where(a => a.Rule_Id == businessRule.Id && a.ActionType_Id == BRActionType.EditCaseField)
+                                                                   .FirstOrDefault();
+
+                    if (actionEntity1 == null)
+                    {
+                        var conditionEntity1 = new BRActionEntity()
+                        {
+                            Id = 0,
+                            Rule_Id = businessRule.Id,
+                            ActionType_Id = BRActionType.EditCaseField,
+                            Sequence = 1
+                        };
+                        this.DbContext.BRActions.Add(actionEntity1);
+                    }
+                    #endregion
+                }
+                this.Commit();
+
+                var resultActionParam = SaveBRActionParamsEditCaseField(businessRule, isNew);
+                if (resultActionParam != "")
+                    return resultActionParam;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message + " " + (ex.InnerException != null ? ex.InnerException.Message : "");
+            }
+
+            return string.Empty;
+        }
+
+        private string SaveBRActionParamsSendEmail(BusinessRuleModel businessRule, bool isNew)
         {
             var action = this.DbContext.BRActions.Where(a => a.Rule_Id == businessRule.Id && a.ActionType_Id == BRActionType.SendEmail)
                                                  .FirstOrDefault();
@@ -462,6 +557,62 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
             return string.Empty;
         }
 
+        private string SaveBRActionParamsEditCaseField(BusinessRuleModel businessRule, bool isNew)
+        {
+            var action = this.DbContext.BRActions.Where(a => a.Rule_Id == businessRule.Id && a.ActionType_Id == BRActionType.EditCaseField)
+                                                 .FirstOrDefault();
+
+            try
+            {
+                if (isNew)
+                {
+                   
+
+                    var actionParamEntity4 = new BRActionParamEntity()
+                    {
+                        Id = 0,
+                        RuleAction_Id = action.Id,
+                        ParamType_Id = BRActionParamType.Administrator,
+                        ParamValue = businessRule.Administrators.GetSelectedStr()
+                    };
+                    this.DbContext.BRActionParams.Add(actionParamEntity4);
+
+                   
+                }
+                else
+                {
+                   
+
+                    var actionParamEntity4 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.Administrator)
+                                                                       .FirstOrDefault();
+                    if (actionParamEntity4 == null)
+                    {
+                        actionParamEntity4 = new BRActionParamEntity()
+                        {
+                            Id = 0,
+                            RuleAction_Id = action.Id,
+                            ParamType_Id = BRActionParamType.Administrator,
+                            ParamValue = businessRule.Administrators.GetSelectedStr()
+                        };
+                        this.DbContext.BRActionParams.Add(actionParamEntity4);
+                    }
+                    else
+                    {
+                        actionParamEntity4.ParamValue = businessRule.Administrators.GetSelectedStr();
+                    }
+
+                   
+                }
+                this.Commit();
+            }
+            catch (Exception ex)
+            {
+                return ex.Message + " " + (ex.InnerException != null ? ex.InnerException.Message : "");
+            }
+
+            return string.Empty;
+        }
+
         public IList<BusinessRuleModel> GetRules(int customerId)
         {
             var ret = new List<BusinessRuleModel>();
@@ -506,15 +657,22 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                     ret.SubStatusFrom.AddItems(conditionEntity2.FromValue, false);
                     ret.SubStatusTo.AddItems(conditionEntity2.ToValue, false);
                 }
+
+                var conditionEntity3 = this.DbContext.BRConditions.Where(c => c.Rule_Id == ruleId && c.Field_Id == BRFieldType.Domain).FirstOrDefault();
+                if (conditionEntity3!= null)
+                {
+                    ret.DomainFrom = conditionEntity3.FromValue;
+                    ret.DomainTo = conditionEntity3.ToValue;
+                }
                 #endregion
 
                 #region actions
                 char[] _SEPARATOR = {';'};
 
-                var actionEntity = this.DbContext.BRActions.Where(a => a.Rule_Id == ruleId && a.ActionType_Id == BRActionType.SendEmail).FirstOrDefault();
-                if (actionEntity != null)
+                var actionEntitySendEmail = this.DbContext.BRActions.Where(a => a.Rule_Id == ruleId && a.ActionType_Id == BRActionType.SendEmail).FirstOrDefault();
+                if (actionEntitySendEmail != null)
                 {
-                    var actionParams = this.DbContext.BRActionParams.Where(p => p.RuleAction_Id == actionEntity.Id).ToList();
+                    var actionParams = this.DbContext.BRActionParams.Where(p => p.RuleAction_Id == actionEntitySendEmail.Id).ToList();
                     foreach(var param in actionParams)
                     {
                         switch (param.ParamType_Id)
@@ -552,6 +710,24 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         }                    
                     }
                 }
+
+                var actionEntityEditCaseField = this.DbContext.BRActions.Where(a => a.Rule_Id == ruleId && a.ActionType_Id == BRActionType.EditCaseField).FirstOrDefault();
+                if (actionEntityEditCaseField != null)
+                {
+                    var actionParams = this.DbContext.BRActionParams.Where(p => p.RuleAction_Id == actionEntityEditCaseField.Id).ToList();
+                    foreach (var param in actionParams)
+                    {
+                        switch (param.ParamType_Id)
+                        {
+                            
+                            case BRActionParamType.Administrator:
+                                ret.Administrators.AddItems(param.ParamValue, false);
+                                break;
+
+                        }
+                    }
+                }
+
                 #endregion
 
                 return ret;
@@ -580,6 +756,35 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                 .Include(x => x.CreatedByUser)
                 .Where(r => r.Customer_Id == customerId)
                 .OrderBy(x => x.Name).ToList();
+        }
+
+        public void DeleteRule(int ruleId)
+        {
+            var ruleEntity = this.DbContext.BRRules.FirstOrDefault(r => r.Id == ruleId);
+            if (ruleEntity != null)
+            {
+                // Since the ON DELETE CASCADE is not set for action parameters, manually delete them.
+                var actionIds = this.DbContext.BRActions
+                                  .Where(a => a.Rule_Id == ruleId)
+                                  .Select(a => a.Id)
+                                  .ToList();
+
+                var actionParamEntities = this.DbContext.BRActionParams
+                                            .Where(p => actionIds.Contains(p.RuleAction_Id))
+                                            .ToList();
+
+                foreach (var actionParamEntity in actionParamEntities)
+                {
+                    this.DbContext.BRActionParams.Remove(actionParamEntity);
+                }
+
+                // Directly remove the rule. This will cascade and remove related rule actions and conditions.
+                this.DbContext.BRRules.Remove(ruleEntity);
+
+                this.DbContext.SaveChanges();
+            }
+
+            this.Commit();
         }
     }
 }

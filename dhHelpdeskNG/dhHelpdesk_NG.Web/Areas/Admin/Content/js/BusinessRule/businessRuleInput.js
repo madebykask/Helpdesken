@@ -17,12 +17,30 @@
         var elContinueOnSuccess = "#continueOnSuccess";
         var elContinueOnError = "#continueOnError";
         var elIsRuleActive = "#isRuleActive";
+
+        var elCondition1 = "#BRCondition1";
+        var elCondition2 = "#BRCondition2";
+
+        var elBRActionMailTemplate = "#BRActionMailTemplate";
+        var elBRActionEmailGroup = "#BRActionEmailGroup";
+        var elBRActionWorkingGroup = "#BRActionWorkingGroup";
+
+        var elBRActionAdministrator = "#BRActionAdministrator";
+        var elBRActionAdministratorSingleSelect = "#BRActionAdministratorSingleSelect";
+
+        var elBRActionRecipients = "#BRActionRecipients";
+        var elBRActionCreatedBy = "#BRActionCreatedBy";
+        var elBRActionRegistrator = "#BRActionRegistrator";
+        var elBRActionAbout = "#BRActionAbout";
+
         
         var elProcessFromDropDown = "#lstProcessFrom";
         var elProcessToDropDown = "#lstProcessTo";
 
         var elSubStatusFromDropDown = "#lstSubStatusFrom";
         var elSubStatusToDropDown = "#lstSubStatusTo";
+
+        var elDomainEquals = "#lstEquals";
 
         var elEmailTemplatsDropDown = "#lstEmailTemplates";
         var elEmailGroupsDropDown = "#lstEmailGroups";
@@ -43,7 +61,7 @@
             var validator = $form.data("validator");
 
             $.extend(validator.settings, {
-                ignore: ":hidden:not(.BR-chosen-single-select, .BR-chosen-select)",
+                ignore: ":hidden, .ignore-validation",
                 highlight: function (element, errorClass, validClass) {
                     var $element = $(element);
                     if ($element.hasClass("BR-chosen-single-select")
@@ -92,10 +110,13 @@
                 subStatusFrom: "",
                 subStatusTo: "",
 
+                equals: "",
+
                 emailTemplate: 0,
                 emailGroups: "",
                 workingGroups: "",
                 administrators: "",
+                administrator: "",
                 recipients: "",
                 caseCreator: true,
                 initiator: true,
@@ -151,6 +172,15 @@
             data.initiator = $(elInitiator).bootstrapSwitch("state");
             data.caseIsAbout = $(elCaseIsAbout).bootstrapSwitch("state");
 
+            data.customerId = $(elCustomerId).val();
+
+            data.equals = $(elDomainEquals).val();
+
+            $(elBRActionAdministratorSingleSelect + " option:selected").each(function () {
+                data.administrator = $(this).val();
+            });
+
+
             return data;
         };       
       
@@ -175,10 +205,12 @@
                     'data.ProcessTo': data.processTo,
                     'data.SubStatusFrom': data.subStatusFrom,
                     'data.SubStatusTo': data.subStatusTo,
+                    'data.Equals': data.equals,
                     'data.EmailTemplate': data.emailTemplate,
                     'data.EmailGroups': data.emailGroups,
                     'data.WorkingGroups': data.workingGroups,
                     'data.Administrators': data.administrators,
+                    'data.Administrator': data.administrator,
                     'data.Recipients': data.recipients,
                     'data.CaseCreator': data.caseCreator,
                     'data.Initiator': data.initiator,
@@ -200,7 +232,46 @@
             var $form = $("#newRule");
 
             return $form.validate().form();
-        }          
+        }
+
+        dhHelpdesk.businessRule.setupEvent = function () {
+            var selectedValue = $(elEventsDropDown).val();
+
+            if (selectedValue === '1') {
+                $(elCondition1).show();
+                $(elCondition2).hide();
+
+                $(elBRActionAdministratorSingleSelect).hide();
+
+                $(elBRActionMailTemplate).show();
+                $(elBRActionEmailGroup).show();
+                $(elBRActionWorkingGroup).show();
+                $(elBRActionAdministrator).show();
+                $(elBRActionRecipients).show();
+                $(elBRActionCreatedBy).show();
+                $(elBRActionRegistrator).show();
+                $(elBRActionAbout).show();
+
+            } else if (selectedValue === '2') {
+
+                $(elCondition1).hide();
+                $(elCondition2).show();
+
+                $(elBRActionAdministratorSingleSelect).show();
+
+                $(elBRActionMailTemplate).hide();
+                $(elBRActionEmailGroup).hide();
+                $(elBRActionWorkingGroup).hide();
+                $(elBRActionAdministrator).hide();
+                $(elBRActionRecipients).hide();
+                $(elBRActionCreatedBy).hide();
+                $(elBRActionRegistrator).hide();
+                $(elBRActionAbout).hide();
+
+
+
+            }
+        };
 
         dhHelpdesk.businessRule.init = function () {
            
@@ -226,7 +297,13 @@
                 $(evt.target).trigger("focusout");
             });
 
-            $(".BR-text").css("width","335px");
+            $(".BR-text").css("width", "335px");
+
+            $(elEventsDropDown).change(function () {
+                dhHelpdesk.businessRule.setupEvent();
+            });
+
+            dhHelpdesk.businessRule.setupEvent();
            
         }
 
