@@ -29,7 +29,7 @@ namespace DH.Helpdesk.Mail2TicketCSharpBridge
 
 
         
-        public string RunBusinessRules(CaseBridge caseObj)
+        public CaseBridge RunBusinessRules(CaseBridge caseObj)
         {
 
             try
@@ -55,7 +55,7 @@ namespace DH.Helpdesk.Mail2TicketCSharpBridge
 
 
             //Return json string
-            return JsonConvert.SerializeObject(caseObj);
+            return caseObj;
 
 
         }
