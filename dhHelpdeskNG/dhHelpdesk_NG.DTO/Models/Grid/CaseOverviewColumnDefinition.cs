@@ -78,7 +78,14 @@
             
             UserFields.IsAbout_User,
             UserFields.IsAbout_Persons_Name,
+            //New fields to show in case overview - 5.5.0
             UserFields.IsAbout_Persons_CellPhone,
+            UserFields.IsAbout_Persons_Phone,
+            UserFields.IsAbout_CostCentre,
+            UserFields.IsAbout_UserCode,
+            UserFields.IsAbout_Persons_Email,
+            UserFields.IsAbout_Place,
+
             OtherFields.Problem,
             OtherFields.Project  
         };

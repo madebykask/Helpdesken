@@ -361,7 +361,13 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 columns.Add("tblCaseIsAbout.ReportedBy as IsAbout_ReportedBy");
                 columns.Add("tblCaseIsAbout.Person_Name as IsAbout_Persons_Name");
+                //New columns added for IsAbout 5.5.0
                 columns.Add("tblCaseIsAbout.Person_CellPhone as IsAbout_Persons_CellPhone");
+                columns.Add("tblCaseIsAbout.CostCentre as IsAbout_CostCentre");
+                columns.Add("tblCaseIsAbout.UserCode as IsAbout_UserCode");
+                columns.Add("tblCaseIsAbout.Person_Email as IsAbout_Persons_Email");
+                columns.Add("tblCaseIsAbout.Place as IsAbout_Place");
+                columns.Add("tblCaseIsAbout.Person_Phone as IsAbout_Persons_Phone");
                 columns.Add("tblCase.AgreedDate");
 
                 if (customerSettings != null)
