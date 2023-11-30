@@ -635,13 +635,6 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             var result = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsTheftMarkUnique(currentId, value);
             return Json(result, JsonRequestBehavior.AllowGet);
         }
-        //[HttpGet]
-        //[OutputCache(NoStore = true, Duration = 0)]
-        //public JsonResult ValidateComputerName(int currentId, string value)
-        //{
-        //    var result = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsComputerNameUnique(currentId, value);
-        //    return Json(result, JsonRequestBehavior.AllowGet);
-        //}
         [HttpGet]
         [OutputCache(NoStore = true, Duration = 0)]
         public JsonResult ValidateComputerName(int currentId, string value)
@@ -649,14 +642,12 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
             bool isUnique = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsComputerNameUnique(currentId, value);
             if (isUnique)
             {
-                // If the name is unique, return true
                 return Json(true, JsonRequestBehavior.AllowGet);
             }
             else
             {
-                // If the name is not unique, return an error message
-                var errorMessage = string.Format("The name '{0}' is already in use. Please choose a different name.", value);
-                return Json(new { valid = false, message = errorMessage }, JsonRequestBehavior.AllowGet);
+                string errorMessage = string.Concat(" ", Translation.GetCoreTextTranslation("Datornamn"), " ", Translation.GetCoreTextTranslation("måste vara unikt"));
+                return Json(new { valid = false, message = errorMessage, from = "nameCheck" }, JsonRequestBehavior.AllowGet);
             }
         }
 
