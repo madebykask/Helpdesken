@@ -1094,13 +1094,16 @@ Module DH_Helpdesk_Mail
 
                                     Dim isInternalLogUsed As Boolean = CheckInternalLogConditions(iMailID, objCustomer, sFromEMailAddress, sToEMailAddress)
 
+                                    If sExternalCaseNumber <> "" Then
+                                        isInternalLogUsed = False
+                                    End If
+
                                     ' Save Logs (Logga händelsen)
                                     If isInternalLogUsed Then
                                         ' Save as Internal Log (Lägg in som intern loggpost)
                                         iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
 
                                     Else
-
                                         iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", sBodyText, 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
 
                                     End If

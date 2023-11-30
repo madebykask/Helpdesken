@@ -458,7 +458,6 @@ Imports System.Text.RegularExpressions
 
     End Function
 
-
     Public Shared Function ExtractExternalCaseNumberFromSubject(ByVal sSubject As String, ByVal sExternalEMailSubjectPattern As String) As String
         Dim iPosCaseNumber As Integer
         Dim iPos As Integer
