@@ -457,6 +457,10 @@ namespace DH.Helpdesk.Services.Services.Concrete
         {
             return _computerRepository.IsTheftMarkUnique(exceptId, theftMark.Trim());
         }
+        public bool IsComputerNameUnique(int exceptId, string computerName)
+        {
+            return _computerRepository.IsComputerNameUnique(exceptId, computerName.Trim());
+        }
         public void UpdateWorkstationInfo(int id, string info)
         {
             _computerRepository.UpdateInfo(id, info);

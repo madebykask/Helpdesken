@@ -516,8 +516,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         query = query.OrderBy(x => x.Computer.ComputerModel.Name);
                     else if (sortOptions.Name == ComputerFields.SerialNumber)
                         query = query.OrderBy(x => x.Computer.SerialNumber);
-                    else if (sortOptions.Name == ComputerFields.SerialNumber)
-                        query = query.OrderBy(x => x.Computer.SerialNumber);
+                    else if (sortOptions.Name == CommunicationFields.MacAddress)
+                        query = query.OrderBy(x => x.Computer.MACAddress);
                     else if (sortOptions.Name == ComputerFields.BIOSVersion)
                         query = query.OrderBy(x => x.Computer.BIOSVersion);
                     else if (sortOptions.Name == ComputerFields.BIOSDate)
@@ -565,8 +565,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         query = query.OrderByDescending(x => x.Computer.ComputerModel.Name);
                     else if (sortOptions.Name == ComputerFields.SerialNumber)
                         query = query.OrderByDescending(x => x.Computer.SerialNumber);
-                    else if (sortOptions.Name == ComputerFields.SerialNumber)
-                        query = query.OrderByDescending(x => x.Computer.SerialNumber);
+                    else if (sortOptions.Name == CommunicationFields.MacAddress)
+                        query = query.OrderByDescending(x => x.Computer.MACAddress);
                     else if (sortOptions.Name == ComputerFields.BIOSVersion)
                         query = query.OrderByDescending(x => x.Computer.BIOSVersion);
                     else if (sortOptions.Name == ComputerFields.BIOSDate)
@@ -766,6 +766,10 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         public bool IsTheftMarkUnique(int exceptId, string theftMark)
         {
             return !DbSet.Any(w => w.TheftMark.Equals(theftMark, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
+        }
+        public bool IsComputerNameUnique(int exceptId, string computerName)
+        {
+            return !DbSet.Any(w => w.ComputerName.Equals(computerName, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
         }
         public List<ComputerOverview> GetRelatedOverviews(int customerId, string userId)
         {

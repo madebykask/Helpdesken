@@ -166,6 +166,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 		public string BuildCaseSearchSql(SearchQueryBuildContext ctx, bool countOnly = false)
         {
+            //Todo: Always use Contains instead of Like in query except for CaseNumber
             _useFts = ctx.UseFullTextSearch;
 
             var search = ctx.Criterias.Search;
@@ -175,7 +176,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
             var freeTextSearchCte = BuildFreeTextSearchCTEQuery(ctx);
 
-            
             var orderBy = BuildOrderBy(search);
 
             //TODO: remove top 500 limit when true sql side paging is implemented

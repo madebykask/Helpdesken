@@ -30,7 +30,7 @@
                 this.settings.messages[element.name].remote = $(element).attr('data-val-remote');
 
                 param = $(element).attr('data-val-remote-url');
-
+                //console.log(param);
                 if (previous.old === value) {
                     return previous.valid;
                 }
@@ -62,11 +62,16 @@
                             delete validator.invalid[element.name];
                             validator.showErrors();
                         } else {
+                            console.log(response.message);
                             var errors = {};
                             var message = response || validator.defaultMessage(element, "remote");
                             errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
-                            validator.invalid[element.name] = true;
-                            validator.showErrors(errors);
+                            console.log(errors);
+                            //validator.invalid[element.name] = true;
+                            //validator.showErrors(errors);
+                            $("[data-valmsg-for='ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value']")
+                                .addClass("field-validation-error")
+                                .text(response.message);
                         }
                         previous.valid = valid;
                         validator.stopRequest(element, valid);

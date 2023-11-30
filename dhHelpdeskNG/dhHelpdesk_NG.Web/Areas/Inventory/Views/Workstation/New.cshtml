@@ -50,7 +50,8 @@
 
 @section Scripts{
     @Scripts.Render(BundleConfig.ScriptNames.InventoryWorkstation)
-    <script type="text/javascript">
+<script type="text/javascript">
+            
         window.parameters = (window.parameters == null ? {} : window.parameters);
         window.parameters.fileUploadWhiteList = [];
 
@@ -70,16 +71,19 @@
 
         $(function(jQuery) {
             $('#@Html.IdFor(m => m.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
-                .attr("data-val-remote",
-                    '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                .attr("data-val-remote",'@string.Format(" {0} {1}", Html.PureFieldCaption(Model.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
             $('#@Html.IdFor(m => m.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
                 .attr("data-val-remote-url", '@Url.Action("ValidateMacAddress", "Workstation")');
 
             $('#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
-                .attr("data-val-remote",
-                    '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark), Translation.GetCoreTextTranslation("måste vara unikt"))');
             $('#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
                 .attr("data-val-remote-url", '@Url.Action("ValidateTheftmark", "Workstation")');
+
+            $('#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)')
+                .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.WorkstationFieldsViewModel.WorkstationFieldsModel.Name), Translation.GetCoreTextTranslation("måste vara unikt"))');
+            $('#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)')
+                 .attr("data-val-remote-url", '@Url.Action("ValidateComputerName", "Workstation")');
 
             if (typeof WorkstationEdit !== 'undefined') {
                 window.workstationEdit = new WorkstationEdit($);
@@ -93,7 +97,7 @@
                 });
             }
         });
-    </script>
+</script>
 
     @if (Model.ContractFieldsViewModel.ContractFieldsModel.Document.Show)
     {

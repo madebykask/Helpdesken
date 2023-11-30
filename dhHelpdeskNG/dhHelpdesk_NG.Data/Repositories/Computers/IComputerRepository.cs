@@ -56,5 +56,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers
         int? GetComputerTypeById(int id);
         bool IsMacAddressUnique(int exceptId, string macAddress);
         bool IsTheftMarkUnique(int exceptId, string theftMark);
+        bool IsComputerNameUnique(int exceptId, string computerName);
     }
 }
