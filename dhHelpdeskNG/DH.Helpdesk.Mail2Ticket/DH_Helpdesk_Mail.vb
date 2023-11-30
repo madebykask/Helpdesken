@@ -1702,6 +1702,15 @@ Module DH_Helpdesk_Mail
                 'Ta bort tempkatalogen / delete temp dir
                 If Directory.Exists(tempDirPath) = True Then
                     Directory.Delete(tempDirPath, True)
+                    ' Get the parent directory info
+                    Dim di As New DirectoryInfo(tempDirPath)
+                    If di.Parent IsNot Nothing Then
+                        ' Check if the parent directory exists
+                        If di.Parent.Exists Then
+                            ' Delete the parent directory and all its contents
+                            di.Parent.Delete(True)
+                        End If
+                    End If
                 End If
                 files.Add(sFilePath)
             End If
