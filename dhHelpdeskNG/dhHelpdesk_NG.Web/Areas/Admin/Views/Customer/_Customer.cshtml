@@ -280,7 +280,7 @@
                     @Translation.Get("Nyckelord koppla rubrik externt")
                 </td>
                 <td>
-                    @Html.TextBoxFor(model => model.Setting.ExternalEMailSubjectPattern, new { maxlength = "1000", style = "width: 600px;" })
+                    @Html.TextAreaFor(model => model.Setting.ExternalEMailSubjectPattern, new { maxlength = "1000", style = "width: 600px;" })
 
                 </td>
             </tr>
