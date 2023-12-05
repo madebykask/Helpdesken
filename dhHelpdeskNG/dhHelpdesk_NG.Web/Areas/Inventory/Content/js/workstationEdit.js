@@ -61,13 +61,23 @@
                             delete validator.invalid[element.name];
                             validator.showErrors();
                         } else {
-                            var errors = {};
-                            var message = response || validator.defaultMessage(element, "remote");
-                            errors[element.name] = previous.message = $.isFunction(message) ? message(value) : message;
-                            validator.invalid[element.name] = true;
-                            validator.showErrors(errors);
                             if (response.from === 'nameCheck') {
                                 $("[data-valmsg-for='WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value']")
+                                    .addClass("field-validation-error")
+                                    .text(response.message);
+                            }
+                            if (response.from === 'macAddress') {
+                                $("[data-valmsg-for='CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value']")
+                                    .addClass("field-validation-error")
+                                    .text(response.message);
+                            }
+                            if (response.from === 'theftMark') {
+                                $("[data-valmsg-for='WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value']")
+                                    .addClass("field-validation-error")
+                                    .text(response.message);
+                            }
+                            if (response.from === 'ipAddress') {
+                                $("[data-valmsg-for='CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value']")
                                     .addClass("field-validation-error")
                                     .text(response.message);
                             }

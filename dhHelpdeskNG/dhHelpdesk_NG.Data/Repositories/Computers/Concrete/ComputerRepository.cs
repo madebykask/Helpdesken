@@ -788,6 +788,10 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         {
             return !DbSet.Any(w => w.TheftMark.Equals(theftMark, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
         }
+        public bool IsIpAddressUnique(int exceptId, string ipAddress)
+        {
+            return !DbSet.Any(w => w.IPAddress.Equals(ipAddress, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
+        }
         public bool IsComputerNameUnique(int exceptId, string computerName)
         {
             return !DbSet.Any(w => w.ComputerName.Equals(computerName, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);

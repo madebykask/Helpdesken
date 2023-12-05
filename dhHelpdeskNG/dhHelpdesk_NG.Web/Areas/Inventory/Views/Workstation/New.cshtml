@@ -51,7 +51,7 @@
 @section Scripts{
     @Scripts.Render(BundleConfig.ScriptNames.InventoryWorkstation)
 <script type="text/javascript">
-            
+
         window.parameters = (window.parameters == null ? {} : window.parameters);
         window.parameters.fileUploadWhiteList = [];
 
@@ -83,7 +83,12 @@
             $('#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)')
                 .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.WorkstationFieldsViewModel.WorkstationFieldsModel.Name), Translation.GetCoreTextTranslation("måste vara unikt"))');
             $('#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)')
-                 .attr("data-val-remote-url", '@Url.Action("ValidateComputerName", "Workstation")');
+                .attr("data-val-remote-url", '@Url.Action("ValidateComputerName", "Workstation")');
+
+            $('#@Html.IdFor(m => m.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value)')
+                .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
+            $('#@Html.IdFor(m => m.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value)')
+                 .attr("data-val-remote-url", '@Url.Action("ValidateIpAddress", "Workstation")');
 
             if (typeof WorkstationEdit !== 'undefined') {
                 window.workstationEdit = new WorkstationEdit($);

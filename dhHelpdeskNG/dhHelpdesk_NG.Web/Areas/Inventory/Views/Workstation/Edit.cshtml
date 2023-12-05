@@ -172,8 +172,13 @@
                 $('#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)')
                      .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Name), Translation.GetCoreTextTranslation("måste vara unikt"))');
                 $('#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)')
-                     .attr("data-val-remote-url", '@Url.Action("ValidateComputerName", "Workstation")');
-                
+                    .attr("data-val-remote-url", '@Url.Action("ValidateComputerName", "Workstation")');
+
+                $('#@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value)')
+                    .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                $('#@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value)')
+                    .attr("data-val-remote-url", '@Url.Action("ValidateIpAddress", "Workstation")');
+
                 window.workstationEdit = new WorkstationEdit($);
                 window.workstationEdit.init({
                     id: @Model.Id,
@@ -185,6 +190,7 @@
                     validateMacAddressUrl: '@Url.Action("ValidateMacAddress", "Workstation")',
                     validateTheftMarkUrl: '@Url.Action("ValidateTheftmark", "Workstation")',
                     validateComputerNameUrl: '@Url.Action("ValidateComputerName", "Workstation")',
+                    validateIpAddressUrl: '@Url.Action("ValidateIpAddress", "Workstation")',
                     copyUrl: '@Url.Action("Copy", "Workstation")',
                     fieldsIds: {
                         'MacAddressId':
@@ -192,7 +198,9 @@
                         'TheftMarkId':
                             '@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)',
                         'ComputerNameId':
-                             '@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)'
+                            '@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)',
+                        'IPAddressId':
+                            '@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value)',
                     },
                 });
 

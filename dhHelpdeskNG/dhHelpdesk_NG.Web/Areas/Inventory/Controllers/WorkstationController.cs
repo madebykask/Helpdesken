@@ -624,16 +624,49 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         public JsonResult ValidateMacAddress(int currentId, string value)
         {
             if (string.IsNullOrWhiteSpace(value)) return Json(true, JsonRequestBehavior.AllowGet);
+            bool isUnique = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsMacAddressUnique(currentId, value);
+            if (isUnique)
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                string errorMessage = string.Concat(" ", Translation.GetCoreTextTranslation("Macadress"), " ", Translation.GetCoreTextTranslation("måste vara unikt"));
+                return Json(new { valid = false, message = errorMessage, from = "macAddress" }, JsonRequestBehavior.AllowGet);
+            }
 
-            var result = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsMacAddressUnique(currentId, value);
-            return Json(result, JsonRequestBehavior.AllowGet);
         }
         [HttpGet]
         [OutputCache(NoStore = true, Duration = 0)]
         public JsonResult ValidateTheftmark(int currentId, string value)
         {
-            var result = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsTheftMarkUnique(currentId, value);
-            return Json(result, JsonRequestBehavior.AllowGet);
+            bool isUnique = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsTheftMarkUnique(currentId, value);
+            if (isUnique)
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                string errorMessage = string.Concat(" ", Translation.GetCoreTextTranslation("Stöldmärkning"), " ", Translation.GetCoreTextTranslation("måste vara unikt"));
+                return Json(new { valid = false, message = errorMessage, from = "theftMark" }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        [HttpGet]
+        [OutputCache(NoStore = true, Duration = 0)]
+        public JsonResult ValidateIpAddress(int currentId, string value)
+        {
+            bool isUnique = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsIpAddressUnique(currentId, value);
+            if (isUnique)
+            {
+                return Json(true, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                string errorMessage = string.Concat(" ", Translation.GetCoreTextTranslation("IP adress"), " ", Translation.GetCoreTextTranslation("måste vara unikt"));
+                return Json(new { valid = false, message = errorMessage, from = "ipAddress" }, JsonRequestBehavior.AllowGet);
+            }
+
         }
         [HttpGet]
         [OutputCache(NoStore = true, Duration = 0)]
