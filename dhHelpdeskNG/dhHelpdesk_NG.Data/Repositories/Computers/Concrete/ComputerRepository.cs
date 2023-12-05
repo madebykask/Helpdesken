@@ -525,6 +525,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         query = query.OrderBy(x => x.Computer.SerialNumber);
                     else if (sortOptions.Name == CommunicationFields.MacAddress)
                         query = query.OrderBy(x => x.Computer.MACAddress);
+                    else if (sortOptions.Name == CommunicationFields.IPAddress)
+                        query = query.OrderBy(x => x.Computer.IPAddress);
                     else if (sortOptions.Name == ComputerFields.BIOSVersion)
                         query = query.OrderBy(x => x.Computer.BIOSVersion);
                     else if (sortOptions.Name == ComputerFields.BIOSDate)
@@ -584,6 +586,8 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         query = query.OrderByDescending(x => x.Computer.SerialNumber);
                     else if (sortOptions.Name == CommunicationFields.MacAddress)
                         query = query.OrderByDescending(x => x.Computer.MACAddress);
+                    else if (sortOptions.Name == CommunicationFields.IPAddress)
+                        query = query.OrderByDescending(x => x.Computer.IPAddress);
                     else if (sortOptions.Name == ComputerFields.BIOSVersion)
                         query = query.OrderByDescending(x => x.Computer.BIOSVersion);
                     else if (sortOptions.Name == ComputerFields.BIOSDate)
