@@ -130,8 +130,8 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         Id = 0,
                         Rule_Id = businessRule.Id,
                         Field_Id = BRFieldType.Domain,
-                        FromValue = businessRule.DomainFrom,
-                        ToValue = businessRule.DomainTo,
+                        FromValue = businessRule.DomainFrom == null ? "": businessRule.DomainFrom,
+                        ToValue = businessRule.DomainTo == null ? "" : businessRule.DomainTo,
                         Sequence = 3
                     };
                     this.DbContext.BRConditions.Add(conditionEntity3);
