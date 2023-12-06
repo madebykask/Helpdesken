@@ -17,11 +17,7 @@ Public Class ProductAreaData
                 sSQL = sSQL & " and (pa.Parent_ProductArea_Id =" & ParentId.ToString() & ")"
             End If
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Return New ProductArea(dt.Rows(0))

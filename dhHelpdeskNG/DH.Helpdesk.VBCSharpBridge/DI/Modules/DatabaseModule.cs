@@ -78,6 +78,8 @@ namespace DH.Helpdesk.VBCSharpBridge.DI.Modules
             Bind<IBusinessModelToEntityMapper<CaseNotifier, ComputerUser>>()
                 .To<CaseNotifierToEntityMapper>()
                 .InSingletonScope();
+
+           
         }
     }
 }

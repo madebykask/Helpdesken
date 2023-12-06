@@ -15,11 +15,7 @@ Public Class QuestionnaireData
 
             Dim dt As DataTable
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             For Each dr In dt.Rows
                 q = New Questionnaire(dr)
@@ -56,12 +52,7 @@ Public Class QuestionnaireData
                         q.Selection & ", " & _
                         q.Filter & ", 1)"
 
-
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
 
             qc = getQuestionnaireCircularById(GUID.ToString())
 
@@ -88,11 +79,7 @@ Public Class QuestionnaireData
                    "FROM tblQuestionnaireCircular " & _
                     "WHERE GUID='" & sGUID & "'"
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim qc As QuestionnaireCircular
@@ -124,11 +111,7 @@ Public Class QuestionnaireData
                         "INNER JOIN tblCase ON tblQuestionnaireCircularPart.Case_Id=tblCase.Id " & _
                     "WHERE GUID='" & sGUID & "'"
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim qcp As QuestionnaireCircularPart
@@ -206,11 +189,7 @@ Public Class QuestionnaireData
 
             Dim dt As DataTable
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             Dim qcp As QuestionnaireCircularPart
 
@@ -247,12 +226,7 @@ Public Class QuestionnaireData
                         qcpnew.QuestionnaireCircular_Id & ", " & _
                         qcpnew.Case_Id & ")"
 
-
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
 
             qcp = getQuestionnaireCircularPartById(qcpnew.GUID.ToString())
 

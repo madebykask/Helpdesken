@@ -52,53 +52,6 @@ Public Class LogData
 
                 ' Skapa loggpost
                 iLogId = DbHelper.executeScalarQuery(Of Integer)(gsConnectionString, sSql, CommandType.Text, sqlParameters.ToArray())
-                
-                #Region "Old implementation"
-                'Dim dt As DataTable
-                'Dim sGuid = logGuid.ToString()
-                'sSQL = "INSERT INTO tblLog(LogGUID, Case_Id, LogDate, Text_Internal, Text_External, LogType, RegUser, CaseHistory_Id, FinishingType, FinishingDate, RegTime, ChangeTime) " & _
-                '            "VALUES(" & _
-                '                getDBStringPrefix() & "'" & _
-                '                sGUID.ToString & "', " & _
-                '                Case_Id & ", " & _
-                '                "getutcdate(), " & _
-                '                getDBStringPrefix() & "'" & Replace(Left(InternalLogText, 2850), "'", "''") & "', " & _
-                '                getDBStringPrefix() & "'" & Replace(Left(ExternalLogText, 2850), "'", "''") & "', " & _
-                '                iLogType & ", " & _
-                '                getDBStringPrefix() & "'" & Replace(sRegUser, "'", "''") & "', " & _
-                '                iCaseHistory_Id & ", "
-
-                'If iFinishingCause_Id <> 0 Then
-                '    sSQL = sSQL & iFinishingCause_Id & ", getutcdate(), "
-                'Else
-                '    sSQL = sSQL & "null, null, "
-                'End If
-
-                'sSQL = sSQL & "getutcDate(), getutcDate())"
-
-                ''If giDBType = 0 Then
-                'executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
-
-                'sSQL = "SELECT tblLog.Id " & _
-                '                   "FROM tblLog " & _
-                '                   "WHERE LogGUID='" & sGUID.ToString & "'"
-
-
-                ''If giDBType = 0 Then
-                'dt = getDataTable(gsConnectionString, sSQL)
-                ''Else
-                ''    dt = getDataTableOracle(gsConnectionString, sSQL)
-                ''End If
-
-                'If dt.Rows.Count = 0 Then
-                '    iLogId = 0
-                'Else
-                '    iLogId = dt.Rows(0)("Id")
-                'End If
-                #End Region
 
             End If
 
@@ -126,11 +79,7 @@ Public Class LogData
                       dtSendTime.ToString("yyyy-MM-dd HH:mm:ss") & "', " & _
                       getDBStringPrefix() & "'" & sResponseMessage & "')"
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
 
         Catch ex As Exception
             If giLoglevel > 0 Then
@@ -152,16 +101,13 @@ Public Class LogData
             sSQL = "INSERT INTO tblLogFile(Log_Id, FileName, LogType) " &
                    "VALUES (@logId, @fileName, @logType)"
 
-            'If giDBType = 0 Then
             Dim parameters As New List(Of SqlParameter) From {
                     DbHelper.createDbParameter("@logId", iLog_Id),
                     DbHelper.createDbParameter("@fileName", sFileNameNormalized, False, DbType.String, 200),
                     DbHelper.createDbParameter("@logType", iLogType)
             }
             DbHelper.executeNonQuery(gsConnectionString, sSQL, CommandType.Text, parameters.ToArray())
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
+
         Catch ex As Exception
             Throw ex
         End Try

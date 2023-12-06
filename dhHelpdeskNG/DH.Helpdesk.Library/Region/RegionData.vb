@@ -26,11 +26,7 @@ Public Class RegionData
                    "WHERE Customer_Id = " & iCustomer_Id & _
                         "AND UPPER(SearchKey) = '" & UCase(name) & "'"
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Return New Region(dt.Rows(0))
@@ -53,11 +49,7 @@ Public Class RegionData
                    "FROM tblRegion " & _
                    "WHERE Customer_Id = " & iCustomer_Id
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             For Each dr As DataRow In dt.Rows
                 Dim d As Region = New Region(dr)
@@ -78,11 +70,7 @@ Public Class RegionData
             sSQL = " INSERT INTO tblRegion(Customer_Id, Region, SearchKey, Status) VALUES (" & iCustomer_Id & ", '" & name & "','" & name & "', 1)"
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If

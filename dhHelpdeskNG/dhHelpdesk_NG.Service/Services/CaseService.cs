@@ -998,7 +998,7 @@ namespace DH.Helpdesk.Services.Services
         {
             var ret = new List<BusinessRuleActionModel>();
 
-            if (currentCase.Id == 0)
+            if (currentCase.Id == 0 && occurredEvent != BREventType.OnCreateCaseM2T )
                 return ret;
 
             var customerId = currentCase.Customer_Id;

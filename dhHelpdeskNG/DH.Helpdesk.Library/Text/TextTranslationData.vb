@@ -11,11 +11,7 @@ Public Class TextTranslationData
                         "INNER JOIN tblTextTranslation ON tblText.Id = tblTextTranslation.Text_Id " & _
                     "WHERE tblText.TextString like '" & sText & "' AND Language_Id=" & iLanguage_Id
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim dr As DataRow = dt.Rows(0)

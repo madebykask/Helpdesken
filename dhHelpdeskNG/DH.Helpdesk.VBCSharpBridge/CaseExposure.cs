@@ -58,7 +58,7 @@ namespace DH.Helpdesk.VBCSharpBridge
 
             return new Case()
             {
-                Id = caseBridge.Id,
+                Customer_Id = caseBridge.Customer_Id,
                 RegUserDomain = caseBridge.FromEmail,
             };
             

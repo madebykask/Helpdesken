@@ -27,11 +27,7 @@ Public Class ComputerData
                 objLogFile.WriteLine(Now() & ", ComputerData.getComputerByName, " & sSQL)
             End If
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim c As Computer
@@ -348,11 +344,7 @@ Public Class ComputerData
                     "FROM tblComputerFieldSettings " & _
                     "WHERE LOWER(ComputerField) = '" & LCase(sXMLElement) & "'"
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim dr As DataRow = dt.Rows(0)
@@ -396,11 +388,7 @@ Public Class ComputerData
                 objLogFile.WriteLine(Now() & ", ComputerData.create, " & sSQL)
             End If
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
 
             Return getComputerByName(ComputerName, iCustomer_id, iComputerRole)
         Catch ex As Exception
@@ -528,11 +516,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -546,11 +530,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -578,11 +558,7 @@ Public Class ComputerData
                 End If
 
                 If gsURL = "" Then
-                    'If giDBType = 0 Then
                     executeSQL(gsConnectionString, sSQL)
-                    'Else
-                    '    executeSQLOracle(gsConnectionString, sSQL)
-                    'End If
                 Else
                     executeSQLHTTP(sSQL)
                 End If
@@ -597,11 +573,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -627,11 +599,7 @@ Public Class ComputerData
                 End If
 
                 If gsURL = "" Then
-                    'If giDBType = 0 Then
                     executeSQL(gsConnectionString, sSQL)
-                    'Else
-                    '    executeSQLOracle(gsConnectionString, sSQL)
-                    'End If
                 Else
                     executeSQLHTTP(sSQL)
                 End If
@@ -647,11 +615,7 @@ Public Class ComputerData
                     sSQL = "DELETE FROM tblComputer_tblInventory WHERE Computer_Id=" & objComputer.Id & " AND Inventory_Id IN (SELECT tblInventory.Id FROM tblInventory INNER JOIN tblComputer_tblInventory ON tblInventory.Id = tblComputer_tblInventory.Inventory_Id WHERE Computer_Id=" & objComputer.Id & " AND tblInventory.InventoryType_Id=" & objInventoryType.Id & ")"
 
                     If gsURL = "" Then
-                        'If giDBType = 0 Then
                         executeSQL(gsConnectionString, sSQL)
-                        'Else
-                        '    executeSQLOracle(gsConnectionString, sSQL)
-                        'End If
                     Else
                         executeSQLHTTP(sSQL)
                     End If
@@ -673,11 +637,7 @@ Public Class ComputerData
                         End If
 
                         If gsURL = "" Then
-                            'If giDBType = 0 Then
                             executeSQL(gsConnectionString, sSQL)
-                            'Else
-                            '    executeSQLOracle(gsConnectionString, sSQL)
-                            'End If
                         Else
                             executeSQLHTTP(sSQL)
                         End If
@@ -694,11 +654,7 @@ Public Class ComputerData
                         End If
 
                         If gsURL = "" Then
-                            'If giDBType = 0 Then
                             executeSQL(gsConnectionString, sSQL)
-                            'Else
-                            '    executeSQLOracle(gsConnectionString, sSQL)
-                            'End If
                         Else
                             executeSQLHTTP(sSQL)
                         End If
@@ -714,11 +670,7 @@ Public Class ComputerData
                     End If
 
                     If gsURL = "" Then
-                        'If giDBType = 0 Then
                         executeSQL(gsConnectionString, sSQL)
-                        'Else
-                        '    executeSQLOracle(gsConnectionString, sSQL)
-                        'End If
                     Else
                         executeSQLHTTP(sSQL)
                     End If
@@ -747,11 +699,7 @@ Public Class ComputerData
                     "WHERE Customer_Id=" & iCustomer_Id & _
                         " AND XMLElement IS NOT NULL "
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             Dim it As InventoryType
 
@@ -804,11 +752,7 @@ Public Class ComputerData
                 sSQL = sSQL & " AND LOWER(InventoryModel) = '" & LCase(objInventory.InventoryModel) & "' "
             End If
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim dr As DataRow = dt.Rows(0)
@@ -848,11 +792,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -864,11 +804,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -880,11 +816,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -896,11 +828,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -912,11 +840,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -928,11 +852,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -954,11 +874,7 @@ Public Class ComputerData
             sSQL = "DELETE FROM tblApplication WHERE Id NOT IN (SELECT Application_Id FROM tblProduct_tblApplication)"
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -974,11 +890,7 @@ Public Class ComputerData
 
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
