@@ -62,11 +62,12 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         query.Where(c => c.InventoryType_Id == inventoryId) :
                         query.Where(c => c.InventoryType_Id == null);
 
-            return query.Select(c => new ItemOverview
-                    {
-                        Name = c.Name,
-                        Value = c.Id.ToString()
-                    }).ToList();
+            return query.OrderBy(c => c.Name)  // Adding OrderBy clause here
+                        .Select(c => new ItemOverview
+                        {
+                            Name = c.Name,
+                            Value = c.Id.ToString()
+                        }).ToList();
         }
     }
 }
