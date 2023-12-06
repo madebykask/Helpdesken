@@ -8588,5 +8588,20 @@ If not exists (select * from tblTextTranslation where text_id = 20000 and Langua
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(20000, 2, 'Start of customer generated ID:s (ignore)')
 GO
 
+-- Generate translations for BusinessRules
+If not exists (select * from tbltext where id = 2169)
+	insert into tbltext (id, TextString) VALUES (2169, 'Domän/E-postmönster')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2169 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2169, 2, 'Domain/Email pattern')
+GO
+
+If not exists (select * from tbltext where id = 2170)
+	insert into tbltext (id, TextString) VALUES (2170, 'Ange en domän (t.ex. "gmail.com") eller specifika e-postadresser separerade med semikolon (t.ex. "user@example.com; another@example.com").')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2170 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2170, 2, 'Enter a domain (e.g., "gmail.com") or specific email addresses separated by semicolons (e.g., "user@example.com; another@example.com").')
+GO
+
 -- *** Run this last when put translation script above this line *** --
 update tblTextTranslation set CreatedDate = GETDATE(), ChangedDate  = GETDATE() where CreatedDate is null
