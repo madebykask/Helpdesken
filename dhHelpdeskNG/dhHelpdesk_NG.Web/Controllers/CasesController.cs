@@ -1491,10 +1491,16 @@ namespace DH.Helpdesk.Web.Controllers
                     var basePath = _masterDataService.GetFilePath(caseToUpdate.Customer_Id);
                     var caseHistoryId = _caseService.SaveCase(caseToUpdate, caseLog, SessionFacade.CurrentUser.Id, User.Identity.Name, new CaseExtraInfo(), out errors);
                     caseLog.CaseHistoryId = caseHistoryId;
+                    
                     var logId = _logService.SaveLog(caseLog, 0, out errors);
                     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
                     // send emails
                     _caseService.SendCaseEmail(caseToUpdate.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser);
+                    
+
+                    var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, caseToUpdate, oldCase);
+                    if (actions.Any())
+                        _caseService.ExecuteBusinessActions(actions, caseToUpdate.Id, caseLog, userTimeZone, caseHistoryId, basePath, SessionFacade.CurrentLanguageId, caseMailSetting, null);
                 }
 
                 //if (caseLockViewModel.IsLocked && !string.IsNullOrEmpty(caseLockViewModel.LockGUID))
@@ -4272,6 +4278,7 @@ namespace DH.Helpdesk.Web.Controllers
                         ParentLogType = x.IsExistCaseFile ? (LogFileType?)null : x.LogType
                     })
                 .ToList();
+            
             allLogFiles.AddRange(newLogFiles);
 
             if (!disableLogFileView.Active)
@@ -4340,7 +4347,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             // send emails
             _caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, allLogFiles, currentLoggedInUser);
-
+             
             var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, case_, oldCase);
             if (actions.Any())
                 _caseService.ExecuteBusinessActions(actions, case_.Id, caseLog, userTimeZone, caseHistoryId, basePath, SessionFacade.CurrentLanguageId, caseMailSetting, allLogFiles);
@@ -4348,7 +4355,7 @@ namespace DH.Helpdesk.Web.Controllers
             //Unlock Case            
             if (m.caseLock != null && !string.IsNullOrEmpty(m.caseLock.LockGUID))
                 _caseLockService.UnlockCaseByGUID(new Guid(m.caseLock.LockGUID));
-
+            
             // delete temp folders                
             _userTemporaryFilesStorage.ResetCacheForObject(case_.Id);
             _userTemporaryFilesStorage.ResetCacheForObject(case_.CaseGUID.ToString());

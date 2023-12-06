@@ -210,8 +210,8 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                     }
                     else
                     {
-                        conditionEntity3.FromValue = businessRule.DomainFrom;
-                        conditionEntity3.ToValue = businessRule.DomainTo;
+                        conditionEntity3.FromValue = businessRule.DomainFrom == null ? "" : businessRule.DomainFrom;
+                        conditionEntity3.ToValue = businessRule.DomainTo == null ? "" : businessRule.DomainTo;
                     }
                     #endregion
                 }
