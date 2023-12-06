@@ -21,6 +21,7 @@ using DH.Helpdesk.Domain.Computers;
 using DH.Helpdesk.Domain.GDPR;
 using DH.Helpdesk.Services.BusinessLogic.Gdpr;
 using Ninject.Modules;
+using System.Configuration;
 using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 using UnitOfWork = DH.Helpdesk.Dal.Infrastructure.UnitOfWork;
 
@@ -38,7 +39,11 @@ namespace DH.Helpdesk.VBCSharpBridge.DI.Modules
 #pragma warning disable 0618
             Bind<IUnitOfWork>().To<UnitOfWork>();
 #pragma warning restore 0618
-            Bind<IDatabaseFactory>().To<DatabaseFactory>();
+
+
+
+
+            Bind<IDatabaseFactory>().To<DatabaseFactory>().WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["Helpdesk"].ToString());
             
             Bind<ISessionFactory>().To<HelpdeskSessionFactory>();
             Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>();

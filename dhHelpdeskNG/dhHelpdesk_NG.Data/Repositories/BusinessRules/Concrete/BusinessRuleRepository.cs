@@ -739,7 +739,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
         public IList<BusinessRuleModel> GetRules(int customerId, BREventType occurredEvent)
         {
             var ret = new List<BusinessRuleModel>();
-            var ruleEntities = this.DbContext.BRRules.Where(r => r.Customer_Id == customerId && r.Event_Id == (int)occurredEvent).ToList();
+            var ruleEntities = this.DbContext.BRRules.Where(r => r.Customer_Id == customerId && r.Event_Id == (int)occurredEvent).OrderBy(x => x.Sequence).ToList();
             foreach (var ruleEntity in ruleEntities)
                 ret.Add(GetRule(ruleEntity.Id));
 
