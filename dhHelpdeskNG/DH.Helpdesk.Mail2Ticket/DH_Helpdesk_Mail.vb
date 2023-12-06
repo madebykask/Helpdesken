@@ -1487,7 +1487,13 @@ Module DH_Helpdesk_Mail
                                 End If
 
                             Else
-                                Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), fileAttach.Name, fileAttach.ContentType)
+                                Dim invalidChars As String = New String(Path.GetInvalidFileNameChars()) + New String(Path.GetInvalidPathChars())
+                                Dim sanitizedFileName As String = fileAttach.Name
+
+                                For Each c As Char In invalidChars
+                                    sanitizedFileName = sanitizedFileName.Replace(c.ToString(), "")
+                                Next
+                                Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), sanitizedFileName, fileAttach.ContentType)
                                 If Not fileAttach.ContentId Is Nothing Then
                                     newResource.ContentId = fileAttach.ContentId
                                 End If
