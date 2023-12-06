@@ -86,7 +86,7 @@
                       data-original-title='@Translation.GetCoreTextTranslation("Enter a domain (e.g., 'gmail.com') or specific email addresses separated by semicolons (e.g., 'user@example.com; another@example.com').")'></span>
             </td>
             <td>
-                @Html.TextBoxFor(m => Model.Equals, new { id = "lstEquals", @class = "BR-text" })
+                @Html.TextAreaFor(m => Model.Equals, new { id = "lstEquals", @class = "BR-text" })
             </td>
             <td></td>
 
