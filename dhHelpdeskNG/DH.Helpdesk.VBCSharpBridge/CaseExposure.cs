@@ -32,12 +32,8 @@ namespace DH.Helpdesk.VBCSharpBridge
                 var caseEntity = MapCaseBridgeToCase(caseObj);
 
                 // Run the business rules
-                var actions = _caseService.CheckBusinessRules(BREventType.OnCreateCaseM2T, caseEntity, null);
-                if (actions.Any())
-                { 
-                    //Fix this for the execution
-                    //_caseService.ExecuteBusinessActions(actions, currentCase.Id, caseLog, userTimeZone, caseHistoryId, basePath, langId, caseMailSetting, allLogFiles);
-                }
+                caseEntity = _caseService.ExecuteBusinessActionsM2T(caseEntity);
+                caseObj.Performer_User_Id = caseEntity.Performer_User_Id;
 
             }
             catch (Exception ex)

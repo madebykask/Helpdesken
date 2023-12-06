@@ -804,12 +804,7 @@ Module DH_Helpdesk_Mail
 
                                         ' Call the ProcessCase method
                                         Dim result As CaseBridge = caseProcessor.RunBusinessRules(caseBridge)
-
-
-
-                                        Console.WriteLine(result)
-                                        Console.ReadLine()
-
+                                        objCase.Performer_User_Id = result.Performer_User_Id
 
                                         objCase = objCaseData.createCase(objCase)
                                     Catch ex As Exception
