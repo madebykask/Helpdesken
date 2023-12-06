@@ -9,6 +9,6 @@ namespace DH.Helpdesk.VBCSharpBridge.Interfaces
 {
     public interface ICaseExposure
     {
-        string RunBusinessRules(CaseBridge caseObj);
+        CaseBridge RunBusinessRules(CaseBridge caseObj);
     }
 }

@@ -22,7 +22,7 @@ namespace DH.Helpdesk.VBCSharpBridge
 
 
         
-        public string RunBusinessRules(CaseBridge caseObj)
+        public CaseBridge RunBusinessRules(CaseBridge caseObj)
         {
 
             try
@@ -48,7 +48,7 @@ namespace DH.Helpdesk.VBCSharpBridge
 
 
             //Return json string
-            return JsonConvert.SerializeObject(caseObj);
+            return caseObj;
 
 
         }
