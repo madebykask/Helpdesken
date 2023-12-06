@@ -1674,7 +1674,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             return (_useFts)
                 ? BuildFTSContainsExpession(field, text, tableAlias, useWildcard)
-                : BuildLikeContainsExpession(field, text, tableAlias);
+                : BuildFTSContainsExpession(field, text, tableAlias, useWildcard);
         }
 
         private string BuildFTSContainsExpession(string field, string text, string tableAlias = "", bool useWildcard = true)
