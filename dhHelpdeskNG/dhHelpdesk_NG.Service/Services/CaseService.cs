@@ -998,7 +998,7 @@ namespace DH.Helpdesk.Services.Services
         {
             var ret = new List<BusinessRuleActionModel>();
 
-            if (currentCase.Id == 0 && occurredEvent != BREventType.OnCreateCaseM2T )
+            if (currentCase.Id == 0)
                 return ret;
 
             var customerId = currentCase.Customer_Id;
@@ -1025,6 +1025,45 @@ namespace DH.Helpdesk.Services.Services
                         break;
                 }
             }
+        }
+
+        public Case ExecuteBusinessActionsM2T(Case caseEntity)
+        {
+
+            var rules = _businessRuleService.GetRuleReadlist(caseEntity.Customer_Id);
+
+            if (rules.Count > 0) {
+                rules = rules.Where(x => x.Event == BREventType.OnCreateCaseM2T && x.RuleActive == true).ToList();
+            
+            }
+
+            foreach (var rule in rules)
+            {
+                var r = _businessRuleService.GetRule(rule.Id);
+
+                if (r.DomainFrom != "" && r.Administrators.Count > 0) {
+                    string[] values = r.DomainFrom.Split(';');
+                    if (Array.Exists(values, value => value.Trim() == caseEntity.RegUserDomain)) {
+                        caseEntity.Performer_User_Id = r.Administrators[0];
+                    }
+                }
+
+            //    if (rule.EventId == BRActionType.EditCaseField && rule.RuleActive == true) {
+                    
+
+            //        if (rule.DomainFrom  != "") { 
+                        
+            //        }
+            //    }
+            //    //switch (rule.ActionType)
+            //    //{
+            //    //    case BRActionType.EditCaseField:
+                        
+            //    //        break;
+            //    //}
+            }
+
+            return caseEntity;
         }
 
         public IList<Case> GetTop100CasesForTest()
@@ -1878,7 +1917,7 @@ namespace DH.Helpdesk.Services.Services
             if (processCondition && subStatusCondition)
             {
                 // TODO: we only have send mail action, in the future it must accept dynamic actions 
-                var newAction = new BusinessRuleActionModel(rule.Id, BRActionType.SendEmail);
+                var newAction = new BusinessRuleActionModel(rule.Id, rule.EventId);
 
                 var param = new BusinessRuleActionParamModel(BRActionParamType.EMailTemplate, rule.EmailTemplate.ToString());
                 newAction.AddActionParam(param);
