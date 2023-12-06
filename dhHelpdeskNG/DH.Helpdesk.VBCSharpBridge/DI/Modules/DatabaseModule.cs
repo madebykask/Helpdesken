@@ -24,7 +24,7 @@ using Ninject.Modules;
 using IUnitOfWork = DH.Helpdesk.Dal.Infrastructure.IUnitOfWork;
 using UnitOfWork = DH.Helpdesk.Dal.Infrastructure.UnitOfWork;
 
-namespace DH.Helpdesk.Mail2TicketCSharpBridge.DI.Modules
+namespace DH.Helpdesk.VBCSharpBridge.DI.Modules
 {
     public class DatabaseModule : NinjectModule
     {

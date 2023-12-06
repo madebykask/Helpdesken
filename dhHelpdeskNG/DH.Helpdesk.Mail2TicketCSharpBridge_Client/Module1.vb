@@ -1,11 +1,11 @@
-﻿Imports DH.Helpdesk.Mail2TicketCSharpBridge
+﻿Imports DH.Helpdesk.VBCSharpBridge
 
 Module Module1
 
     Sub Main()
-        Dim caseProcessor As New DH.Helpdesk.Mail2TicketCSharpBridge.CaseExposure
+        Dim caseProcessor As New DH.Helpdesk.VBCSharpBridge.CaseExposure
 
-        Dim caseBridge As New DH.Helpdesk.Mail2TicketCSharpBridge.Models.CaseBridge()
+        Dim caseBridge As New DH.Helpdesk.VBCSharpBridge.Models.CaseBridge()
         caseBridge.Id = 123
         caseBridge.FromEmail = "user@example.com"
 

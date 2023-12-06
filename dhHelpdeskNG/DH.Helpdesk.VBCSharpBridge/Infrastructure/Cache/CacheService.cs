@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DH.Helpdesk.Mail2TicketCSharpBridge.Infrastructure.Cache
+namespace DH.Helpdesk.VBCSharpBridge.Infrastructure.Cache
 {
     public class CacheService : ICacheService
     {

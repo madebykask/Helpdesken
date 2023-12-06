@@ -107,9 +107,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\DH.Helpdesk.Mail2TicketCSharpBridge\DH.Helpdesk.Mail2TicketCSharpBridge.csproj">
+    <ProjectReference Include="..\DH.Helpdesk.VBCSharpBridge\DH.Helpdesk.VBCSharpBridge.csproj">
       <Project>{468e0378-c78b-4da0-899c-81fab600e45e}</Project>
-      <Name>DH.Helpdesk.Mail2TicketCSharpBridge</Name>
+      <Name>DH.Helpdesk.VBCSharpBridge</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />

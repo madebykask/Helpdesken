@@ -62,7 +62,6 @@ using DH.Helpdesk.Domain.Invoice;
 using DH.Helpdesk.Domain.Problems;
 using DH.Helpdesk.Domain.Projects;
 using DH.Helpdesk.Domain.Users;
-using DH.Helpdesk.Mail2TicketCSharpBridge.Infrastructure.Cache;
 using DH.Helpdesk.Services.BusinessLogic.Admin.Users;
 using DH.Helpdesk.Services.BusinessLogic.Admin.Users.Concrete;
 using DH.Helpdesk.Services.BusinessLogic.Gdpr;
@@ -81,11 +80,11 @@ using DH.Helpdesk.Services.Services.EmployeeService.Concrete;
 using DH.Helpdesk.Services.Services.Feedback;
 using DH.Helpdesk.TaskScheduler.Infrastructure.Context;
 using DH.Helpdesk.TaskScheduler.Infrastructure.Translate;
+using DH.Helpdesk.VBCSharpBridge.Infrastructure.Cache;
 using Ninject.Modules;
-using System.Reflection;
 
 
-namespace DH.Helpdesk.Mail2TicketCSharpBridge.DI.Modules
+namespace DH.Helpdesk.VBCSharpBridge.DI.Modules
 {
     public class ServiceModule : NinjectModule
     {

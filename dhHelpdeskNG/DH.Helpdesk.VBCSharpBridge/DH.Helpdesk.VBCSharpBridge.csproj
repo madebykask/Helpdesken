@@ -7,8 +7,8 @@
     <ProjectGuid>{468E0378-C78B-4DA0-899C-81FAB600E45E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>DH.Helpdesk.Mail2TicketCSharpBridge</RootNamespace>
-    <AssemblyName>DH.Helpdesk.Mail2TicketCSharpBridge</AssemblyName>
+    <RootNamespace>DH.Helpdesk.VBCSharpBridge</RootNamespace>
+    <AssemblyName>DH.Helpdesk.VBCSharpBridge</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>

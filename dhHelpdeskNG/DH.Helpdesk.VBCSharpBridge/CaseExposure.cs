@@ -1,21 +1,14 @@
 ﻿using DH.Helpdesk.Common.Enums.BusinessRule;
-using DH.Helpdesk.Dal.DbContext;
-using DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete;
 using DH.Helpdesk.Domain;
-using DH.Helpdesk.Mail2TicketCSharpBridge.Interfaces;
-using DH.Helpdesk.Mail2TicketCSharpBridge.Models;
-using DH.Helpdesk.Mail2TicketCSharpBridge.Resolver;
-using DH.Helpdesk.Services.BusinessLogic.Cases;
+using DH.Helpdesk.VBCSharpBridge.Interfaces;
+using DH.Helpdesk.VBCSharpBridge.Models;
+using DH.Helpdesk.VBCSharpBridge.Resolver;
 using DH.Helpdesk.Services.Services;
 using Newtonsoft.Json;
-using Ninject;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DH.Helpdesk.Mail2TicketCSharpBridge
+namespace DH.Helpdesk.VBCSharpBridge
 {
     public class CaseExposure : ICaseExposure
     {
@@ -39,7 +32,7 @@ namespace DH.Helpdesk.Mail2TicketCSharpBridge
                 var caseEntity = MapCaseBridgeToCase(caseObj);
 
                 // Run the business rules
-                var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, caseEntity, caseEntity);
+                var actions = _caseService.CheckBusinessRules(BREventType.OnCreateCaseM2T, caseEntity, null);
                 if (actions.Any())
                 { 
                     //Fix this for the execution

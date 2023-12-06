@@ -1,10 +1,9 @@
 ﻿using DH.Helpdesk.Common.Serializers;
 using DH.Helpdesk.Dal.Infrastructure;
 using DH.Helpdesk.Dal.Infrastructure.Concrete;
-using DH.Helpdesk.Dal.Repositories.GDPR;
 using Ninject.Modules;
 
-namespace DH.Helpdesk.Mail2TicketCSharpBridge.DI.Modules
+namespace DH.Helpdesk.VBCSharpBridge.DI.Modules
 {
     public class InfrastructureModule : NinjectModule
     {

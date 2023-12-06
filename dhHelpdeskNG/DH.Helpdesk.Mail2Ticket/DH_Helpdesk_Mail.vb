@@ -794,6 +794,22 @@ Module DH_Helpdesk_Mail
 
                                     End If
                                     Try
+                                        Dim caseProcessor As New DH.Helpdesk.VBCSharpBridge.CaseExposure
+
+                                        Dim caseBridge As New DH.Helpdesk.VBCSharpBridge.Models.CaseBridge With {
+                                            .Customer_Id = objCase.Customer_Id,
+                                            .FromEmail = sFromEMailAddress
+                                        }
+
+                                        ' Call the ProcessCase method
+                                        Dim result As String = caseProcessor.RunBusinessRules(caseBridge)
+
+
+
+                                        Console.WriteLine(result)
+                                        Console.ReadLine()
+
+
                                         objCase = objCaseData.createCase(objCase)
                                     Catch ex As Exception
                                         LogError("Error creating Case in database: " & ex.Message.ToString(), objCustomer)

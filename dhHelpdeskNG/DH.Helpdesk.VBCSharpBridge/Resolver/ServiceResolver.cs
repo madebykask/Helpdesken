@@ -1,16 +1,8 @@
-﻿using DH.Helpdesk.Dal.Infrastructure;
-using DH.Helpdesk.Dal.Infrastructure.Context;
-using DH.Helpdesk.Dal.Repositories;
-using DH.Helpdesk.Mail2TicketCSharpBridge.DI.Modules;
-using DH.Helpdesk.Services.Services;
+﻿using DH.Helpdesk.Services.Services;
+using DH.Helpdesk.VBCSharpBridge.DI.Modules;
 using Ninject;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace DH.Helpdesk.Mail2TicketCSharpBridge.Resolver
+namespace DH.Helpdesk.VBCSharpBridge.Resolver
 {
     public static class ServiceResolver
     {
