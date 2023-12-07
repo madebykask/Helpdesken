@@ -1033,7 +1033,7 @@ namespace DH.Helpdesk.Services.Services
             var rules = _businessRuleService.GetRuleReadlist(caseEntity.Customer_Id);
 
             if (rules.Count > 0) {
-                rules = rules.Where(x => x.Event == BREventType.OnCreateCaseM2T && x.RuleActive == true).ToList();
+                rules = rules.Where(x => x.Event == BREventType.OnCreateCaseM2T && x.RuleActive == true).OrderBy(y => y.RuleSequence).ToList();
             
             }
 
@@ -1041,7 +1041,7 @@ namespace DH.Helpdesk.Services.Services
             {
                 var r = _businessRuleService.GetRule(rule.Id);
 
-                if (r.DomainFrom != "" && r.Administrators.Count > 0) {
+                if (!string.IsNullOrEmpty(r.DomainFrom) && r.Administrators.Count > 0) {
                     string[] values = r.DomainFrom.Split(';');
 
                     
