@@ -556,7 +556,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     else if (sortOptions.Name == OtherFields.Info)
                         query = query.OrderBy(x => x.Computer.Info);
                     else if (sortOptions.Name == ContactInformationFields.UserId)
-                        query = query.OrderBy(x => x.Computer.User_Id);
+                        query = query.OrderBy(x => x.Computer.User.UserId);
                     else if (sortOptions.Name == StateFields.State)
                         query = query.OrderBy(x => x.StatusName);
                     else if (sortOptions.Name == StateFields.ScrapDate)
@@ -617,7 +617,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                     else if (sortOptions.Name == OtherFields.Info)
                         query = query.OrderByDescending(x => x.Computer.Info);
                     else if (sortOptions.Name == ContactInformationFields.UserId)
-                        query = query.OrderByDescending(x => x.Computer.User_Id);
+                        query = query.OrderByDescending(x => x.Computer.User.UserId);
                     else if (sortOptions.Name == StateFields.State)
                         query = query.OrderByDescending(x => x.StatusName);
                     else if (sortOptions.Name == StateFields.ScrapDate)
