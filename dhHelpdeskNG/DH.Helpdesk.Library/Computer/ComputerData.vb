@@ -1,7 +1,4 @@
 Imports System.Data.SqlClient
-Imports System.Data.Odbc
-Imports System.Net
-Imports System.IO
 Imports DH.Helpdesk.Library.SharedFunctions
 
 Public Class ComputerData
@@ -27,11 +24,7 @@ Public Class ComputerData
                 objLogFile.WriteLine(Now() & ", ComputerData.getComputerByName, " & sSQL)
             End If
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim c As Computer
@@ -49,9 +42,9 @@ Public Class ComputerData
     End Function
 
     Public Function existsObject(ByVal iObjectType As SharedFunctions.ObjectType, ByVal sName As String) As Integer
-        If giDBType = 0 Then
+        'If giDBType = 0 Then
 
-            Dim con As SqlConnection = New SqlConnection(gsConnectionString)
+        Dim con As SqlConnection = New SqlConnection(gsConnectionString)
             Dim cmd As New SqlCommand
 
             con.Open()
@@ -92,59 +85,59 @@ Public Class ComputerData
             Finally
                 con.Close()
             End Try
-        Else
-            Return existsObjectODBC(iObjectType, sName)
-        End If
+        'Else
+        '    Return existsObjectODBC(iObjectType, sName)
+        'End If
     End Function
 
 
-    Private Function existsObjectODBC(ByVal iObjectType As SharedFunctions.ObjectType, ByVal sName As String) As Integer
-        Dim con As OdbcConnection = New OdbcConnection(gsConnectionString)
-        Dim cmd As New OdbcCommand
+    'Private Function existsObjectODBC(ByVal iObjectType As SharedFunctions.ObjectType, ByVal sName As String) As Integer
+    '    Dim con As OdbcConnection = New OdbcConnection(gsConnectionString)
+    '    Dim cmd As New OdbcCommand
 
-        con.Open()
+    '    con.Open()
 
-        Try
-            cmd.Connection = con
+    '    Try
+    '        cmd.Connection = con
 
-            Select Case iObjectType
-                Case SharedFunctions.ObjectType.OS
-                    cmd.CommandText = "{? = CALL dhexistsOs(?)}"
-                Case SharedFunctions.ObjectType.Processor
-                    cmd.CommandText = "{? = CALL dhExistsProcessor(?)}"
-                Case SharedFunctions.ObjectType.RAM
-                    cmd.CommandText = "{? = CALL dhExistsRam(?)}"
-                Case SharedFunctions.ObjectType.ComputerModel
-                    cmd.CommandText = "{? = CALL dhExistsComputerModel(?)}"
-                Case SharedFunctions.ObjectType.NIC
-                    cmd.CommandText = "{? = CALL dhExistsNetworkAdapter(?)}"
-            End Select
+    '        Select Case iObjectType
+    '            Case SharedFunctions.ObjectType.OS
+    '                cmd.CommandText = "{? = CALL dhexistsOs(?)}"
+    '            Case SharedFunctions.ObjectType.Processor
+    '                cmd.CommandText = "{? = CALL dhExistsProcessor(?)}"
+    '            Case SharedFunctions.ObjectType.RAM
+    '                cmd.CommandText = "{? = CALL dhExistsRam(?)}"
+    '            Case SharedFunctions.ObjectType.ComputerModel
+    '                cmd.CommandText = "{? = CALL dhExistsComputerModel(?)}"
+    '            Case SharedFunctions.ObjectType.NIC
+    '                cmd.CommandText = "{? = CALL dhExistsNetworkAdapter(?)}"
+    '        End Select
 
-            cmd.CommandType = CommandType.StoredProcedure
+    '        cmd.CommandType = CommandType.StoredProcedure
 
-            cmd.Parameters.Add("@RETURN_VALUE", OdbcType.Numeric, 4)
-            cmd.Parameters("@RETURN_VALUE").Direction = ParameterDirection.ReturnValue
+    '        cmd.Parameters.Add("@RETURN_VALUE", OdbcType.Numeric, 4)
+    '        cmd.Parameters("@RETURN_VALUE").Direction = ParameterDirection.ReturnValue
 
-            Select Case iObjectType
-                Case SharedFunctions.ObjectType.ComputerModel
-                    cmd.Parameters.Add(New OdbcParameter("@Namn", OdbcType.VarChar, 100)).Value = sName
-                Case Else
-                    cmd.Parameters.Add(New OdbcParameter("@Namn", OdbcType.VarChar, 50)).Value = sName
-            End Select
-
-
-
-            cmd.ExecuteNonQuery()
+    '        Select Case iObjectType
+    '            Case SharedFunctions.ObjectType.ComputerModel
+    '                cmd.Parameters.Add(New OdbcParameter("@Namn", OdbcType.VarChar, 100)).Value = sName
+    '            Case Else
+    '                cmd.Parameters.Add(New OdbcParameter("@Namn", OdbcType.VarChar, 50)).Value = sName
+    '        End Select
 
 
-            Return CType(cmd.Parameters("@RETURN_VALUE").Value, Integer)
 
-        Catch ex As Exception
-            Throw ex
-        Finally
-            con.Close()
-        End Try
-    End Function
+    '        cmd.ExecuteNonQuery()
+
+
+    '        Return CType(cmd.Parameters("@RETURN_VALUE").Value, Integer)
+
+    '    Catch ex As Exception
+    '        Throw ex
+    '    Finally
+    '        con.Close()
+    '    End Try
+    'End Function
 
     Function getChassisTypeName(ByVal iChassisType As Long) As String
         Select Case iChassisType
@@ -348,11 +341,7 @@ Public Class ComputerData
                     "FROM tblComputerFieldSettings " & _
                     "WHERE LOWER(ComputerField) = '" & LCase(sXMLElement) & "'"
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim dr As DataRow = dt.Rows(0)
@@ -396,11 +385,7 @@ Public Class ComputerData
                 objLogFile.WriteLine(Now() & ", ComputerData.create, " & sSQL)
             End If
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
 
             Return getComputerByName(ComputerName, iCustomer_id, iComputerRole)
         Catch ex As Exception
@@ -528,11 +513,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -546,11 +527,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -578,11 +555,7 @@ Public Class ComputerData
                 End If
 
                 If gsURL = "" Then
-                    'If giDBType = 0 Then
                     executeSQL(gsConnectionString, sSQL)
-                    'Else
-                    '    executeSQLOracle(gsConnectionString, sSQL)
-                    'End If
                 Else
                     executeSQLHTTP(sSQL)
                 End If
@@ -597,11 +570,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -627,11 +596,7 @@ Public Class ComputerData
                 End If
 
                 If gsURL = "" Then
-                    'If giDBType = 0 Then
                     executeSQL(gsConnectionString, sSQL)
-                    'Else
-                    '    executeSQLOracle(gsConnectionString, sSQL)
-                    'End If
                 Else
                     executeSQLHTTP(sSQL)
                 End If
@@ -647,11 +612,7 @@ Public Class ComputerData
                     sSQL = "DELETE FROM tblComputer_tblInventory WHERE Computer_Id=" & objComputer.Id & " AND Inventory_Id IN (SELECT tblInventory.Id FROM tblInventory INNER JOIN tblComputer_tblInventory ON tblInventory.Id = tblComputer_tblInventory.Inventory_Id WHERE Computer_Id=" & objComputer.Id & " AND tblInventory.InventoryType_Id=" & objInventoryType.Id & ")"
 
                     If gsURL = "" Then
-                        'If giDBType = 0 Then
                         executeSQL(gsConnectionString, sSQL)
-                        'Else
-                        '    executeSQLOracle(gsConnectionString, sSQL)
-                        'End If
                     Else
                         executeSQLHTTP(sSQL)
                     End If
@@ -673,11 +634,7 @@ Public Class ComputerData
                         End If
 
                         If gsURL = "" Then
-                            'If giDBType = 0 Then
                             executeSQL(gsConnectionString, sSQL)
-                            'Else
-                            '    executeSQLOracle(gsConnectionString, sSQL)
-                            'End If
                         Else
                             executeSQLHTTP(sSQL)
                         End If
@@ -694,11 +651,7 @@ Public Class ComputerData
                         End If
 
                         If gsURL = "" Then
-                            'If giDBType = 0 Then
                             executeSQL(gsConnectionString, sSQL)
-                            'Else
-                            '    executeSQLOracle(gsConnectionString, sSQL)
-                            'End If
                         Else
                             executeSQLHTTP(sSQL)
                         End If
@@ -714,11 +667,7 @@ Public Class ComputerData
                     End If
 
                     If gsURL = "" Then
-                        'If giDBType = 0 Then
                         executeSQL(gsConnectionString, sSQL)
-                        'Else
-                        '    executeSQLOracle(gsConnectionString, sSQL)
-                        'End If
                     Else
                         executeSQLHTTP(sSQL)
                     End If
@@ -747,11 +696,7 @@ Public Class ComputerData
                     "WHERE Customer_Id=" & iCustomer_Id & _
                         " AND XMLElement IS NOT NULL "
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             Dim it As InventoryType
 
@@ -804,11 +749,7 @@ Public Class ComputerData
                 sSQL = sSQL & " AND LOWER(InventoryModel) = '" & LCase(objInventory.InventoryModel) & "' "
             End If
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim dr As DataRow = dt.Rows(0)
@@ -848,11 +789,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -864,11 +801,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -880,11 +813,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -896,11 +825,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -912,11 +837,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -928,11 +849,7 @@ Public Class ComputerData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -954,11 +871,7 @@ Public Class ComputerData
             sSQL = "DELETE FROM tblApplication WHERE Id NOT IN (SELECT Application_Id FROM tblProduct_tblApplication)"
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -974,11 +887,7 @@ Public Class ComputerData
 
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If

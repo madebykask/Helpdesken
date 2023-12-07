@@ -10,11 +10,7 @@ Public Class AccountData
                     "FROM tblAccount " & _
                     "WHERE tblAccount.CaseNumber = " & sCaseNumber
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim a As Account
@@ -41,11 +37,7 @@ Public Class AccountData
                     "FROM tblAccountActivity " & _
                     "WHERE tblAccountActivity.Id = " & iId
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim aa As AccountActivity

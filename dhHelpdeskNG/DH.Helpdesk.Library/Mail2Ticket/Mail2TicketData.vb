@@ -67,33 +67,6 @@ Public Class Mail2TicketData
                             
                             newId = DbHelper.executeScalarQuery(Of Integer)(gsConnectionString, sSql, CommandType.Text, parameters.ToArray())
 
-                            'logid > 0 ? logId : null 
-                            '
-                            'messageId
-
-                            'sSQL = "INSERT INTO tblMail2Ticket (Case_Id, Log_id, Type, EmailAddress, UniqueMessageId) " + 
-                            '       "Values (" & caseid.ToString() & ", "
-                            'If logid <> 0 Then
-                            '    sSQL = sSQL & logid.ToString() & ", '" & type & "',"
-                            'Else
-                            '    sSQL = sSQL & "null, '" & type & "', "
-                            'End If
-                            
-                            'sSQL = sSQL & " '" &  Replace(sEmail, "'", "''") & "', "
-
-                            'If (IsNullOrEmpty(messageId))
-                            '    sSQL = sSQL & " null" 
-                            'Else 
-                            '    sSQL = sSQL & " '" & messageId & "'"
-                            'End If
-
-                            'sSQL = sSQL & ")" 
-
-                            'If giDBType = 0 Then
-                            '    executeSQL(gsConnectionString, sSQL)
-                            'Else
-                            '   executeSQLOracle(gsConnectionString, sSQL)
-                            'End If
                         End If
                     End If
                 Next

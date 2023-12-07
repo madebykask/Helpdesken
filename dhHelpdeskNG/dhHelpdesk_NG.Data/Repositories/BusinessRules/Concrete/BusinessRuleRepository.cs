@@ -130,8 +130,8 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         Id = 0,
                         Rule_Id = businessRule.Id,
                         Field_Id = BRFieldType.Domain,
-                        FromValue = businessRule.DomainFrom,
-                        ToValue = businessRule.DomainTo,
+                        FromValue = businessRule.DomainFrom == null ? "": businessRule.DomainFrom,
+                        ToValue = businessRule.DomainTo == null ? "" : businessRule.DomainTo,
                         Sequence = 3
                     };
                     this.DbContext.BRConditions.Add(conditionEntity3);
@@ -210,8 +210,8 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                     }
                     else
                     {
-                        conditionEntity3.FromValue = businessRule.DomainFrom;
-                        conditionEntity3.ToValue = businessRule.DomainTo;
+                        conditionEntity3.FromValue = businessRule.DomainFrom == null ? "" : businessRule.DomainFrom;
+                        conditionEntity3.ToValue = businessRule.DomainTo == null ? "" : businessRule.DomainTo;
                     }
                     #endregion
                 }
@@ -739,7 +739,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
         public IList<BusinessRuleModel> GetRules(int customerId, BREventType occurredEvent)
         {
             var ret = new List<BusinessRuleModel>();
-            var ruleEntities = this.DbContext.BRRules.Where(r => r.Customer_Id == customerId && r.Event_Id == (int)occurredEvent).ToList();
+            var ruleEntities = this.DbContext.BRRules.Where(r => r.Customer_Id == customerId && r.Event_Id == (int)occurredEvent).OrderBy(x => x.Sequence).ToList();
             foreach (var ruleEntity in ruleEntities)
                 ret.Add(GetRule(ruleEntity.Id));
 

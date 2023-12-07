@@ -1,4 +1,5 @@
 ﻿using Autofac;
+using DH.Helpdesk.Dal.Repositories;
 using DH.Helpdesk.Services.BusinessLogic.Settings;
 using DH.Helpdesk.Services.Infrastructure.Email;
 using DH.Helpdesk.Services.Infrastructure.Email.Concrete;
@@ -23,6 +24,8 @@ namespace DH.Helpdesk.WebApi.DependencyInjection
         protected override void Load(ContainerBuilder builder)
         {
             //services
+
+            builder.RegisterType<PriorityLanguageRepository>().As<IPriorityLanguageRepository>();
             builder.RegisterType<TranslateCacheService>().As<ITranslateCacheService>();
             builder.RegisterType<UserService>().As<IUserService>();
             builder.RegisterType<HolidayService>().As<IHolidayService>();

@@ -31,6 +31,7 @@ Imports HtmlAgilityPack
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.Drawing.Imaging
+Imports DH.Helpdesk.VBCSharpBridge.Models
 
 
 Module DH_Helpdesk_Mail
@@ -326,9 +327,9 @@ Module DH_Helpdesk_Mail
                 'Make sure to empty temp-folder.
                 Try
                     Dim di As DirectoryInfo = New DirectoryInfo(objCustomer.PhysicalFilePath & tempFolder)
-                    For Each fi As FileInfo In di.GetFiles()
-                        fi.Delete()
-                    Next
+                    'For Each fi As FileInfo In di.GetFiles()
+                    '    fi.Delete()
+                    'Next
                 Catch ex As Exception
 
                 End Try
@@ -794,6 +795,17 @@ Module DH_Helpdesk_Mail
 
                                     End If
                                     Try
+                                        Dim caseProcessor As New DH.Helpdesk.VBCSharpBridge.CaseExposure
+
+                                        Dim caseBridge As New CaseBridge With {
+                                            .Customer_Id = objCase.Customer_Id,
+                                            .FromEmail = sFromEMailAddress
+                                        }
+
+                                        ' Call the ProcessCase method
+                                        Dim result As CaseBridge = caseProcessor.RunBusinessRules(caseBridge)
+                                        objCase.Performer_User_Id = result.Performer_User_Id
+
                                         objCase = objCaseData.createCase(objCase)
                                     Catch ex As Exception
                                         LogError("Error creating Case in database: " & ex.Message.ToString(), objCustomer)

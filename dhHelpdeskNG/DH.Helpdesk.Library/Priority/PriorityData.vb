@@ -11,11 +11,7 @@ Public Class PriorityData
                    "FROM tblPriority " & _
                    "WHERE tblPriority.Id = " & iId
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim p As Priority
@@ -39,11 +35,7 @@ Public Class PriorityData
         Try
             sSQL = "SELECT * FROM tblPriority WHERE (Customer_Id = " & iId & ") and ([Status] = 1) ORDER BY SolutionTime"
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             For Each dr As DataRow In dt.Rows
                 Dim p As Priority = New Priority(dr)

@@ -48,11 +48,7 @@ Public Class ComputerUserData
 
                 sSQL = sSQL & " ORDER BY tblComputerUsers.Status DESC "
 
-                'If giDBType = 0 Then
                 dt = getDataTable(gsConnectionString, sSQL)
-                'Else
-                '    dt = getDataTableOracle(gsConnectionString, sSQL)
-                'End If
 
                 If dt.Rows.Count > 0 Then
                     Dim c As ComputerUser
@@ -179,11 +175,7 @@ Public Class ComputerUserData
 
             sSQL = sSQL & " ORDER BY ComputerUserField"
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             Dim cufs As ComputerUserFieldSettings
 
@@ -222,11 +214,7 @@ Public Class ComputerUserData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -239,11 +227,7 @@ Public Class ComputerUserData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -256,11 +240,7 @@ Public Class ComputerUserData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -273,11 +253,7 @@ Public Class ComputerUserData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -291,11 +267,7 @@ Public Class ComputerUserData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -315,11 +287,7 @@ Public Class ComputerUserData
             sSQL = "UPDATE tblComputerusers SET Status=0 WHERE NDSPath='" & sDN & "' AND Customer_Id=" & iCustomer_id
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -471,11 +439,7 @@ Public Class ComputerUserData
             End If
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If

@@ -267,6 +267,10 @@
       <Project>{de589388-2e9b-44c3-bcb7-9d4d051391de}</Project>
       <Name>DH.Helpdesk.Models</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DH.Helpdesk.VBCSharpBridge\DH.Helpdesk.VBCSharpBridge.csproj">
+      <Project>{468e0378-c78b-4da0-899c-81fab600e45e}</Project>
+      <Name>DH.Helpdesk.VBCSharpBridge</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
       <Project>{90defcb6-e297-4f99-a532-da1e0522aa49}</Project>
       <Name>DH.Helpdesk.Common</Name>

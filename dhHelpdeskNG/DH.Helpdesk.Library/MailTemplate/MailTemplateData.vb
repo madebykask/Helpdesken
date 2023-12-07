@@ -14,11 +14,7 @@ Public Class MailTemplateData
                         " AND tblMailTemplate_tblLanguage.Language_Id = " & Language_Id &
                         " AND tblMailTemplate_tblLanguage.Subject <> '' "
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             Dim mt As MailTemplate = Nothing
 

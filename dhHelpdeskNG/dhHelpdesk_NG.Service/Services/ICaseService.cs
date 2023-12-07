@@ -100,6 +100,7 @@ namespace DH.Helpdesk.Services.Services
                                     int caseHistoryId, string basePath, int currentLanguageId, CaseMailSetting caseMailSetting,
                                     List<CaseLogFileDto> logFiles = null
                                     );
+        Case ExecuteBusinessActionsM2T(Case caseEntity);
 
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
