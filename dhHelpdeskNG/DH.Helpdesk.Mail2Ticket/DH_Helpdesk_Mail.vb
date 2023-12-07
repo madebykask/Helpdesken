@@ -1,37 +1,33 @@
 ﻿Imports System.Configuration
 Imports System.Data.SqlClient
-Imports DH.Helpdesk.Library
-Imports Rebex.Net
-Imports System.IO
-Imports System.Linq
-Imports System.Text
-Imports DH.Helpdesk.Library.SharedFunctions
-Imports System.Text.RegularExpressions
-Imports DH.Helpdesk.BusinessData.Enums.Users
-Imports Rebex.Mail
-Imports Rebex.Mime
-Imports DH.Helpdesk.BusinessData.OldComponents.GlobalEnums
-Imports Microsoft.Identity.Client
-Imports System.Threading.Tasks
-Imports Rebex.Mime.Headers
-Imports System.Collections.Generic
-Imports System.Net
-Imports System.Reflection
-Imports System.Web
-Imports System.Web.UI
-Imports System.Web.UI.WebControls
-Imports System.Windows.Forms
-Imports ICSharpCode.SharpZipLib.Zip
-Imports Microsoft.Exchange.WebServices.Data
-Imports Microsoft.VisualBasic
-Imports Rebex
-Imports Winnovative
-Imports System.Threading
-Imports HtmlAgilityPack
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
-Imports System.Drawing.Imaging
+Imports System.IO
+Imports System.Linq
+Imports System.Net
+Imports System.Reflection
+Imports System.Text
+Imports System.Text.RegularExpressions
+Imports System.Threading
+Imports System.Threading.Tasks
+Imports System.Web
+Imports System.Web.UI.WebControls
+Imports System.Windows.Forms
+Imports DH.Helpdesk.BusinessData.Enums.Users
+Imports DH.Helpdesk.BusinessData.OldComponents.GlobalEnums
+Imports DH.Helpdesk.Library
+Imports DH.Helpdesk.Library.SharedFunctions
 Imports DH.Helpdesk.VBCSharpBridge.Models
+Imports HtmlAgilityPack
+Imports ICSharpCode.SharpZipLib.Zip
+Imports Microsoft.Exchange.WebServices.Data
+Imports Microsoft.Identity.Client
+Imports Rebex
+Imports Rebex.Mail
+Imports Rebex.Mime
+Imports Rebex.Mime.Headers
+Imports Rebex.Net
+Imports Winnovative
 
 
 Module DH_Helpdesk_Mail
@@ -804,7 +800,10 @@ Module DH_Helpdesk_Mail
 
                                         ' Call the ProcessCase method
                                         Dim result As CaseBridge = caseProcessor.RunBusinessRules(caseBridge)
-                                        objCase.Performer_User_Id = result.Performer_User_Id
+
+                                        If result.Performer_User_Id IsNot Nothing Then
+                                            objCase.Performer_User_Id = result.Performer_User_Id
+                                        End If
 
                                         objCase = objCaseData.createCase(objCase)
                                     Catch ex As Exception
