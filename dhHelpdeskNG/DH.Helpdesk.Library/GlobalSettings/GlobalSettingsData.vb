@@ -1,6 +1,4 @@
 Imports DH.Helpdesk.Library.SharedFunctions
-Imports System.Net
-Imports System.IO
 
 Public Class GlobalSettingsData
     Public Function getGlobalSettings() As GlobalSettings
@@ -10,12 +8,7 @@ Public Class GlobalSettingsData
         Try
             sSQL = "SELECT * FROM tblGlobalSettings "
 
-            'If InStr(gsConnectionString, "dbmssocn", CompareMethod.Text) > 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-
-            'End If
 
             Dim gs As GlobalSettings
 
@@ -37,12 +30,7 @@ Public Class GlobalSettingsData
             Else
                 sSQL = "SELECT * FROM tblHoliday WHERE " & Call4DateFormat("Holiday", giDBType) & " = " & convertDateTime(Now.Date, giDBType)
 
-                'If InStr(gsConnectionString, "dbmssocn", CompareMethod.Text) > 0 Then
                 dt = getDataTable(gsConnectionString, sSQL)
-                'Else
-                '    dt = getDataTableOracle(gsConnectionString, sSQL)
-
-                'End If
 
                 If dt.Rows.Count > 0 Then
                     Return True

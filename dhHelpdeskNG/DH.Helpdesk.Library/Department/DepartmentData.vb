@@ -26,11 +26,7 @@ Public Class DepartmentData
                    "WHERE tblDepartment.Customer_Id = " & iCustomer_Id &
                         " AND UPPER(Department) = '" & UCase(Name) & "'"
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim d As Department
@@ -52,11 +48,6 @@ Public Class DepartmentData
         Dim colDepartment As New Collection
 
         Try
-            'sSQL = "SELECT tblDepartment.Id, tblDepartment.Region_Id, tblDepartment.Department, tblDepartment.DepartmentId, tblDepartment.SearchKey, tblDepartment.NDSPath " & _
-            '       "FROM tblDepartment " & _
-            '       "WHERE tblDepartment.Customer_Id = " & iCustomer_Id & " AND tblDepartment.Status=1 "
-
-
             sSQL = "SELECT tblDepartment.Id, tblDepartment.Region_Id, tblDepartment.Department, tblDepartment.DepartmentId, " &
                     "tblDepartment.SearchKey, tblDepartment.NDSPath, " &
                     "(select min(watchdate) from tblWatchDateCalendarValue where tblWatchDateCalendarValue.WatchDateCalendar_Id = tblDepartment.WatchDateCalendar_Id " &
@@ -65,23 +56,7 @@ Public Class DepartmentData
                     "WHERE tblDepartment.Customer_Id = " & iCustomer_Id &
                         "AND tblDepartment.Status=1 "
 
-
-            'sSQL = "SELECT tblDepartment.Id, tblDepartment.Region_Id, tblDepartment.Department, tblDepartment.DepartmentId, tblDepartment.SearchKey, tblDepartment.NDSPath, MIN(tblWatchDateCalendarValue.WatchDate) AS WatchDate " & _
-            '        "FROM tblDepartment " & _
-            '            "LEFT JOIN tblWatchDateCalendarValue ON tblDepartment.WatchDateCalendar_Id=tblWatchDateCalendarValue.WatchDateCalendar_Id " & _
-            '        "WHERE tblDepartment.Customer_Id = " & iCustomer_Id & _
-            '            " AND tblDepartment.Status=1 " & _
-            '            "AND " & _
-            '                "(convert(varchar(10), tblWatchDateCalendarValue.WatchDate, 121) >= convert(varchar(10), getDate(), 121) " & _
-            '            "AND (tblWatchDateCalendarValue.ValidUntilDate IS NULL OR convert(varchar(10), tblWatchDateCalendarValue.ValidUntilDate, 121) >= convert(varchar(10), getDate(), 121)) " & _
-            '                "OR tblWatchDateCalendarValue.Id IS NULL) " & _
-            '        "GROUP BY tblDepartment.Id, tblDepartment.Region_Id, tblDepartment.Department, tblDepartment.DepartmentId, tblDepartment.SearchKey, tblDepartment.NDSPath"
-
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             Dim d As Department
 
@@ -135,11 +110,7 @@ Public Class DepartmentData
             sSQL = sSQL & ")"
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -167,11 +138,7 @@ Public Class DepartmentData
                 sSQL = sSQL & " AND Region_Id = " & iRegion_Id
             End If
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Return New Department(dt.Rows(0))

@@ -93,11 +93,7 @@ Public Class ContractData
             sSQL = "INSERT INTO tblContractLog(Contract_Id, LogType, EMail, Case_Id) " & _
                         "VALUES(" & Contract_Id & ", " & LogType & ", '" & EMail & "', " & Case_Id & ")"
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
         Catch ex As Exception
             If giLoglevel > 0 Then
                 objLogFile.WriteLine(Now() & ", ERROR createLog " & ex.Message.ToString)

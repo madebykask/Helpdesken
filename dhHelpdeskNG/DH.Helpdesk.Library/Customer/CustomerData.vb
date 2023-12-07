@@ -74,11 +74,7 @@ Public Class CustomerData
 
                 sSQL = sSQL & " ORDER BY tblCustomer.Name"
 
-                'If giDBType = 0 Then
                 dt = getDataTable(gsConnectionString, sSQL)
-                'Else
-                '    dt = getDataTableOracle(gsConnectionString, sSQL)
-                'End If
 
                 Dim c As Customer
 
@@ -331,11 +327,7 @@ Public Class CustomerData
                         "LEFT JOIN tblRegistrationSourceCustomer ON tblCustomer.Id = tblRegistrationSourceCustomer.Customer_Id AND tblRegistrationSourceCustomer.SystemCode=3 "
 
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             Dim c As Customer
 
@@ -388,11 +380,7 @@ Public Class CustomerData
                         "WHERE tblWorkingGroup.POP3UserName IS NOT NULL " & _
                         "ORDER BY tblCustomer.Name "
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             Dim c As Customer
 
@@ -414,14 +402,9 @@ Public Class CustomerData
         Dim ret As New Dictionary(Of String, String)
 
         Try
-            ' TODO Ett nytt fält ska skapas instället för EMailIdentifier? 
             sSQL = "select CaseField, Mail2TicketIdentifier from tblCaseFieldSettings where (Customer_Id = " & customerId.ToString() & ") and (Mail2TicketIdentifier != '') "
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             For Each dr In dt.Rows
                 ret.Add(dr(0).ToString(), dr(1).ToString())
@@ -442,11 +425,7 @@ Public Class CustomerData
         Try
             sSQL = "SELECT tblCustomer.Id FROM tblCustomer WHERE CustomerGUID='" & APIKey & "'"
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Return True

@@ -11,11 +11,7 @@ Public Class OUData
                    "FROM tblOU " & _
                    "WHERE tblOU.Department_Id IN (SELECT Id FROM tblDepartment WHERE Customer_Id = " & iCustomer_Id & ") AND tblOU.Status=1 "
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             Dim o As OU
 
@@ -52,11 +48,7 @@ Public Class OUData
                         "Values ('" & name & "','" & name & "', " & iDepartment_Id & ")"
 
             If gsURL = "" Then
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
             Else
                 executeSQLHTTP(sSQL)
             End If
@@ -79,12 +71,8 @@ Public Class OUData
                    "FROM tblOU " & _
                    "WHERE Department_Id = " & iDepartment_Id & _
                         " AND UPPER(SearchKey) = '" & UCase(Name) & "'"
-            
-            'If giDBType = 0 Then
+
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Return New OU(dt.Rows(0))

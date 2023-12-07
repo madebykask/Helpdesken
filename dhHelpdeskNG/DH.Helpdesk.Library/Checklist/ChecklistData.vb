@@ -1,5 +1,4 @@
-﻿Imports System.Data.SqlClient
-Imports DH.Helpdesk.Library.SharedFunctions
+﻿Imports DH.Helpdesk.Library.SharedFunctions
 
 Public Class ChecklistData
     Public Function getChecklistSchedule() As IList(Of Checklist)
@@ -194,11 +193,8 @@ Public Class ChecklistData
             sSQL = "INSERT INTO tblChecklist(Customer_Id, CheckLists_Id, Checklistdate) " & _
                         "VALUES(" & iCustomer_Id & ", " & iChecklists_Id & ", " & convertDateTime(Date.Today, giDBType) & ")"
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
+
         Catch ex As Exception
             If giLoglevel > 0 Then
                 objLogFile.WriteLine(Now() & ", ERROR createChecklistDate " & ex.Message.ToString)
