@@ -1,10 +1,8 @@
 Imports System.Data.SqlClient
 Imports System.Linq
-Imports DH.Helpdesk.BusinessData.Models.Reports
 Imports DH.Helpdesk.BusinessData.Models.WorktimeCalculator
 Imports DH.Helpdesk.Dal.Infrastructure
 Imports DH.Helpdesk.Dal.Repositories
-'Imports System.Data.Odbc
 Imports DH.Helpdesk.Library.SharedFunctions
 Imports DH.Helpdesk.Services.Services
 Imports DH.Helpdesk.Services.Utils

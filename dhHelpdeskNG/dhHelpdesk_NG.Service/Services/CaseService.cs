@@ -1047,20 +1047,6 @@ namespace DH.Helpdesk.Services.Services
                         caseEntity.Performer_User_Id = r.Administrators[0];
                     }
                 }
-
-            //    if (rule.EventId == BRActionType.EditCaseField && rule.RuleActive == true) {
-                    
-
-            //        if (rule.DomainFrom  != "") { 
-                        
-            //        }
-            //    }
-            //    //switch (rule.ActionType)
-            //    //{
-            //    //    case BRActionType.EditCaseField:
-                        
-            //    //        break;
-            //    //}
             }
 
             return caseEntity;
