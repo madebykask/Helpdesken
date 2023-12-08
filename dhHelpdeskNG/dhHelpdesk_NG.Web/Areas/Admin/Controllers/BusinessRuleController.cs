@@ -68,8 +68,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				ChangedBy = x.ChangedBy.GetFullName(),
 				ChangedOn = x.ChangedTime,
 				Event = Enum.GetName(typeof(BREventType), x.Event),
-				IsActive = x.RuleActive
-			}).ToList();
+				IsActive = x.RuleActive,
+                Sequence = x.RuleSequence
+            }).ToList();
 
 			return View(model);
 		}

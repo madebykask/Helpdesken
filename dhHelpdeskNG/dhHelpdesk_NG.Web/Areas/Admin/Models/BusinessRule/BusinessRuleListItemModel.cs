@@ -22,5 +22,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         public string ChangedBy { get; set; }
 
         public DateTime ChangedOn { get; set; }
+
+        public int Sequence { get; set; }
     }
 }
