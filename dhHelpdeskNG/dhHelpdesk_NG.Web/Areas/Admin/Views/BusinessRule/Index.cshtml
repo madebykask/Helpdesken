@@ -124,8 +124,11 @@
                                     <th>
                                         @Translation.Get("Uppdaterad", Enums.TranslationSource.TextTranslation)
                                     </th>
-                                     <th>
-                                        @Translation.Get("Active", Enums.TranslationSource.TextTranslation)  
+                                    <th>
+                                        @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
+                                        @Translation.Get("Sekvens", Enums.TranslationSource.TextTranslation)
                                     </th>
                                 </tr>
                             </thead>
@@ -156,6 +159,11 @@
                                         <td>
                                             <a href="@Url.Action("EditRule", "BusinessRule", new { id = rule.RuleId})">
                                                 @rule.IsActive.BoolToYesNo()
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("EditRule", "BusinessRule", new { id = rule.RuleId})">
+                                                @Html.DisplayFor(x => rule.Sequence)
                                             </a>
                                         </td>
                                     </tr>
