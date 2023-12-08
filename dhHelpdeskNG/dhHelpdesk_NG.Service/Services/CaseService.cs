@@ -1044,9 +1044,12 @@ namespace DH.Helpdesk.Services.Services
                 if (!string.IsNullOrEmpty(r.DomainFrom) && r.Administrators.Count > 0) {
                     string[] values = r.DomainFrom.Split(';');
 
-                    
-                    if (values.Any(value => caseEntity.RegUserDomain.Contains(value))) {
-                        caseEntity.Performer_User_Id = r.Administrators[0];
+                    foreach (var v in values) {
+                        if (v != "") {
+                            if (caseEntity.RegUserDomain.Trim().Contains(v.Trim())) {
+                                caseEntity.Performer_User_Id = r.Administrators[0];
+                            }
+                        }
                     }
 
                 }
