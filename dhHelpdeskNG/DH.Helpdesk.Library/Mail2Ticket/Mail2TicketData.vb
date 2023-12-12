@@ -37,25 +37,25 @@ Public Class Mail2TicketData
                 For Each address As String in addressArray
                     If (Not IsNullOrEmpty(address)) Then
                         Dim sEmail As String = parseEMailAddress(address)
-                        
+
                         'Add only if valid email address 
                         If IsValidEmailAddress(sEmail) Then
 
                             Dim caseId As Integer? = Nothing
                             If iCase_Id > 0 Then caseId = iCase_Id
 
-                            Dim logId As Integer? =  Nothing
+                            Dim logId As Integer? = Nothing
                             If iLog_Id > 0 Then logId = iLog_Id
-                            
-                            Dim subject as String = If(IsNullOrEmpty(sSubject), "", sSubject)
-                            If (subject.Length > 512) Then 
+
+                            Dim subject As String = If(IsNullOrEmpty(sSubject), "", sSubject)
+                            If (subject.Length > 512) Then
                                 subject = subject.Left(509) & "..."
                             End If
-                                     
-                            Const sSql = "INSERT INTO tblMail2Ticket (Case_Id, Log_id, Type, EmailAddress, EMailSubject, UniqueMessageId) " & _ 
-                                         "Values (@caseId, @logId, @type, @emailAddress, @emailSubject, @uniqueMessageId);" & _
+
+                            Const sSql = "INSERT INTO tblMail2Ticket (Case_Id, Log_id, Type, EmailAddress, EMailSubject, UniqueMessageId) " &
+                                         "Values (@caseId, @logId, @type, @emailAddress, @emailSubject, @uniqueMessageId);" &
                                          "SELECT SCOPE_IDENTITY();"
-                            
+
                             Dim parameters As New List(Of SqlParameter) From {
                                 DbHelper.createNullableDbParameter("@caseId", caseId),
                                 DbHelper.createNullableDbParameter("@logId", logId),
@@ -64,36 +64,9 @@ Public Class Mail2TicketData
                                 DbHelper.createNullableDbParameter("@emailSubject", subject),
                                 DbHelper.createNullableDbParameter("@uniqueMessageId", messageId)
                             }
-                            
+
                             newId = DbHelper.executeScalarQuery(Of Integer)(gsConnectionString, sSql, CommandType.Text, parameters.ToArray())
 
-                            'logid > 0 ? logId : null 
-                            '
-                            'messageId
-
-                            'sSQL = "INSERT INTO tblMail2Ticket (Case_Id, Log_id, Type, EmailAddress, UniqueMessageId) " + 
-                            '       "Values (" & caseid.ToString() & ", "
-                            'If logid <> 0 Then
-                            '    sSQL = sSQL & logid.ToString() & ", '" & type & "',"
-                            'Else
-                            '    sSQL = sSQL & "null, '" & type & "', "
-                            'End If
-                            
-                            'sSQL = sSQL & " '" &  Replace(sEmail, "'", "''") & "', "
-
-                            'If (IsNullOrEmpty(messageId))
-                            '    sSQL = sSQL & " null" 
-                            'Else 
-                            '    sSQL = sSQL & " '" & messageId & "'"
-                            'End If
-
-                            'sSQL = sSQL & ")" 
-
-                            'If giDBType = 0 Then
-                            '    executeSQL(gsConnectionString, sSQL)
-                            'Else
-                            '   executeSQLOracle(gsConnectionString, sSQL)
-                            'End If
                         End If
                     End If
                 Next

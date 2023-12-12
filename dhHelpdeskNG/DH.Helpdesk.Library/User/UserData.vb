@@ -12,11 +12,7 @@ Public Class UserData
 
             Dim dt As DataTable
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 u = New User(dt.Rows(0))
@@ -39,11 +35,7 @@ Public Class UserData
 
             Dim dt As DataTable
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 u = New User(dt.Rows(0))
@@ -67,11 +59,7 @@ Public Class UserData
 
             Dim dt As DataTable
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             Dim u As User
 

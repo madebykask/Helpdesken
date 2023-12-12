@@ -54,15 +54,16 @@ namespace DH.Helpdesk.Web.Infrastructure.CaseOverview
 
             var exceptedList = new []
             {
-                UserFields.IsAbout_CostCentre.ToLower(),
+               
                 UserFields.IsAbout_Department.ToLower(),
                 UserFields.IsAbout_OU.ToLower(),
-                UserFields.IsAbout_Persons_CellPhone.ToLower(),
-                UserFields.IsAbout_Persons_Email.ToLower(),
-                UserFields.IsAbout_Persons_Phone.ToLower(),
-                UserFields.IsAbout_Place.ToLower(),
                 UserFields.IsAbout_Region.ToLower(),
-                UserFields.IsAbout_UserCode.ToLower(),
+                //UserFields.IsAbout_Persons_CellPhone.ToLower(),
+                //UserFields.IsAbout_Persons_Email.ToLower(),
+                //UserFields.IsAbout_Persons_Phone.ToLower(),
+                //UserFields.IsAbout_Place.ToLower(),
+                //UserFields.IsAbout_CostCentre.ToLower(),
+                //UserFields.IsAbout_UserCode.ToLower(),
                 LogFields.InternalLogNote.ToLower(),
                 LogFields.ExternalLogNote.ToLower(),
                 "tblProblem.ResponsibleUser_Id".ToLower()

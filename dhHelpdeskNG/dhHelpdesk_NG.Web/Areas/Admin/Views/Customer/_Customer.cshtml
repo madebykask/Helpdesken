@@ -275,13 +275,23 @@
 
                 </td>
             </tr>
+            <tr>
+                <td class="span3">
+                    @Translation.Get("Nyckelord koppla rubrik externt")
+                </td>
+                <td>
+                    @Html.TextAreaFor(model => model.Setting.ExternalEMailSubjectPattern, new { maxlength = "1000", style = "width: 600px;" })
+
+                </td>
+            </tr>
 
         }
         else
         {
             @Html.HiddenFor(model => model.Setting.EMailAnswerSeparator)
             @Html.HiddenFor(model => model.Setting.EMailSubjectPattern)
-           
+            @Html.HiddenFor(model => model.Setting.ExternalEMailSubjectPattern)
+
         }
         <tr>
             <td style="vertical-align: top">

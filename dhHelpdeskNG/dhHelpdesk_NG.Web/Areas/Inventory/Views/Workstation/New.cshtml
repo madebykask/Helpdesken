@@ -50,7 +50,8 @@
 
 @section Scripts{
     @Scripts.Render(BundleConfig.ScriptNames.InventoryWorkstation)
-    <script type="text/javascript">
+<script type="text/javascript">
+
         window.parameters = (window.parameters == null ? {} : window.parameters);
         window.parameters.fileUploadWhiteList = [];
 
@@ -70,16 +71,24 @@
 
         $(function(jQuery) {
             $('#@Html.IdFor(m => m.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
-                .attr("data-val-remote",
-                    '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                .attr("data-val-remote",'@string.Format(" {0} {1}", Html.PureFieldCaption(Model.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
             $('#@Html.IdFor(m => m.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)')
                 .attr("data-val-remote-url", '@Url.Action("ValidateMacAddress", "Workstation")');
 
             $('#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
-                .attr("data-val-remote",
-                    '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark), Translation.GetCoreTextTranslation("måste vara unikt"))');
             $('#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
                 .attr("data-val-remote-url", '@Url.Action("ValidateTheftmark", "Workstation")');
+
+            $('#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)')
+                .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.WorkstationFieldsViewModel.WorkstationFieldsModel.Name), Translation.GetCoreTextTranslation("måste vara unikt"))');
+            $('#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)')
+                .attr("data-val-remote-url", '@Url.Action("ValidateComputerName", "Workstation")');
+
+            $('#@Html.IdFor(m => m.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value)')
+                .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
+            $('#@Html.IdFor(m => m.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value)')
+                 .attr("data-val-remote-url", '@Url.Action("ValidateIpAddress", "Workstation")');
 
             if (typeof WorkstationEdit !== 'undefined') {
                 window.workstationEdit = new WorkstationEdit($);
@@ -92,8 +101,25 @@
                     copyUrl: '@Url.Action("Copy", "Workstation")',
                 });
             }
+            // TODO: Move this section to WorkstationEdit
+            $('#@Html.IdFor(m => m.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice.Value)')
+                .prop('type', 'number');
+
+            // TODO: Move this section to WorkstationEdit
+            $("#@Html.IdFor(m => m.WorkstationFieldsViewModel.WorkstationFieldsModel.ComputerTypeId.Value)")
+                .change(function() {
+                    if (this.value > 0) {
+                        $.get('@Url.Action("GetPrice", "Workstation")',
+                            { id: this.value },
+                            function(data) {
+                                $('#@Html.IdFor(m => m.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice.Value)').val(data);
+                            });
+                    } else {
+                        $('#@Html.IdFor(m => m.ContractFieldsViewModel.ContractFieldsModel.PurchasePrice.Value)').val(0);
+                    }
+                });
         });
-    </script>
+</script>
 
     @if (Model.ContractFieldsViewModel.ContractFieldsModel.Document.Show)
     {

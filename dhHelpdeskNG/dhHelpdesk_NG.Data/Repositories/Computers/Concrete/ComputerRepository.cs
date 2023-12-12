@@ -31,6 +31,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     using OtherFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.OtherFields;
     using ContactInformationFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.ContactInformationFields;
     using StateFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.StateFields;
+    using DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Inventory;
 
     public class ComputerRepository : Repository<Domain.Computers.Computer>, IComputerRepository
     {
@@ -512,12 +513,20 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         query = query.OrderBy(x => x.Computer.ComputerName);
                     else if (sortOptions.Name == ComputerFields.Manufacturer)
                         query = query.OrderBy(x => x.Computer.Manufacturer);
+                    else if (sortOptions.Name == ComputerFields.Location)
+                        query = query.OrderBy(x => x.Computer.Location);
+                    else if (sortOptions.Name == "OperatingSystem.Name")
+                        query = query.OrderBy(x => x.Computer.OS.Name);
+                    else if (sortOptions.Name == "Organization.Department")
+                        query = query.OrderBy(x => x.Computer.Department.DepartmentName);
                     else if (sortOptions.Name == ComputerFields.Model)
                         query = query.OrderBy(x => x.Computer.ComputerModel.Name);
                     else if (sortOptions.Name == ComputerFields.SerialNumber)
                         query = query.OrderBy(x => x.Computer.SerialNumber);
-                    else if (sortOptions.Name == ComputerFields.SerialNumber)
-                        query = query.OrderBy(x => x.Computer.SerialNumber);
+                    else if (sortOptions.Name == CommunicationFields.MacAddress)
+                        query = query.OrderBy(x => x.Computer.MACAddress);
+                    else if (sortOptions.Name == CommunicationFields.IPAddress)
+                        query = query.OrderBy(x => x.Computer.IPAddress);
                     else if (sortOptions.Name == ComputerFields.BIOSVersion)
                         query = query.OrderBy(x => x.Computer.BIOSVersion);
                     else if (sortOptions.Name == ComputerFields.BIOSDate)
@@ -542,12 +551,16 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         query = query.OrderBy(x => x.Computer.ContractStatus.Name);
                     else if (sortOptions.Name == ContractFields.PurchasePrice)
                         query = query.OrderBy(x => x.Computer.Price);
+                    else if (sortOptions.Name == "Inventory.PurchaseDate")
+                        query = query.OrderBy(x => x.Computer.PurchaseDate);
                     else if (sortOptions.Name == OtherFields.Info)
                         query = query.OrderBy(x => x.Computer.Info);
                     else if (sortOptions.Name == ContactInformationFields.UserId)
-                        query = query.OrderBy(x => x.Computer.User_Id);
+                        query = query.OrderBy(x => x.Computer.User.UserId);
                     else if (sortOptions.Name == StateFields.State)
                         query = query.OrderBy(x => x.StatusName);
+                    else if (sortOptions.Name == StateFields.ScrapDate)
+                        query = query.OrderBy(x => x.Computer.ScrapDate);
                     else if (sortOptions.Name == DateFields.ChangedDate)
                         query = query.OrderBy(x => x.Computer.ChangedDate);
                     else if (sortOptions.Name == DateFields.SynchronizeDate)
@@ -561,12 +574,20 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         query = query.OrderByDescending(x => x.Computer.ComputerName);
                     else if (sortOptions.Name == ComputerFields.Manufacturer)
                         query = query.OrderByDescending(x => x.Computer.Manufacturer);
+                    else if (sortOptions.Name == ComputerFields.Location)
+                        query = query.OrderByDescending(x => x.Computer.Location);
+                    else if (sortOptions.Name == "OperatingSystem.Name")
+                        query = query.OrderByDescending(x => x.Computer.OS.Name);
+                    else if (sortOptions.Name == "Organization.Department")
+                        query = query.OrderByDescending(x => x.Computer.Department.DepartmentName);
                     else if (sortOptions.Name == ComputerFields.Model)
                         query = query.OrderByDescending(x => x.Computer.ComputerModel.Name);
                     else if (sortOptions.Name == ComputerFields.SerialNumber)
                         query = query.OrderByDescending(x => x.Computer.SerialNumber);
-                    else if (sortOptions.Name == ComputerFields.SerialNumber)
-                        query = query.OrderByDescending(x => x.Computer.SerialNumber);
+                    else if (sortOptions.Name == CommunicationFields.MacAddress)
+                        query = query.OrderByDescending(x => x.Computer.MACAddress);
+                    else if (sortOptions.Name == CommunicationFields.IPAddress)
+                        query = query.OrderByDescending(x => x.Computer.IPAddress);
                     else if (sortOptions.Name == ComputerFields.BIOSVersion)
                         query = query.OrderByDescending(x => x.Computer.BIOSVersion);
                     else if (sortOptions.Name == ComputerFields.BIOSDate)
@@ -591,12 +612,16 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         query = query.OrderByDescending(x => x.Computer.ContractStatus.Name);
                     else if (sortOptions.Name == ContractFields.PurchasePrice)
                         query = query.OrderByDescending(x => x.Computer.Price);
+                    else if (sortOptions.Name == "Inventory.PurchaseDate")
+                        query = query.OrderByDescending(x => x.Computer.PurchaseDate);
                     else if (sortOptions.Name == OtherFields.Info)
                         query = query.OrderByDescending(x => x.Computer.Info);
                     else if (sortOptions.Name == ContactInformationFields.UserId)
-                        query = query.OrderByDescending(x => x.Computer.User_Id);
+                        query = query.OrderByDescending(x => x.Computer.User.UserId);
                     else if (sortOptions.Name == StateFields.State)
                         query = query.OrderByDescending(x => x.StatusName);
+                    else if (sortOptions.Name == StateFields.ScrapDate)
+                        query = query.OrderByDescending(x => x.Computer.ScrapDate);
                     else if (sortOptions.Name == DateFields.ChangedDate)
                         query = query.OrderByDescending(x => x.Computer.ChangedDate);
                     else if (sortOptions.Name == DateFields.SynchronizeDate)
@@ -766,6 +791,14 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
         public bool IsTheftMarkUnique(int exceptId, string theftMark)
         {
             return !DbSet.Any(w => w.TheftMark.Equals(theftMark, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
+        }
+        public bool IsIpAddressUnique(int exceptId, string ipAddress)
+        {
+            return !DbSet.Any(w => w.IPAddress.Equals(ipAddress, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
+        }
+        public bool IsComputerNameUnique(int exceptId, string computerName)
+        {
+            return !DbSet.Any(w => w.ComputerName.Equals(computerName, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
         }
         public List<ComputerOverview> GetRelatedOverviews(int customerId, string userId)
         {

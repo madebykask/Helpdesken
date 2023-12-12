@@ -166,6 +166,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 		public string BuildCaseSearchSql(SearchQueryBuildContext ctx, bool countOnly = false)
         {
+            //Todo: Always use Contains instead of Like in query except for CaseNumber
             _useFts = ctx.UseFullTextSearch;
 
             var search = ctx.Criterias.Search;
@@ -175,7 +176,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
             var freeTextSearchCte = BuildFreeTextSearchCTEQuery(ctx);
 
-            
             var orderBy = BuildOrderBy(search);
 
             //TODO: remove top 500 limit when true sql side paging is implemented
@@ -361,6 +361,13 @@ namespace DH.Helpdesk.Dal.Repositories
 
                 columns.Add("tblCaseIsAbout.ReportedBy as IsAbout_ReportedBy");
                 columns.Add("tblCaseIsAbout.Person_Name as IsAbout_Persons_Name");
+                //New columns added for IsAbout 5.5.0
+                columns.Add("tblCaseIsAbout.Person_CellPhone as IsAbout_Persons_CellPhone");
+                columns.Add("tblCaseIsAbout.CostCentre as IsAbout_CostCentre");
+                columns.Add("tblCaseIsAbout.UserCode as IsAbout_UserCode");
+                columns.Add("tblCaseIsAbout.Person_Email as IsAbout_Persons_Email");
+                columns.Add("tblCaseIsAbout.Place as IsAbout_Place");
+                columns.Add("tblCaseIsAbout.Person_Phone as IsAbout_Persons_Phone");
                 columns.Add("tblCase.AgreedDate");
 
                 if (customerSettings != null)
@@ -1667,7 +1674,7 @@ namespace DH.Helpdesk.Dal.Repositories
         {
             return (_useFts)
                 ? BuildFTSContainsExpession(field, text, tableAlias, useWildcard)
-                : BuildLikeContainsExpession(field, text, tableAlias);
+                : BuildFTSContainsExpession(field, text, tableAlias, useWildcard);
         }
 
         private string BuildFTSContainsExpession(string field, string text, string tableAlias = "", bool useWildcard = true)

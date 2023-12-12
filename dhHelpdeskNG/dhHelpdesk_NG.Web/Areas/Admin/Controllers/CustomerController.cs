@@ -401,6 +401,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 setting.BlockedEmailRecipients = vmodel.Setting.BlockedEmailRecipients;
                 setting.EMailAnswerSeparator = vmodel.Setting.EMailAnswerSeparator;
                 setting.EMailSubjectPattern = vmodel.Setting.EMailSubjectPattern;
+                setting.ExternalEMailSubjectPattern = vmodel.Setting.ExternalEMailSubjectPattern;
             }
 
             IDictionary<string, string> errors;
@@ -925,6 +926,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 QuickNewCaseLinkText = customerToCopySettings.QuickNewCaseLinkText,
                 QuickNewCaseLinkUrl = customerToCopySettings.QuickNewCaseLinkUrl,
                 EMailSubjectPattern = customerToCopySettings.EMailSubjectPattern,
+                ExternalEMailSubjectPattern = customerToCopySettings.ExternalEMailSubjectPattern,
                 EMailAnswerSeparator = customerToCopySettings.EMailAnswerSeparator,
                 BlockedEmailRecipients = "noreply;",
                 ErrorMailTo = "",
@@ -1152,25 +1154,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 }
 
             }
-
-            //Get CustomerUser to copy
-            var customerUserToCopy = this._customerUserService.GetCustomerUsersForCustomer(customerToCopy.Id);
-
-            foreach (var cu in customerUserToCopy)
-            {
-                var newCustomerCustomerUser = new CustomerUser() { };
-
-                newCustomerCustomerUser.Customer_Id = newCustomerToSave.Id;
-                newCustomerCustomerUser.User_Id = cu.User_Id;
-                newCustomerCustomerUser.CasePerformerFilter = string.Empty;
-                newCustomerCustomerUser.ShowOnStartPage = cu.ShowOnStartPage;
-                newCustomerCustomerUser.UserInfoPermission = cu.UserInfoPermission;
-                //todo: add missing customer user settings
-                this._customerUserService.SaveCustomerUserForCopy(newCustomerCustomerUser, out errors);
-            }
-
-            //Get CustomerUser to copy
-            newCustomerToSave.UsersAvailable = customerToCopy.UsersAvailable;
 
             //Get Casetype to copy
             var caseTypesToCopy = this._caseTypeService.GetCaseTypes(customerToCopy.Id).Where(x => x.Parent_CaseType_Id == null && x.IsActive == 1);

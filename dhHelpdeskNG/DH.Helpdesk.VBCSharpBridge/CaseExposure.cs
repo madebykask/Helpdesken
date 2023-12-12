@@ -1,0 +1,64 @@
+﻿using DH.Helpdesk.Common.Enums.BusinessRule;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.VBCSharpBridge.Interfaces;
+using DH.Helpdesk.VBCSharpBridge.Models;
+using DH.Helpdesk.VBCSharpBridge.Resolver;
+using DH.Helpdesk.Services.Services;
+using Newtonsoft.Json;
+using System;
+using System.Linq;
+
+namespace DH.Helpdesk.VBCSharpBridge
+{
+    public class CaseExposure : ICaseExposure
+    {
+
+        private ICaseService _caseService;
+
+        public CaseExposure()
+        {
+            _caseService = ServiceResolver.GetCaseService();
+        }
+
+
+        
+        public CaseBridge RunBusinessRules(CaseBridge caseObj)
+        {
+
+            try
+            {
+
+                //Map the CaseBridge to Case entity
+                var caseEntity = MapCaseBridgeToCase(caseObj);
+
+                // Run the business rules
+                caseEntity = _caseService.ExecuteBusinessActionsM2T(caseEntity);
+                caseObj.Performer_User_Id = caseEntity.Performer_User_Id;
+
+            }
+            catch (Exception ex)
+            {
+                // Log the exception
+                throw ex;
+            }
+
+
+            //Return json string
+            return caseObj;
+
+
+        }
+
+        private Case MapCaseBridgeToCase(CaseBridge caseBridge)
+        {
+
+            return new Case()
+            {
+                Customer_Id = caseBridge.Customer_Id,
+                RegUserDomain = caseBridge.FromEmail,
+            };
+            
+        }
+
+    }
+}

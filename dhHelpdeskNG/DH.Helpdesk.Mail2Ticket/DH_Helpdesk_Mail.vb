@@ -1,36 +1,33 @@
 ﻿Imports System.Configuration
 Imports System.Data.SqlClient
-Imports DH.Helpdesk.Library
-Imports Rebex.Net
-Imports System.IO
-Imports System.Linq
-Imports System.Text
-Imports DH.Helpdesk.Library.SharedFunctions
-Imports System.Text.RegularExpressions
-Imports DH.Helpdesk.BusinessData.Enums.Users
-Imports Rebex.Mail
-Imports Rebex.Mime
-Imports DH.Helpdesk.BusinessData.OldComponents.GlobalEnums
-Imports Microsoft.Identity.Client
-Imports System.Threading.Tasks
-Imports Rebex.Mime.Headers
-Imports System.Collections.Generic
-Imports System.Net
-Imports System.Reflection
-Imports System.Web
-Imports System.Web.UI
-Imports System.Web.UI.WebControls
-Imports System.Windows.Forms
-Imports ICSharpCode.SharpZipLib.Zip
-Imports Microsoft.Exchange.WebServices.Data
-Imports Microsoft.VisualBasic
-Imports Rebex
-Imports Winnovative
-Imports System.Threading
-Imports HtmlAgilityPack
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
-Imports System.Drawing.Imaging
+Imports System.IO
+Imports System.Linq
+Imports System.Net
+Imports System.Reflection
+Imports System.Text
+Imports System.Text.RegularExpressions
+Imports System.Threading
+Imports System.Threading.Tasks
+Imports System.Web
+Imports System.Web.UI.WebControls
+Imports System.Windows.Forms
+Imports DH.Helpdesk.BusinessData.Enums.Users
+Imports DH.Helpdesk.BusinessData.OldComponents.GlobalEnums
+Imports DH.Helpdesk.Library
+Imports DH.Helpdesk.Library.SharedFunctions
+Imports DH.Helpdesk.VBCSharpBridge.Models
+Imports HtmlAgilityPack
+Imports ICSharpCode.SharpZipLib.Zip
+Imports Microsoft.Exchange.WebServices.Data
+Imports Microsoft.Identity.Client
+Imports Rebex
+Imports Rebex.Mail
+Imports Rebex.Mime
+Imports Rebex.Mime.Headers
+Imports Rebex.Net
+Imports Winnovative
 
 
 Module DH_Helpdesk_Mail
@@ -326,9 +323,9 @@ Module DH_Helpdesk_Mail
                 'Make sure to empty temp-folder.
                 Try
                     Dim di As DirectoryInfo = New DirectoryInfo(objCustomer.PhysicalFilePath & tempFolder)
-                    For Each fi As FileInfo In di.GetFiles()
-                        fi.Delete()
-                    Next
+                    'For Each fi As FileInfo In di.GetFiles()
+                    '    fi.Delete()
+                    'Next
                 Catch ex As Exception
 
                 End Try
@@ -625,17 +622,22 @@ Module DH_Helpdesk_Mail
 
                                 If objCase Is Nothing Then
                                     ' Kontrollera om det är ett externt mail som ska hanteras
-                                    'If objCustomer.ExternalEMailSubjectPattern <> "" Then
-                                    '    sExternalCaseNumber = ExtractExternalCaseNumberFromSubject(sSubject, objCustomer.ExternalEMailSubjectPattern)
-                                    '    LogToFile("ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
+                                    If objCustomer.ExternalEMailSubjectPattern <> "" Then
+                                        sExternalCaseNumber = ExtractExternalCaseNumberFromSubject(sSubject, objCustomer.ExternalEMailSubjectPattern)
 
-                                    '    If sExternalCaseNumber <> "" Then
-                                    '        objCase = objCaseData.getCaseByExternalCaseNumber(sExternalCaseNumber)
-                                    '    End If
-                                    'End If
+                                        If sExternalCaseNumber <> "" Then
+                                            LogToFile("Found ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
+
+                                            objCase = objCaseData.GetCaseByExternalCaseNumber(sExternalCaseNumber)
+
+                                            If Not objCase Is Nothing Then
+                                                LogToFile("Found existing case by ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
+                                            End If
+                                        End If
+                                    End If
 
                                     ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
-                                    If objCustomer.EMailSubjectPattern <> "" Then
+                                    If objCustomer.EMailSubjectPattern <> "" And objCase Is Nothing Then
                                         LogToFile("Subject: " & sSubject, iPop3DebugLevel)
 
                                         iCaseNumber = extractCaseNumberFromSubject(sSubject, objCustomer.EMailSubjectPattern)
@@ -690,7 +692,7 @@ Module DH_Helpdesk_Mail
                                 If objCase Is Nothing Then
                                     objCase = New CCase
 
-                                    'objCase.ExternalCasenumber = sExternalCaseNumber
+                                    objCase.ExternalCasenumber = sExternalCaseNumber
 
                                     objCase.Caption = Left(message.Subject.ToString(), 100)
                                     objCase.Description = sBodyText
@@ -789,6 +791,20 @@ Module DH_Helpdesk_Mail
 
                                     End If
                                     Try
+                                        Dim caseProcessor As New DH.Helpdesk.VBCSharpBridge.CaseExposure
+
+                                        Dim caseBridge As New CaseBridge With {
+                                            .Customer_Id = objCase.Customer_Id,
+                                            .FromEmail = sFromEMailAddress
+                                        }
+
+                                        ' Call the ProcessCase method
+                                        Dim result As CaseBridge = caseProcessor.RunBusinessRules(caseBridge)
+
+                                        If result.Performer_User_Id IsNot Nothing Then
+                                            objCase.Performer_User_Id = result.Performer_User_Id
+                                        End If
+
                                         objCase = objCaseData.createCase(objCase)
                                     Catch ex As Exception
                                         LogError("Error creating Case in database: " & ex.Message.ToString(), objCustomer)
@@ -1089,13 +1105,16 @@ Module DH_Helpdesk_Mail
 
                                     Dim isInternalLogUsed As Boolean = CheckInternalLogConditions(iMailID, objCustomer, sFromEMailAddress, sToEMailAddress)
 
+                                    If sExternalCaseNumber <> "" Then
+                                        isInternalLogUsed = False
+                                    End If
+
                                     ' Save Logs (Logga händelsen)
                                     If isInternalLogUsed Then
                                         ' Save as Internal Log (Lägg in som intern loggpost)
                                         iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, sBodyText, "", 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
 
                                     Else
-
                                         iLog_Id = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", sBodyText, 0, sFromEMailAddress, iCaseHistory_Id, iFinishingCause_Id)
 
                                     End If
@@ -1479,7 +1498,13 @@ Module DH_Helpdesk_Mail
                                 End If
 
                             Else
-                                Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), fileAttach.Name, fileAttach.ContentType)
+                                Dim invalidChars As String = New String(Path.GetInvalidFileNameChars()) + New String(Path.GetInvalidPathChars())
+                                Dim sanitizedFileName As String = fileAttach.Name
+
+                                For Each c As Char In invalidChars
+                                    sanitizedFileName = sanitizedFileName.Replace(c.ToString(), "")
+                                Next
+                                Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), sanitizedFileName, fileAttach.ContentType)
                                 If Not fileAttach.ContentId Is Nothing Then
                                     newResource.ContentId = fileAttach.ContentId
                                 End If
@@ -1694,6 +1719,15 @@ Module DH_Helpdesk_Mail
                 'Ta bort tempkatalogen / delete temp dir
                 If Directory.Exists(tempDirPath) = True Then
                     Directory.Delete(tempDirPath, True)
+                    ' Get the parent directory info
+                    Dim di As New DirectoryInfo(tempDirPath)
+                    If di.Parent IsNot Nothing Then
+                        ' Check if the parent directory exists
+                        If di.Parent.Exists Then
+                            ' Delete the parent directory and all its contents
+                            di.Parent.Delete(True)
+                        End If
+                    End If
                 End If
                 files.Add(sFilePath)
             End If
@@ -1950,15 +1984,22 @@ Module DH_Helpdesk_Mail
                                     'LogToFile("Saved file: " & sContentLocation, 1)
                                     Dim imgHref As String = ""
                                     Dim bData As Byte()
+
+
                                     Dim newImagePath = ResizeImage(sContentLocation, sFolder, iFileCount, sFileExtension)
-                                    'LogToFile("Rezised image file: " & newImagePath, 1)
-                                    Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(newImagePath))
-                                    bData = br.ReadBytes(br.BaseStream.Length)
-                                    Dim base64String As String = Convert.ToBase64String(bData, 0, bData.Length)
+
+
+                                    ' Properly handling the file read operation
+                                    Using fs As FileStream = File.OpenRead(newImagePath)
+                                        ReDim bData(CInt(fs.Length) - 1)
+                                        fs.Read(bData, 0, bData.Length)
+                                    End Using ' FileStream is disposed of here, releasing the file
+
+                                    Dim base64String As String = Convert.ToBase64String(bData)
                                     imgHref = "data:image/png;base64," & base64String
-                                    br.Close()
+
                                     sBodyHtml = sBodyHtml.Replace(sContentId, imgHref)
-                                    'LogToFile("Created Base64 images for case: " & sFolder, 1)
+
                                 End If
                             End If
                         Next
@@ -2812,44 +2853,44 @@ Module DH_Helpdesk_Mail
 
     End Function
     Private Function ResizeImage(contentLocation As String, folder As String, iFileCount As Integer, fileExtension As String) As String
+        Dim newFilePath As String = System.IO.Path.Combine(folder, $"{iFileCount}_small.{fileExtension}")
 
+        ' The 'Using' block ensures that IDisposable objects are correctly disposed, releasing resources
+        Using originalImage As Bitmap = New Bitmap(contentLocation) ' Load the original image
 
-        ' Load the original image
-        Dim originalImage As Bitmap = New Bitmap(contentLocation)
+            Dim newWidth As Integer = 500
+            Dim newHeight As Integer = originalImage.Height
 
-        Dim newWidth As Integer = 500
-        Dim newHeight As Integer = originalImage.Height
-        If originalImage.Width > newWidth Then
-            newHeight = originalImage.Height * newWidth / originalImage.Width
-        Else
-            newWidth = originalImage.Width
-        End If
+            ' Calculate the new dimensions
+            If originalImage.Width > newWidth Then
+                newHeight = originalImage.Height * newWidth / originalImage.Width
+            Else
+                newWidth = originalImage.Width
+            End If
 
-        'Hängslen och byxor
-        If newHeight = 0 Then
-            newHeight = 1
-        End If
+            ' Fallback to prevent zero dimensions
+            newHeight = If(newHeight = 0, 1, newHeight)
+            newWidth = If(newWidth = 0, 1, newWidth)
 
-        If newWidth = 0 Then
-            newWidth = 1
-        End If
-        ' Create a new Bitmap object with the new width and height
-        Dim newImage As New Bitmap(originalImage, newWidth, newHeight)
+            ' Using statement ensures proper disposal of newImage instance after usage
+            Using newImage As New Bitmap(newWidth, newHeight)
 
-        ' Create a Graphics object for the new image
-        Dim graphics As Graphics = Graphics.FromImage(newImage)
+                ' Using statement for proper disposal of graphics object
+                Using graphics As Graphics = Graphics.FromImage(newImage)
 
-        ' Set the interpolation mode to high quality
-        graphics.InterpolationMode = InterpolationMode.HighQualityBicubic
+                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic
 
-        ' Draw the original image on the new image using the specified width and height
-        graphics.DrawImage(originalImage, 0, 0, newWidth, newHeight)
+                    ' Draw the original image on the new image using the specified width and height
+                    graphics.DrawImage(originalImage, 0, 0, newWidth, newHeight)
+                End Using ' Graphics object is disposed here
 
-        Dim newFilePath As String = folder & "\" & iFileCount & "_small" & "." & fileExtension
-        newImage.Save(newFilePath)
+                newImage.Save(newFilePath) ' Save the new image
+            End Using ' New Image object is disposed here
+
+        End Using ' Original Bitmap object is disposed here
+
         Return newFilePath
     End Function
-
 
 End Module
 

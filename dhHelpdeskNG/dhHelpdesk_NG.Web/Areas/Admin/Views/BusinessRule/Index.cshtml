@@ -116,6 +116,9 @@
                                         @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
                                     </th>
                                     <th>
+                                        @Translation.Get("Sekvens", Enums.TranslationSource.TextTranslation)
+                                    </th>
+                                    <th>
                                         @Translation.Get("Event", Enums.TranslationSource.TextTranslation)
                                     </th>
                                     <th>
@@ -124,9 +127,10 @@
                                     <th>
                                         @Translation.Get("Uppdaterad", Enums.TranslationSource.TextTranslation)
                                     </th>
-                                     <th>
-                                        @Translation.Get("Active", Enums.TranslationSource.TextTranslation)  
+                                    <th>
+                                        @Translation.Get("Active", Enums.TranslationSource.TextTranslation)
                                     </th>
+
                                 </tr>
                             </thead>
                             <tbody>
@@ -136,6 +140,11 @@
                                         <td>
                                             <a href="@Url.Action("EditRule", "BusinessRule", new { id = rule.RuleId})">
                                                 @Html.DisplayFor(x => rule.RuleName)
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="@Url.Action("EditRule", "BusinessRule", new { id = rule.RuleId})">
+                                                @Html.DisplayFor(x => rule.Sequence)
                                             </a>
                                         </td>
                                         <td>
@@ -158,6 +167,7 @@
                                                 @rule.IsActive.BoolToYesNo()
                                             </a>
                                         </td>
+
                                     </tr>
                                 }
                             </tbody>                            

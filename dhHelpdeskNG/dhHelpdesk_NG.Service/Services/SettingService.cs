@@ -184,6 +184,7 @@ namespace DH.Helpdesk.Services.Services
             setting.EMailFolderArchive = setting.EMailFolderArchive ?? string.Empty;
             setting.EMailAnswerSeparator = setting.EMailAnswerSeparator ?? string.Empty;
             setting.EMailSubjectPattern = setting.EMailSubjectPattern ?? string.Empty;
+            setting.ExternalEMailSubjectPattern = setting.ExternalEMailSubjectPattern ?? string.Empty;
             setting.BlockedEmailRecipients = setting.BlockedEmailRecipients ?? string.Empty;
             setting.BatchEmail = setting.BatchEmail;
 
@@ -239,6 +240,7 @@ namespace DH.Helpdesk.Services.Services
             setting.DSN_Sync = setting.DSN_Sync ?? string.Empty;
             setting.EMailAnswerSeparator = setting.EMailAnswerSeparator ?? string.Empty;
             setting.EMailSubjectPattern = setting.EMailSubjectPattern ?? string.Empty;
+            setting.ExternalEMailSubjectPattern = setting.ExternalEMailSubjectPattern ?? string.Empty;
             setting.BlockedEmailRecipients = setting.BlockedEmailRecipients ?? string.Empty;
             setting.LDAPBase = setting.LDAPBase ?? string.Empty;
             setting.LDAPFilter = setting.LDAPFilter ?? string.Empty;

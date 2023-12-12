@@ -1,10 +1,8 @@
 Imports System.Data.SqlClient
 Imports System.Linq
-Imports DH.Helpdesk.BusinessData.Models.Reports
 Imports DH.Helpdesk.BusinessData.Models.WorktimeCalculator
 Imports DH.Helpdesk.Dal.Infrastructure
 Imports DH.Helpdesk.Dal.Repositories
-'Imports System.Data.Odbc
 Imports DH.Helpdesk.Library.SharedFunctions
 Imports DH.Helpdesk.Services.Services
 Imports DH.Helpdesk.Services.Utils
@@ -62,11 +60,7 @@ Public Class CaseData
                 objLogFile.WriteLine(Now() & ", saveFileInfo: " & sSQL)
             End If
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
 
         Catch ex As Exception
             If giLoglevel > 0 Then
@@ -146,11 +140,7 @@ Public Class CaseData
                 objLogFile.WriteLine(Now() & ", saveCaseIsAbout: " & sSQL)
             End If
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
 
         Catch ex As Exception
             If giLoglevel > 0 Then
@@ -298,11 +288,8 @@ Public Class CaseData
 
             sSQL = sSQL & " WHERE Id=" & objCase.Id
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
+
         Catch ex As Exception
             Throw ex
 
@@ -329,11 +316,8 @@ Public Class CaseData
                 DbHelper.createDbParameter("@leadTime", workTime.LeadTime)
             }
 
-            'If giDBType = 0 Then
             DbHelper.executeNonQuery(gsConnectionString, sSQL, CommandType.Text, parameters.ToArray())
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
+
         Catch ex As Exception
             Throw ex
         End Try
@@ -371,11 +355,8 @@ Public Class CaseData
         Try
             sSQL = "DELETE FROM tblFileViewLog WHERE " & Call4DateFormat("CreatedDate", giDBType) & " < " & convertDateTime(DateAdd(DateInterval.Year, -1, Now.Date), giDBType)
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
+
         Catch ex As Exception
             Throw ex
         End Try
@@ -396,11 +377,8 @@ Public Class CaseData
 
             sSQL = $"UPDATE tblCase SET StateSecondary_Id=Null, ChangeTime='{getDateAsSqlString(workTime.Now)}', ExternalTime={workTime.ExternalTime}, LeadTime={workTime.LeadTime} WHERE tblCase.Id={objCase.Id}"
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
+
         Catch ex As Exception
             Throw ex
         End Try
@@ -417,7 +395,7 @@ Public Class CaseData
         Try
 
             ' Skapa nytt ärende
-            sSQL = "INSERT INTO tblCase(CaseGUID, CaseType_Id, Customer_Id, ProductArea_Id,Category_Id, Region_Id, ReportedBy, Department_Id, OU_Id, " &
+            sSQL = "INSERT INTO tblCase(CaseGUID, ExternalCaseNumber, CaseType_Id, Customer_Id, ProductArea_Id,Category_Id, Region_Id, ReportedBy, Department_Id, OU_Id, " &
                             "Project_Id, System_Id, Urgency_Id, Impact_Id, Supplier_Id, SMS, Cost, OtherCost, Problem_Id, Change_Id, CausingPartId, Verified, VerifiedDescription, SolutionRate," &
                             "InventoryType, InventoryLocation, Currency, ContactBeforeAction, FinishingDescription, " &
                             "Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Place, UserCode, CostCentre, InventoryNumber, InvoiceNumber, " &
@@ -425,6 +403,7 @@ Public Class CaseData
                             "WatchDate, PlanDate, AgreedDate, FinishingDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id, RegUserName, CaseSolution_Id, RegTime, ChangeTime) " &
                         "VALUES(" &
                             getDBStringPrefix() & "'" & objCase.CaseGUID & "', " &
+                            getDBStringPrefix() & "'" & objCase.ExternalCasenumber & "', " &
                             objCase.CaseType_Id & ", " &
                             objCase.Customer_Id & ", "
 
@@ -631,25 +610,7 @@ Public Class CaseData
 
             sSQL = sSQL & "getutcdate(), getutcdate())"
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-
-            '    sDescription = objCase.Description
-
-            '    If Len(sDescription) > 2000 Then
-            '        sDescription = Mid(sDescription, 2001)
-
-            '        Do Until Len(sDescription) = 0
-            '            sSQL = "UPDATE tblCase SET Description = Description || '" & Replace(Left(sDescription, 2000), "'", "''") & "' WHERE CaseGUID='" & objCase.CaseGUID & "'"
-
-            '            executeSQLOracle(gsConnectionString, sSQL)
-
-            '            sDescription = Mid(sDescription, 2001)
-            '        Loop
-            '    End If
-            'End If
 
             Dim newCase As CCase = getCaseById(sCaseGUID:=objCase.CaseGUID)
 
@@ -657,11 +618,8 @@ Public Class CaseData
                 sSQL = "INSERT INTO tblFormFieldValue(Case_Id, FormField_Id, FormFieldValue) " &
                         "SELECT " & newCase.Id & ", Id, ' ' FROM tblFormField WHERE Form_Id=" & objCase.Form_Id
 
-                'If giDBType = 0 Then
                 executeSQL(gsConnectionString, sSQL)
-                'Else
-                '    executeSQLOracle(gsConnectionString, sSQL)
-                'End If
+
             End If
 
             Return newCase
@@ -786,7 +744,7 @@ Public Class CaseData
         Dim dt As DataTable
 
         Try
-            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
+            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.ExternalCaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
                        "tblCase.Project_Id, tblCase.System_Id, tblCase.Urgency_Id, tblCase.Impact_Id, tblCase.Supplier_Id, tblCase.SMS, tblCase.VerifiedDescription, tblCase.SolutionRate, " &
                        "tblCase.InventoryType, tblCase.InventoryLocation, tblCase.Cost, tblCase.OtherCost, tblCase.Currency, tblCase.ContactBeforeAction, tblCase.Change_Id, tblCase.Problem_Id, " &
@@ -829,11 +787,7 @@ Public Class CaseData
                 sSQL = sSQL & "WHERE tblCase.ExternalCaseNumber = '" & sExternalCaseNumber & "'"
             End If
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim c As CCase
@@ -863,11 +817,7 @@ Public Class CaseData
                    "FROM tblEMailLog " &
                    "WHERE MessageId='" & sMessageId & "'"
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Return dt.Rows(0)("MailId")
@@ -1027,7 +977,7 @@ Public Class CaseData
             ' Lägg in den nya posten i historiken
 
             sSQL = "INSERT INTO tblCaseHistory(CaseHistoryGUID, Case_Id, ReportedBy, Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Customer_Id, Region_Id, Department_Id, OU_Id, Place, UserCode, InventoryNumber, InventoryType," &
-                          "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber, Caption, Description," &
+                          "InventoryLocation, Casenumber, ExternalCaseNumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber, Caption, Description," &
                           "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, Cost, OtherCost, Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id," &
                           "ProjectSchedule_Id, Verified, VerifiedDescription, SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, FinishingDescription, FollowUpDate," &
                           "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, RegUserId, RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, CreatedDate, CreatedByUser, CausingPartId, " &
@@ -1036,7 +986,7 @@ Public Class CaseData
                           "IsAbout_CostCentre, IsAbout_Place) " &
                        "Select top 1  '" & sCaseHistoryGUID & "', " & iCase_Id & " , " &
                                 "c.ReportedBy, c.Persons_Name, c.Persons_EMail, c.Persons_Phone, c.Persons_CellPhone, Customer_Id, c.Region_Id, c.Department_Id, c.OU_Id, c.Place, c.UserCode, InventoryNumber, InventoryType," &
-                              "InventoryLocation, Casenumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber,  Caption, Description," &
+                              "InventoryLocation, Casenumber, ExternalCaseNumber, User_Id, IPAddress, CaseType_Id, ProductArea_Id, ProductAreaSetDate, System_Id, Urgency_Id, Impact_Id, Category_Id, Supplier_Id, InvoiceNumber, ReferenceNumber,  Caption, Description," &
                               "Miscellaneous, ContactBeforeAction, SMS, AgreedDate, Available, c.Cost, OtherCost, Currency, Performer_User_Id, CaseResponsibleUser_Id, Priority_Id, Status_Id, StateSecondary_Id, ExternalTime, Project_Id, " &
                               "ProjectSchedule_Id, Verified, VerifiedDescription, SolutionRate, PlanDate, ApprovedDate, ApprovedBy_User_Id, WatchDate, LockCaseToWorkingGroup_Id, WorkingGroup_Id, FinishingDate, FinishingDescription, FollowUpDate, " &
                               "RegistrationSource, RelatedCaseNumber, Problem_Id, Change_Id, Deleted, Status, RegLanguage_Id, RegUserId, RegUserDomain, ProductAreaQuestionVersion_Id, LeadTime, getutcdate(),'" & Replace(sCreatedByUser, "'", "''") & "', CausingPartId, " &
@@ -1141,11 +1091,7 @@ Public Class CaseData
 
             Dim dt As DataTable
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If giLoglevel > 0 Then
                 objLogFile.WriteLine(Now() & ", getCaseSolutionSchedule rows " & dt.Rows.Count.ToString)
@@ -1598,12 +1544,7 @@ Public Class CaseData
 
             Dim dt As DataTable
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
-
 
             For Each dr In dt.Rows
                 If IsDBNull(dr("PhysicalFilePath")) Then
@@ -1639,14 +1580,9 @@ Public Class CaseData
                     sSQL = sSQL & " AND tblCase.Id NOT IN (SELECT Case_Id FROM tblCaseHistory WHERE Status_Id IN (" & dr("Exclude_Status_Id") & "))"
                 End If
 
-
                 Dim dtCase As DataTable
 
-                'If giDBType = 0 Then
                 dtCase = getDataTable(gsConnectionString, sSQL)
-                'Else
-                '    dtCase = getDataTableOracle(gsConnectionString, sSQL)
-                'End If
 
                 For Each drCase In dtCase.Rows
 
@@ -1736,11 +1672,8 @@ Public Class CaseData
                         "RunDate=getutcdate() " &
                     " WHERE tblCaseCleanUp.Id=" & iCaseCleanUp_Id
 
-            'If giDBType = 0 Then
             executeSQL(gsConnectionString, sSQL)
-            'Else
-            '    executeSQLOracle(gsConnectionString, sSQL)
-            'End If
+
         Catch ex As Exception
             Throw ex
         End Try

@@ -50,6 +50,7 @@
             this.Property(x => x.EMailImportType).IsRequired();
             this.Property(x => x.EMailRegistrationMailID).IsRequired();            
             this.Property(x => x.EMailSubjectPattern).IsRequired().HasMaxLength(100);
+            this.Property(x => x.ExternalEMailSubjectPattern).IsRequired().HasMaxLength(1000);
             //this.Property(x => x.InventoryDays2WaitBeforeDelete).IsOptional();
             this.Property(x => x.InvoiceType).IsRequired();
             this.Property(x => x.IntegrationType).IsRequired();

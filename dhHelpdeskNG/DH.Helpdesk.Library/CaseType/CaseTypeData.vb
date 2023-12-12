@@ -10,11 +10,7 @@ Public Class CaseTypeData
                    "FROM tblCaseType " & _
                    "WHERE tblCaseType.Id = " & iId
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             If dt.Rows.Count > 0 Then
                 Dim ct As CaseType

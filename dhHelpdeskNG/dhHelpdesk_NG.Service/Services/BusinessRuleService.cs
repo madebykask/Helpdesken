@@ -23,6 +23,8 @@ namespace DH.Helpdesk.Services.Services
         IList<BusinessRuleModel> GetRules(int customerId, BREventType occurredEvent);
 
         IList<BusinessRuleReadModel> GetRuleReadlist(int customerId);
+
+        DeleteMessage DeleteBusinessRule(int id);
     }
 
     public class BusinessRuleService : IBusinessRuleService
@@ -76,6 +78,27 @@ namespace DH.Helpdesk.Services.Services
                 Conditions = ruleEntity.BrConditions.Select(x => x.Field_Id).ToList(), 
                 Actions = ruleEntity.BrActions.SelectMany(x => x.BrActionParams).Select(x => x.ParamValue).ToList()
             }).ToList();
-        }   
+        }
+
+        public DeleteMessage DeleteBusinessRule(int id)
+        {
+            var businessRule = this._businessRuleRepository.GetRule(id);
+
+            if (businessRule != null)
+            {
+                try
+                {
+                    this._businessRuleRepository.DeleteRule(id);
+
+                    return DeleteMessage.Success;
+                }
+                catch
+                {
+                    return DeleteMessage.UnExpectedError;
+                }
+            }
+
+            return DeleteMessage.Error;
+        }
     }
 }

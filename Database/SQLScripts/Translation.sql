@@ -8573,6 +8573,34 @@ If not exists (select * from tblTextTranslation where text_id = 2167 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2167, 2, 'Closing reason must be specified at the lowest level')
 GO
 
+If not exists (select * from tbltext where id = 2168)
+	insert into tbltext (id, TextString) VALUES (2168, 'Nyckelord koppla rubrik externt')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2168 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2168, 2, 'Headline key word externally')
+GO
+
+-- Generate translations for BusinessRules
+If not exists (select * from tbltext where id = 2169)
+	insert into tbltext (id, TextString) VALUES (2169, 'Domän/E-postmönster')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2169 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2169, 2, 'Domain/Email pattern')
+GO
+
+If not exists (select * from tbltext where id = 2170)
+	insert into tbltext (id, TextString) VALUES (2170, 'Ange en domän (t.ex. "gmail.com") eller specifika e-postadresser separerade med semikolon (t.ex. "user@example.com; another@example.com").')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2170 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2170, 2, 'Enter a domain (e.g., "gmail.com") or specific email addresses separated by semicolons (e.g., "user@example.com; another@example.com").')
+GO
+
+Update tblTextTranslation set TextTranslation = 'Headline keyword' where Language_Id = 2 and Text_Id = 2160 
+Go
+
+Update tblTextTranslation set TextTranslation = 'Headline keyword externally' where Language_Id = 2 and Text_Id = 2168 
+Go
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

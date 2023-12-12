@@ -9,11 +9,7 @@ Public Class HolidayData
         Try
             sSQL = "SELECT tblHoliday.Id, tblHoliday.Holiday, tblHoliday.TimeFrom, tblHoliday.TimeUntil, tblHoliday.HolidayHeader_Id FROM tblHoliday ORDER BY Holiday"
 
-            'If giDBType = 0 Then
             dt = getDataTable(gsConnectionString, sSQL)
-            'Else
-            '    dt = getDataTableOracle(gsConnectionString, sSQL)
-            'End If
 
             Dim h As Holiday
 

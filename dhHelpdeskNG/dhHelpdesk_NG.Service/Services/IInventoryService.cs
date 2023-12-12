@@ -159,5 +159,7 @@ namespace DH.Helpdesk.Services.Services
         int? GetComputerTypePrice(int id);
         bool IsMacAddressUnique(int exceptId, string macAddress);
         bool IsTheftMarkUnique(int exceptId, string theftMark);
+        bool IsComputerNameUnique(int exceptId, string computerName);
+        bool IsIpAddressUnique(int exceptId, string ipAddress);
     }
 }

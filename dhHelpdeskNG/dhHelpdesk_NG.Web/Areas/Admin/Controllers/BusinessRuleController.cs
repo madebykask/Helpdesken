@@ -5,6 +5,7 @@ using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule;
 using DH.Helpdesk.Web.Infrastructure;
 using DH.Helpdesk.Web.Infrastructure.Extensions;
+using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,9 +67,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				//Condition = String.Join(", ", x.Conditions.ToArray()),
 				ChangedBy = x.ChangedBy.GetFullName(),
 				ChangedOn = x.ChangedTime,
-				Event = "On Save Case",
-				IsActive = x.RuleActive
-			}).ToList();
+				Event = Enum.GetName(typeof(BREventType), x.Event),
+				IsActive = x.RuleActive,
+                Sequence = x.RuleSequence
+            }).ToList();
 
 			return View(model);
 		}
@@ -79,7 +81,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			var model = new BusinessRuleInputModel
 			{
 				CustomerId = customerId,
-				Events = new List<BREvent> { new BREvent((int)BREventType.OnSaveCase, "On Save Case", true) },
+				Events = DefineBREvents(),
 				Condition = new BRConditionModel
 				{
 					Sequence = 1
@@ -147,7 +149,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				RuleId = rule.Id,
 				CustomerId = rule.CustomerId,
 				RuleName = rule.RuleName,
-				Events = new List<BREvent> { new BREvent((int)BREventType.OnSaveCase, "On Save Case", true) },
+				Events = DefineBREvents(rule.EventId),
 				ContinueOnSuccess = rule.ContinueOnSuccess,
 				ContinueOnError = rule.ContinueOnError,
 				IsActive = rule.RuleActive,
@@ -188,8 +190,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				ProcessesToValue = processList.Where(x => rule.ProcessTo.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				SubStatusesFromValue = subStatusList.Where(x => rule.SubStatusFrom.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				SubStatusesToValue = subStatusList.Where(x => rule.SubStatusTo.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
-				Sequence = 1
-			};
+				Sequence = 1,
+                Equals = rule.DomainFrom
+            };
 
 			var emailTemplateList = GetEmailTemplatesList(rule.CustomerId);
 			ViewBag.EMailTemplates = emailTemplateList.OrderBy(x => x.Text).ToList();
@@ -208,12 +211,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			{
 				Id = 0,
 				RuleId = rule.Id,
-				ActionTypeId = BRActionType.SendEmail,
+				ActionTypeId = rule.EventId,
 				EmailTemplateId = rule.EmailTemplate,
 				EMailGroupIds = emailGroupList.Where(x => rule.EmailGroups.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				WorkingGroupIds = workingGroups.Where(x => rule.WorkingGroups.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				AdministratorIds = allAdmins.Where(x => rule.Administrators.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
-				Recipients = string.Join(BRConstItem.Email_Separator, rule.Recipients),
+				Recipients = rule.Recipients != null ? string.Join(BRConstItem.Email_Separator, rule.Recipients) : null,
 				CaseCreator = rule.CaseCreator,
 				Initiator = rule.Initiator,
 				CaseIsAbout = rule.CaseIsAbout,
@@ -243,7 +246,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 					ruleModel.ChangedByUserId = SessionFacade.CurrentUser.Id;
 				}
 
-				ruleModel.EventId = (int) BREventType.OnSaveCase;
 				if (ruleModel.Recipients == null)
 					ruleModel.Recipients = new List<string>().ToArray();
 
@@ -255,26 +257,45 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			return Json("false", JsonRequestBehavior.AllowGet);
 		}
 
-		#endregion
+        [HttpPost]
+        public ActionResult Delete(int id)
+        {
+            var rule = this._businessRuleService.GetRule(id);
 
-		#region Private
+            if (this._businessRuleService.DeleteBusinessRule(id) == DeleteMessage.Success)
+			{
 
-		//private string SerializeRuleAction(string emailTemplate, SelectedItems emailGroups, SelectedItems workingGroups, SelectedItems administrators, string[] recipients)
-		//{
+				return RedirectToAction("Index", new { customerId = rule.CustomerId});
 
-		//}
+            }
 
-		//private string SerializeRuleCondition(BRActionModel action)
-		//{
+            else
+            {
+                this.TempData.Add("Error", "");
+                return RedirectToAction("EditRule", new { id = rule.Id });
+            }
+        }
 
-		//}
+        #endregion
 
-		//private string SerializeRuleEvent(BRActionModel action)
-		//{
+        #region Private
 
-		//}
+        //private string SerializeRuleAction(string emailTemplate, SelectedItems emailGroups, SelectedItems workingGroups, SelectedItems administrators, string[] recipients)
+        //{
 
-		private List<DdlModel> GetSubStatusesList(int customerId, List<DdlModel> fieldItems)
+        //}
+
+        //private string SerializeRuleCondition(BRActionModel action)
+        //{
+
+        //}
+
+        //private string SerializeRuleEvent(BRActionModel action)
+        //{
+
+        //}
+
+        private List<DdlModel> GetSubStatusesList(int customerId, List<DdlModel> fieldItems)
 		{
 			var subStatusList = fieldItems.Union(_subStatusService.GetStateSecondaries(customerId).Select(s => new DdlModel
 			{
@@ -363,7 +384,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			return emailTemplateList;
 		}
 
-		#endregion Private
+		private List<BREvent> DefineBREvents(int selectedId = 1)
+		{
+			return new List<BREvent>
+			{
+				new BREvent((int)BREventType.OnSaveCase, "On Save Case", selectedId == (int)BREventType.OnSaveCase),
+				new BREvent((int)BREventType.OnCreateCaseM2T, "On Create Case (M2T)", selectedId == (int)BREventType.OnCreateCaseM2T)
+			};
 
+			#endregion Private
+
+		}
 	}
 }

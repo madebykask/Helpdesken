@@ -139,7 +139,7 @@
 @section Scripts
 {
     @Scripts.Render(BundleConfig.ScriptNames.InventoryWorkstation)
-    <script type="text/javascript">
+<script type="text/javascript">
 
             window.parameters = (window.parameters == null ? {} : window.parameters);
             window.parameters.fileUploadWhiteList = [];
@@ -169,6 +169,16 @@
                 $('#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)')
                     .attr("data-val-remote-url", '@Url.Action("ValidateTheftmark", "Workstation")');
 
+                $('#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)')
+                     .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Name), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                $('#@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)')
+                    .attr("data-val-remote-url", '@Url.Action("ValidateComputerName", "Workstation")');
+
+                $('#@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value)')
+                    .attr("data-val-remote", '@string.Format(" {0} {1}", Html.PureFieldCaption(Model.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress), Translation.GetCoreTextTranslation("måste vara unikt"))');
+                $('#@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value)')
+                    .attr("data-val-remote-url", '@Url.Action("ValidateIpAddress", "Workstation")');
+
                 window.workstationEdit = new WorkstationEdit($);
                 window.workstationEdit.init({
                     id: @Model.Id,
@@ -179,12 +189,18 @@
                     getDepartmentsUrl: '@Url.Action("GetDepartments", "Ajax", new {area = ""})',
                     validateMacAddressUrl: '@Url.Action("ValidateMacAddress", "Workstation")',
                     validateTheftMarkUrl: '@Url.Action("ValidateTheftmark", "Workstation")',
+                    validateComputerNameUrl: '@Url.Action("ValidateComputerName", "Workstation")',
+                    validateIpAddressUrl: '@Url.Action("ValidateIpAddress", "Workstation")',
                     copyUrl: '@Url.Action("Copy", "Workstation")',
                     fieldsIds: {
                         'MacAddressId':
                             '@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value)',
                         'TheftMarkId':
-                            '@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)'
+                            '@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value)',
+                        'ComputerNameId':
+                            '@Html.IdFor(m => m.ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value)',
+                        'IPAddressId':
+                            '@Html.IdFor(m => m.ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value)',
                     },
                 });
 
@@ -206,7 +222,7 @@
                         }
                     });
             });
-    </script>
+</script>
 
     @if (documentModel.Show)
     {
