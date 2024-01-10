@@ -81,7 +81,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Helpers
             }
 
             HtmlNodeCollection tableWidths = doc.DocumentNode.SelectNodes("//table[@width]");
-            if (tables != null)
+            if (tableWidths != null)
             {
                 foreach (HtmlNode table in tableWidths)
                 {
