@@ -81,6 +81,7 @@ namespace DH.Helpdesk.SelfService.Infrastructure.Helpers
             }
 
             HtmlNodeCollection tableWidths = doc.DocumentNode.SelectNodes("//table[@width]");
+            //This is corrected from "tables" to "tableWidths" 2024-01-10. //Katta
             if (tableWidths != null)
             {
                 foreach (HtmlNode table in tableWidths)
