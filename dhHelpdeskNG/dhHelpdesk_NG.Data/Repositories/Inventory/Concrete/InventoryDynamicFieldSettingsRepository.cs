@@ -146,7 +146,8 @@ namespace DH.Helpdesk.Dal.Repositories.Inventory.Concrete
             var anonymus =
                 this.GetSettings(inventoryTypeId)
                     .Where(x => x.ShowInList == True)
-                    .Select(x => new { x.Id, x.PropertyValue })
+                    .Select(x => new { x.Id, x.PropertyValue, x.PropertyPos })
+                    .OrderBy(x => x.PropertyPos)
                     .ToList();
 
             var data = anonymus.Select(x => new InventoryDynamicFieldSettingOverview(x.Id, x.PropertyValue)).ToList();
