@@ -786,7 +786,7 @@ EditPage.prototype.reExtendCaseLock = function () {
         extendValue: p.extendValue,
         caseId: parseInt(p.currentCaseId || self.case.id)
     };
-    if (!data.caseId || !data.lockGuid) {
+    if (!data || !data.caseId || !data.lockGuid || !data.extendValue) {
         console.log(`Missing data for reextendcase: ${JSON.stringify(data)}`);
         return;
     }

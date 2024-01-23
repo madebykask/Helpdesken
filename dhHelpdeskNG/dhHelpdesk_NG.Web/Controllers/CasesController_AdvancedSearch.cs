@@ -250,8 +250,10 @@ namespace DH.Helpdesk.Web.Controllers
             var theCaseToCheck = _caseService.GetCaseById(caseId);
             if (caseId > 0)
             {
-                var userDeps = _departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
-                if(userDeps != null && userDeps.Count > 0) {
+                //If the user has restrictions on departments for a specific customer we have to check this.
+                //If there are no userdeps we can skip this check.
+                var userDeps = _departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, theCaseToCheck.Customer_Id);
+                if (userDeps != null && userDeps.Count > 0) {
                     //Check if the user has access to the case
                     if (!userDeps.Any(x => x.Id == theCaseToCheck.Department_Id))
                     {

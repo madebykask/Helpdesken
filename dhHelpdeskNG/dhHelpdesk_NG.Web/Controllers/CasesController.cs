@@ -1870,7 +1870,9 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (SessionFacade.CurrentUser != null)
             {
-                var userDeps = _departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, SessionFacade.CurrentCustomer.Id);
+                //If the user has restrictions on departments for a specific customer we have to check this.
+                //If there are no userdeps we can skip this check.
+                var userDeps = _departmentService.GetDepartmentsByUserPermissions(SessionFacade.CurrentUser.Id, c.Customer_Id);
                 if (userDeps != null && userDeps.Count > 0)
                 {
                     //Check if the user has access to the case due to restrictions by department
@@ -1879,12 +1881,7 @@ namespace DH.Helpdesk.Web.Controllers
                         return new RedirectResult("~/Error/Unathorized");
                     }
                 }
-                //Instead of this we use the UserCasePermissions attribute
-                //var isAuthorised = _userService.VerifyUserCasePermissions(SessionFacade.CurrentUser, id);
-                //if(!isAuthorised)
-                //{
-                //    return new RedirectResult("~/Error/Unathorized");
-                //}
+
                 /* Used for Extended Case */
                 TempData["Case_Id"] = id;
 
@@ -8280,6 +8277,7 @@ namespace DH.Helpdesk.Web.Controllers
         }
 
         #endregion
+
 
 
 #if DEBUG
