@@ -263,6 +263,29 @@ IF COL_LENGTH('dbo.tblCaseHistory','ExternalCaseNumber') IS NULL
 	End
 Go
 
+
+-- 5.6.0
+
+
+-- Add columns to tblStateSecondary #13486
+RAISERROR ('Add Column SplitOnSave to tblStateSecondary', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblStateSecondary','SplitOnSave') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblStateSecondary]
+		ADD SplitOnSave bit not null default 0
+	End
+Go
+
+
+RAISERROR ('Add Column SplitOnNext to tblStateSecondary', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblStateSecondary','SplitOnNext') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblStateSecondary]
+		ADD SplitOnNext bit not null default 0
+	End
+Go
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.6.0'
 GO
