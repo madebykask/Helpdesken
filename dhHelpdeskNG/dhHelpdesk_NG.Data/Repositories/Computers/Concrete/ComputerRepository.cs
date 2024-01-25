@@ -32,6 +32,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
     using ContactInformationFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.ContactInformationFields;
     using StateFields = DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Computer.StateFields;
     using DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Inventory;
+    using DH.Helpdesk.BusinessData.Enums.Inventory.Fields.Shared;
 
     public class ComputerRepository : Repository<Domain.Computers.Computer>, IComputerRepository
     {
@@ -515,8 +516,6 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         query = query.OrderBy(x => x.Computer.Manufacturer);
                     else if (sortOptions.Name == ComputerFields.Location)
                         query = query.OrderBy(x => x.Computer.Location);
-                    else if (sortOptions.Name == "OperatingSystem.Name")
-                        query = query.OrderBy(x => x.Computer.OS.Name);
                     else if (sortOptions.Name == "Organization.Department")
                         query = query.OrderBy(x => x.Computer.Department.DepartmentName);
                     else if (sortOptions.Name == ComputerFields.Model)
@@ -551,6 +550,66 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         query = query.OrderBy(x => x.Computer.ContractStatus.Name);
                     else if (sortOptions.Name == ContractFields.PurchasePrice)
                         query = query.OrderBy(x => x.Computer.Price);
+                    //Nytt 2024-01-25
+                    else if (sortOptions.Name == "Organization.Region")
+                        query = query.OrderBy(x => x.Computer.Region.Name);
+                    else if (sortOptions.Name == "Organization.Unit")
+                        query = query.OrderBy(x => x.Computer.OU.Name);
+                    else if (sortOptions.Name == "Organization.Domain")
+                        query = query.OrderBy(x => x.Computer.Domain.Name);
+                    else if (sortOptions.Name == "Place.LocationRoom")
+                        query = query.OrderBy(x => x.Computer.LocationRoom);
+                    else if (sortOptions.Name == "Place.Location2")
+                        query = query.OrderBy(x => x.Computer.Location2);
+                    else if (sortOptions.Name == "Place.LocationAddress")
+                        query = query.OrderBy(x => x.Computer.LocationAddress);
+                    else if (sortOptions.Name == "Place.LocationPostalAddress")
+                        query = query.OrderBy(x => x.Computer.LocationPostalAddress);
+                    else if (sortOptions.Name == "Contact.Name")
+                        query = query.OrderBy(x => x.Computer.ContactName);
+                    else if (sortOptions.Name == "Contact.Phone")
+                        query = query.OrderBy(x => x.Computer.ContactPhone);
+                    else if (sortOptions.Name == "Contact.Email")
+                        query = query.OrderBy(x => x.Computer.ContactEmailAddress);
+                    else if (sortOptions.Name == CommunicationFields.RAS)
+                        query = query.OrderBy(x => x.Computer.RAS);
+                    else if (sortOptions.Name == ContractFields.ContractStartDate)
+                        query = query.OrderBy(x => x.Computer.ContractStartDate);
+                    else if (sortOptions.Name == ContractFields.ContractEndDate)
+                        query = query.OrderBy(x => x.Computer.ContractEndDate);
+                    else if (sortOptions.Name == ContractFields.WarrantyEndDate)
+                        query = query.OrderBy(x => x.Computer.WarrantyEndDate);
+                    else if (sortOptions.Name == ContractFields.ContractNumber)
+                        query = query.OrderBy(x => x.Computer.ContractNumber);
+                    else if (sortOptions.Name == ContractFields.AccountingDimension1)
+                        query = query.OrderBy(x => x.Computer.AccountingDimension1);
+                    else if (sortOptions.Name == ContractFields.AccountingDimension2)
+                        query = query.OrderBy(x => x.Computer.AccountingDimension2);
+                    else if (sortOptions.Name == ContractFields.AccountingDimension3)
+                        query = query.OrderBy(x => x.Computer.AccountingDimension3);
+                    else if (sortOptions.Name == ContractFields.AccountingDimension4)
+                        query = query.OrderBy(x => x.Computer.AccountingDimension4);
+                    else if (sortOptions.Name == ContractFields.AccountingDimension5)
+                        query = query.OrderBy(x => x.Computer.AccountingDimension5);
+                    else if (sortOptions.Name == ComputerFields.Location)
+                        query = query.OrderBy(x => x.Computer.Location);
+                    else if (sortOptions.Name == "Chassis.Type")
+                        query = query.OrderBy(x => x.Computer.ChassisType);
+                    else if (sortOptions.Name == "Inventory.BarCode")
+                        query = query.OrderBy(x => x.Computer.BarCode);
+                    else if (sortOptions.Name == CommunicationFields.NovellClient)
+                        query = query.OrderBy(x => x.Computer.NovellClient);
+                    else if (sortOptions.Name == OperatingSystemFields.Version)
+                        query = query.OrderBy(x => x.Computer.Version);
+                    else if (sortOptions.Name == OperatingSystemFields.ServicePack)
+                        query = query.OrderBy(x => x.Computer.SP);
+                    else if (sortOptions.Name == OperatingSystemFields.RegistrationCode)
+                        query = query.OrderBy(x => x.Computer.RegistrationCode);
+                    else if (sortOptions.Name == OperatingSystemFields.ProductKey)
+                        query = query.OrderBy(x => x.Computer.ProductKey);
+                    else if (sortOptions.Name == OperatingSystemFields.OperatingSystem)
+                        query = query.OrderBy(x => x.Computer.OS.Name);
+                    //Slut nytt 2024-01-25
                     else if (sortOptions.Name == "Inventory.PurchaseDate")
                         query = query.OrderBy(x => x.Computer.PurchaseDate);
                     else if (sortOptions.Name == OtherFields.Info)
@@ -570,14 +629,13 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 }
                 else
                 {
+
                     if (sortOptions.Name == ComputerFields.Name)
                         query = query.OrderByDescending(x => x.Computer.ComputerName);
                     else if (sortOptions.Name == ComputerFields.Manufacturer)
                         query = query.OrderByDescending(x => x.Computer.Manufacturer);
                     else if (sortOptions.Name == ComputerFields.Location)
                         query = query.OrderByDescending(x => x.Computer.Location);
-                    else if (sortOptions.Name == "OperatingSystem.Name")
-                        query = query.OrderByDescending(x => x.Computer.OS.Name);
                     else if (sortOptions.Name == "Organization.Department")
                         query = query.OrderByDescending(x => x.Computer.Department.DepartmentName);
                     else if (sortOptions.Name == ComputerFields.Model)
@@ -612,6 +670,67 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                         query = query.OrderByDescending(x => x.Computer.ContractStatus.Name);
                     else if (sortOptions.Name == ContractFields.PurchasePrice)
                         query = query.OrderByDescending(x => x.Computer.Price);
+                    //Nytt 2024-01-25
+                    else if (sortOptions.Name == "Organization.Region")
+                        query = query.OrderByDescending(x => x.Computer.Region.Name);
+                    else if (sortOptions.Name == "Organization.Unit")
+                        query = query.OrderByDescending(x => x.Computer.OU.Name);
+                    else if (sortOptions.Name == "Organization.Domain")
+                        query = query.OrderByDescending(x => x.Computer.Domain.Name);
+                    else if (sortOptions.Name == "Place.LocationRoom")
+                        query = query.OrderByDescending(x => x.Computer.LocationRoom);
+                    else if (sortOptions.Name == "Place.Location2")
+                        query = query.OrderByDescending(x => x.Computer.Location2);
+                    else if (sortOptions.Name == "Place.LocationAddress")
+                        query = query.OrderByDescending(x => x.Computer.LocationAddress);
+                    else if (sortOptions.Name == "Place.LocationPostalAddress")
+                        query = query.OrderByDescending(x => x.Computer.LocationPostalAddress);
+                    else if (sortOptions.Name == "Contact.Name")
+                        query = query.OrderByDescending(x => x.Computer.ContactName);
+                    else if (sortOptions.Name == "Contact.Phone")
+                        query = query.OrderByDescending(x => x.Computer.ContactPhone);
+                    else if (sortOptions.Name == "Contact.Email")
+                        query = query.OrderByDescending(x => x.Computer.ContactEmailAddress);
+                    else if (sortOptions.Name == CommunicationFields.RAS)
+                        query = query.OrderByDescending(x => x.Computer.RAS);
+                    else if (sortOptions.Name == ContractFields.ContractStartDate)
+                        query = query.OrderByDescending(x => x.Computer.ContractStartDate);
+                    else if (sortOptions.Name == ContractFields.ContractEndDate)
+                        query = query.OrderByDescending(x => x.Computer.ContractEndDate);
+                    else if (sortOptions.Name == ContractFields.WarrantyEndDate)
+                        query = query.OrderByDescending(x => x.Computer.WarrantyEndDate);
+                    else if (sortOptions.Name == ContractFields.AccountingDimension1)
+                        query = query.OrderByDescending(x => x.Computer.AccountingDimension1);
+                    else if (sortOptions.Name == ContractFields.AccountingDimension2)
+                        query = query.OrderByDescending(x => x.Computer.AccountingDimension2);
+                    else if (sortOptions.Name == ContractFields.AccountingDimension3)
+                        query = query.OrderByDescending(x => x.Computer.AccountingDimension3);
+                    else if (sortOptions.Name == ContractFields.AccountingDimension4)
+                        query = query.OrderByDescending(x => x.Computer.AccountingDimension4);
+                    else if (sortOptions.Name == ContractFields.AccountingDimension5)
+                        query = query.OrderByDescending(x => x.Computer.AccountingDimension5);
+                    else if (sortOptions.Name == ComputerFields.Location)
+                        query = query.OrderByDescending(x => x.Computer.Location);
+                    else if (sortOptions.Name == "Chassis.Type")
+                        query = query.OrderByDescending(x => x.Computer.ChassisType);
+                    else if (sortOptions.Name == "Inventory.BarCode")
+                        query = query.OrderByDescending(x => x.Computer.BarCode);
+                    else if (sortOptions.Name == CommunicationFields.NovellClient)
+                        query = query.OrderByDescending(x => x.Computer.NovellClient);
+                    else if (sortOptions.Name == OperatingSystemFields.Version)
+                        query = query.OrderByDescending(x => x.Computer.Version);
+                    else if (sortOptions.Name == OperatingSystemFields.ServicePack)
+                        query = query.OrderByDescending(x => x.Computer.SP);
+                    else if (sortOptions.Name == OperatingSystemFields.RegistrationCode)
+                        query = query.OrderByDescending(x => x.Computer.RegistrationCode);
+                    else if (sortOptions.Name == OperatingSystemFields.ProductKey)
+                        query = query.OrderByDescending(x => x.Computer.ProductKey);
+                    else if (sortOptions.Name == OperatingSystemFields.OperatingSystem)
+                        query = query.OrderByDescending(x => x.Computer.OS.Name);
+                    else if (sortOptions.Name == OperatingSystemFields.OperatingSystem)
+                        query = query.OrderByDescending(x => x.Computer.OS.Name);
+                    //RegistrationCode
+                    //Slut nytt 2024-01-25
                     else if (sortOptions.Name == "Inventory.PurchaseDate")
                         query = query.OrderByDescending(x => x.Computer.PurchaseDate);
                     else if (sortOptions.Name == OtherFields.Info)
