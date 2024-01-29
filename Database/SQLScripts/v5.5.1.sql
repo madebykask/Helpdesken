@@ -263,6 +263,22 @@ IF COL_LENGTH('dbo.tblCaseHistory','ExternalCaseNumber') IS NULL
 	End
 Go
 
+RAISERROR ('Alter tblComputer.Location from 50 nvarchar to 100 nvarchar', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblComputer','Location') IS NOT NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblComputer]
+		ALTER COLUMN [Location2] nvarchar(100) NULL
+	End
+Go
+
+RAISERROR ('Alter tblComputer.LocationRoom from 50 nvarchar to 100 nvarchar', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblComputer','LocationRoom') IS NOT NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblComputer]
+		ALTER COLUMN [LocationRoom] nvarchar(100) NULL
+	End
+Go
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.5.1'
 GO
