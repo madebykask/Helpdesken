@@ -62,21 +62,33 @@
                             validator.showErrors();
                         } else {
                             if (response.from === 'nameCheck') {
+                                $("[data-valmsg-for='ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value']")
+                                    .addClass("field-validation-error")
+                                    .text(response.message);
                                 $("[data-valmsg-for='WorkstationFieldsViewModel.WorkstationFieldsModel.Name.Value']")
                                     .addClass("field-validation-error")
                                     .text(response.message);
                             }
                             if (response.from === 'macAddress') {
+                                $("[data-valmsg-for='ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value']")
+                                    .addClass("field-validation-error")
+                                    .text(response.message);
                                 $("[data-valmsg-for='CommunicationFieldsViewModel.CommunicationFieldsModel.MacAddress.Value']")
                                     .addClass("field-validation-error")
                                     .text(response.message);
                             }
                             if (response.from === 'theftMark') {
+                                $("[data-valmsg-for='ComputerViewModel.WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value']")
+                                    .addClass("field-validation-error")
+                                    .text(response.message);
                                 $("[data-valmsg-for='WorkstationFieldsViewModel.WorkstationFieldsModel.Theftmark.Value']")
                                     .addClass("field-validation-error")
                                     .text(response.message);
                             }
                             if (response.from === 'ipAddress') {
+                                $("[data-valmsg-for='ComputerViewModel.CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value']")
+                                    .addClass("field-validation-error")
+                                    .text(response.message);
                                 $("[data-valmsg-for='CommunicationFieldsViewModel.CommunicationFieldsModel.IPAddress.Value']")
                                     .addClass("field-validation-error")
                                     .text(response.message);

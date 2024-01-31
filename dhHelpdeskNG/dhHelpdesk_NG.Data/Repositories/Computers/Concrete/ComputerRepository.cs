@@ -903,21 +903,21 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
             return computerTypePrice;
         }
 
-        public bool IsMacAddressUnique(int exceptId, string macAddress)
+        public bool IsMacAddressUnique(int exceptId, string macAddress, int customerId)
         {
-            return !DbSet.Any(w => w.MACAddress.Equals(macAddress, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
+            return !DbSet.Any(w => w.MACAddress.Equals(macAddress, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId && w.Customer_Id == customerId);
         }
-        public bool IsTheftMarkUnique(int exceptId, string theftMark)
+        public bool IsTheftMarkUnique(int exceptId, string theftMark, int customerId)
         {
-            return !DbSet.Any(w => w.TheftMark.Equals(theftMark, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
+            return !DbSet.Any(w => w.TheftMark.Equals(theftMark, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId && w.Customer_Id == customerId);
         }
-        public bool IsIpAddressUnique(int exceptId, string ipAddress)
+        public bool IsIpAddressUnique(int exceptId, string ipAddress, int customerId)
         {
-            return !DbSet.Any(w => w.IPAddress.Equals(ipAddress, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
+            return !DbSet.Any(w => w.IPAddress.Equals(ipAddress, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId && w.Customer_Id == customerId);
         }
-        public bool IsComputerNameUnique(int exceptId, string computerName)
+        public bool IsComputerNameUnique(int exceptId, string computerName, int customerId)
         {
-            return !DbSet.Any(w => w.ComputerName.Equals(computerName, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId);
+            return !DbSet.Any(w => w.ComputerName.Equals(computerName, StringComparison.InvariantCultureIgnoreCase) && w.Id != exceptId && w.Customer_Id == customerId);
         }
         public List<ComputerOverview> GetRelatedOverviews(int customerId, string userId)
         {
