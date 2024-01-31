@@ -864,7 +864,7 @@ EditPage.prototype.getValidationErrorMessage = function (extraMessage) {
     return messages.join('');
 };
 
-var isSummernoteEmpty = function () {
+var isExternalSummernoteEmpty = function () {
     // Get the HTML content of the Summernote editor
     var content = $('.summernoteexternal').summernote('code');
 
@@ -899,15 +899,16 @@ EditPage.prototype.isFormValid = function () {
         };
     }
 
-    var emptyLog = isSummernoteEmpty();
+    var emptyLog = isExternalSummernoteEmpty();
 
     if (emptyLog && $('#divCaseLogFiles.externalLog-files tr').length > 0) {
-
         $("#textExternalOuter").find(".note-editor").addClass("error");
-
-        dhHelpdesk.cases.utils.showError(me.productAreaErrorMessage);
-
-        return false; 
+        $("#externalError").css('display', 'inline');
+        return false;
+    }
+    else {
+        $("#textExternalOuter").find(".note-editor").removeClass("error");
+        $("#externalError").css('display', 'none');
     }
 
 
