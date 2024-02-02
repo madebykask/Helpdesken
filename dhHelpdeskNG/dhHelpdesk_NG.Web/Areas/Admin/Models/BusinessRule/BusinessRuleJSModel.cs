@@ -6,6 +6,7 @@ using System.Linq;
 using System.Web;
 using DH.Helpdesk.Web.Infrastructure.Attributes;
 using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
+using DH.Helpdesk.Common.Enums.BusinessRule;
 
 namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 {
@@ -108,11 +109,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
             ret.WorkingGroups.AddItems(it.WorkingGroups, false);
             ret.Administrators.AddItems(it.Administrators, false);
 
-            if (!string.IsNullOrEmpty(it.Administrator))
+            if (!string.IsNullOrEmpty(it.Administrator) && it.EventId == BREventType.OnCreateCaseM2T.ToString())
             {
-                ret.Administrators.AddItem(Int32.Parse(it.Administrator));
+                ret.Administrators.Clear();
+                ret.Administrators.AddItems(it.Administrator);
             }
-            
+
             if (!string.IsNullOrEmpty(it.Recipients))                
                 ret.Recipients = it.Recipients.Split(_SEPARATOR, StringSplitOptions.RemoveEmptyEntries);
 
