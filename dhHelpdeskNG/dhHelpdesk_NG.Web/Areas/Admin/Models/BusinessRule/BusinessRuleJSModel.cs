@@ -109,7 +109,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
             ret.WorkingGroups.AddItems(it.WorkingGroups, false);
             ret.Administrators.AddItems(it.Administrators, false);
 
-            if (!string.IsNullOrEmpty(it.Administrator) && it.EventId == BREventType.OnCreateCaseM2T.ToString())
+            if (!string.IsNullOrEmpty(it.Administrator) && Convert.ToInt32(it.EventId) == (int)BREventType.OnCreateCaseM2T)
             {
                 ret.Administrators.Clear();
                 ret.Administrators.AddItems(it.Administrator);
