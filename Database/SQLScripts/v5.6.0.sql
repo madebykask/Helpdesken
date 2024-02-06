@@ -268,19 +268,19 @@ Go
 
 
 -- Add columns to tblStateSecondary #13486
-RAISERROR ('Add Column SplitOnSave to tblStateSecondary', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblStateSecondary','SplitOnSave') IS NULL
+RAISERROR ('Add Column SplitOnSave to tblStatus', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblStatus','SplitOnSave') IS NULL
 	BEGIN	 
-		ALTER TABLE [dbo].[tblStateSecondary]
+		ALTER TABLE [dbo].[tblStatus]
 		ADD SplitOnSave bit not null default 0
 	End
 Go
 
 
-RAISERROR ('Add Column SplitOnNext to tblStateSecondary', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblStateSecondary','SplitOnNext') IS NULL
+RAISERROR ('Add Column SplitOnNext to tblStatus', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblStatus','SplitOnNext') IS NULL
 	BEGIN	 
-		ALTER TABLE [dbo].[tblStateSecondary]
+		ALTER TABLE [dbo].[tblStatus]
 		ADD SplitOnNext bit not null default 0
 	End
 Go
