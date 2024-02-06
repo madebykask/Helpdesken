@@ -29,6 +29,8 @@
             this.Property(x => x.CreatedDate).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
             this.Property(x => x.Id).HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity);
             this.Property(x => x.StatusGUID).IsRequired().HasDatabaseGeneratedOption(DatabaseGeneratedOption.Computed);
+            this.Property(x => x.SplitOnNext).IsRequired().HasColumnName("SplitOnNext");
+            this.Property(x => x.SplitOnSave).IsRequired().HasColumnName("SplitOnSave");
 
             this.ToTable("tblstatus");
         }

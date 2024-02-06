@@ -185,8 +185,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             caseNumber = -1;
 
             var res = new ProcessResult("Save Case Check Split");
-            //var status = _statusService.GetStatus(caseModel.Status_Id.Value);
-            if (caseModel.CaseSolution_Id.HasValue && isNewCase)
+            var status = _statusService.GetStatus(caseModel.Status_Id.Value);
+
+            if (caseModel.CaseSolution_Id.HasValue && isNewCase && status.SplitOnSave)
             {
                 var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
 
@@ -207,6 +208,10 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 {
                     return res = SaveNewSelfAndDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
                 }
+            }
+            else if (!status.SplitOnSave)
+            {
+                var apa = "hej";
             }
 
             //do regular save

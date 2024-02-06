@@ -272,7 +272,7 @@ RAISERROR ('Add Column SplitOnSave to tblStatus', 10, 1) WITH NOWAIT
 IF COL_LENGTH('dbo.tblStatus','SplitOnSave') IS NULL
 	BEGIN	 
 		ALTER TABLE [dbo].[tblStatus]
-		ADD SplitOnSave bit not null default 0
+		ADD SplitOnSave bit not null default 1
 	End
 Go
 
@@ -281,7 +281,7 @@ RAISERROR ('Add Column SplitOnNext to tblStatus', 10, 1) WITH NOWAIT
 IF COL_LENGTH('dbo.tblStatus','SplitOnNext') IS NULL
 	BEGIN	 
 		ALTER TABLE [dbo].[tblStatus]
-		ADD SplitOnNext bit not null default 0
+		ADD SplitOnNext bit not null default 1
 	End
 Go
 
