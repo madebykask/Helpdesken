@@ -11,10 +11,11 @@
                 <div class="container">
                     @if (TempData["Error"] != null)
                     {
-                        <div class="alert alert-error">@Translation.Get("Status", Enums.TranslationSource.TextTranslation)
-                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
-                        </div>    
-                    }
+                        <div class="alert alert-error">
+                            @Translation.Get("Status", Enums.TranslationSource.TextTranslation)
+                        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                    </div>
+                }
                     <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
@@ -72,6 +73,13 @@
                                         </label>
                                     </td>
                                 </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
                                 <tr>
                                     <td>
                                         @Translation.Get("SplitOnSave", Enums.TranslationSource.TextTranslation)
