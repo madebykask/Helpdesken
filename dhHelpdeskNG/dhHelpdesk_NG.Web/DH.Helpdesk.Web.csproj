@@ -1979,8 +1979,6 @@
     <Content Include="Scripts\jquery.cookie.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.js" />
     <Content Include="Scripts\jquery.unobtrusive-ajax.min.js" />
-    <Content Include="SqlServerTypes\x64\SqlServerSpatial110.dll" />
-    <Content Include="SqlServerTypes\x86\SqlServerSpatial110.dll" />
     <Content Include="_app_offline.htm" />
   </ItemGroup>
   <ItemGroup>

@@ -11,10 +11,11 @@
                 <div class="container">
                     @if (TempData["Error"] != null)
                     {
-                        <div class="alert alert-error">@Translation.Get("Status", Enums.TranslationSource.TextTranslation)
-                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
-                        </div>    
-                    }
+                        <div class="alert alert-error">
+                            @Translation.Get("Status", Enums.TranslationSource.TextTranslation)
+                        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                    </div>
+                }
                     <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
@@ -54,9 +55,10 @@
                                     <td>
                                         @Translation.Get("Standard", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="status.IsDefault" @(Model.Status.IsDefault == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="status.IsDefault" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="status.IsDefault" @(Model.Status.IsDefault == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="status.IsDefault" value="0" />
                                         </label>
                                     </td>
                                 </tr>
@@ -64,9 +66,39 @@
                                     <td>
                                         @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="status.IsActive" @(Model.Status.IsActive == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="status.IsActive" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="status.IsActive" @(Model.Status.IsActive == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="status.IsActive" value="0" />
+                                        </label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <h4>@Translation.Get("Självservice", Enums.TranslationSource.TextTranslation)</h4>
+                    <div class="row">
+                        <div class="span12">
+                            <table class="tableform">
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("SplitOnSave", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="status.SplitOnSave" @(Model.Status.SplitOnSave == true ? "checked=checked" : "") value="true" />
+                                            <input type="hidden" name="status.SplitOnSave" value="0" />
+                                        </label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="span3">
+                                        @Translation.Get("SplitOnNext", Enums.TranslationSource.TextTranslation)
+                                    </td>
+                                    <td class="span9">
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="status.SplitOnNext" @(Model.Status.SplitOnNext == true ? "checked=checked" : "") value="true" />
+                                            <input type="hidden" name="status.SplitOnNext" value="0" />
                                         </label>
                                     </td>
                                 </tr>
