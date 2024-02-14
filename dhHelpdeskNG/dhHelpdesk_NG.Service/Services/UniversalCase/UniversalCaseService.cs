@@ -185,14 +185,46 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             caseNumber = -1;
 
             var res = new ProcessResult("Save Case Check Split");
-            var status = _statusService.GetStatus(caseModel.Status_Id.Value);
-
-            //Ytterbygg
-            if (caseModel.CaseSolution_Id.HasValue && isNewCase == false && status != null && status.SplitOnSave)
+            //Status_id är null för JKP
+            Status status = null;
+            if (caseModel.Status_Id.HasValue)
             {
-                //#163000 - Devops
-                //Endast göra om caset inte redan blivit splitat + att ärendet redan är sparat + status har splitOnSave
-                if (_caseService.GetChildCasesFor(caseModel.Id).Count == 0)
+                status = _statusService.GetStatus(caseModel.Status_Id.Value);
+            }
+            if (status != null)
+            {
+                //Ytterbygg efter pausning - när det ska splittas
+                if (caseModel.CaseSolution_Id.HasValue && isNewCase == false && status != null && status.SplitOnSave)
+                {
+                    //#163000 - Devops
+                    //Endast göra om caset inte redan blivit splitat + att ärendet redan är sparat + status har splitOnSave
+                    if (_caseService.GetChildCasesFor(caseModel.Id).Count == 0)
+                    {
+                        var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
+
+                        // Split into "parent" and "child(s)"
+                        if (caseSolution.CaseRelationType == CaseRelationType.ParentAndChildren)
+                        {
+                            return res = SaveParentAndChildren(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
+                        }
+                        // Create indepent cases based on the "parent" case solution template
+                        if (caseSolution.CaseRelationType == CaseRelationType.OnlyDescendants)
+                        {
+                            return res = SaveNewDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
+                        }
+
+                        // Create cases based on "parent", and "child" but independent
+                        if (caseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts)
+                        {
+                            return res = SaveNewSelfAndDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
+                        }
+                    }
+                }
+            }
+            else
+            { 
+                //Jönköping borde komma hit
+                if (caseModel.CaseSolution_Id.HasValue && isNewCase)
                 {
                     var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
 
@@ -214,30 +246,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     }
                 }
             }
-            //TODO: Kolla Jönköping
-            else if (caseModel.CaseSolution_Id.HasValue && isNewCase)
-            {
-                var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
 
-                // Split into "parent" and "child(s)"
-                if (caseSolution.CaseRelationType == CaseRelationType.ParentAndChildren)
-                {
-                    return res = SaveParentAndChildren(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
-                }
-                // Create indepent cases based on the "parent" case solution template
-                if (caseSolution.CaseRelationType == CaseRelationType.OnlyDescendants)
-                {
-                    return res = SaveNewDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
-                }
-
-                // Create cases based on "parent", and "child" but independent
-                if (caseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts)
-                {
-                    return res = SaveNewSelfAndDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
-                }
-            }
-
-            //do regular save
+            //Spara caset  för Ytterbyggs pausade status
             res = SaveCase(caseModel, auxModel, out caseId, out caseNumber);
             return res;
         }
@@ -462,9 +472,12 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     caseModel.UserCode = oldCase.UserCode;
                 }
                 caseModel.RegTime = oldCase.RegTime;
+                //KAN DET VARA DETTA?
+                caseModel.ChangeTime = oldCase.RegTime;
             }
             else
             {
+                //Nytt case
                 oldCase = null;
                 caseModel.RegTime = auxModel.UtcNow;
                 if (caseModel.RegLanguage_Id == 0)
