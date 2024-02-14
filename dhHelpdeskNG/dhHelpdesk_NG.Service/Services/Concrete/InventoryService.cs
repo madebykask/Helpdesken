@@ -449,21 +449,21 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
         }
 
-        public bool IsMacAddressUnique(int exceptId, string macAddress)
+        public bool IsMacAddressUnique(int exceptId, string macAddressint, int customerId)
         {
-            return _computerRepository.IsMacAddressUnique(exceptId, macAddress.Trim());
+            return _computerRepository.IsMacAddressUnique(exceptId, macAddressint.Trim(), customerId);
         }
-        public bool IsTheftMarkUnique(int exceptId, string theftMark)
+        public bool IsTheftMarkUnique(int exceptId, string theftMark, int customerId)
         {
-            return _computerRepository.IsTheftMarkUnique(exceptId, theftMark.Trim());
+            return _computerRepository.IsTheftMarkUnique(exceptId, theftMark.Trim(), customerId);
         }
-        public bool IsIpAddressUnique(int exceptId, string ipAddress)
+        public bool IsIpAddressUnique(int exceptId, string ipAddress, int customerId)
         {
-            return _computerRepository.IsIpAddressUnique(exceptId, ipAddress.Trim());
+            return _computerRepository.IsIpAddressUnique(exceptId, ipAddress.Trim(),customerId);
         }
-        public bool IsComputerNameUnique(int exceptId, string computerName)
+        public bool IsComputerNameUnique(int exceptId, string computerName, int customerId)
         {
-            return _computerRepository.IsComputerNameUnique(exceptId, computerName.Trim());
+            return _computerRepository.IsComputerNameUnique(exceptId, computerName.Trim(), customerId);
         }
         public void UpdateWorkstationInfo(int id, string info)
         {

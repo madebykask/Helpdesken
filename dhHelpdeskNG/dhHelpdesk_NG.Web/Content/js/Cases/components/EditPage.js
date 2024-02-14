@@ -864,6 +864,16 @@ EditPage.prototype.getValidationErrorMessage = function (extraMessage) {
     return messages.join('');
 };
 
+var isExternalSummernoteEmpty = function () {
+    // Get the HTML content of the Summernote editor
+    var content = $('.summernoteexternal').summernote('code');
+
+    var plainText = $('<div>').html(content).text().trim(); // Strip HTML and trim whitespace
+    var isEmpty = !plainText.length && !(/<img[^>]*>/g).test(content); // Check if the plain text is empty and not contains any image
+
+    return isEmpty;
+};
+
 EditPage.prototype.isFormValid = function () {
     var me = this;
     $('#btnAddCaseFile').removeClass('error');
@@ -888,6 +898,19 @@ EditPage.prototype.isFormValid = function () {
             return false;
         };
     }
+
+    var emptyLog = isExternalSummernoteEmpty();
+
+    if (emptyLog && $('#divCaseLogFiles.externalLog-files tr').length > 0) {
+        $("#textExternalOuter").find(".note-editor").addClass("error");
+        $("#externalError").css('display', 'inline');
+        return false;
+    }
+    else {
+        $("#textExternalOuter").find(".note-editor").removeClass("error");
+        $("#externalError").css('display', 'none');
+    }
+
 
     var finished = true;
     var finishingTypeId = "CaseLog_FinishingType";
@@ -923,6 +946,7 @@ EditPage.prototype.isFormValid = function () {
             }
         }
     }
+
 
     if (!me.$form.valid()) {
         if (isCaseFileValid)

@@ -57,11 +57,11 @@
                 @Html.EditorFor(m => m.PlaceFieldsModel.BuildingId, "Fields/List", new { Source = Model.Buildings, Id = "buildings_dropdown" })
                 @Html.EditorFor(m => m.PlaceFieldsModel.FloorId, "Fields/List", new { Source = Model.Floors, Id = "floors_dropdown" })
                 @Html.EditorFor(m => m.PlaceFieldsModel.RoomId, "Fields/List", new { Source = Model.Rooms, Id = "rooms_dropdown" })
-                @Html.EditorFor(m => m.PlaceFieldsModel.Address, "Fields/Text")
-                @Html.EditorFor(m => m.PlaceFieldsModel.PostalCode, "Fields/Text")
-                @Html.EditorFor(m => m.PlaceFieldsModel.PostalAddress, "Fields/Text")
-                @Html.EditorFor(m => m.PlaceFieldsModel.Location, "Fields/Text")
-                @Html.EditorFor(m => m.PlaceFieldsModel.Location2, "Fields/Text")
+                @Html.EditorFor(m => m.PlaceFieldsModel.Address, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "data-val-length", "Max 50 tecken" }, { "data-val-length-max", "50" } } })
+                @Html.EditorFor(m => m.PlaceFieldsModel.PostalCode, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "data-val-length", "Max 10 tecken" }, { "data-val-length-max", "10" } } })
+                @Html.EditorFor(m => m.PlaceFieldsModel.PostalAddress, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "data-val-length", "Max 50 tecken" }, { "data-val-length-max", "50" } } })
+                @Html.EditorFor(m => m.PlaceFieldsModel.Location, "Fields/Text", new { inputAttributes = new Dictionary<string, object> { { "data-val-length", "Max 100 tecken" }, { "data-val-length-max", "100" } } })
+                @Html.EditorFor(m => m.PlaceFieldsModel.Location2, "Fields/Text",new { inputAttributes = new Dictionary<string, object> { { "data-val-length", "Max 100 tecken" }, { "data-val-length-max", "100" } } })
             </table>
         </div>
     </div>
