@@ -416,6 +416,7 @@ function bindDeleteCaseFileBehaviorToDeleteButtons() {
 function bindDeleteLogFileBehaviorToDeleteButtons(isInternalLog) {
     // add delete btn handler
     var $container = isInternalLog === true ? $('div.internalLog-files') : $('div.externalLog-files');
+    
     if ($container.length) {
         $container.find('a[id^="delete_logfile_button_"]').click(function () {
             var key = $('#LogKey').val();
@@ -442,7 +443,11 @@ function bindDeleteLogFileBehaviorToDeleteButtons(isInternalLog) {
                 fileNames = fileNames.replace("|" + fileName.trim(), "");
                 fileNames = fileNames.replace(fileName.trim() + "|", "");
                 $logFileNames.val(fileNames);
-
+                var rowCount = $('#log_files_table tbody tr').length;
+                if (rowCount === 0) {
+                    $("#textExternalOuter").find(".note-editor").removeClass("error");
+                    $("#externalError").css('display', 'none');
+                }
                 // Raise event about deleted file
                 $(document).trigger("OnDeleteCaseLogFile", [key, fileName]);
             });

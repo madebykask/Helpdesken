@@ -148,8 +148,8 @@
             this.Property(x => x.LocationAddress).IsOptional().HasMaxLength(50);
             this.Property(x => x.LocationPostalCode).IsOptional().HasMaxLength(10);
             this.Property(x => x.LocationPostalAddress).IsOptional().HasMaxLength(50);
-            this.Property(x => x.LocationRoom).IsOptional().HasMaxLength(50);
-            this.Property(x => x.Location2).IsOptional().HasMaxLength(50);
+            this.Property(x => x.LocationRoom).IsOptional().HasMaxLength(100);
+            this.Property(x => x.Location2).IsOptional().HasMaxLength(100);
 
             this.ToTable("tblComputer");
         }

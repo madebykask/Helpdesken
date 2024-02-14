@@ -624,7 +624,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         public JsonResult ValidateMacAddress(int currentId, string value)
         {
             if (string.IsNullOrWhiteSpace(value)) return Json(true, JsonRequestBehavior.AllowGet);
-            bool isUnique = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsMacAddressUnique(currentId, value);
+            bool isUnique = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsMacAddressUnique(currentId, value, SessionFacade.CurrentCustomer.Id);
             if (isUnique)
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
@@ -640,7 +640,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [OutputCache(NoStore = true, Duration = 0)]
         public JsonResult ValidateTheftmark(int currentId, string value)
         {
-            bool isUnique = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsTheftMarkUnique(currentId, value);
+            bool isUnique = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsTheftMarkUnique(currentId, value, SessionFacade.CurrentCustomer.Id);
             if (isUnique)
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
@@ -656,7 +656,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [OutputCache(NoStore = true, Duration = 0)]
         public JsonResult ValidateIpAddress(int currentId, string value)
         {
-            bool isUnique = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsIpAddressUnique(currentId, value);
+            bool isUnique = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsIpAddressUnique(currentId, value, SessionFacade.CurrentCustomer.Id);
             if (isUnique)
             {
                 return Json(true, JsonRequestBehavior.AllowGet);
@@ -672,7 +672,7 @@ namespace DH.Helpdesk.Web.Areas.Inventory.Controllers
         [OutputCache(NoStore = true, Duration = 0)]
         public JsonResult ValidateComputerName(int currentId, string value)
         {
-            bool isUnique = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsComputerNameUnique(currentId, value);
+            bool isUnique = !string.IsNullOrWhiteSpace(value) && _inventoryService.IsComputerNameUnique(currentId, value, SessionFacade.CurrentCustomer.Id);
             if (isUnique)
             {
                 return Json(true, JsonRequestBehavior.AllowGet);

@@ -322,7 +322,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 		private List<DdlModel> GetAdminsList(int customerId, List<DdlModel> currentValue)
 		{
 			var customerSetting = _settingService.GetCustomerSetting(customerId);
-			var performers = _userService.GetPerformersOrUserId(customerId);
+			var performers = _userService.GetAvailablePerformersOrUserId(customerId);
 			var adminList = performers.MapToCustomSelectList(string.Empty, customerSetting);
 			var allAdmins = currentValue.Union(adminList.Items.Select(i => new DdlModel
 			{
