@@ -91,17 +91,6 @@
                                         </label>
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td class="span3">
-                                        @Translation.Get("SplitOnNext", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td class="span9">
-                                        <label class="checkbox">
-                                            <input type="checkbox" name="status.SplitOnNext" @(Model.Status.SplitOnNext == true ? "checked=checked" : "") value="true" />
-                                            <input type="hidden" name="status.SplitOnNext" value="0" />
-                                        </label>
-                                    </td>
-                                </tr>
                             </table>
                             @Html.HiddenFor(model => model.Status.Customer_Id)
                             @Html.HiddenFor(model => model.Status.Id)

@@ -277,15 +277,6 @@ IF COL_LENGTH('dbo.tblStatus','SplitOnSave') IS NULL
 Go
 
 
-RAISERROR ('Add Column SplitOnNext to tblStatus', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblStatus','SplitOnNext') IS NULL
-	BEGIN	 
-		ALTER TABLE [dbo].[tblStatus]
-		ADD SplitOnNext bit not null default 1
-	End
-Go
-
-
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.6.0'
 GO
