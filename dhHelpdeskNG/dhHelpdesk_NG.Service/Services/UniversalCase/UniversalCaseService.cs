@@ -187,7 +187,35 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             var res = new ProcessResult("Save Case Check Split");
             var status = _statusService.GetStatus(caseModel.Status_Id.Value);
 
-            if (caseModel.CaseSolution_Id.HasValue && isNewCase && status.SplitOnSave)
+            //Ytterbygg
+            if (caseModel.CaseSolution_Id.HasValue && isNewCase == false && status != null && status.SplitOnSave)
+            {
+                //#163000 - Devops
+                //Endast göra om caset inte redan blivit splitat + att ärendet redan är sparat + status har splitOnSave
+                if (_caseService.GetChildCasesFor(caseModel.Id).Count == 0)
+                {
+                    var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
+
+                    // Split into "parent" and "child(s)"
+                    if (caseSolution.CaseRelationType == CaseRelationType.ParentAndChildren)
+                    {
+                        return res = SaveParentAndChildren(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
+                    }
+                    // Create indepent cases based on the "parent" case solution template
+                    if (caseSolution.CaseRelationType == CaseRelationType.OnlyDescendants)
+                    {
+                        return res = SaveNewDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
+                    }
+
+                    // Create cases based on "parent", and "child" but independent
+                    if (caseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts)
+                    {
+                        return res = SaveNewSelfAndDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
+                    }
+                }
+            }
+            //TODO: Kolla Jönköping
+            else if (caseModel.CaseSolution_Id.HasValue && isNewCase)
             {
                 var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
 
@@ -202,16 +230,11 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     return res = SaveNewDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
                 }
 
-
                 // Create cases based on "parent", and "child" but independent
                 if (caseSolution.CaseRelationType == CaseRelationType.SelfAndDescendandts)
                 {
                     return res = SaveNewSelfAndDescendandts(caseModel, auxModel, caseSolution, out caseId, out caseNumber);
                 }
-            }
-            else if (!status.SplitOnSave)
-            {
-                var apa = "hej";
             }
 
             //do regular save
@@ -423,6 +446,8 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             {
                 oldCase = _caseRepository.GetCase(caseModel.Id);
 
+              
+
                 if (_customerUser != null && _customerUser.UserInfoPermission == 0)
                 {
                     caseModel.ReportedBy = oldCase.ReportedBy;
@@ -445,6 +470,15 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 if (caseModel.RegLanguage_Id == 0)
                     caseModel.RegLanguage_Id = auxModel.CurrentLanguageId;
             }
+
+            ////Set same date so that CaseTimeMetricsModel doesent throw error
+            //if (splitOnSave)
+            //{
+            //    caseModel.RegTime = auxModel.UtcNow;
+            //    caseModel.ChangeTime = auxModel.UtcNow;
+            //    oldCase.RegTime = auxModel.UtcNow;
+            //    oldCase.ChangeTime = auxModel.UtcNow;
+            //}
 
             if (caseModel.FinishingType_Id > 0)
             {
@@ -802,6 +836,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                                 // prevent extended case relation creation in SaveCase
                                 childCaseModel.ExtendedCaseData_Id = null;
                                 childCaseModel.ExtendedCaseForm_Id = null;
+                                childCaseModel.Id = 0;
 
                                 int childCaseId;
                                 res = SaveCase(childCaseModel, baseAuxModel, out childCaseId, out caseNum);
@@ -894,6 +929,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                             // Required to avoid extended Case creation during SaveCase. Extended case is created later.
                             childCaseModel.ExtendedCaseData_Id = null;
                             childCaseModel.ExtendedCaseForm_Id = null;
+                            childCaseModel.Id = 0;
 
                             var childRes = SaveCase(childCaseModel, baseAuxModel, out childCaseId, out childCaseNum);
 
@@ -971,6 +1007,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                             // Required to avoid extended Case creation during SaveCase. Extended case is created later.
                             childCaseModel.ExtendedCaseData_Id = null;
                             childCaseModel.ExtendedCaseForm_Id = null;
+                            childCaseModel.Id = 0;
 
                             var childRes = SaveCase(childCaseModel, baseAuxModel, out childCaseId, out childCaseNum);
 
@@ -996,6 +1033,86 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             caseNumber = _caseNum;
             return res;
         }
+
+        private ProcessResult EditParentAndChildren(CaseModel baseCaseModel, AuxCaseModel baseAuxModel, CaseSolution baseCaseSolution, out int caseId, out decimal caseNumber)
+        {
+            IDictionary<string, string> errors;
+
+            //Multicase - Split
+            int conditionType_Id = (int)((ConditionType)Enum.Parse(typeof(ConditionType), ConditionType.MultiCaseSplit.ToString()));
+
+            ProcessResult res = new ProcessResult("Children");
+            decimal _caseNum;
+            int selfCaseId;
+            //save base
+            res = SaveCase(baseCaseModel, baseAuxModel, out selfCaseId, out _caseNum);
+
+            if (res.IsSucceed && selfCaseId != -1)
+            {
+
+                //check if there should be created child cases
+                if (baseCaseSolution.SplitToCaseSolutionDescendants != null && baseCaseSolution.SplitToCaseSolutionDescendants.Any())
+                {
+                    var baseCaseExtendedCaseDataId = baseCaseModel.ExtendedCaseData_Id ?? 0;
+                    var baseCaseExCaseForm = baseCaseSolution.ExtendedCaseForms?.FirstOrDefault();
+
+                    foreach (var item in baseCaseSolution.SplitToCaseSolutionDescendants.Where(x => x.SplitToCaseSolutionDescendant.Status > 0).OrderBy(x => x.SplitToCaseSolutionDescendant.SortOrder))
+                    {
+                        var childCaseTemplate = _caseSolutionService.GetCaseSolution(item.SplitToCaseSolutionDescendant.Id);
+
+                        var doSplit = _conditionService.CheckConditions(baseCaseModel.Id, item.SplitToCaseSolutionDescendant.Id, conditionType_Id);
+
+                        if (doSplit.Show)
+                        {
+                            ExtendedCaseFormEntity exCaseForm = null;
+                            var childCaseModel = baseCaseModel.DeepClone();
+
+                            //TODO: refactor and make a long term solution, this is just for DepartmentId
+                            baseCaseModel.Department_Id = ChangeDepartmentId(childCaseModel.Customer_Id, childCaseModel.Department_Id, childCaseTemplate.Customer_Id);
+
+                            int childCaseId = -1;
+                            decimal childCaseNum;
+
+                            //apply values from case solution
+                            childCaseModel = ApplyValuesFromCaseSolution(childCaseModel, item.SplitToCaseSolutionDescendant.Id);
+
+                            //apply caseBinding values from child extended case template which are missing in the parent form
+                            if (baseCaseExtendedCaseDataId > 0)
+                            {
+                                exCaseForm = childCaseTemplate.ExtendedCaseForms.FirstOrDefault();
+                                ApplyCaseBindingValuesFromExtendedCase(childCaseModel, exCaseForm, baseCaseExtendedCaseDataId, baseCaseExCaseForm);
+                            }
+
+                            // Required to avoid extended Case creation during SaveCase. Extended case is created later.
+                            childCaseModel.ExtendedCaseData_Id = null;
+                            childCaseModel.ExtendedCaseForm_Id = null;
+                            childCaseModel.Id = 0;
+
+                            var childRes = SaveCase(childCaseModel, baseAuxModel, out childCaseId, out childCaseNum);
+
+                            if (childRes.IsSucceed && childCaseId != -1)
+                            {
+                                if (baseCaseExtendedCaseDataId > 0 && exCaseForm != null)
+                                {
+                                    _extendedCaseService.CopyExtendedCaseToCase(baseCaseExtendedCaseDataId, childCaseId, baseAuxModel.UserIdentityName, exCaseForm.Id);
+                                }
+
+                                //TODO: om fel, visa det
+                                _caseService.AddChildCase(childCaseId, baseCaseModel.Id, out errors);
+
+                                if (!errors.Any())
+                                    _caseService.SetIndependentChild(childCaseId, true);
+                            }
+                        }
+                    }
+                }
+            }
+
+            caseId = baseCaseModel.Id;
+            caseNumber = baseCaseModel.CaseNumber;
+            return res;
+        }
+
 
         #region ApplyValuesCaseBindingValuesFromExtendedCase
 

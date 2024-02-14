@@ -125,7 +125,8 @@
         {
             if (from > to)
             {
-                throw new ArgumentException("'from' can not be more that 'to'");
+                return 0;
+                //throw new ArgumentException("'from' can not be more that 'to'");
             }
 
             var res =
