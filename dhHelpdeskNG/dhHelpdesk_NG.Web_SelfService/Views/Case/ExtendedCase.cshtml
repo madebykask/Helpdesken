@@ -213,6 +213,8 @@
 @using (Html.BeginForm("ExtendedCase", "case", null, FormMethod.Post, new { id = "extendedCaseForm" }))
 {
     // Base
+    string encodedDescription = HttpUtility.HtmlEncode(Model.CaseDataModel.Description);
+
     @Html.HiddenFor(model => model.CaseDataModel.Id)
     @Html.HiddenFor(model => model.CaseDataModel.CaseNumber)
     @Html.HiddenFor(model => model.CaseDataModel.CaseGUID)
@@ -273,7 +275,7 @@
     @Html.HiddenFor(model => model.CaseDataModel.Supplier_Id)
     @Html.HiddenFor(model => model.CaseDataModel.InvoiceNumber)
     @Html.HiddenFor(model => model.CaseDataModel.Caption)
-    @Html.HiddenFor(model => model.CaseDataModel.Description)
+    @Html.HiddenFor(model => model.CaseDataModel.Description, new { Value = encodedDescription })
     @Html.HiddenFor(model => model.CaseDataModel.Miscellaneous)
     @Html.HiddenFor(model => model.CaseDataModel.ContactBeforeAction)
     @Html.HiddenFor(model => model.CaseDataModel.SMS)
@@ -321,7 +323,7 @@
     // Log
     @Html.HiddenFor(model => model.CaseDataModel.Text_External)
     @Html.HiddenFor(model => model.CaseDataModel.Text_Internal)
-    
+
     // case solution
     @Html.HiddenFor(model => model.CaseDataModel.CaseSolution_Id)
     @Html.HiddenFor(model => model.CaseDataModel.CurrentCaseSolution_Id)
@@ -406,7 +408,7 @@
                 </div>
                 @if (Model.CaseId == 0 && (recaptchaSiteKey != "" || recaptchaSiteKey != null))
                 {
-                    <div id="cap1" class="g-recaptcha" data-sitekey=@recaptchaSiteKey></div>                    
+                    <div id="cap1" class="g-recaptcha" data-sitekey=@recaptchaSiteKey></div>
                 }
             </div>
         </div>
