@@ -26,6 +26,7 @@ namespace DH.Helpdesk.SelfService.Controllers
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums;
+    using DH.Helpdesk.Common.Extensions.Object;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.SelfService.Infrastructure;
@@ -672,13 +673,18 @@ namespace DH.Helpdesk.SelfService.Controllers
 
                 ApplyTemplate(caseTemplate, model.CaseDataModel, true);
             }
-
+            
             var caseId = -1;
             decimal caseNum;
 
             //TODO: Refactor
             model.CaseDataModel.ExtendedCaseData_Id = model.ExtendedCaseDataModel.Id;
             model.CaseDataModel.ExtendedCaseForm_Id = model.ExtendedCaseDataModel.ExtendedCaseFormId;
+            //Get Html-description if any, otherwise page will crash
+            if (model.CaseId > 0)
+            {
+                model.CaseDataModel.Description = _caseService.GetCaseById(model.CaseId).Description;
+            }
 
             var res = _universalCaseService.SaveCaseCheckSplit(model.CaseDataModel, auxModel, out caseId, out caseNum);
 
