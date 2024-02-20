@@ -977,6 +977,9 @@
     <Content Include="Web.config.anonymous.template">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Web.config.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1042,9 +1045,9 @@
     <Content Include="Views\Shared\_MainMenu.cshtml" />
     <Content Include="Views\Case\_ClosedCaseAlert.cshtml" />
     <Content Include="Views\Case\ModalDialogs\_CaseLogNotePopup.cshtml" />
-    <Content Include="Web.config.template">
+    <None Include="Web.config.template_old">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Content Include="Views\Case\ModalDialogs\_UploadFilePopup.cshtml" />
     <Content Include="Views\Case\_FilesAttachButtons.cshtml" />
     <Content Include="Views\Case\ExtendedCaseWithCase.cshtml" />
