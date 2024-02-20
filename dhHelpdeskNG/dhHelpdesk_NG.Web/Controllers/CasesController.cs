@@ -107,6 +107,8 @@ namespace DH.Helpdesk.Web.Controllers
     using DH.Helpdesk.Common.Extensions;
     using System.IO;
     using System.Net;
+    using System.Runtime.InteropServices;
+    using DH.Helpdesk.Services.Services.UniversalCase;
 
     public partial class CasesController : BaseController
     {
@@ -193,6 +195,7 @@ namespace DH.Helpdesk.Web.Controllers
         private readonly IFileViewLogService _fileViewLogService;
         private readonly IFilesStorage _filesStorage;
         private readonly ICaseDeletionService _caseDeletionService;
+        private readonly IUniversalCaseService _universalCaseService;
 
         #endregion
 
@@ -279,7 +282,8 @@ namespace DH.Helpdesk.Web.Controllers
             IFeatureToggleService featureToggleService,
             IFileViewLogService fileViewLogService,
             IFilesStorage filesStorage,
-            ICaseDeletionService caseDeletionService)
+            ICaseDeletionService caseDeletionService,
+            IUniversalCaseService universalCaseService)
             : base(masterDataService)
         {
             _caseProcessor = caseProcessor;
@@ -358,6 +362,7 @@ namespace DH.Helpdesk.Web.Controllers
             _fileViewLogService = fileViewLogService;
             _filesStorage = filesStorage;
             _caseDeletionService = caseDeletionService;
+            _universalCaseService = universalCaseService;
 
             _advancedSearchBehavior = new AdvancedSearchBehavior(caseFieldSettingService,
                 caseSearchService,
@@ -4127,6 +4132,20 @@ namespace DH.Helpdesk.Web.Controllers
                     var exData = _caseService.GetExtendedCaseData(m.ExtendedRegardingGUID.Value);
                   
                     _caseService.CreateExtendedCaseSectionRelationship(case_.Id, exData.Id, CaseSectionType.Regarding, curCustomer.Id);
+                }
+                if (case_.Id > 0 && case_.Status != null && case_.Status.SplitOnSave)
+                {
+                    var localUserId = SessionFacade.CurrentUser?.Id ?? 0;
+                    var auxModel = new AuxCaseModel(SessionFacade.CurrentUser.LanguageId,
+                                    localUserId,
+                                    SessionFacade.CurrentUserIdentity.UserId,
+                                    RequestExtension.GetAbsoluteUrl(), //RequestExtension.GetAbsoluteUrl(),
+                                    CreatedByApplications.ExtendedCase,
+                                    TimeZoneInfo.Local);
+                    int caseId = 0;
+                    decimal caseNum = 0;
+                    CaseModel caseModel = _universalCaseService.GetCase(case_.Id);
+                    var res = _universalCaseService.SaveCaseCheckSplit(caseModel, auxModel, out caseId, out caseNum);
                 }
 #pragma warning restore 0618
             }
