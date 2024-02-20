@@ -17,7 +17,7 @@
     <add key="ClientValidationEnabled" value="true" />
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
     <add key="dh_filesDirectory" value="#{FilesDirectory}" />
-    <add key="dh_selfserviceaddress" value="#{SelfserviceAddress}" />
+    <add key="dh_selfserviceaddress" value="#{SelfserviceAddressMicrosoft}" />
     <add key="dh_helpdeskaddress" value="#{HelpdeskAddress}" />
     <add key="webpages:Version" value="3.0.0.0" />
 		<add key="InitFromSelfService" value="true" />
@@ -38,7 +38,7 @@
     If your application supports Accounts in any organizational directory, replace this value with "organizations"
     If your application supports All Microsoft account users, replace this value with "common"-->
     <add key="Authority" value="#{SelfserviceAuthority}" />
-    <add key="RedirectUri" value="#{SelfserviceRedirectUri}" />
+    <add key="RedirectUri" value="#{SelfserviceRedirectUriMicrosoft}" />
   </appSettings>
 
   <!--
