@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using DH.Helpdesk.BusinessData.Enums.BusinessRules;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
 using DH.Helpdesk.BusinessData.OldComponents;
 using DH.Helpdesk.Common.Serializers;
@@ -296,7 +297,7 @@ namespace DH.Helpdesk.Services.Services
                 }
             }
             
-            if (p.ReplaceEmails)
+            if (p.ReplaceEmails && p.GDPRType != (int)GDPRType.Radering)
             {
                 casesQueryable = casesQueryable.IncludePath(x => x.Mail2Tickets);
                 casesQueryable = casesQueryable.IncludePath(x => x.CaseHistories.Select(y => y.Emaillogs));
