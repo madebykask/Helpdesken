@@ -2681,7 +2681,20 @@ Module DH_Helpdesk_Mail
     Public Function CleanHtml(ByVal input As String) As String
         Dim doc As New HtmlAgilityPack.HtmlDocument()
         doc.LoadHtml(input)
-
+        ' Iterate through all nodes in the HTML document
+        For Each node As HtmlNode In doc.DocumentNode.DescendantsAndSelf()
+            ' Check if the node is an element node
+            If node.NodeType = HtmlNodeType.Element Then
+                ' Iterate through all attributes of the node
+                For Each attribute As HtmlAttribute In node.Attributes
+                    ' Replace single quotes with &quote; in attribute values
+                    attribute.Value = attribute.Value.Replace("'", "&quot;")
+                Next
+            ElseIf node.NodeType = HtmlNodeType.Text Then
+                ' Replace single quotes with &quote; in text content
+                node.InnerHtml = node.InnerHtml.Replace("'", "&quot;")
+            End If
+        Next
         ' Remove divs that only contain other divs Or br tags
         Dim divNodes As HtmlNodeCollection = doc.DocumentNode.SelectNodes("//div[not(*) or (*[self::div or self::br]) and not(text()[normalize-space()])]")
         If divNodes IsNot Nothing Then
