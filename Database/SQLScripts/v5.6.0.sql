@@ -267,12 +267,12 @@ Go
 -- 5.6.0
 
 
--- Add columns to tblStateSecondary #13486
+-- Add column to tblStatus #13486
 RAISERROR ('Add Column SplitOnSave to tblStatus', 10, 1) WITH NOWAIT
 IF COL_LENGTH('dbo.tblStatus','SplitOnSave') IS NULL
 	BEGIN	 
 		ALTER TABLE [dbo].[tblStatus]
-		ADD SplitOnSave bit not null default 1
+		ADD SplitOnSave bit not null default 0
 	End
 Go
 
