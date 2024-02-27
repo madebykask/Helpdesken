@@ -4115,23 +4115,10 @@ namespace DH.Helpdesk.Web.Controllers
 
             if (m.ContainsExtendedCase)
             {
-                /* Create Relationship between Case & ExtendedCase*/
-                if (m.ExtendedCaseGuid != Guid.Empty)
+                Status status = null;
+                if (case_.Status_Id.HasValue)
                 {
-                    var exData = _caseService.GetExtendedCaseData(m.ExtendedCaseGuid);
-                    _caseService.CreateExtendedCaseRelationship(case_.Id, exData.Id, exData.ExtendedCaseFormId);
-                }
-#pragma warning disable 0618
-                if (m.case_.ReportedBy != null && m.ExtendedInitiatorGUID.HasValue)
-                {
-                    var exData = _caseService.GetExtendedCaseData(m.ExtendedInitiatorGUID.Value);
-                    _caseService.CreateExtendedCaseSectionRelationship(case_.Id, exData.Id, CaseSectionType.Initiator, curCustomer.Id);
-                }
-                if (m.case_.IsAbout.ReportedBy != null && m.ExtendedRegardingGUID.HasValue)
-                {
-                    var exData = _caseService.GetExtendedCaseData(m.ExtendedRegardingGUID.Value);
-                  
-                    _caseService.CreateExtendedCaseSectionRelationship(case_.Id, exData.Id, CaseSectionType.Regarding, curCustomer.Id);
+                    status = _statusService.GetStatus(case_.Status_Id.Value);
                 }
                 if (case_.Id > 0 && case_.Status != null && case_.Status.SplitOnSave)
                 {
@@ -4145,41 +4132,67 @@ namespace DH.Helpdesk.Web.Controllers
                     int caseId = 0;
                     decimal caseNum = 0;
                     CaseModel caseModel = _universalCaseService.GetCase(case_.Id);
+                    var exData = _caseService.GetExtendedCaseData(m.ExtendedCaseGuid);
+
+                    caseModel.ExtendedCaseData_Id = exData.Id;
+                    caseModel.ExtendedCaseForm_Id = exData.ExtendedCaseFormId;
                     var res = _universalCaseService.SaveCaseCheckSplit(caseModel, auxModel, out caseId, out caseNum);
                 }
-#pragma warning restore 0618
-            }
-            if (edit) // If edit existing case
-            {
-                if (m.ExtendedInitiatorGUID.HasValue)
-                {
-#pragma warning disable 0618
-                    var exData = _caseService.GetExtendedCaseData(m.ExtendedInitiatorGUID.Value);
-                    _caseService.CheckAndUpdateExtendedCaseSectionData(exData.Id, m.case_.Id, m.case_.Customer_Id, CaseSectionType.Initiator);
-#pragma warning restore 0618
-                }
                 else
                 {
+                    /* Create Relationship between Case & ExtendedCase*/
+                    if (m.ExtendedCaseGuid != Guid.Empty)
+                    {
+                        var exData = _caseService.GetExtendedCaseData(m.ExtendedCaseGuid);
+                        _caseService.CreateExtendedCaseRelationship(case_.Id, exData.Id, exData.ExtendedCaseFormId);
+                    }
 #pragma warning disable 0618
-                    _caseService.RemoveAllExtendedCaseSectionData(case_.Id, m.case_.Customer_Id, CaseSectionType.Initiator);
-#pragma warning restore 0618
-                }
+                    if (m.case_.ReportedBy != null && m.ExtendedInitiatorGUID.HasValue)
+                    {
+                        var exData = _caseService.GetExtendedCaseData(m.ExtendedInitiatorGUID.Value);
+                        _caseService.CreateExtendedCaseSectionRelationship(case_.Id, exData.Id, CaseSectionType.Initiator, curCustomer.Id);
+                    }
+                    if (m.case_.IsAbout.ReportedBy != null && m.ExtendedRegardingGUID.HasValue)
+                    {
+                        var exData = _caseService.GetExtendedCaseData(m.ExtendedRegardingGUID.Value);
 
-                if (m.ExtendedRegardingGUID.HasValue)
-                {
+                        _caseService.CreateExtendedCaseSectionRelationship(case_.Id, exData.Id, CaseSectionType.Regarding, curCustomer.Id);
+                    }
+                    if (edit) // If edit existing case
+                    {
+                        if (m.ExtendedInitiatorGUID.HasValue)
+                        {
 #pragma warning disable 0618
-                    var exData = _caseService.GetExtendedCaseData(m.ExtendedRegardingGUID.Value);
-                    _caseService.CheckAndUpdateExtendedCaseSectionData(exData.Id, m.case_.Id, m.case_.Customer_Id, CaseSectionType.Regarding);
+                            var exData = _caseService.GetExtendedCaseData(m.ExtendedInitiatorGUID.Value);
+                            _caseService.CheckAndUpdateExtendedCaseSectionData(exData.Id, m.case_.Id, m.case_.Customer_Id, CaseSectionType.Initiator);
 #pragma warning restore 0618
-                }
-                else
-                {
+                        }
+                        else
+                        {
 #pragma warning disable 0618
-                    _caseService.RemoveAllExtendedCaseSectionData(case_.Id, m.case_.Customer_Id, CaseSectionType.Regarding);
+                            _caseService.RemoveAllExtendedCaseSectionData(case_.Id, m.case_.Customer_Id, CaseSectionType.Initiator);
+#pragma warning restore 0618
+                        }
+
+                        if (m.ExtendedRegardingGUID.HasValue)
+                        {
+#pragma warning disable 0618
+                            var exData = _caseService.GetExtendedCaseData(m.ExtendedRegardingGUID.Value);
+                            _caseService.CheckAndUpdateExtendedCaseSectionData(exData.Id, m.case_.Id, m.case_.Customer_Id, CaseSectionType.Regarding);
+#pragma warning restore 0618
+                        }
+                        else
+                        {
+#pragma warning disable 0618
+                            _caseService.RemoveAllExtendedCaseSectionData(case_.Id, m.case_.Customer_Id, CaseSectionType.Regarding);
 #pragma warning restore 0618
 
+                        }
+                    }
                 }
+#pragma warning restore 0618
             }
+
 
             #endregion
 
