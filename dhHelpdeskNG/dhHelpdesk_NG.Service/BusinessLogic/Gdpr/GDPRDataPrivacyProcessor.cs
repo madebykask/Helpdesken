@@ -141,8 +141,8 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 
                 _log.Debug($"Total cases found to process: {totalCount}. TaskId: {p.TaskId}.");
                 IList<int> parentIds = new List<int>();
-                IList<Case> parentCases = new List<Case>();
-                IList<Case> childrenCases = new List<Case>();
+                IList<Case> parentCases;
+                IList<Case> childrenCases;
 
                 using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
                 {
@@ -293,7 +293,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                         UpdateStepSuccessOperationAudit(auditId, true);
                     }
 
-                    if (processedCasesIds.Count() >= totalCount)
+                    if (processedCasesIds.Count >= totalCount)
                     {
                         fetchNext = false;
                     }
