@@ -13,6 +13,9 @@ namespace DH.Helpdesk.TestConsole
 		{
 			string metaData = "";
             var hejAnnaKarin = JsonConvert.DeserializeObject<ExtendedCaseFormJsonModel>(metaData);
+
+            var alltingfungerarkanske = "blabla";
+
             //var mailer = new Mail();
 
             //mailer.Send("license@standby.eu", "johan.weinitz@dhsolutions.se", "test subject " + DateTime.Now.ToString(), "test body", "", "smtp.datahalland.se", Guid.NewGuid().ToString());
