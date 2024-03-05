@@ -125,17 +125,18 @@
         {
             if (from > to)
             {
-                //return 0;
-                throw new ArgumentException("'from' can not be more that 'to'");
+                return 0;
+                //throw new ArgumentException("'from' can not be more that 'to'");
             }
 
             var res =
                 this.workTimeRanges.Where(
-                    it => 
+                    it =>
                     (it.begin < from && it.end > to) || (it.begin >= from && it.begin <= to)
                     || (it.end >= from && it.end <= to))
                     .Sum(it => (int)Math.Round((DatesHelper.Min(it.end, to) - DatesHelper.Max(it.begin, from)).TotalMinutes));
             return res;
+
         }
     }
 }

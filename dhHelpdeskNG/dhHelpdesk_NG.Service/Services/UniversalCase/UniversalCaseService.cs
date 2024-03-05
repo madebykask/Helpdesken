@@ -193,10 +193,17 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             }
             if (status != null)
             {
-                //Ytterbygg efter pausning - när det ska splittas
-                if (caseModel.CaseSolution_Id.HasValue && isNewCase == false && status != null && status.SplitOnSave)
+                //Ytterbygg - när det ska splittas
+                if (caseModel.CaseSolution_Id.HasValue && status != null && status.SplitOnSave)
                 {
-                    //#163000 - Devops
+                    //If new case
+                    if (isNewCase)
+                    {
+                        SaveCase(caseModel, auxModel, out caseId, out caseNumber);
+                        caseModel.Id = caseId;
+                        caseModel.CaseNumber = caseNumber;
+                    }
+                    
                     //Endast göra om caset inte redan blivit splitat + att ärendet redan är sparat + status har splitOnSave
                     if (_caseService.GetChildCasesFor(caseModel.Id).Count == 0)
                     {
