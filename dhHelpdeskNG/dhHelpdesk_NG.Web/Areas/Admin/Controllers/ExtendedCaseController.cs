@@ -16,6 +16,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -165,9 +166,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
             string metaData = viewModel.ExtendedCaseForm.MetaData.Replace("function(m) { return ", "").Replace("\";}", "\"");
 
-            var firstIndex = metaData.IndexOf("\"tabs\":[{\"id\":\"") + "\"tabs\":[{\"id\":\"".Length;
-            var secondIndex = metaData.IndexOf("\"name\":\"@Translation.Tab") - firstIndex;
-            string firstTabName = metaData.Substring(firstIndex, secondIndex - 2);
+            string firstTabName = ExtractFirstNameAttribute(metaData);
             metaData = metaData.Replace("]},"+ ExtendedCaseFormsHelper.GetEditorInitiatorData(firstTabName, viewModel.Customer.CustomerGUID.ToString()), "");
             metaData = metaData.Replace(@""" },""dataSource", @" "",""dataSource");
             metaData = metaData.Replace(@"function(m) { if (m.formInfo.applicationType == ""helpdesk"") return true; }",
@@ -187,6 +186,20 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         //    bool deleted = _extendedCaseService.DeleteExtendedCaseForm(id);
         //    return Json();
         //}
+
+        private string ExtractFirstNameAttribute(string json)
+        {
+            // Pattern to match the "id" attribute in the first tab
+            string pattern = "\"tabs\":\\s*\\[\\s*{\\s*\"id\":\\s*\"([^\"]+)\"";
+
+            Match match = Regex.Match(json, pattern);
+            if (match.Success)
+            {
+                return match.Groups[1].Value;
+            }
+
+            return null;
+        }
 
         private List<ExtendedCaseFieldTranslation> GetInitialTranslations()
         {

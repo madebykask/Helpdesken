@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
 using System.Linq;
+using System.Linq.Dynamic;
 using System.Linq.Expressions;
 using System.Web.Http.Results;
 using DH.Helpdesk.BusinessData.Models.Gdpr;
@@ -135,15 +137,32 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                 var totalCount = _gDPRDataPrivacyCasesService.GetCasesCount(customerId, p);
                 var fetchNext = totalCount > 0;
                 var step = 0;
+                var childrenDone = false;
                 
                 _log.Debug($"Total cases found to process: {totalCount}. TaskId: {p.TaskId}.");
                 IList<int> parentIds = new List<int>();
+                IList<Case> parentCases;
+                IList<Case> childrenCases;
 
                 using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
                 {
-                    parentIds = _gDPRDataPrivacyCasesService.GetCaseParents(customerId, p, uow);
+                   parentIds = _gDPRDataPrivacyCasesService.GetCaseParents(customerId, p, uow);
                 }
 
+                using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
+                {
+                    // Retrieve all cases thats not a parent
+                    childrenCases = _gDPRDataPrivacyCasesService.GetCasesQuery(customerId, p, uow)
+                                             .Where(c => !parentIds.Contains(c.Id))
+                                             .ToList();
+                }
+                using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
+                {
+                    // Retrieve all parentcases
+                    parentCases = _gDPRDataPrivacyCasesService.GetCasesQuery(customerId, p, uow)
+                                            .Where(c => parentIds.Contains(c.Id))
+                                            .ToList();
+                }
                 while (fetchNext)
                 {
                     var auditId = 0;
@@ -152,7 +171,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                     var take = processed + batchSize > totalCount ? totalCount - processed : batchSize;
 
                     _log.Debug($"Step {step}. Fetching next {take} cases. Skip: {processed}. TaskId: {p.TaskId}.");
-
+                        
                     var casesIds = new List<int>();
                     var batchProcessedCaseIds = new List<int>();
                     var batchProcessedCaseNumbers = new List<decimal>();
@@ -167,10 +186,29 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                         var casesQueryable = _gDPRDataPrivacyCasesService.GetCasesQuery(customerId, p, uow).OrderBy(c => parentIds.Contains(c.Id) ? 1 : 0);
 
                         List<Case> cases = new List<Case>();
-                        //fetch next cases
-                        if (p.GDPRType == 2)
+                      
+                        if (p.GDPRType == 2) //Deletion - we have to delete children first
                         {
-                            cases = casesQueryable.OrderBy(x => parentIds.Contains(x.Id) ? 1 : 0).Take(batchSize).ToList();
+                            if (!childrenDone)
+                            {
+                                if (childrenCases.Any())
+                                {
+                                    cases = childrenCases.Skip(processed).Take(batchSize).ToList();
+                                    processed += cases.Count; // Update processed after fetching
+                                }
+
+                                if (!cases.Any()) // If no more child cases to process
+                                {
+                                    childrenDone = true;
+                                    processed = 0; // Reset processed for parent cases
+                                                   // No need to fetch here again if you're fetching outside the loop
+                                }
+                            }
+                            if(childrenDone) // Now processing parent cases
+                            {
+                                cases = parentCases.Skip(processed).Take(batchSize).ToList(); // Assuming parentCases are pre-fetched
+                                processed += cases.Count; // Update processed after fetching
+                            }
                         }
                         else
                         {
@@ -189,26 +227,16 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                             if (p.GDPRType == 2) //Deletion
                             {
                                 casesIds = cases.Select(c => c.Id).ToList();
-                                
-                                //Cases som är en parent tar vi bort sist
-                                foreach (var c in cases.OrderBy(x => parentIds.Contains(x.Id) ? 1 : 0))
-                                {
-                                    List<int> caseId = new List<int>() { c.Id };
 
-                                    if (caseId != null)
-                                    {
-
-                                        deletionStatus = _caseDeletionService.DeleteCases(caseId, customerId, null, jobTimeout);
-                                        errorMessage += string.IsNullOrEmpty(deletionStatus.ErrorMessage) ? String.Empty : deletionStatus.ErrorMessage + "//";
-                                        batchErrorMessage += string.IsNullOrEmpty(deletionStatus.ErrorMessage) ? String.Empty : deletionStatus.ErrorMessage + "//";
-                                        batchCaseNumbersToExclude.AddRange(deletionStatus.CaseNumbersToExclude);
-                                        batchProcessedCaseNumbers.AddRange(deletionStatus.ProcessedCaseNumbers);
-                                        batchProcessedCaseIds.AddRange(deletionStatus.ProcessedCaseIds.ToList());
-                                    }
-                                    UpdateOperationAuditInner(auditId, batchCaseNumbersToExclude, batchProcessedCaseNumbers, batchProcessedCaseIds);
-                                    UpdateProgress(p.TaskId, processed + pos, totalCount);
-                                    pos++;
-                                }
+                                deletionStatus = _caseDeletionService.DeleteCases(casesIds, customerId, null, jobTimeout);
+                                errorMessage = string.IsNullOrEmpty(deletionStatus.ErrorMessage) ? String.Empty : deletionStatus.ErrorMessage + "//";
+                                batchErrorMessage = string.IsNullOrEmpty(deletionStatus.ErrorMessage) ? String.Empty : deletionStatus.ErrorMessage + "//";
+                                batchCaseNumbersToExclude.AddRange(deletionStatus.CaseNumbersToExclude);
+                                batchProcessedCaseNumbers.AddRange(deletionStatus.ProcessedCaseNumbers);
+                                batchProcessedCaseIds.AddRange(deletionStatus.ProcessedCaseIds.ToList());
+                                UpdateOperationAuditInner(auditId, batchCaseNumbersToExclude, batchProcessedCaseNumbers, batchProcessedCaseIds);
+                                UpdateProgress(p.TaskId, processed + pos, totalCount);
+                                pos++;
 
                                 _log.Debug($"{cases.Count} cases have been deleted. TaskId: {p.TaskId}.");
                             }
@@ -265,7 +293,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Gdpr
                         UpdateStepSuccessOperationAudit(auditId, true);
                     }
 
-                    if (processedCasesIds.Count() >= totalCount)
+                    if (processedCasesIds.Count >= totalCount)
                     {
                         fetchNext = false;
                     }

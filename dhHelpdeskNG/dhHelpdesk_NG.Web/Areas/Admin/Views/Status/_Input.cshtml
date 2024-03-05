@@ -82,13 +82,17 @@
                             <table class="tableform">
                                 <tr>
                                     <td class="span3">
-                                        @Translation.Get("SplitOnSave", Enums.TranslationSource.TextTranslation)
+                                        @Translation.Get("Dela upp ärende på begäran", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
                                         <label class="checkbox">
                                             <input type="checkbox" name="status.SplitOnSave" @(Model.Status.SplitOnSave == true ? "checked=checked" : "") value="true" />
+                                            <span class="icon-info-sign ml15" rel="tooltip"
+                                                  title=""
+                                                  data-original-title='@Translation.GetCoreTextTranslation("Kopplat villkor som även kräver konfigurering av Utökat ärende formulär. Kontakta DH Solutions för mer information")'></span>
                                             <input type="hidden" name="status.SplitOnSave" value="0" />
                                         </label>
+                                        
                                     </td>
                                 </tr>
                             </table>
