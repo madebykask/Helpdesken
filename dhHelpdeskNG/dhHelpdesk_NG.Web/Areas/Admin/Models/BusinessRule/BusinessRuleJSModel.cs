@@ -108,10 +108,23 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
             ret.ProcessFrom.AddItems(it.ProcessFrom, false);
             ret.ProcessTo.AddItems(it.ProcessTo, false);
 
-            ret.SubStatusFrom.AddItems(it.SubStatusFrom, false);
-            ret.SubStatusTo.AddItems(it.SubStatusTo, false);
-            ret.SubStatusFrom.AddItems(it.SubStatusFrom2, false);
-            ret.SubStatusTo.AddItems(it.SubStatusTo2, false);
+            if (it.EventId == "1")
+            {
+                ret.SubStatusFrom.AddItems(it.SubStatusFrom, false);
+                ret.SubStatusTo.AddItems(it.SubStatusTo, false);
+            }
+            if (it.EventId == "2")
+            {
+                ret.SubStatusFrom.AddItems(it.SubStatusFrom, false);
+                ret.SubStatusTo.AddItems(it.SubStatusTo, false);
+            }
+            else if (it.EventId == "3")
+            {
+                ret.SubStatusFrom.AddItems(it.SubStatusFrom2, false);
+                ret.SubStatusTo.AddItems(it.SubStatusTo2, false);
+            }
+
+
 
             if (it.EmailTemplate != null)
             {
