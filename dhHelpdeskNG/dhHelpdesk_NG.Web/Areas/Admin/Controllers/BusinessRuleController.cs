@@ -18,42 +18,46 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 		private readonly ICustomerService _customerService;
 		private readonly ISettingService _settingService;
 		private readonly IUserService _userService;
-		private readonly IProductAreaService _productAreaService;
-		private readonly IStateSecondaryService _subStatusService;
-		private readonly IMailTemplateService _mailTemplateService;
-		private readonly IEmailGroupService _emailGroupService;
-		private readonly IWorkingGroupService _workingGroupService;
-		private readonly IBusinessRuleService _businessRuleService;
+        private readonly IProductAreaService _productAreaService;
+        private readonly IStateSecondaryService _subStatusService;
+        private readonly IMailTemplateService _mailTemplateService;
+        private readonly IEmailGroupService _emailGroupService;
+        private readonly IWorkingGroupService _workingGroupService;
+        private readonly IBusinessRuleService _businessRuleService;
+        private readonly IStatusService _statusService;
 
-		public BusinessRuleController(IMasterDataService masterDataService,
-									  ICustomerService customerService,
-									  ISettingService settingService,
-									  IUserService userService,
-									  IProductAreaService productAreaService,
-									  IStateSecondaryService subStatusService,
-									  IMailTemplateService mailTemplateService,
-									  IEmailGroupService emailGroupService,
-									  IWorkingGroupService workingGroupService,
-									  IBusinessRuleService businessRuleService
+        public BusinessRuleController(IMasterDataService masterDataService,
+                                      ICustomerService customerService,
+                                      ISettingService settingService,
+                                      IUserService userService,
+                                      IProductAreaService productAreaService,
+                                      IStateSecondaryService subStatusService,
+                                      IMailTemplateService mailTemplateService,
+                                      IEmailGroupService emailGroupService,
+                                      IWorkingGroupService workingGroupService,
+                                      IBusinessRuleService businessRuleService,
+                                      IStatusService statusService
 
-									 )
-			: base(masterDataService)
-		{
-			_customerService = customerService;
-			_settingService = settingService;
-			_userService = userService;
-			_productAreaService = productAreaService;
-			_subStatusService = subStatusService;
-			_mailTemplateService = mailTemplateService;
-			_emailGroupService = emailGroupService;
-			_workingGroupService = workingGroupService;
-			_businessRuleService = businessRuleService;
-		}
+                                     )
+            : base(masterDataService)
+        {
+            _customerService = customerService;
+            _settingService = settingService;
+            _userService = userService;
+            _productAreaService = productAreaService;
+            _subStatusService = subStatusService;
+            _mailTemplateService = mailTemplateService;
+            _emailGroupService = emailGroupService;
+            _workingGroupService = workingGroupService;
+            _businessRuleService = businessRuleService;
+            _statusService = statusService;
 
-		#region Public Methods 
+        }
 
-		[HttpGet]
-		public ActionResult Index(int customerId)
+        #region Public Methods 
+
+        [HttpGet]
+        public ActionResult Index(int customerId)
 		{
 			var model = new BusinessRuleIndexModel();
 			model.Customer = _customerService.GetCustomer(customerId);
@@ -111,10 +115,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			var processList = GetProcessesList(fieldItems, lastLevels);
 			ViewBag.ProcessList = processList;
 
-			var subStatusList = GetSubStatusesList(customerId, fieldItems);
+            var statusList = GetStatusesList(customerId, fieldItems);
+            ViewBag.Status = statusList;
+
+            var subStatusList = GetSubStatusesList(customerId, fieldItems);
 			ViewBag.SubStatus = subStatusList;
 
-			var emailTemplateList = GetEmailTemplatesList(customerId);
+            var emailTemplateList = GetEmailTemplatesList(customerId);
 			ViewBag.EMailTemplates = emailTemplateList.OrderBy(x => x.Text).ToList();
 
 			var emailGroupList = GetEmailGroupsList(customerId);
@@ -179,7 +186,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			var processList = GetProcessesList(fieldItems, lastLevels);
 			ViewBag.ProcessList = processList;
 
-			var subStatusList = GetSubStatusesList(rule.CustomerId, fieldItems);
+            var statusList = GetStatusesList(rule.CustomerId, fieldItems);
+            ViewBag.Status = statusList;
+
+            var subStatusList = GetSubStatusesList(rule.CustomerId, fieldItems);
 			ViewBag.SubStatus = subStatusList;
 
 			model.Condition = new BRConditionModel
@@ -190,7 +200,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				ProcessesToValue = processList.Where(x => rule.ProcessTo.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				SubStatusesFromValue = subStatusList.Where(x => rule.SubStatusFrom.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				SubStatusesToValue = subStatusList.Where(x => rule.SubStatusTo.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
-				Sequence = 1,
+                StatusesFromValue = statusList.Where(x => rule.StatusFrom.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
+                StatusesToValue = statusList.Where(x => rule.StatusTo.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
+                Sequence = 1,
                 Equals = rule.DomainFrom
             };
 
@@ -308,7 +320,19 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			return subStatusList;
 		}
 
-		private static List<DdlModel> GetProcessesList(List<DdlModel> fieldItems, List<ProductArea> lastLevels)
+        private List<DdlModel> GetStatusesList(int customerId, List<DdlModel> fieldItems)
+        {
+            var statusList = fieldItems.Union(_statusService.GetStatuses(customerId).Select(s => new DdlModel
+            {
+                Value = s.Id.ToString(),
+                Text = s.Name,
+                Selected = false,
+                Disabled = s.IsActive != 1
+            }).OrderBy(x => x.Text)).ToList();
+            return statusList;
+        }
+
+        private static List<DdlModel> GetProcessesList(List<DdlModel> fieldItems, List<ProductArea> lastLevels)
 		{
 			var processList = fieldItems.Union(lastLevels.Select(l => new DdlModel
 			{

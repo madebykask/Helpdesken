@@ -42,7 +42,23 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 		[RequiredIfNotEmpty("ProcessFrom")]
 		public string ProcessTo { get; set; }
 
-		[LocalizedDisplay("Sub status från")]
+        [LocalizedDisplay("Status från")]
+        [RequiredIfNotEmpty("StatusTo")]
+        public string StatusFrom { get; set; }
+
+        [LocalizedDisplay("Status till")]
+        [RequiredIfNotEmpty("StatusFrom")]
+        public string StatusTo { get; set; }
+
+        [LocalizedDisplay("Status från")]
+        [RequiredIfNotEmpty("StatusTo2")]
+        public string StatusFrom2 { get; set; }
+
+        [LocalizedDisplay("Status till")]
+        [RequiredIfNotEmpty("StatusFrom2")]
+        public string StatusTo2 { get; set; }
+
+        [LocalizedDisplay("Sub status från")]
 		[RequiredIfNotEmpty("SubStatusTo")]
 		public string SubStatusFrom { get; set; }
 
@@ -110,18 +126,32 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
             if (it.EventId == "1")
             {
+
+                ret.StatusFrom.AddItems(it.StatusFrom, false);
+                ret.StatusTo.AddItems(it.StatusTo, false);
+
                 ret.SubStatusFrom.AddItems(it.SubStatusFrom, false);
                 ret.SubStatusTo.AddItems(it.SubStatusTo, false);
+
             }
             if (it.EventId == "2")
             {
+
+                ret.StatusFrom.AddItems(it.StatusFrom, false);
+                ret.StatusTo.AddItems(it.StatusTo, false);
+
                 ret.SubStatusFrom.AddItems(it.SubStatusFrom, false);
                 ret.SubStatusTo.AddItems(it.SubStatusTo, false);
+
             }
             else if (it.EventId == "3")
             {
+                ret.StatusFrom.AddItems(it.StatusFrom2, false);
+                ret.StatusTo.AddItems(it.StatusTo2, false);
+
                 ret.SubStatusFrom.AddItems(it.SubStatusFrom2, false);
                 ret.SubStatusTo.AddItems(it.SubStatusTo2, false);
+
             }
 
 

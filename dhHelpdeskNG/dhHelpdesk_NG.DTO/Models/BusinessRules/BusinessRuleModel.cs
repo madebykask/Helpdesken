@@ -14,6 +14,8 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
         {
             this.ProcessFrom = new SelectedItems();
             this.ProcessTo = new SelectedItems();
+            this.StatusFrom = new SelectedItems();
+            this.StatusTo = new SelectedItems();
             this.SubStatusFrom = new SelectedItems();
             this.SubStatusTo = new SelectedItems();
             this.EmailGroups = new SelectedItems();
@@ -48,6 +50,10 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
         public SelectedItems ProcessFrom { get; set; }
 
         public SelectedItems ProcessTo { get; set; }
+
+        public SelectedItems StatusFrom { get; set; }
+
+        public SelectedItems StatusTo { get; set; }
 
         public SelectedItems SubStatusFrom { get; set; }
 

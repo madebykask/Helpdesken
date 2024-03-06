@@ -42,6 +42,22 @@
 
         <tr>
             <td>
+                @Translation.Get("Status")
+            </td>
+            <td>
+                @Html.ListBoxExtendedOptionsFor(x => x.StatusesFromValue, (List<DdlModel>)@ViewBag.Status, new { @id = "lstStatusFrom", @name = "lstStatusFrom", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
+                @Html.ValidationMessageFor(model => model.StatusesFromValue)
+            </td>
+            <td>
+                @Html.ListBoxExtendedOptionsFor(x => x.StatusesToValue, (List<DdlModel>)@ViewBag.Status, new { @id = "lstStatusTo", @name = "lstStatusTo", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
+                @Html.ValidationMessageFor(model => model.StatusesToValue)
+            </td>
+
+            <td></td>
+        </tr>
+
+        <tr>
+            <td>
                 @Translation.Get("SubStatus")
             </td>
             <td>
@@ -115,6 +131,21 @@
         </tr>
     </thead>
     <tbody>
+        <tr>
+            <td>
+                @Translation.Get("Status")
+            </td>
+            <td>
+                @Html.ListBoxExtendedOptionsFor(x => x.StatusesFromValue, (List<DdlModel>)@ViewBag.Status, new { @id = "lstStatusFrom2", @name = "lstStatusFrom2", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
+                @Html.ValidationMessageFor(model => model.StatusesFromValue)
+            </td>
+            <td>
+                @Html.ListBoxExtendedOptionsFor(x => x.StatusesToValue, (List<DdlModel>)@ViewBag.Status, new { @id = "lstStatusTo2", @name = "lstStatusTo2", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
+                @Html.ValidationMessageFor(model => model.StatusesToValue)
+            </td>
+
+            <td></td>
+        </tr>
         <tr>
             <td>
                 @Translation.Get("SubStatus")

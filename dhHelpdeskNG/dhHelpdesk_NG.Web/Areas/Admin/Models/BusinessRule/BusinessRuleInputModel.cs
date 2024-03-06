@@ -67,7 +67,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 		{
 			ProcessesFromValue = new List<string>();
 			ProcessesToValue = new List<string>();
-			SubStatusesFromValue = new List<string>();
+            StatusesFromValue = new List<string>();
+            StatusesToValue = new List<string>();
+            SubStatusesFromValue = new List<string>();
 			SubStatusesToValue = new List<string>();
 		}
 
@@ -83,7 +85,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 		[RequiredIfNotEmpty("ProcessesFromValue", "lstProcessFrom")]
 		public ICollection<string> ProcessesToValue { get; set; }
 
-		[LocalizedDisplay("Sub status från")]
+        [LocalizedDisplay("Status från")]
+        [RequiredIfNotEmpty("StatusesToValue", "SubStatusTo")]
+        public ICollection<string> StatusesFromValue { get; set; }
+
+        [LocalizedDisplay("Status till")]
+        [RequiredIfNotEmpty("StatusesFromValue", "SubStatusFrom")]
+        public ICollection<string> StatusesToValue { get; set; }
+
+        [LocalizedDisplay("Sub status från")]
 		[RequiredIfNotEmpty("SubStatusesToValue", "lstSubStatusTo")]
 		public ICollection<string> SubStatusesFromValue { get; set; }
 

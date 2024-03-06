@@ -142,6 +142,17 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         Sequence = 3
                     };
                     this.DbContext.BRConditions.Add(conditionEntity3);
+
+                    var conditionEntity4 = new BRConditionEntity()
+                    {
+                        Id = 0,
+                        Rule_Id = businessRule.Id,
+                        Field_Id = BRFieldType.Status,
+                        FromValue = businessRule.StatusFrom.GetSelectedStr(),
+                        ToValue = businessRule.StatusTo.GetSelectedStr(),
+                        Sequence = 4
+                    };
+                    this.DbContext.BRConditions.Add(conditionEntity4);
                 }
                 else
                 {
@@ -221,6 +232,34 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         conditionEntity3.ToValue = businessRule.DomainTo == null ? "" : businessRule.DomainTo;
                     }
                     #endregion
+
+
+                    #region Save Status
+                    var conditionEntity4 = this.DbContext.BRConditions.Where(c => c.Rule_Id == businessRule.Id && c.Field_Id == BRFieldType.Status)
+                                                                      .FirstOrDefault();
+
+                    if (conditionEntity4 == null)
+                    {
+                        conditionEntity4 = new BRConditionEntity()
+                        {
+                            Id = 0,
+                            Rule_Id = businessRule.Id,
+                            Field_Id = BRFieldType.Status,
+                            FromValue = businessRule.StatusFrom.GetSelectedStr(),
+                            ToValue = businessRule.StatusTo.GetSelectedStr(),
+                            Sequence = 4
+                        };
+
+                        this.DbContext.BRConditions.Add(conditionEntity4);
+                    }
+                    else
+                    {
+                        conditionEntity4.FromValue = businessRule.StatusFrom.GetSelectedStr();
+                        conditionEntity4.ToValue = businessRule.StatusTo.GetSelectedStr();
+                    }
+
+                    #endregion
+
                 }
 
                 this.Commit();
@@ -777,6 +816,14 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                     ret.DomainFrom = conditionEntity3.FromValue;
                     ret.DomainTo = conditionEntity3.ToValue;
                 }
+
+                var conditionEntity4 = this.DbContext.BRConditions.Where(c => c.Rule_Id == ruleId && c.Field_Id == BRFieldType.Status).FirstOrDefault();
+                if (conditionEntity4 != null)
+                {
+                    ret.StatusFrom.AddItems(conditionEntity4.FromValue, false);
+                    ret.StatusTo.AddItems(conditionEntity4.ToValue, false);
+                }
+
                 #endregion
 
                 #region actions

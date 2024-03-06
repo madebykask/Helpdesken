@@ -33,6 +33,7 @@
         var elBRActionCreatedBy = "#BRActionCreatedBy";
         var elBRActionRegistrator = "#BRActionRegistrator";
         var elBRActionAbout = "#BRActionAbout";
+        var elBRActionDisableFinishingType = "#BRActionDisableFinishingType";
 
         
         var elProcessFromDropDown = "#lstProcessFrom";
@@ -43,6 +44,12 @@
 
         var elSubStatusFromDropDown2 = "#lstSubStatusFrom2";
         var elSubStatusToDropDown2 = "#lstSubStatusTo2";
+
+        var elStatusFromDropDown = "#lstStatusFrom";
+        var elStatusToDropDown = "#lstStatusTo";
+
+        var elStatusFromDropDown2 = "#lstStatusFrom2";
+        var elStatusToDropDown2 = "#lstStatusTo2";
 
         var elDomainEquals = "#lstEquals";
 
@@ -119,6 +126,11 @@
                 subStatusFrom2: "",
                 subStatusTo2: "",
 
+                statusFrom: "",
+                statusTo: "",
+                statusFrom2: "",
+                statusTo2: "",
+
                 equals: "",
 
                 emailTemplate: 0,
@@ -169,6 +181,26 @@
             $(elSubStatusToDropDown2 + " option:selected").each(function () {
                 data.subStatusTo2 += $(this).val() + ",";
             });
+
+
+
+            $(elStatusFromDropDown + " option:selected").each(function () {
+                data.statusFrom += $(this).val() + ",";
+            });
+
+            $(elStatusToDropDown + " option:selected").each(function () {
+                data.statusTo += $(this).val() + ",";
+            });
+
+            $(elStatusFromDropDown2 + " option:selected").each(function () {
+                data.statusFrom2 += $(this).val() + ",";
+            });
+
+            $(elStatusToDropDown2 + " option:selected").each(function () {
+                data.statusTo2 += $(this).val() + ",";
+            });
+
+
           
             $(elEmailTemplatsDropDown + " option:selected").each(function () {
                 data.emailTemplate = $(this).val();
@@ -228,6 +260,10 @@
                     'data.SubStatusTo': data.subStatusTo,
                     'data.SubStatusFrom2': data.subStatusFrom2,
                     'data.SubStatusTo2': data.subStatusTo2,
+                    'data.StatusFrom': data.statusFrom,
+                    'data.StatusTo': data.statusTo,
+                    'data.StatusFrom2': data.statusFrom2,
+                    'data.StatusTo2': data.statusTo2,
                     'data.Equals': data.equals,
                     'data.EmailTemplate': data.emailTemplate,
                     'data.EmailGroups': data.emailGroups,
@@ -276,6 +312,7 @@
                 $(elBRActionCreatedBy).show();
                 $(elBRActionRegistrator).show();
                 $(elBRActionAbout).show();
+                $(elBRActionDisableFinishingType).show();
 
             } else if (selectedValue === '2') {
 
@@ -293,6 +330,7 @@
                 $(elBRActionCreatedBy).hide();
                 $(elBRActionRegistrator).hide();
                 $(elBRActionAbout).hide();
+                $(elBRActionDisableFinishingType).hide();
 
 
 
@@ -313,6 +351,7 @@
                 $(elBRActionCreatedBy).hide();
                 $(elBRActionRegistrator).hide();
                 $(elBRActionAbout).hide();
+                $(elBRActionDisableFinishingType).show();
 
             }
         };

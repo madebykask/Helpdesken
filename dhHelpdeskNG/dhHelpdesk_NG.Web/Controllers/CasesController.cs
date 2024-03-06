@@ -2076,7 +2076,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             //Run business rules on load
-           m.DisableCaseFields = _caseService.ExecuteBusinessActionsDisable(c);
+            m.DisableCaseFields = _caseService.ExecuteBusinessActionsDisable(c);
 
             return this.View(m);
         }

@@ -1077,16 +1077,17 @@ namespace DH.Helpdesk.Services.Services
 
                 if (r.DisableFinishingType == true && r.SubStatusFrom.Count > 0 && r.SubStatusTo.Count > 0)
                 {
-
-                    if (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(caseEntity.StateSecondary_Id.Value)) { 
-                        if (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(caseEntity.StateSecondary_Id.Value))
+                    if (caseEntity.StateSecondary_Id.HasValue)
+                    {
+                        if (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(caseEntity.StateSecondary_Id.Value))
                         {
-                            elementsToDisable.Add("FinishingCause");
-                            elementsToDisable.Add("FinishingDate");
+                            if (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(caseEntity.StateSecondary_Id.Value))
+                            {
+                                elementsToDisable.Add("FinishingCause");
+                                elementsToDisable.Add("FinishingDate");
+                            }
                         }
                     }
-
-
                 }
             }
 
