@@ -45,7 +45,7 @@
 	<system.web.extensions>
 		<scripting>
 			<webServices>
-				<jsonSerialization maxJsonLength="36000000"/>
+				<jsonSerialization maxJsonLength="2147483644"/>
 			</webServices>
 		</scripting>
 	</system.web.extensions>
