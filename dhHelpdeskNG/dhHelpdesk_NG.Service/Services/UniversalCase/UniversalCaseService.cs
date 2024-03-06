@@ -609,7 +609,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 _caseService.SendCaseEmail(caseEntity.Id, mailSettings, historyId, "", auxModel.UserTimeZone, oldCase, logEntity, null, curUser);
             }
 
-            var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, caseEntity, oldCase);
+            var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCaseAfter, caseEntity, oldCase);
             if (actions.Any())
                 _caseService.ExecuteBusinessActions(actions, caseEntity.Id, logEntity, auxModel.UserTimeZone, historyId, "", auxModel.CurrentLanguageId, mailSettings);
 

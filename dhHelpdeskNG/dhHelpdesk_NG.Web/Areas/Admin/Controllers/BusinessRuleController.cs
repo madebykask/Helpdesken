@@ -410,16 +410,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 		}
 
 		private List<BREvent> DefineBREvents(int selectedId = 1)
-		{
-			return new List<BREvent>
-			{
-				new BREvent((int)BREventType.OnSaveCase, "On Save Case", selectedId == (int)BREventType.OnSaveCase),
-				new BREvent((int)BREventType.OnCreateCaseM2T, "On Create Case (M2T)", selectedId == (int)BREventType.OnCreateCaseM2T),
-                new BREvent((int)BREventType.OnLoadCase, "On Load Case", selectedId == (int)BREventType.OnLoadCase)
+        {
+            return new List<BREvent>
+            {
+                new BREvent((int)BREventType.OnSaveCaseAfter, "On Save Case (After)", selectedId == (int)BREventType.OnSaveCaseAfter),
+                new BREvent((int)BREventType.OnCreateCaseM2T, "On Create Case (M2T)", selectedId == (int)BREventType.OnCreateCaseM2T),
+                new BREvent((int)BREventType.OnLoadCase, "On Load Case", selectedId == (int)BREventType.OnLoadCase),
+                new BREvent((int)BREventType.OnLoadCase, "On Save Case (Before)", selectedId == (int)BREventType.OnSaveCaseBefore)
             };
 
-			#endregion Private
+            #endregion Private
 
-		}
-	}
+        }
+    }
 }

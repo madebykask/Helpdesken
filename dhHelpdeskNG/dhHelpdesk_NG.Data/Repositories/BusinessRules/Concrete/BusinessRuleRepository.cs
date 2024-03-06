@@ -79,7 +79,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
             if (conResult != "")
                 return conResult;
 
-            if (businessRule.EventId == (int)BREventType.OnSaveCase)
+            if (businessRule.EventId == (int)BREventType.OnSaveCaseAfter)
             {
                 var actResult = SaveBRActionsSendEmail(businessRule, isNew);
                 if (actResult != "")

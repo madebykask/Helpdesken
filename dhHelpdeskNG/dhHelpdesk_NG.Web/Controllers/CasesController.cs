@@ -1503,7 +1503,7 @@ namespace DH.Helpdesk.Web.Controllers
                     _caseService.SendCaseEmail(caseToUpdate.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser);
                     
 
-                    var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, caseToUpdate, oldCase);
+                    var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCaseAfter, caseToUpdate, oldCase);
                     if (actions.Any())
                         _caseService.ExecuteBusinessActions(actions, caseToUpdate.Id, caseLog, userTimeZone, caseHistoryId, basePath, SessionFacade.CurrentLanguageId, caseMailSetting, null);
                 }
@@ -4380,7 +4380,7 @@ namespace DH.Helpdesk.Web.Controllers
             // send emails
             _caseService.SendCaseEmail(case_.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, allLogFiles, currentLoggedInUser);
              
-            var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, case_, oldCase);
+            var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCaseAfter, case_, oldCase);
             if (actions.Any())
                 _caseService.ExecuteBusinessActions(actions, case_.Id, caseLog, userTimeZone, caseHistoryId, basePath, SessionFacade.CurrentLanguageId, caseMailSetting, allLogFiles);
 

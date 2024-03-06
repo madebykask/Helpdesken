@@ -21,6 +21,7 @@
         var elCondition1 = "#BRCondition1";
         var elCondition2 = "#BRCondition2";
         var elCondition3 = "#BRCondition3";
+        var elCondition4 = "#BRCondition4";
 
         var elBRActionMailTemplate = "#BRActionMailTemplate";
         var elBRActionEmailGroup = "#BRActionEmailGroup";
@@ -301,6 +302,7 @@
                 $(elCondition1).show();
                 $(elCondition2).hide();
                 $(elCondition3).hide();
+                $(elCondition4).hide();
 
                 $(elBRActionAdministratorSingleSelect).hide();
 
@@ -312,13 +314,14 @@
                 $(elBRActionCreatedBy).show();
                 $(elBRActionRegistrator).show();
                 $(elBRActionAbout).show();
-                $(elBRActionDisableFinishingType).show();
+                $(elBRActionDisableFinishingType).hide();
 
             } else if (selectedValue === '2') {
 
                 $(elCondition1).hide();
                 $(elCondition2).show();
                 $(elCondition3).hide();
+                $(elCondition4).hide();
 
                 $(elBRActionAdministratorSingleSelect).show();
 
@@ -340,6 +343,28 @@
                 $(elCondition1).hide();
                 $(elCondition2).hide();
                 $(elCondition3).show();
+                $(elCondition4).hide();
+
+
+                $(elBRActionAdministratorSingleSelect).hide();
+                $(elBRActionMailTemplate).hide();
+                $(elBRActionEmailGroup).hide();
+                $(elBRActionWorkingGroup).hide();
+                $(elBRActionAdministrator).hide();
+                $(elBRActionRecipients).hide();
+                $(elBRActionCreatedBy).hide();
+                $(elBRActionRegistrator).hide();
+                $(elBRActionAbout).hide();
+                $(elBRActionDisableFinishingType).show();
+
+            }
+
+            else if (selectedValue === '4') {
+
+                $(elCondition1).hide();
+                $(elCondition2).hide();
+                $(elCondition3).hide();
+                $(elCondition4).show();
 
 
                 $(elBRActionAdministratorSingleSelect).hide();

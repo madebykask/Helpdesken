@@ -967,6 +967,10 @@ EditPage.prototype.isFormValid = function () {
 
 EditPage.prototype.primaryValidation = function (submitUrl) {
 
+
+    ShowToastMessage("Blabla", "error", true);
+    return;
+
     var me = this;
     me.syncCaseFromExCaseIfExists();
     var finishDate = $('#CaseLog_FinishingDate').val();
@@ -1084,6 +1088,8 @@ EditPage.prototype.doTotalValidationAndSave = function (submitUrl) {
     if (isNaN(finishingType.value)) {
         finishingType = 0;
     }
+
+   
 
 
     if ($("#ExtendedInitiatorGUID").val().length > 0) {
