@@ -389,6 +389,12 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             var fieldTemplateSettings = model.CaseSolutionSettingModels.FirstOrDefault(x => x.CaseSolutionField == caseTemplateFieldName);
             var isTemplateReadonly = fieldTemplateSettings != null && (fieldTemplateSettings.CaseSolutionMode == CaseSolutionModes.ReadOnly);
             var isReadOnly = model.EditMode == AccessMode.ReadOnly || isTemplateReadonly;
+
+            if (model.DisableCaseFields != null && model.DisableCaseFields.Contains(caseTemplateFieldName.GetName()))
+            {
+                isReadOnly = true;
+            }
+
             return isReadOnly;
         }
 
@@ -433,6 +439,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Extensions
             GlobalEnums.TranslationCaseFields caseFieldName,
             CaseSolutionFields caseTemplateFieldName)
         {
+
             return model.IsReadOnly(caseFieldName, caseTemplateFieldName) ? "disabled" : string.Empty;
         }
     }

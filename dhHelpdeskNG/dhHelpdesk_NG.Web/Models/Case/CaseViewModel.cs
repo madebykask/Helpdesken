@@ -553,6 +553,8 @@ namespace DH.Helpdesk.Web.Models.Case
         public bool EnableTwoAttachments { get; internal set; }
 		public bool HasFileUploadWhiteList { get; internal set; }
 		public List<string> FileUploadWhiteList { get; internal set; }
+
+        public List<string> DisableCaseFields { get; set; }
 	}
 
     public class CaseIndexViewModel

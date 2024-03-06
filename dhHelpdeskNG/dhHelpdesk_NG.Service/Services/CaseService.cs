@@ -1058,6 +1058,41 @@ namespace DH.Helpdesk.Services.Services
             return caseEntity;
         }
 
+        public List<string> ExecuteBusinessActionsDisable(Case caseEntity)
+        {
+
+            List<string> elementsToDisable = new List<string>();
+
+            var rules = _businessRuleService.GetRuleReadlist(caseEntity.Customer_Id);
+
+            if (rules.Count > 0)
+            {
+                rules = rules.Where(x => x.Event == BREventType.OnLoadCase && x.RuleActive == true).OrderBy(y => y.RuleSequence).ToList();
+
+            }
+
+            foreach (var rule in rules)
+            {
+                var r = _businessRuleService.GetRule(rule.Id);
+
+                if (r.DisableFinishingType == true && r.SubStatusFrom.Count > 0 && r.SubStatusTo.Count > 0)
+                {
+
+                    if (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(caseEntity.StateSecondary_Id.Value)) { 
+                        if (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(caseEntity.StateSecondary_Id.Value))
+                        {
+                            elementsToDisable.Add("FinishingCause");
+                            elementsToDisable.Add("FinishingDate");
+                        }
+                    }
+
+
+                }
+            }
+
+            return elementsToDisable;
+        }
+
         public IList<Case> GetTop100CasesForTest()
         {
             return _caseRepository.GetTop100CasesToTest();

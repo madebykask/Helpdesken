@@ -102,6 +102,8 @@ namespace DH.Helpdesk.Services.Services
                                     );
         Case ExecuteBusinessActionsM2T(Case caseEntity);
 
+        List<string> ExecuteBusinessActionsDisable(Case caseEntity);
+
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
         void MarkAsRead(int caseId);
