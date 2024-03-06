@@ -1060,7 +1060,6 @@ namespace DH.Helpdesk.Services.Services
 
         public List<string> ExecuteBusinessActionsDisable(Case caseEntity)
         {
-
             List<string> elementsToDisable = new List<string>();
 
             var rules = _businessRuleService.GetRuleReadlist(caseEntity.Customer_Id);
@@ -1068,25 +1067,51 @@ namespace DH.Helpdesk.Services.Services
             if (rules.Count > 0)
             {
                 rules = rules.Where(x => x.Event == BREventType.OnLoadCase && x.RuleActive == true).OrderBy(y => y.RuleSequence).ToList();
-
             }
 
             foreach (var rule in rules)
             {
                 var r = _businessRuleService.GetRule(rule.Id);
 
-                if (r.DisableFinishingType == true && r.SubStatusFrom.Count > 0 && r.SubStatusTo.Count > 0)
+                if (r.DisableFinishingType == true)
                 {
-                    if (caseEntity.StateSecondary_Id.HasValue)
+                    bool statusMatch = r.StatusFrom == null || r.StatusTo == null || (r.StatusFrom.Count == 0 && r.StatusTo.Count == 0);
+                    bool subStatusMatch = r.SubStatusFrom == null || r.SubStatusTo == null || (r.SubStatusFrom.Count == 0 && r.SubStatusTo.Count == 0);
+
+                    // Update logic to handle nulls and absence of values correctly
+                    if (r.StatusFrom != null && r.StatusTo != null)
                     {
-                        if (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(caseEntity.StateSecondary_Id.Value))
+                        if (caseEntity.Status_Id.HasValue)
                         {
-                            if (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(caseEntity.StateSecondary_Id.Value))
-                            {
-                                elementsToDisable.Add("FinishingCause");
-                                elementsToDisable.Add("FinishingDate");
-                            }
+                            statusMatch = (r.StatusFrom.Contains(BRConstItem.ANY) || r.StatusFrom.Contains(caseEntity.Status_Id.Value)) &&
+                                          (r.StatusTo.Contains(BRConstItem.ANY) || r.StatusTo.Contains(caseEntity.Status_Id.Value));
                         }
+                    }
+                    else
+                    {
+                        // If both StatusFrom and StatusTo are null, do not automatically consider status as matching
+                        statusMatch = !caseEntity.Status_Id.HasValue;
+                    }
+
+                    if (r.SubStatusFrom != null && r.SubStatusTo != null)
+                    {
+                        if (caseEntity.StateSecondary_Id.HasValue)
+                        {
+                            subStatusMatch = (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(caseEntity.StateSecondary_Id.Value)) &&
+                                             (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(caseEntity.StateSecondary_Id.Value));
+                        }
+                    }
+                    else
+                    {
+                        // If both SubStatusFrom and SubStatusTo are null, do not automatically consider substatus as matching
+                        subStatusMatch = !caseEntity.StateSecondary_Id.HasValue;
+                    }
+
+                    // If both status and substatus conditions are appropriately met, disable elements
+                    if (statusMatch && subStatusMatch)
+                    {
+                        elementsToDisable.Add("FinishingCause");
+                        elementsToDisable.Add("FinishingDate");
                     }
                 }
             }
