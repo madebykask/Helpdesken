@@ -132,7 +132,10 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             if (res.IsSucceed)
             {
                 CaseTimeMetricsModel timeMetrics;
-                res = CloneCase(ref caseModel, auxModel, out timeMetrics);
+                //Why calculate on workingtime when cloning a case? 
+                //It throws exception beacause of code in CalculateWorkTime in WorkTimeCalculator 
+                //Added last parameter to this - calculateWorkTime
+                res = CloneCase(ref caseModel, auxModel, out timeMetrics, false);
                 if (res.IsSucceed)
                 {
                     res = ValidateCase(caseModel);
@@ -185,7 +188,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             caseNumber = -1;
 
             var res = new ProcessResult("Save Case Check Split");
-            //Status_id är null för JKP
+            //Status_id is null for some customers
             Status status = null;
             if (caseModel.Status_Id.HasValue)
             {
@@ -193,7 +196,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             }
             if (status != null)
             {
-                //Ytterbygg - när det ska splittas
+                //After paused and saved again or new case, the case should be split
                 if (caseModel.CaseSolution_Id.HasValue && status != null && status.SplitOnSave)
                 {
                     //If new case
@@ -204,7 +207,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                         caseModel.CaseNumber = caseNumber;
                     }
                     
-                    //Endast göra om caset inte redan blivit splitat + att ärendet redan är sparat + status har splitOnSave
+                    //Only if case is not already split and status is splitOnSave
                     if (_caseService.GetChildCasesFor(caseModel.Id).Count == 0)
                     {
                         var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
@@ -230,7 +233,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             }
             else
             { 
-                //Jönköping borde komma hit
+                //Other customers without status should come here
                 if (caseModel.CaseSolution_Id.HasValue && isNewCase)
                 {
                     var caseSolution = _caseSolutionService.GetCaseSolution(caseModel.CaseSolution_Id.Value);
@@ -254,7 +257,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 }
             }
 
-            //Spara caset  för Ytterbyggs pausade status
+            //Save case if not split
             res = SaveCase(caseModel, auxModel, out caseId, out caseNumber);
             return res;
         }
@@ -419,7 +422,7 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             return new ProcessResult("Primary Validation.");
         }
 
-        private ProcessResult CloneCase(ref CaseModel caseModel, AuxCaseModel auxModel, out CaseTimeMetricsModel timeMetrics)
+        private ProcessResult CloneCase(ref CaseModel caseModel, AuxCaseModel auxModel, out CaseTimeMetricsModel timeMetrics, bool calculateWorkingTime = true)
         {
             var isEditMode = caseModel.Id != 0;
 
@@ -463,8 +466,6 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             {
                 oldCase = _caseRepository.GetCase(caseModel.Id);
 
-              
-
                 if (_customerUser != null && _customerUser.UserInfoPermission == 0)
                 {
                     caseModel.ReportedBy = oldCase.ReportedBy;
@@ -479,7 +480,6 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                     caseModel.UserCode = oldCase.UserCode;
                 }
                 caseModel.RegTime = oldCase.RegTime;
-                //KAN DET VARA DETTA?
                 caseModel.ChangeTime = oldCase.RegTime;
             }
             else
@@ -490,15 +490,6 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 if (caseModel.RegLanguage_Id == 0)
                     caseModel.RegLanguage_Id = auxModel.CurrentLanguageId;
             }
-
-            ////Set same date so that CaseTimeMetricsModel doesent throw error
-            //if (splitOnSave)
-            //{
-            //    caseModel.RegTime = auxModel.UtcNow;
-            //    caseModel.ChangeTime = auxModel.UtcNow;
-            //    oldCase.RegTime = auxModel.UtcNow;
-            //    oldCase.ChangeTime = auxModel.UtcNow;
-            //}
 
             if (caseModel.FinishingType_Id > 0)
             {
@@ -527,11 +518,27 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
                 caseModel.ProductAreaSetDate = auxModel.UtcNow;
 
             /*Calculate Times*/
-            var calculatedTimes = ClaculateCaseTimeMetrics(caseModel, auxModel, oldCase);
-            caseModel.LeadTime = calculatedTimes.LeadTime;
-            caseModel.ExternalTime = calculatedTimes.ExternalTime;
-            caseModel.LatestSLACountDate = calculatedTimes.LatestSLACountDate;
-            timeMetrics = calculatedTimes;
+            if(calculateWorkingTime)
+            {
+                var calculatedTimes = ClaculateCaseTimeMetrics(caseModel, auxModel, oldCase);
+                caseModel.LeadTime = calculatedTimes.LeadTime;
+                caseModel.ExternalTime = calculatedTimes.ExternalTime;
+                caseModel.LatestSLACountDate = calculatedTimes.LatestSLACountDate;
+                timeMetrics = calculatedTimes;
+            }
+            else
+            {
+                timeMetrics = new CaseTimeMetricsModel
+                {
+                    ExternalTime = 0,
+                    ActionExternalTime = 0,
+                    LeadTime = 0,
+                    LeadTimeForNow = 0,
+                    ActionLeadTime = 0,
+                    LatestSLACountDate = null
+                };
+            }
+            
 
             return new ProcessResult("Case cloned.");
         }
@@ -1053,86 +1060,6 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
             caseNumber = _caseNum;
             return res;
         }
-
-        private ProcessResult EditParentAndChildren(CaseModel baseCaseModel, AuxCaseModel baseAuxModel, CaseSolution baseCaseSolution, out int caseId, out decimal caseNumber)
-        {
-            IDictionary<string, string> errors;
-
-            //Multicase - Split
-            int conditionType_Id = (int)((ConditionType)Enum.Parse(typeof(ConditionType), ConditionType.MultiCaseSplit.ToString()));
-
-            ProcessResult res = new ProcessResult("Children");
-            decimal _caseNum;
-            int selfCaseId;
-            //save base
-            res = SaveCase(baseCaseModel, baseAuxModel, out selfCaseId, out _caseNum);
-
-            if (res.IsSucceed && selfCaseId != -1)
-            {
-
-                //check if there should be created child cases
-                if (baseCaseSolution.SplitToCaseSolutionDescendants != null && baseCaseSolution.SplitToCaseSolutionDescendants.Any())
-                {
-                    var baseCaseExtendedCaseDataId = baseCaseModel.ExtendedCaseData_Id ?? 0;
-                    var baseCaseExCaseForm = baseCaseSolution.ExtendedCaseForms?.FirstOrDefault();
-
-                    foreach (var item in baseCaseSolution.SplitToCaseSolutionDescendants.Where(x => x.SplitToCaseSolutionDescendant.Status > 0).OrderBy(x => x.SplitToCaseSolutionDescendant.SortOrder))
-                    {
-                        var childCaseTemplate = _caseSolutionService.GetCaseSolution(item.SplitToCaseSolutionDescendant.Id);
-
-                        var doSplit = _conditionService.CheckConditions(baseCaseModel.Id, item.SplitToCaseSolutionDescendant.Id, conditionType_Id);
-
-                        if (doSplit.Show)
-                        {
-                            ExtendedCaseFormEntity exCaseForm = null;
-                            var childCaseModel = baseCaseModel.DeepClone();
-
-                            //TODO: refactor and make a long term solution, this is just for DepartmentId
-                            baseCaseModel.Department_Id = ChangeDepartmentId(childCaseModel.Customer_Id, childCaseModel.Department_Id, childCaseTemplate.Customer_Id);
-
-                            int childCaseId = -1;
-                            decimal childCaseNum;
-
-                            //apply values from case solution
-                            childCaseModel = ApplyValuesFromCaseSolution(childCaseModel, item.SplitToCaseSolutionDescendant.Id);
-
-                            //apply caseBinding values from child extended case template which are missing in the parent form
-                            if (baseCaseExtendedCaseDataId > 0)
-                            {
-                                exCaseForm = childCaseTemplate.ExtendedCaseForms.FirstOrDefault();
-                                ApplyCaseBindingValuesFromExtendedCase(childCaseModel, exCaseForm, baseCaseExtendedCaseDataId, baseCaseExCaseForm);
-                            }
-
-                            // Required to avoid extended Case creation during SaveCase. Extended case is created later.
-                            childCaseModel.ExtendedCaseData_Id = null;
-                            childCaseModel.ExtendedCaseForm_Id = null;
-                            childCaseModel.Id = 0;
-
-                            var childRes = SaveCase(childCaseModel, baseAuxModel, out childCaseId, out childCaseNum);
-
-                            if (childRes.IsSucceed && childCaseId != -1)
-                            {
-                                if (baseCaseExtendedCaseDataId > 0 && exCaseForm != null)
-                                {
-                                    _extendedCaseService.CopyExtendedCaseToCase(baseCaseExtendedCaseDataId, childCaseId, baseAuxModel.UserIdentityName, exCaseForm.Id);
-                                }
-
-                                //TODO: om fel, visa det
-                                _caseService.AddChildCase(childCaseId, baseCaseModel.Id, out errors);
-
-                                if (!errors.Any())
-                                    _caseService.SetIndependentChild(childCaseId, true);
-                            }
-                        }
-                    }
-                }
-            }
-
-            caseId = baseCaseModel.Id;
-            caseNumber = baseCaseModel.CaseNumber;
-            return res;
-        }
-
 
         #region ApplyValuesCaseBindingValuesFromExtendedCase
 
