@@ -97,3 +97,40 @@
 </table>
 
 
+<table id="BRCondition3" class="table table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+            <th style="width:10%">
+                Field
+            </th>
+            <th style="width:25%">
+                From value
+            </th>
+            <th style="width:25%">
+                To value
+            </th>
+            <th>
+
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                @Translation.Get("SubStatus")
+            </td>
+            <td>
+                @Html.ListBoxExtendedOptionsFor(x => x.SubStatusesFromValue, (List<DdlModel>)@ViewBag.SubStatus, new { @id = "lstSubStatusFrom2", @name = "lstSubStatusFrom2", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
+                @Html.ValidationMessageFor(model => model.SubStatusesFromValue)
+            </td>
+            <td>
+                @Html.ListBoxExtendedOptionsFor(x => x.SubStatusesToValue, (List<DdlModel>)@ViewBag.SubStatus, new { @id = "lstSubStatusTo2", @name = "lstSubStatusTo2", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
+                @Html.ValidationMessageFor(model => model.SubStatusesToValue)
+            </td>
+
+            <td></td>
+        </tr>
+    </tbody>
+</table>
+
+

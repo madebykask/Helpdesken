@@ -50,6 +50,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 		[RequiredIfNotEmpty("SubStatusFrom")]
 		public string SubStatusTo { get; set; }
 
+        [LocalizedDisplay("Sub status från")]
+        [RequiredIfNotEmpty("SubStatusTo2")]
+        public string SubStatusFrom2 { get; set; }
+
+        [LocalizedDisplay("Sub status till")]
+        [RequiredIfNotEmpty("SubStatusFrom2")]
+        public string SubStatusTo2 { get; set; }
+
         [LocalizedDisplay("Domän från")]
         [RequiredIfNotEmpty("DomainTo")]
         public string DomainFrom { get; set; }
@@ -77,6 +85,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         public string CaseIsAbout { get; set; }
 
         public string Equals { get; set; }
+
+        public string DisableFinishingType { get; set; }
     }
 
    
@@ -97,8 +107,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
             ret.ProcessFrom.AddItems(it.ProcessFrom, false);
             ret.ProcessTo.AddItems(it.ProcessTo, false);
+
             ret.SubStatusFrom.AddItems(it.SubStatusFrom, false);
             ret.SubStatusTo.AddItems(it.SubStatusTo, false);
+            ret.SubStatusFrom.AddItems(it.SubStatusFrom2, false);
+            ret.SubStatusTo.AddItems(it.SubStatusTo2, false);
 
             if (it.EmailTemplate != null)
             {
@@ -127,7 +140,10 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
             //Set eventID
             ret.EventId = int.Parse(it.EventId);
-            
+
+            ret.DisableFinishingType = bool.Parse(it.DisableFinishingType);
+
+
             return ret;
         }
     }

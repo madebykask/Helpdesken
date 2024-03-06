@@ -20,6 +20,7 @@
 
         var elCondition1 = "#BRCondition1";
         var elCondition2 = "#BRCondition2";
+        var elCondition3 = "#BRCondition3";
 
         var elBRActionMailTemplate = "#BRActionMailTemplate";
         var elBRActionEmailGroup = "#BRActionEmailGroup";
@@ -40,6 +41,9 @@
         var elSubStatusFromDropDown = "#lstSubStatusFrom";
         var elSubStatusToDropDown = "#lstSubStatusTo";
 
+        var elSubStatusFromDropDown2 = "#lstSubStatusFrom2";
+        var elSubStatusToDropDown2 = "#lstSubStatusTo2";
+
         var elDomainEquals = "#lstEquals";
 
         var elEmailTemplatsDropDown = "#lstEmailTemplates";
@@ -50,6 +54,8 @@
         var elCaseCreator = "#caseCreator";
         var elInitiator = "#initiator";
         var elCaseIsAbout = "#caseIsAbout";
+
+        var elDisableFinishingType = "#disableFinishingType";
 
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.businessRule = window.dhHelpdesk.businessRule || {};
@@ -107,8 +113,11 @@
 
                 processFrom: "",
                 processTo: "",
+
                 subStatusFrom: "",
                 subStatusTo: "",
+                subStatusFrom2: "",
+                subStatusTo2: "",
 
                 equals: "",
 
@@ -120,7 +129,9 @@
                 recipients: "",
                 caseCreator: true,
                 initiator: true,
-                caseIsAbout: true
+                caseIsAbout: true,
+
+                disableFinishingType: true
             };
 
             data.customerId = $(elCustomerId).val();
@@ -150,6 +161,14 @@
             $(elSubStatusToDropDown + " option:selected").each(function () {
                 data.subStatusTo += $(this).val() + ",";
             });
+
+            $(elSubStatusFromDropDown2 + " option:selected").each(function () {
+                data.subStatusFrom2 += $(this).val() + ",";
+            });
+
+            $(elSubStatusToDropDown2 + " option:selected").each(function () {
+                data.subStatusTo2 += $(this).val() + ",";
+            });
           
             $(elEmailTemplatsDropDown + " option:selected").each(function () {
                 data.emailTemplate = $(this).val();
@@ -171,6 +190,8 @@
             data.caseCreator = $(elCaseCreator).bootstrapSwitch("state");
             data.initiator = $(elInitiator).bootstrapSwitch("state");
             data.caseIsAbout = $(elCaseIsAbout).bootstrapSwitch("state");
+
+            data.disableFinishingType = $(elDisableFinishingType).bootstrapSwitch("state");
 
             data.customerId = $(elCustomerId).val();
 
@@ -205,6 +226,8 @@
                     'data.ProcessTo': data.processTo,
                     'data.SubStatusFrom': data.subStatusFrom,
                     'data.SubStatusTo': data.subStatusTo,
+                    'data.SubStatusFrom2': data.subStatusFrom2,
+                    'data.SubStatusTo2': data.subStatusTo2,
                     'data.Equals': data.equals,
                     'data.EmailTemplate': data.emailTemplate,
                     'data.EmailGroups': data.emailGroups,
@@ -215,6 +238,7 @@
                     'data.CaseCreator': data.caseCreator,
                     'data.Initiator': data.initiator,
                     'data.CaseIsAbout': data.caseIsAbout,
+                    'data.DisableFinishingType': data.disableFinishingType,
                     curTime: new Date().getTime()
                 },
                 function (result) {
@@ -240,6 +264,7 @@
             if (selectedValue === '1') {
                 $(elCondition1).show();
                 $(elCondition2).hide();
+                $(elCondition3).hide();
 
                 $(elBRActionAdministratorSingleSelect).hide();
 
@@ -256,6 +281,7 @@
 
                 $(elCondition1).hide();
                 $(elCondition2).show();
+                $(elCondition3).hide();
 
                 $(elBRActionAdministratorSingleSelect).show();
 
@@ -269,6 +295,24 @@
                 $(elBRActionAbout).hide();
 
 
+
+            }
+            else if (selectedValue === '3') {
+
+                $(elCondition1).hide();
+                $(elCondition2).hide();
+                $(elCondition3).show();
+
+
+                $(elBRActionAdministratorSingleSelect).hide();
+                $(elBRActionMailTemplate).hide();
+                $(elBRActionEmailGroup).hide();
+                $(elBRActionWorkingGroup).hide();
+                $(elBRActionAdministrator).hide();
+                $(elBRActionRecipients).hide();
+                $(elBRActionCreatedBy).hide();
+                $(elBRActionRegistrator).hide();
+                $(elBRActionAbout).hide();
 
             }
         };

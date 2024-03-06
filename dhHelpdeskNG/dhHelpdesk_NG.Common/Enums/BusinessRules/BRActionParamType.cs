@@ -10,5 +10,6 @@
         public const int CaseCreator   = 6;
         public const int Initiator     = 7;
         public const int CaseIsAbout   = 8;
-   }
+        public const int DisableFinishingType = 9;
+    }
 }

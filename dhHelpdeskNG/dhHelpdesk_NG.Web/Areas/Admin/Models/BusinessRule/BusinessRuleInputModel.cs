@@ -144,5 +144,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
 		public bool CaseIsAbout { get; set; }
 
+		public bool DisableFinishingType { get; set; }
+
 	}
 }

@@ -220,6 +220,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				CaseCreator = rule.CaseCreator,
 				Initiator = rule.Initiator,
 				CaseIsAbout = rule.CaseIsAbout,
+				DisableFinishingType = rule.DisableFinishingType,
 				Sequence = 1
 			};
 
@@ -389,8 +390,9 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			return new List<BREvent>
 			{
 				new BREvent((int)BREventType.OnSaveCase, "On Save Case", selectedId == (int)BREventType.OnSaveCase),
-				new BREvent((int)BREventType.OnCreateCaseM2T, "On Create Case (M2T)", selectedId == (int)BREventType.OnCreateCaseM2T)
-			};
+				new BREvent((int)BREventType.OnCreateCaseM2T, "On Create Case (M2T)", selectedId == (int)BREventType.OnCreateCaseM2T),
+                new BREvent((int)BREventType.OnLoadCase, "On Load Case", selectedId == (int)BREventType.OnLoadCase)
+            };
 
 			#endregion Private
 

@@ -92,8 +92,15 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                     return actResult;
             }
 
+            else if (businessRule.EventId == (int)BREventType.OnLoadCase)
+            {
+                var actResult = SaveBRActionsDisableCaseField(businessRule, isNew);
+                if (actResult != "")
+                    return actResult;
+            }
 
-            
+
+
             return string.Empty;
         }
 
@@ -263,6 +270,54 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                 this.Commit();
 
                 var resultActionParam = SaveBRActionParamsSendEmail(businessRule, isNew);
+                if (resultActionParam != "")
+                    return resultActionParam;
+            }
+            catch (Exception ex)
+            {
+                return ex.Message + " " + (ex.InnerException != null ? ex.InnerException.Message : "");
+            }
+
+            return string.Empty;
+        }
+
+        private string SaveBRActionsDisableCaseField(BusinessRuleModel businessRule, bool isNew)
+        {
+            try
+            {
+                if (isNew)
+                {
+                    var actionEntity1 = new BRActionEntity()
+                    {
+                        Id = 0,
+                        Rule_Id = businessRule.Id,
+                        ActionType_Id = BRActionType.DisableCaseField,
+                        Sequence = 1
+                    };
+                    this.DbContext.BRActions.Add(actionEntity1);
+                }
+                else
+                {
+                    #region Save Action
+                    var actionEntity1 = this.DbContext.BRActions.Where(a => a.Rule_Id == businessRule.Id && a.ActionType_Id == BRActionType.DisableCaseField)
+                                                                   .FirstOrDefault();
+
+                    if (actionEntity1 == null)
+                    {
+                        var conditionEntity1 = new BRActionEntity()
+                        {
+                            Id = 0,
+                            Rule_Id = businessRule.Id,
+                            ActionType_Id = BRActionType.DisableCaseField,
+                            Sequence = 1
+                        };
+                        this.DbContext.BRActions.Add(actionEntity1);
+                    }
+                    #endregion
+                }
+                this.Commit();
+
+                var resultActionParam = SaveBRActionParamsDisableCaseField(businessRule, isNew);
                 if (resultActionParam != "")
                     return resultActionParam;
             }
@@ -557,6 +612,64 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
             return string.Empty;
         }
 
+        private string SaveBRActionParamsDisableCaseField(BusinessRuleModel businessRule, bool isNew)
+        {
+
+            var action = this.DbContext.BRActions.Where(a => a.Rule_Id == businessRule.Id && a.ActionType_Id == BRActionType.DisableCaseField)
+                                                .FirstOrDefault();
+
+            try
+            {
+                if (isNew)
+                {
+
+
+                    var actionParamEntity4 = new BRActionParamEntity()
+                    {
+                        Id = 0,
+                        RuleAction_Id = action.Id,
+                        ParamType_Id = BRActionParamType.DisableFinishingType,
+                        ParamValue = businessRule.DisableFinishingType.ToInt().ToString()
+                    };
+                    this.DbContext.BRActionParams.Add(actionParamEntity4);
+
+
+                }
+                else
+                {
+
+
+                    var actionParamEntity4 = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.DisableFinishingType)
+                                                                       .FirstOrDefault();
+                    if (actionParamEntity4 == null)
+                    {
+                        actionParamEntity4 = new BRActionParamEntity()
+                        {
+                            Id = 0,
+                            RuleAction_Id = action.Id,
+                            ParamType_Id = BRActionParamType.DisableFinishingType,
+                            ParamValue = businessRule.DisableFinishingType.ToInt().ToString()
+                        };
+                        this.DbContext.BRActionParams.Add(actionParamEntity4);
+                    }
+                    else
+                    {
+                        actionParamEntity4.ParamValue = businessRule.DisableFinishingType.ToInt().ToString();
+                    }
+
+
+                }
+                this.Commit();
+            }
+            catch (Exception ex)
+            {
+                return ex.Message + " " + (ex.InnerException != null ? ex.InnerException.Message : "");
+            }
+
+            return string.Empty;
+
+        }
+
         private string SaveBRActionParamsEditCaseField(BusinessRuleModel businessRule, bool isNew)
         {
             var action = this.DbContext.BRActions.Where(a => a.Rule_Id == businessRule.Id && a.ActionType_Id == BRActionType.EditCaseField)
@@ -722,6 +835,23 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             
                             case BRActionParamType.Administrator:
                                 ret.Administrators.AddItems(param.ParamValue, false);
+                                break;
+
+                        }
+                    }
+                }
+
+                var actionEntityDisableCaseField = this.DbContext.BRActions.Where(a => a.Rule_Id == ruleId && a.ActionType_Id == BRActionType.DisableCaseField).FirstOrDefault();
+                if (actionEntityDisableCaseField != null)
+                {
+                    var actionParams = this.DbContext.BRActionParams.Where(p => p.RuleAction_Id == actionEntityDisableCaseField.Id).ToList();
+                    foreach (var param in actionParams)
+                    {
+                        switch (param.ParamType_Id)
+                        {
+
+                            case BRActionParamType.DisableFinishingType:
+                                ret.DisableFinishingType = Int32.Parse(param.ParamValue).ToBool();
                                 break;
 
                         }

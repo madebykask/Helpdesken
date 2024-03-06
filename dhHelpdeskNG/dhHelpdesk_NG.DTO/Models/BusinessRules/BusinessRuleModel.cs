@@ -72,6 +72,8 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
         public bool Initiator { get; set; }
 
         public bool CaseIsAbout { get; set; }
+
+        public bool DisableFinishingType { get; set; }
     }
 
     public class BusinessRuleActionModel

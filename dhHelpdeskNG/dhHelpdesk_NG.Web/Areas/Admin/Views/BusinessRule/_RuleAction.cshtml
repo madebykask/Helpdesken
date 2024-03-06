@@ -80,5 +80,13 @@
                 @Html.CheckBoxFor(m => Model.CaseIsAbout, new { @class = "switchcheckbox", id = "caseIsAbout" })
             </td>
         </tr>
+        <tr id="BRActionDisableFinishingType">
+            <td class="span2">
+                Disable Finishing
+            </td>
+            <td>
+                @Html.CheckBoxFor(m => Model.DisableFinishingType, new { @class = "switchcheckbox", id = "disableFinishingType" })
+            </td>
+        </tr>
     </tbody>
 </table>
