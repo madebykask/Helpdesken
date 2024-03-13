@@ -416,7 +416,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 new BREvent((int)BREventType.OnSaveCaseAfter, "On Save Case (After)", selectedId == (int)BREventType.OnSaveCaseAfter),
                 new BREvent((int)BREventType.OnCreateCaseM2T, "On Create Case (M2T)", selectedId == (int)BREventType.OnCreateCaseM2T),
                 new BREvent((int)BREventType.OnLoadCase, "On Load Case", selectedId == (int)BREventType.OnLoadCase),
-                new BREvent((int)BREventType.OnLoadCase, "On Save Case (Before)", selectedId == (int)BREventType.OnSaveCaseBefore)
+                new BREvent((int)BREventType.OnSaveCaseBefore, "On Save Case (Before)", selectedId == (int)BREventType.OnSaveCaseBefore)
             };
 
             #endregion Private

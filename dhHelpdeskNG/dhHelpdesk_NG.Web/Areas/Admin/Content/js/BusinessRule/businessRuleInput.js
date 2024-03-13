@@ -52,6 +52,12 @@
         var elStatusFromDropDown2 = "#lstStatusFrom2";
         var elStatusToDropDown2 = "#lstStatusTo2";
 
+        var elStatusFromDropDown3 = "#lstStatusFrom3";
+        var elStatusToDropDown3 = "#lstStatusTo3";
+
+        var elSubStatusFromDropDown3 = "#lstSubStatusFrom3";
+        var elSubStatusToDropDown3 = "#lstSubStatusTo3";
+
         var elDomainEquals = "#lstEquals";
 
         var elEmailTemplatsDropDown = "#lstEmailTemplates";
@@ -126,11 +132,15 @@
                 subStatusTo: "",
                 subStatusFrom2: "",
                 subStatusTo2: "",
+                subStatusFrom3: "",
+                subStatusTo3: "",
 
                 statusFrom: "",
                 statusTo: "",
                 statusFrom2: "",
                 statusTo2: "",
+                statusFrom3: "",
+                statusTo3: "",
 
                 equals: "",
 
@@ -183,6 +193,14 @@
                 data.subStatusTo2 += $(this).val() + ",";
             });
 
+            $(elSubStatusFromDropDown3 + " option:selected").each(function () {
+                data.subStatusFrom3 += $(this).val() + ",";
+            });
+
+            $(elSubStatusToDropDown3 + " option:selected").each(function () {
+                data.subStatusTo3 += $(this).val() + ",";
+            });
+
 
 
             $(elStatusFromDropDown + " option:selected").each(function () {
@@ -199,6 +217,14 @@
 
             $(elStatusToDropDown2 + " option:selected").each(function () {
                 data.statusTo2 += $(this).val() + ",";
+            });
+
+            $(elStatusFromDropDown3 + " option:selected").each(function () {
+                data.statusFrom3 += $(this).val() + ",";
+            });
+
+            $(elStatusToDropDown3 + " option:selected").each(function () {
+                data.statusTo3 += $(this).val() + ",";
             });
 
 
@@ -261,10 +287,14 @@
                     'data.SubStatusTo': data.subStatusTo,
                     'data.SubStatusFrom2': data.subStatusFrom2,
                     'data.SubStatusTo2': data.subStatusTo2,
+                    'data.SubStatusFrom3': data.subStatusFrom3,
+                    'data.SubStatusTo3': data.subStatusTo3,
                     'data.StatusFrom': data.statusFrom,
                     'data.StatusTo': data.statusTo,
                     'data.StatusFrom2': data.statusFrom2,
                     'data.StatusTo2': data.statusTo2,
+                    'data.StatusFrom3': data.statusFrom3,
+                    'data.StatusTo3': data.statusTo3,
                     'data.Equals': data.equals,
                     'data.EmailTemplate': data.emailTemplate,
                     'data.EmailGroups': data.emailGroups,

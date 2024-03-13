@@ -58,6 +58,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         [RequiredIfNotEmpty("StatusFrom2")]
         public string StatusTo2 { get; set; }
 
+        [LocalizedDisplay("Status från")]
+        [RequiredIfNotEmpty("StatusTo3")]
+        public string StatusFrom3 { get; set; }
+
+        [LocalizedDisplay("Status till")]
+        [RequiredIfNotEmpty("StatusFrom3")]
+        public string StatusTo3 { get; set; }
+
         [LocalizedDisplay("Sub status från")]
 		[RequiredIfNotEmpty("SubStatusTo")]
 		public string SubStatusFrom { get; set; }
@@ -73,6 +81,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         [LocalizedDisplay("Sub status till")]
         [RequiredIfNotEmpty("SubStatusFrom2")]
         public string SubStatusTo2 { get; set; }
+
+        [LocalizedDisplay("Sub status från")]
+        [RequiredIfNotEmpty("SubStatusTo3")]
+        public string SubStatusFrom3 { get; set; }
+
+        [LocalizedDisplay("Sub status till")]
+        [RequiredIfNotEmpty("SubStatusFrom3")]
+        public string SubStatusTo3 { get; set; }
 
         [LocalizedDisplay("Domän från")]
         [RequiredIfNotEmpty("DomainTo")]
@@ -151,6 +167,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
                 ret.SubStatusFrom.AddItems(it.SubStatusFrom2, false);
                 ret.SubStatusTo.AddItems(it.SubStatusTo2, false);
+
+            }
+
+            else if (it.EventId == "4")
+            {
+                ret.StatusFrom.AddItems(it.StatusFrom3, false);
+                ret.StatusTo.AddItems(it.StatusTo3, false);
+
+                ret.SubStatusFrom.AddItems(it.SubStatusFrom3, false);
+                ret.SubStatusTo.AddItems(it.SubStatusTo3, false);
 
             }
 

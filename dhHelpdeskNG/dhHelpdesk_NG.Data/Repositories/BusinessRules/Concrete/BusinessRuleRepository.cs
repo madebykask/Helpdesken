@@ -92,12 +92,13 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                     return actResult;
             }
 
-            else if (businessRule.EventId == (int)BREventType.OnLoadCase)
+            else if ((businessRule.EventId == (int)BREventType.OnLoadCase) || (businessRule.EventId == (int)BREventType.OnSaveCaseBefore))
             {
                 var actResult = SaveBRActionsDisableCaseField(businessRule, isNew);
                 if (actResult != "")
                     return actResult;
             }
+
 
 
 
@@ -232,7 +233,6 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         conditionEntity3.ToValue = businessRule.DomainTo == null ? "" : businessRule.DomainTo;
                     }
                     #endregion
-
 
                     #region Save Status
                     var conditionEntity4 = this.DbContext.BRConditions.Where(c => c.Rule_Id == businessRule.Id && c.Field_Id == BRFieldType.Status)
