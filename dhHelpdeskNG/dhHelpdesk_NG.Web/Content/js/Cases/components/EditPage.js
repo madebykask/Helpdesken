@@ -967,27 +967,39 @@ EditPage.prototype.isFormValid = function () {
 
 EditPage.prototype.primaryValidation = function (submitUrl) {
 
+    //This is weird... But ok
+    let me = this;
 
-    ShowToastMessage("Blabla", "error", true);
-    return;
+    //Get the calues needed the check against the businessrules... Maybe do something dynamic in the future if we apply more conditions/actions
+    const finishDate = $('#CaseLog_FinishingDate').val();
+    const status = $('#case__Status_Id').val();
+    const subStatus = $('#case__StateSecondary_Id').val();
 
-    var me = this;
-    me.syncCaseFromExCaseIfExists();
-    var finishDate = $('#CaseLog_FinishingDate').val();
+    // Execute the check and wait for the promise to resolve
+    me.RunBusinessRulesForBeforeCaseSave(finishDate, status, subStatus)
+        .then(function (businessRuleCheckResult) {
+            // Check the result of the business rule check
+            if (!businessRuleCheckResult) {
+                ShowToastMessage(me.p.caseCanNotCloseDueToBusinessRules, true);
+                return; // Stop execution if the business rule check fails
+            }
 
-    /* Check FinishigTime */
-    if (me.CaseWillFinish() && finishDate != null && finishDate != undefined) {
-        $.get('/Cases/IsFinishingDateValid/', { changedTime: me.p.caseChangedTime, finishingTime: finishDate, myTime: Date.now() }, function (res) {
-            if (res != null && res) {
+            me.syncCaseFromExCaseIfExists();
+
+            /* Check FinishigTime */
+            if (me.CaseWillFinish() && finishDate != null && finishDate != undefined) {
+                $.get('/Cases/IsFinishingDateValid/', { changedTime: me.p.caseChangedTime, finishingTime: finishDate, myTime: Date.now() }, function (res) {
+                    if (res != null && res) {
+                        me.startSaveProcess(me, submitUrl);
+                    }
+                    else {
+                        dhHelpdesk.cases.utils.showError(me.p.finishingDateMessage2);
+                    }
+                });
+            } else {
                 me.startSaveProcess(me, submitUrl);
             }
-            else {
-                dhHelpdesk.cases.utils.showError(me.p.finishingDateMessage2);
-            }
         });
-    } else {
-        me.startSaveProcess(me, submitUrl);
-    }
 }
 
 EditPage.prototype.startSaveProcess = function (sender, submitUrl) {
@@ -1223,6 +1235,28 @@ EditPage.prototype.CaseWillFinish = function () {
         return false;
     }
 };
+
+EditPage.prototype.RunBusinessRulesForBeforeCaseSave = function (finishDate, status, subStatus) {
+
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            url: "/Cases/RunBusinessRulesForBeforeCaseSave",
+            type: "POST",
+            data: { finishDate: finishDate, status: status, subStatus: subStatus }
+        })
+            .done(function (result) {
+                resolve(result); // Resolve the promise with the result
+            })
+            .fail(function (jqXHR, textStatus, errorThrown) {
+                console.error("Error:", textStatus, errorThrown);
+                reject(errorThrown); // Reject the promise with the error
+            });
+    });
+};
+
+
+
+
 
 EditPage.prototype.onSaveYes = function (e) {
     e.preventDefault();

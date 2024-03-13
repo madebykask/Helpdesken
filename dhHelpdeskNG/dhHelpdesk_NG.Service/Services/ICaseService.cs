@@ -104,6 +104,8 @@ namespace DH.Helpdesk.Services.Services
 
         List<string> ExecuteBusinessActionsDisable(Case caseEntity);
 
+        bool ExecuteBusinessActionsError(int customerId, string finishDate, string status, string subStatus);
+
         void UpdateFollowUpDate(int caseId, DateTime? time);
         void MarkAsUnread(int caseId);
         void MarkAsRead(int caseId);

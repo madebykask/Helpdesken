@@ -2826,6 +2826,22 @@ namespace DH.Helpdesk.Web.Controllers
         #region --Validation--
 
         [HttpPost]
+        public JsonResult RunBusinessRulesForBeforeCaseSave(string finishDate, string status, string subStatus)
+        {
+            var currentCustomerId = SessionFacade.CurrentCustomer.Id;
+
+            var ret = _caseService.ExecuteBusinessActionsError(currentCustomerId, finishDate, status, subStatus);
+
+            if (ret)
+            {
+                return Json(true);
+            }
+
+            return Json(false);
+
+        }
+
+        [HttpPost]
         public JsonResult CheckCaseForActiveData(CaseMasterDataFieldsModel caseMasterDataFields)
         {
             var inactiveFields = GetInactiveFieldsValue(caseMasterDataFields);

@@ -80,6 +80,7 @@
         currentUserName: '@Model.CurrentUserName',
         applicationType: '@ApplicationTypes.Helpdesk',
         caseLockedByLabel: '@Translation.GetForJS("Låsningen av ärendet bröts. Användare <name> har låst ärendet. Dina ändringar kan inte sparas. Stäng ärendet och försök att öppna det igen senare.")',
+        caseCanNotCloseDueToBusinessRules: '@Translation.GetForJS("Ärendet kan inte stängas pågrund av business rules")',
         caseFieldIds: {
             Caption: "case__Caption",
             CaseId: "case__Id",
@@ -538,7 +539,7 @@
             } else if (element.hasClass("cost-field")) {
                 $("#costValidationMessage").html(error);
             } else if (element.hasClass("summernoteinternal") || element.hasClass("summernotedesc") || element.hasClass("summernoteexternal")) {
-              
+
                 error.insertAfter(element.siblings(".note-editor"));
 
             } else {

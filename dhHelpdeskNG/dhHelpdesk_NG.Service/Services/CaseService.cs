@@ -1058,6 +1058,65 @@ namespace DH.Helpdesk.Services.Services
             return caseEntity;
         }
 
+        public bool ExecuteBusinessActionsError(int customerId, string finishDate, string status, string subStatus)
+        {
+
+            var rules = _businessRuleService.GetRuleReadlist(customerId);
+
+            if (rules.Count > 0)
+            {
+                rules = rules.Where(x => x.Event == BREventType.OnLoadCase && x.RuleActive == true).OrderBy(y => y.RuleSequence).ToList();
+            }
+
+            foreach (var rule in rules)
+            {
+                var r = _businessRuleService.GetRule(rule.Id);
+
+                if (r.DisableFinishingType == true)
+                {
+                    bool statusMatch = r.StatusFrom == null || r.StatusTo == null || (r.StatusFrom.Count == 0 && r.StatusTo.Count == 0);
+                    bool subStatusMatch = r.SubStatusFrom == null || r.SubStatusTo == null || (r.SubStatusFrom.Count == 0 && r.SubStatusTo.Count == 0);
+
+                    // Update logic to handle nulls and absence of values correctly
+                    if (r.StatusFrom != null && r.StatusTo != null)
+                    {
+                        if (!string.IsNullOrEmpty(status))
+                        {
+                            statusMatch = (r.StatusFrom.Contains(BRConstItem.ANY) || r.StatusFrom.Contains(Int32.Parse(status))) &&
+                                          (r.StatusTo.Contains(BRConstItem.ANY) || r.StatusTo.Contains(Int32.Parse(status)));
+                        }
+                    }
+                    else
+                    {
+                        // If both StatusFrom and StatusTo are null, do not automatically consider status as matching
+                        statusMatch = !string.IsNullOrEmpty(status);
+                    }
+
+                    if (r.SubStatusFrom != null && r.SubStatusTo != null)
+                    {
+                        if (!string.IsNullOrEmpty(subStatus))
+                        {
+                            subStatusMatch = (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(Int32.Parse(subStatus))) &&
+                                             (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(Int32.Parse(subStatus)));
+                        }
+                    }
+                    else
+                    {
+                        // If both SubStatusFrom and SubStatusTo are null, do not automatically consider substatus as matching
+                        subStatusMatch = !string.IsNullOrEmpty(subStatus);
+                    }
+
+                    // If both status and substatus conditions are appropriately met, show warning
+                    if (statusMatch && subStatusMatch && !string.IsNullOrEmpty(finishDate))
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
         public List<string> ExecuteBusinessActionsDisable(Case caseEntity)
         {
             List<string> elementsToDisable = new List<string>();
