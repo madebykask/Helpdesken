@@ -39,8 +39,6 @@ namespace DH.Helpdesk.Dal.Repositories.Cases.Concrete
                 //    ConnectTimeout = 4000,
                 //    AsynchronousProcessing = true
                 //};
-
-
                 using (var connection = new SqlConnection(_connectionString))
                 {
                     if (connection.State == ConnectionState.Closed)

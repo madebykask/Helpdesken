@@ -130,7 +130,7 @@ namespace DH.Helpdesk.Services.Services
                 {
                     _filesStorage.DeleteFilesInFolders(caseList, caseFiles, logFiles, basePath);
                 }
-                
+
                 deletionCompleted = true;
 
                 return new DeletionStatus
