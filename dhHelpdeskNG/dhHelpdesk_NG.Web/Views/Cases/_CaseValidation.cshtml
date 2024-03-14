@@ -15,7 +15,7 @@
         parentCaseId: '@(Model.ParentCaseInfo != null ? Model.ParentCaseInfo.ParentId.ToString() : "null")',
         whiteFilesList: @Html.Raw(Json.Encode(Model.WhiteFilesList)),
         maxFileSize: @Model.MaxFileSize,
-        isAnyNotClosedChild: '@Model.IsAnyNotClosedChild().ToString()',
+        isAnyNotClosedChild: '@Model.IsAnyNotClosedNonIndependentChild().ToString()',
         backUrl: '@Model.BackUrl',
         productAreaErrorMessage:
             '@Html.Raw(Translation.GetForJS("Ärendet kunde inte sparas då den lägsta möjliga nivån på fält") + " [" +

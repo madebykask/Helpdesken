@@ -455,6 +455,35 @@ namespace DH.Helpdesk.Web.Models.Case
 
             return childList.Any(it => it.ClosingDate == null && (containsIndependents? !it.Indepandent : true));
         }
+        public bool IsAnyNotClosedNonIndependentChild()
+        {
+            // Check if the ChildCaseViewModel is null.
+            if (this.ChildCaseViewModel == null)
+            {
+                return false;
+            }
+
+            var childList = this.ChildCaseViewModel.ChildCaseList;
+            // Check if the child list is null or empty.
+            if (childList == null || childList.Count == 0)
+            {
+                return false;
+            }
+
+            // Iterate through each child case in the list.
+            foreach (var childCase in childList)
+            {
+                // Check if the child case is not independent and does not have a closing date.
+                if (!childCase.Indepandent && childCase.ClosingDate == null)
+                {
+                    return true; // Return true if such a child case is found.
+                }
+            }
+
+            // If no matching child case is found, return false.
+            return false;
+        }
+
 
         public string ExtendedSectionsToJS()
         {
