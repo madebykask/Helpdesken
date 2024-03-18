@@ -11,6 +11,7 @@ using DH.Helpdesk.Dal.NewInfrastructure.Concrete;
 using DH.Helpdesk.Dal.Repositories.GDPR;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.GDPR;
+using System.Data.SqlClient;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -28,11 +29,13 @@ namespace DH.Helpdesk.Services.Services
 
     public interface IGDPRDataPrivacyAccessService
     {
+        
         GDPRDataPrivacyAccess GetUserWithPrivacyPermissionsByUserId(int userId);
     }
 
     public interface IGDPRDataPrivacyCasesService
     {
+        IList<int> GetCaseIdsToDelete(int customerId, DataPrivacyParameters p);
         IList<int> GetCaseParents(int customerId, DataPrivacyParameters p, IUnitOfWork uow);
         int GetCasesCount(int customerId, DataPrivacyParameters p);
 
@@ -248,6 +251,16 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
+        public IList<int> GetCaseIdsToDelete(int customerId, DataPrivacyParameters p)
+        {
+            var sqlTimeout = 300;
+            using (var uow = _unitOfWorkFactory.Create(sqlTimeout))
+            {
+                uow.AutoDetectChangesEnabled = false;
+                var casesQueryable = GetCasesQuery(customerId, p, uow);
+                return casesQueryable.Select(c => c.Id).ToList();
+            }
+        }
         public IQueryable<Case> GetCasesQuery(int customerId, DataPrivacyParameters p, IUnitOfWork uow)
         {
             var caseRepository = uow.GetRepository<Case>();

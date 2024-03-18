@@ -8595,6 +8595,20 @@ If not exists (select * from tblTextTranslation where text_id = 2170 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2170, 2, 'Enter a domain (e.g., "gmail.com") or specific email addresses separated by semicolons (e.g., "user@example.com; another@example.com").')
 GO
 
+If not exists (select * from tbltext where id = 2171)
+	insert into tbltext (id, TextString) VALUES (2171, 'Multiärenden vid utökat ärende')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2171 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2171, 2, 'Multi-cases in extended case')
+GO
+
+If not exists (select * from tbltext where id = 2172)
+	insert into tbltext (id, TextString) VALUES (2172, 'Detta är ett kopplat villkor som kräver konfiguration vid användning av utökat ärendeformulär.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2172 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2172, 2, 'This is a condition that requires configuration when using the extended case form.')
+GO
+
 Update tblTextTranslation set TextTranslation = 'Headline keyword' where Language_Id = 2 and Text_Id = 2160 
 Go
 

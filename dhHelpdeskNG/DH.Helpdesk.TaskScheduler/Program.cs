@@ -18,6 +18,7 @@ namespace DH.Helpdesk.TaskScheduler
         /// </summary>
         static void Main()
         {
+            //Dont forget to comment this out before deploying to production
             //Debugger.Launch();
             var modules = new List<NinjectModule>
             {
