@@ -37,6 +37,7 @@ namespace DH.Helpdesk.WebApi.Controllers
         [Route("options")]
         public async Task<IEnumerable<ItemOverview>> Get([FromUri]int cid, [FromUri]int langId, [FromUri]int? caseId = null)
         {
+            //Todo - soon
             var workflowCaseSolutionIds = _caseSolutionService.GetWorkflowCaseSolutionIds(cid, UserId);
             var isRelatedCase = caseId.HasValue && caseId.Value > 0 && _caseService.IsRelated(caseId.Value);
             var userSettings = await _userSerivice.GetUserOverviewAsync(UserId);

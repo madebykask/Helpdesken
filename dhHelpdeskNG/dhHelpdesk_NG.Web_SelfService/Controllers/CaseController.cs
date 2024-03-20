@@ -26,7 +26,6 @@ namespace DH.Helpdesk.SelfService.Controllers
     using DH.Helpdesk.BusinessData.OldComponents;
     using DH.Helpdesk.BusinessData.OldComponents.DH.Helpdesk.BusinessData.Utils;
     using DH.Helpdesk.Common.Enums;
-    using DH.Helpdesk.Common.Extensions.Object;
     using DH.Helpdesk.Domain;
     using DH.Helpdesk.Domain.Computers;
     using DH.Helpdesk.SelfService.Infrastructure;
@@ -2650,8 +2649,18 @@ namespace DH.Helpdesk.SelfService.Controllers
             var closedChildCasesCount = childCases.Count(it => it.ClosingDate != null);
             var totalChildCases = childCases.Where(x => x.Indepandent == false).Count();
             bool hasUnclosedChildren = closedChildCasesCount != totalChildCases;
+            bool dontShowClosingWorksteps = false;
 
-            if (hasUnclosedChildren)
+            //Check business rules on load
+            List<string> disableCaseFields = new List<string>();
+           
+            disableCaseFields = _caseService.ExecuteBusinessActionsDisable(caseEntity);
+            if (disableCaseFields != null && disableCaseFields.Count > 0)
+            {
+                dontShowClosingWorksteps = true;
+            }
+
+            if (hasUnclosedChildren || dontShowClosingWorksteps)
             {
                 workflowCaseSolutionIds = customerCaseSolutions
                     .Where(x => x.ConnectedButton == 0
