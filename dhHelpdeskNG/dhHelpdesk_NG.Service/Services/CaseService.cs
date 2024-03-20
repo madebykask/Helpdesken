@@ -1060,7 +1060,7 @@ namespace DH.Helpdesk.Services.Services
 
         public bool ExecuteBusinessActionsError(int customerId, string finishDate, string status, string subStatus)
         {
-
+            //Nullcheck?
             var rules = _businessRuleService.GetRuleReadlist(customerId);
 
             if (rules.Count > 0)
@@ -1074,11 +1074,25 @@ namespace DH.Helpdesk.Services.Services
 
                 if (r.DisableFinishingType == true)
                 {
-                    bool statusMatch = r.StatusFrom == null || r.StatusTo == null || (r.StatusFrom.Count == 0 && r.StatusTo.Count == 0);
-                    bool subStatusMatch = r.SubStatusFrom == null || r.SubStatusTo == null || (r.SubStatusFrom.Count == 0 && r.SubStatusTo.Count == 0);
+                    bool statusMatch = false;
+                    bool subStatusMatch = false;
+                    bool bothHasValue = false;
 
-                    // Update logic to handle nulls and absence of values correctly
-                    if (r.StatusFrom != null && r.StatusTo != null)
+                    if (r.StatusFrom.Count > 0 && r.StatusTo.Count > 0 && r.SubStatusFrom.Count > 0 && r.SubStatusTo.Count > 0)
+                    {
+                        bothHasValue = true;
+                        if (!string.IsNullOrEmpty(status))
+                        {
+                            statusMatch = (r.StatusFrom.Contains(BRConstItem.ANY) || r.StatusFrom.Contains(Int32.Parse(status))) &&
+                                          (r.StatusTo.Contains(BRConstItem.ANY) || r.StatusTo.Contains(Int32.Parse(status)));
+                        }
+                        if (!string.IsNullOrEmpty(subStatus))
+                        {
+                            subStatusMatch = (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(Int32.Parse(subStatus))) &&
+                                             (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(Int32.Parse(subStatus)));
+                        }
+                    }
+                    else if (r.StatusFrom.Count > 0 && r.StatusTo.Count > 0)
                     {
                         if (!string.IsNullOrEmpty(status))
                         {
@@ -1086,13 +1100,7 @@ namespace DH.Helpdesk.Services.Services
                                           (r.StatusTo.Contains(BRConstItem.ANY) || r.StatusTo.Contains(Int32.Parse(status)));
                         }
                     }
-                    else
-                    {
-                        // If both StatusFrom and StatusTo are null, do not automatically consider status as matching
-                        statusMatch = !string.IsNullOrEmpty(status);
-                    }
-
-                    if (r.SubStatusFrom != null && r.SubStatusTo != null)
+                    else if (r.SubStatusFrom.Count > 0 && r.SubStatusFrom.Count > 0)
                     {
                         if (!string.IsNullOrEmpty(subStatus))
                         {
@@ -1100,17 +1108,20 @@ namespace DH.Helpdesk.Services.Services
                                              (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(Int32.Parse(subStatus)));
                         }
                     }
-                    else
-                    {
-                        // If both SubStatusFrom and SubStatusTo are null, do not automatically consider substatus as matching
-                        subStatusMatch = !string.IsNullOrEmpty(subStatus);
-                    }
 
-                    // If both status and substatus conditions are appropriately met, show warning
-                    if (statusMatch && subStatusMatch && !string.IsNullOrEmpty(finishDate))
+                    if(bothHasValue && statusMatch && subStatusMatch && !string.IsNullOrEmpty(finishDate))
                     {
                         return false;
                     }
+                    else
+                    {
+                        // If either status or substatus conditions are appropriately met, show warning
+                        if ((statusMatch || subStatusMatch) && !string.IsNullOrEmpty(finishDate))
+                        {
+                            return false;
+                        }
+                    }
+                    
                 }
             }
 
@@ -1134,11 +1145,25 @@ namespace DH.Helpdesk.Services.Services
 
                 if (r.DisableFinishingType == true)
                 {
-                    bool statusMatch = r.StatusFrom == null || r.StatusTo == null || (r.StatusFrom.Count == 0 && r.StatusTo.Count == 0);
-                    bool subStatusMatch = r.SubStatusFrom == null || r.SubStatusTo == null || (r.SubStatusFrom.Count == 0 && r.SubStatusTo.Count == 0);
+                    bool statusMatch = false;
+                    bool subStatusMatch = false;
+                    bool bothHasValue = false;
 
-                    // Update logic to handle nulls and absence of values correctly
-                    if (r.StatusFrom != null && r.StatusTo != null)
+                    if (r.StatusFrom.Count > 0  && r.StatusTo.Count > 0 && r.SubStatusFrom.Count > 0 && r.SubStatusTo.Count > 0)
+                    {
+                        bothHasValue = true;
+                        if (caseEntity.Status_Id.HasValue)
+                        {
+                            statusMatch = (r.StatusFrom.Contains(BRConstItem.ANY) || r.StatusFrom.Contains(caseEntity.Status_Id.Value)) &&
+                                          (r.StatusTo.Contains(BRConstItem.ANY) || r.StatusTo.Contains(caseEntity.Status_Id.Value));
+                        }
+                        if (caseEntity.StateSecondary_Id.HasValue)
+                        {
+                            subStatusMatch = (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(caseEntity.StateSecondary_Id.Value)) &&
+                                             (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(caseEntity.StateSecondary_Id.Value));
+                        }
+                    }
+                    else if(r.StatusFrom.Count > 0 && r.StatusTo.Count > 0 )
                     {
                         if (caseEntity.Status_Id.HasValue)
                         {
@@ -1146,13 +1171,7 @@ namespace DH.Helpdesk.Services.Services
                                           (r.StatusTo.Contains(BRConstItem.ANY) || r.StatusTo.Contains(caseEntity.Status_Id.Value));
                         }
                     }
-                    else
-                    {
-                        // If both StatusFrom and StatusTo are null, do not automatically consider status as matching
-                        statusMatch = !caseEntity.Status_Id.HasValue;
-                    }
-
-                    if (r.SubStatusFrom != null && r.SubStatusTo != null)
+                    else if (r.SubStatusFrom.Count > 0 && r.SubStatusTo.Count > 0)
                     {
                         if (caseEntity.StateSecondary_Id.HasValue)
                         {
@@ -1160,14 +1179,13 @@ namespace DH.Helpdesk.Services.Services
                                              (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(caseEntity.StateSecondary_Id.Value));
                         }
                     }
-                    else
+                    if(bothHasValue && statusMatch && subStatusMatch)
                     {
-                        // If both SubStatusFrom and SubStatusTo are null, do not automatically consider substatus as matching
-                        subStatusMatch = !caseEntity.StateSecondary_Id.HasValue;
+                        elementsToDisable.Add("FinishingCause");
+                        elementsToDisable.Add("FinishingDate");
                     }
-
-                    // If both status and substatus conditions are appropriately met, disable elements
-                    if (statusMatch && subStatusMatch)
+                    // If either status or substatus conditions are appropriately met, disable elements
+                    else if (statusMatch || subStatusMatch)
                     {
                         elementsToDisable.Add("FinishingCause");
                         elementsToDisable.Add("FinishingDate");
