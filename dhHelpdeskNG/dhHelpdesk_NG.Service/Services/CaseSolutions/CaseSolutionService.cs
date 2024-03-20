@@ -43,7 +43,7 @@ namespace DH.Helpdesk.Services.Services
         DeleteMessage DeleteCaseSolution(int id, int customerId);
         DeleteMessage DeleteCaseSolutionCategory(int id);
 
-        List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId, CaseSolutionLocationShow location, int? languageId);
+        List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId, CaseSolutionLocationShow location, int? languageId, bool withoutFinishingCause = false);
         void SaveCaseSolution(CaseSolution caseSolution, CaseSolutionSchedule caseSolutionSchedule, IList<CaseFieldSetting> CaseFieldSetting, out IDictionary<string, string> errors);
         void SaveCaseSolutionCategory(CaseSolutionCategory caseSolutionCategory, out IDictionary<string, string> errors);
         void SaveEmptyForm(Guid formGuid, int caseId);
@@ -148,17 +148,31 @@ namespace DH.Helpdesk.Services.Services
         }
 
         //todo : check if case solutions can be passed as an arguement
-        public List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId, CaseSolutionLocationShow location, int? languageId)
+        public List<CaseTemplateCategoryNode> GetCaseSolutionCategoryTree(int customerId, int userId, CaseSolutionLocationShow location, int? languageId, bool withoutFinishingCause = false)
         {
 
-            var customerCaseSolutions = 
-                GetCustomerCaseSolutionsOverview(customerId, userId) //uses cached version
-                    .Where(cs => cs.ConnectedButton != 0 &&
-                                 (
-                                     location == CaseSolutionLocationShow.BothCaseOverviewAndInsideCase ||
-                                     (location == CaseSolutionLocationShow.OnCaseOverview && cs.ShowOnCaseOverview != 0) ||
-                                     (location == CaseSolutionLocationShow.InsideTheCase && cs.ShowInsideCase != 0)
-                                 )).OrderBy(cs => cs.Name).ToList();
+            var customerCaseSolutions = new List<CaseSolutionOverview>();
+            if(withoutFinishingCause)
+            {
+                   customerCaseSolutions = GetCustomerCaseSolutionsOverview(customerId, userId) //uses cached version
+                    .Where(cs => cs.ConnectedButton != 0 && cs.HasFinishingCauseId == false &&
+                                                (
+                                                location == CaseSolutionLocationShow.BothCaseOverviewAndInsideCase ||
+                                                (location == CaseSolutionLocationShow.OnCaseOverview && cs.ShowOnCaseOverview != 0) ||
+                                                (location == CaseSolutionLocationShow.InsideTheCase && cs.ShowInsideCase != 0)
+                                                )).OrderBy(cs => cs.Name).ToList();
+            }
+            else
+            {
+                customerCaseSolutions = GetCustomerCaseSolutionsOverview(customerId, userId) //uses cached version
+                .Where(cs => cs.ConnectedButton != 0 &&
+                 (
+                     location == CaseSolutionLocationShow.BothCaseOverviewAndInsideCase ||
+                     (location == CaseSolutionLocationShow.OnCaseOverview && cs.ShowOnCaseOverview != 0) ||
+                     (location == CaseSolutionLocationShow.InsideTheCase && cs.ShowInsideCase != 0)
+                 )).OrderBy(cs => cs.Name).ToList();
+            }
+
 
             #region Solutions Without Category
 
