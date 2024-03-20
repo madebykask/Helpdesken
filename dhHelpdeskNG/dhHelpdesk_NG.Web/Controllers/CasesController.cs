@@ -2089,6 +2089,23 @@ namespace DH.Helpdesk.Web.Controllers
 
             //Run business rules on load
             m.DisableCaseFields = _caseService.ExecuteBusinessActionsDisable(c);
+            if(m.DisableCaseFields != null && m.DisableCaseFields.Count > 0)
+            {
+                var customerCaseSolutions =
+                _caseSolutionService.GetCustomerCaseSolutionsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id)
+                        .Where(x => x.ConnectedButton == 0
+                        && x.ShowInsideCase == 1
+                        && x.Status > 0
+                        && x.HasFinishingCauseId == false).ToList();
+
+                var customerCaseSolutionsIds = customerCaseSolutions.Select(x => x.CaseSolutionId).ToList();
+
+                m.WorkflowSteps = m.WorkflowSteps.Where(x => customerCaseSolutionsIds.Contains(x.CaseTemplateId)).ToList();
+
+                //Todo 
+                //We have to remove all casesolutions from  CaseTemplateTreeButton that has finishingcauseid = true
+
+            }
 
             return this.View(m);
         }
@@ -2848,7 +2865,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 return Json(true);
             }
-
+            //Show error message
             return Json(false);
 
         }
@@ -3763,7 +3780,7 @@ namespace DH.Helpdesk.Web.Controllers
             return "";
         }
 
-        private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId, CaseSolutionLocationShow location, int? languageId)
+        private CaseTemplateTreeModel GetCaseTemplateTreeModel(int customerId, int userId, CaseSolutionLocationShow location, int? languageId, bool withoutFinishinCases = false)
         {
             var model = new CaseTemplateTreeModel
             {
