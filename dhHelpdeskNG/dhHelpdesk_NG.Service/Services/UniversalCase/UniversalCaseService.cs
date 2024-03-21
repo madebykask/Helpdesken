@@ -1047,9 +1047,9 @@ namespace DH.Helpdesk.Services.Services.UniversalCase
 
                                 //TODO: om fel, visa det
                                 _caseService.AddChildCase(childCaseId, selfCaseId, out errors);
-
-                                if (!errors.Any())
-                                    _caseService.SetIndependentChild(childCaseId, true);
+                                //Commented out because of US 16794/16794, Should not be automaticly set as independent child
+                                //if (!errors.Any())
+                                //    _caseService.SetIndependentChild(childCaseId, true);
                             }
                         }
                     }
