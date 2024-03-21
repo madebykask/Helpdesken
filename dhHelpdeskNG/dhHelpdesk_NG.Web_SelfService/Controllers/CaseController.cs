@@ -2649,16 +2649,14 @@ namespace DH.Helpdesk.SelfService.Controllers
             var closedChildCasesCount = childCases.Count(it => it.ClosingDate != null);
             var totalChildCases = childCases.Where(x => x.Indepandent == false).Count();
             bool hasUnclosedChildren = closedChildCasesCount != totalChildCases;
-            bool dontShowClosingWorksteps = false;
+            
 
             //Check business rules on load
             List<string> disableCaseFields = new List<string>();
-           
-            disableCaseFields = _caseService.ExecuteBusinessActionsDisable(caseEntity);
-            if (disableCaseFields != null && disableCaseFields.Count > 0)
-            {
-                dontShowClosingWorksteps = true;
-            }
+            bool dontShowClosingWorksteps = false;
+
+            (disableCaseFields, dontShowClosingWorksteps) = _caseService.ExecuteBusinessActionsDisable(caseEntity);
+
 
             if (hasUnclosedChildren || dontShowClosingWorksteps)
             {

@@ -2088,8 +2088,9 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             //Run business rules on load
-            m.DisableCaseFields = _caseService.ExecuteBusinessActionsDisable(c);
-            if(m.DisableCaseFields != null && m.DisableCaseFields.Count > 0)
+            bool dontShowClosingWorksteps = false;
+            (m.DisableCaseFields, dontShowClosingWorksteps) = _caseService.ExecuteBusinessActionsDisable(c);
+            if(dontShowClosingWorksteps)
             {
                 var customerCaseSolutions =
                 _caseSolutionService.GetCustomerCaseSolutionsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id)
@@ -2102,7 +2103,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                 m.WorkflowSteps = m.WorkflowSteps.Where(x => customerCaseSolutionsIds.Contains(x.CaseTemplateId)).ToList();
 
-                //Todo 
                 //We have to remove all casesolutions from  CaseTemplateTreeButton that has finishingcauseid = true
                 m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id, CaseSolutionLocationShow.InsideTheCase, SessionFacade.CurrentLanguageId, true);
 

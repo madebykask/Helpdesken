@@ -1128,9 +1128,10 @@ namespace DH.Helpdesk.Services.Services
             return true;
         }
 
-        public List<string> ExecuteBusinessActionsDisable(Case caseEntity)
+        public (List<string>, bool) ExecuteBusinessActionsDisable(Case caseEntity)
         {
             List<string> elementsToDisable = new List<string>();
+            bool disableElements = false;
 
             var rules = _businessRuleService.GetRuleReadlist(caseEntity.Customer_Id);
 
@@ -1181,19 +1182,21 @@ namespace DH.Helpdesk.Services.Services
                     }
                     if(bothHasValue && statusMatch && subStatusMatch)
                     {
+                        disableElements = true;
                         elementsToDisable.Add("FinishingCause");
                         elementsToDisable.Add("FinishingDate");
                     }
                     // If either status or substatus conditions are appropriately met, disable elements
                     else if (statusMatch || subStatusMatch)
                     {
+                        disableElements = true;
                         elementsToDisable.Add("FinishingCause");
                         elementsToDisable.Add("FinishingDate");
                     }
                 }
             }
 
-            return elementsToDisable;
+            return (elementsToDisable, disableElements);
         }
 
         public IList<Case> GetTop100CasesForTest()

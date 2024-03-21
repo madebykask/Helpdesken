@@ -42,6 +42,22 @@ namespace DH.Helpdesk.WebApi.Controllers
             var isRelatedCase = caseId.HasValue && caseId.Value > 0 && _caseService.IsRelated(caseId.Value);
             var userSettings = await _userSerivice.GetUserOverviewAsync(UserId);
             var caseEntity =  caseId.HasValue ? _caseService.GetCaseById(caseId.Value) : (Case)null;
+            var customerCaseSolutions = _caseSolutionService.GetCustomerCaseSolutionsOverview(cid);
+
+            //New from BusinessRules 
+            bool dontShowClosingWorksteps = false;
+            List<string> disableCaseFields = new List<string>();
+            (disableCaseFields, dontShowClosingWorksteps) = _caseService.ExecuteBusinessActionsDisable(caseEntity);
+
+            if (dontShowClosingWorksteps)
+            {
+                workflowCaseSolutionIds = customerCaseSolutions
+                     .Where(x => x.ConnectedButton == 0
+                              && x.Status > 0
+                              && x.HasFinishingCauseId == false)
+                     .Select(x => x.CaseSolutionId)
+                     .ToList();
+            }
             var workflowSteps =
                 _caseSolutionService.GetWorkflowSteps(cid, 
                     caseEntity,
@@ -51,6 +67,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     ApplicationType.Helpdesk,
                     null,
                     langId);
+
             return workflowSteps.Select(w => new ItemOverview(Translate(w.Name, langId, TranslationTextTypes.MasterData), w.CaseTemplateId.ToString()))
                 .OrderBy(w => w.Name);
         }

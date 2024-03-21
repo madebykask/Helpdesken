@@ -102,7 +102,7 @@ namespace DH.Helpdesk.Services.Services
                                     );
         Case ExecuteBusinessActionsM2T(Case caseEntity);
 
-        List<string> ExecuteBusinessActionsDisable(Case caseEntity);
+        (List<string>, bool) ExecuteBusinessActionsDisable(Case caseEntity);
 
         bool ExecuteBusinessActionsError(int customerId, string finishDate, string status, string subStatus);
 
