@@ -1060,7 +1060,7 @@ namespace DH.Helpdesk.Services.Services
 
         public bool ExecuteBusinessActionsError(int customerId, string finishDate, string status, string subStatus)
         {
-            //Nullcheck?
+
             var rules = _businessRuleService.GetRuleReadlist(customerId);
 
             if (rules.Count > 0)
@@ -1081,6 +1081,7 @@ namespace DH.Helpdesk.Services.Services
                     if (r.StatusFrom.Count > 0 && r.StatusTo.Count > 0 && r.SubStatusFrom.Count > 0 && r.SubStatusTo.Count > 0)
                     {
                         bothHasValue = true;
+                        
                         if (!string.IsNullOrEmpty(status))
                         {
                             statusMatch = (r.StatusFrom.Contains(BRConstItem.ANY) || r.StatusFrom.Contains(Int32.Parse(status))) &&
@@ -1091,25 +1092,24 @@ namespace DH.Helpdesk.Services.Services
                             subStatusMatch = (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(Int32.Parse(subStatus))) &&
                                              (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(Int32.Parse(subStatus)));
                         }
+                        
                     }
-                    else if (r.StatusFrom.Count > 0 && r.StatusTo.Count > 0)
+                    else if (r.StatusFrom.Count > 0 && r.StatusTo.Count > 0 && !string.IsNullOrEmpty(status))
                     {
-                        if (!string.IsNullOrEmpty(status))
-                        {
-                            statusMatch = (r.StatusFrom.Contains(BRConstItem.ANY) || r.StatusFrom.Contains(Int32.Parse(status))) &&
-                                          (r.StatusTo.Contains(BRConstItem.ANY) || r.StatusTo.Contains(Int32.Parse(status)));
-                        }
+
+                        statusMatch = (r.StatusFrom.Contains(BRConstItem.ANY) || r.StatusFrom.Contains(Int32.Parse(status))) &&
+                                      (r.StatusTo.Contains(BRConstItem.ANY) || r.StatusTo.Contains(Int32.Parse(status)));
+
                     }
-                    else if (r.SubStatusFrom.Count > 0 && r.SubStatusFrom.Count > 0)
+                    else if (r.SubStatusFrom.Count > 0 && r.SubStatusTo.Count > 0 && !string.IsNullOrEmpty(subStatus))
                     {
-                        if (!string.IsNullOrEmpty(subStatus))
-                        {
-                            subStatusMatch = (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(Int32.Parse(subStatus))) &&
-                                             (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(Int32.Parse(subStatus)));
-                        }
+
+                        subStatusMatch = (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(Int32.Parse(subStatus))) &&
+                                         (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(Int32.Parse(subStatus)));
+
                     }
 
-                    if(bothHasValue && statusMatch && subStatusMatch && !string.IsNullOrEmpty(finishDate))
+                    if (bothHasValue && statusMatch && subStatusMatch && !string.IsNullOrEmpty(finishDate))
                     {
                         return false;
                     }
@@ -1164,23 +1164,21 @@ namespace DH.Helpdesk.Services.Services
                                              (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(caseEntity.StateSecondary_Id.Value));
                         }
                     }
-                    else if(r.StatusFrom.Count > 0 && r.StatusTo.Count > 0 )
+                    else if(r.StatusFrom.Count > 0 && r.StatusTo.Count > 0 && caseEntity.Status_Id.HasValue)
                     {
-                        if (caseEntity.Status_Id.HasValue)
-                        {
-                            statusMatch = (r.StatusFrom.Contains(BRConstItem.ANY) || r.StatusFrom.Contains(caseEntity.Status_Id.Value)) &&
-                                          (r.StatusTo.Contains(BRConstItem.ANY) || r.StatusTo.Contains(caseEntity.Status_Id.Value));
-                        }
+
+                        statusMatch = (r.StatusFrom.Contains(BRConstItem.ANY) || r.StatusFrom.Contains(caseEntity.Status_Id.Value)) &&
+                                      (r.StatusTo.Contains(BRConstItem.ANY) || r.StatusTo.Contains(caseEntity.Status_Id.Value));
+
                     }
-                    else if (r.SubStatusFrom.Count > 0 && r.SubStatusTo.Count > 0)
+                    else if (r.SubStatusFrom.Count > 0 && r.SubStatusTo.Count > 0 && caseEntity.StateSecondary_Id.HasValue)
                     {
-                        if (caseEntity.StateSecondary_Id.HasValue)
-                        {
-                            subStatusMatch = (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(caseEntity.StateSecondary_Id.Value)) &&
-                                             (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(caseEntity.StateSecondary_Id.Value));
-                        }
+
+                        subStatusMatch = (r.SubStatusFrom.Contains(BRConstItem.ANY) || r.SubStatusFrom.Contains(caseEntity.StateSecondary_Id.Value)) &&
+                                         (r.SubStatusTo.Contains(BRConstItem.ANY) || r.SubStatusTo.Contains(caseEntity.StateSecondary_Id.Value));
+
                     }
-                    if(bothHasValue && statusMatch && subStatusMatch)
+                    if (bothHasValue && statusMatch && subStatusMatch)
                     {
                         disableElements = true;
                         elementsToDisable.Add("FinishingCause");
