@@ -1065,7 +1065,7 @@ namespace DH.Helpdesk.Services.Services
 
             if (rules.Count > 0)
             {
-                rules = rules.Where(x => x.Event == BREventType.OnLoadCase || x.Event == BREventType.OnSaveCaseBefore && x.RuleActive == true).OrderBy(y => y.RuleSequence).ToList();
+                rules = rules.Where(x => x.Event == BREventType.OnLoadCase && x.RuleActive == true || x.Event == BREventType.OnSaveCaseBefore && x.RuleActive == true).OrderBy(y => y.RuleSequence).ToList();
             }
 
             foreach (var rule in rules)
