@@ -1403,7 +1403,7 @@ namespace DH.Helpdesk.Web.Controllers
                 //This is a fail, we must skip this iteration
                 if (ret == false || ret2 == false)
                 {
-                    string errorMsg = Translation.Get("Ärendet kan inte stängas pågrund av business rules");
+                    string errorMsg = Translation.Get("Ärendet uppfyller inte villkoren i business rules.");
                     throw new Exception(errorMsg);
                 }
 

@@ -8615,6 +8615,20 @@ Go
 Update tblTextTranslation set TextTranslation = 'Headline keyword externally' where Language_Id = 2 and Text_Id = 2168 
 Go
 
+If not exists (select * from tbltext where id = 2173)
+	insert into tbltext (id, TextString) VALUES (2173, 'Ärendet uppfyller inte villkoren i business rules.')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2173 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2173, 2, 'The case does not fulfill the conditions in the business rules.')
+GO
+
+If not exists (select * from tbltext where id = 2174)
+	insert into tbltext (id, TextString) VALUES (2174, 'Inaktivera avslut')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2174 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2174, 2, 'Disable closure')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
