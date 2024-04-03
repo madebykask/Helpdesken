@@ -9,7 +9,7 @@
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
-            <li class="active"><a href="#fragment-1">@Translation.Get("Rule", Enums.TranslationSource.TextTranslation)</a></li>                        
+            <li class="active"><a href="#fragment-1">@Translation.Get("Regel", Enums.TranslationSource.TextTranslation)</a></li>                        
         </ul>
 
         <div class="tab-content">
@@ -17,7 +17,7 @@
                 <table>
                     <tr>
                         <td class="span2">
-                            @Translation.Get("Namn", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get("Regelnamn", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
                             @Html.TextBoxFor(m => Model.RuleName, new { @class="BR-text"})
@@ -26,7 +26,7 @@
                     </tr>
                     <tr>
                         <td class="span2">
-                            @Translation.Get("Event", Enums.TranslationSource.TextTranslation) 
+                            @Translation.Get("Händelse", Enums.TranslationSource.TextTranslation) 
                         </td>
                         <td>                            
                             <select id="lstEvents" name="lstEvents" class="BR-chosen-single-select">                                    
@@ -39,7 +39,7 @@
                     </tr>
                     <tr>
                         <td class="span2">
-                            @Translation.Get("Sequence", Enums.TranslationSource.TextTranslation)
+                            @Translation.Get("Sekvens", Enums.TranslationSource.TextTranslation)
                         </td>
                         <td>
                             @Html.TextBoxFor(m => Model.Sequence, new { id="ruleSequence" , @class="BR-text"})
@@ -64,7 +64,7 @@
                     
                     <tr>
                         <td class="span2">
-                            @Translation.Get("Active", Enums.TranslationSource.TextTranslation)                            
+                            @Translation.Get("Aktiv", Enums.TranslationSource.TextTranslation)                            
                         </td>
                         <td>
                              @Html.CheckBoxFor(m => Model.IsActive, new { @class="switchcheckbox", id="isRuleActive"})

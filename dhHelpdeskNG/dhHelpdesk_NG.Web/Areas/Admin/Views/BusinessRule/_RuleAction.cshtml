@@ -5,12 +5,12 @@
 }
 
 
-<h4>@Translation.Get("Actions")</h4>
+<h4>@Translation.Get("Åtgärder")</h4>
 
 <table>
     <tbody>
         <tr id="BRActionMailTemplate">
-            <td class="span2"> @Translation.Get("Mail Template") </td>
+            <td class="span2"> @Translation.Get("E-post mall") </td>
             <td>
                 @Html.DropDownListFor(x => x.EmailTemplateId, (List<SelectListItem>)@ViewBag.EMailTemplates, "", new { @id = "lstEmailTemplates", name = "lstEmailTemplates", @class = "BR-chosen-single-select" })
                 @Html.ValidationMessageFor(x => x.EmailTemplateId)
@@ -18,7 +18,7 @@
         </tr>
         <tr id="BRActionEmailGroup">
             <td class="span2">
-                @Translation.Get("Email Group")
+                @Translation.Get("E-postgrupp")
             </td>
             <td>
                 @Html.ListBoxExtendedOptionsFor(x => x.EMailGroupIds, (List<DdlModel>)@ViewBag.EMailGroups, new { @id = "lstEmailGroups", @name = "lstEmailGroups", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
@@ -26,7 +26,7 @@
         </tr>
         <tr id="BRActionWorkingGroup">
             <td class="span2">
-                @Translation.Get("Working Group")
+                @Translation.Get("Driftgrupp")
             </td>
             <td>
                 @Html.ListBoxExtendedOptionsFor(x => x.WorkingGroupIds, (List<DdlModel>)@ViewBag.WorkingGroups, new { @id = "lstWorkingGroups", @name = "lstWorkingGroups", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
@@ -34,7 +34,7 @@
         </tr>
         <tr id="BRActionAdministrator">
             <td class="span2">
-                @Translation.Get("Administrator")
+                @Translation.Get("Handläggare")
             </td>
             <td>
                 @Html.ListBoxExtendedOptionsFor(x => x.AdministratorIds, (List<DdlModel>)@ViewBag.Administrators, new { @id = "lstAdministrators", @name = "lstAdministrators", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
@@ -42,7 +42,7 @@
         </tr>
         <tr id="BRActionAdministratorSingleSelect">
             <td class="span2">
-                @Translation.Get("Administrator")
+                @Translation.Get("Handläggare")
             </td>
             <td>
                 @Html.DropDownListFor(x => x.Administrator, (List<DdlModel>)@ViewBag.Administrators, "", new { @id = "lstAdministrators", name = "lstAdministrators", @class = "BR-chosen-single-select" })
@@ -50,7 +50,7 @@
         </tr>
         <tr id="BRActionRecipients">
             <td class="span2">
-                @Translation.Get("Recipients", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Mottagare", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
                 @Html.TextBoxFor(m => Model.Recipients, new { id = "recipients", @class = "BR-text" })

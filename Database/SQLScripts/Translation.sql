@@ -8629,6 +8629,41 @@ If not exists (select * from tblTextTranslation where text_id = 2174 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2174, 2, 'Disable closure')
 GO
 
+If not exists (select * from tbltext where id = 2175)
+	insert into tbltext (id, TextString) VALUES (2175, 'Sekvens')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2175 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2175, 2, 'Sequence')
+GO
+
+If not exists (select * from tbltext where id = 2176)
+	insert into tbltext (id, TextString) VALUES (2176, 'Från värde')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2176 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2176, 2, 'From value')
+GO
+
+If not exists (select * from tbltext where id = 2177)
+	insert into tbltext (id, TextString) VALUES (2177, 'Till värde')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2177 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2177, 2, 'To value')
+GO
+
+If not exists (select * from tbltext where id = 2178)
+	insert into tbltext (id, TextString) VALUES (2178, 'Lika med')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2178 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2178, 2, 'Equals')
+GO
+
+If not exists (select * from tbltext where id = 2179)
+	insert into tbltext (id, TextString) VALUES (2179, 'Ny regel')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2179 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2179, 2, 'New rule')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')

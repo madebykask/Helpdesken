@@ -4,19 +4,19 @@
     ViewBag.Title = "";
 }
 
-<h4>@Translation.Get("Conditions")</h4>
+<h4>@Translation.Get("Villkor")</h4>
 
 <table id="BRCondition1" class="table table-striped table-bordered table-hover">
     <thead>
         <tr>
             <th style="width:10%">
-                Field
+                @Translation.Get("Fält")
             </th>
             <th style="width:25%">
-                From value
+                @Translation.Get("Från värde")
             </th>
             <th style="width:25%">
-                To value
+                @Translation.Get("Till värde")
             </th>
             <th>
 
@@ -42,7 +42,7 @@
 
         <tr>
             <td>
-                @Translation.Get("SubStatus")
+                @Translation.Get("Understatus")
             </td>
             <td>
                 @Html.ListBoxExtendedOptionsFor(x => x.SubStatusesFromValue, (List<DdlModel>)@ViewBag.SubStatus, new { @id = "lstSubStatusFrom", @name = "lstSubStatusFrom", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
@@ -64,10 +64,10 @@
     <thead>
         <tr>
             <th style="width:15%">
-                Attribute
+                @Translation.Get("Attribut")
             </th>
             <th style="width:20%">
-                Equals
+                @Translation.Get("Lika med")
             </th>
             <th style="width:25%">
 
@@ -101,13 +101,13 @@
     <thead>
         <tr>
             <th style="width:10%">
-                Field
+                @Translation.Get("Fält")
             </th>
             <th style="width:25%">
-                From value
+                @Translation.Get("Från värde")
             </th>
             <th style="width:25%">
-                To value
+                @Translation.Get("Till värde")
             </th>
             <th>
 
@@ -132,7 +132,7 @@
         </tr>
         <tr>
             <td>
-                @Translation.Get("SubStatus")
+                @Translation.Get("Understatus")
             </td>
             <td>
                 @Html.ListBoxExtendedOptionsFor(x => x.SubStatusesFromValue, (List<DdlModel>)@ViewBag.SubStatus, new { @id = "lstSubStatusFrom2", @name = "lstSubStatusFrom2", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
@@ -153,13 +153,13 @@
     <thead>
         <tr>
             <th style="width:10%">
-                Field
+                @Translation.Get("Fält")
             </th>
             <th style="width:25%">
-                From value
+                @Translation.Get("Från värde")
             </th>
             <th style="width:25%">
-                To value
+                @Translation.Get("Till värde")
             </th>
             <th>
 
@@ -184,7 +184,7 @@
         </tr>
         <tr>
             <td>
-                @Translation.Get("SubStatus")
+                @Translation.Get("Understatus")
             </td>
             <td>
                 @Html.ListBoxExtendedOptionsFor(x => x.SubStatusesFromValue, (List<DdlModel>)@ViewBag.SubStatus, new { @id = "lstSubStatusFrom3", @name = "lstSubStatusFrom3", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
