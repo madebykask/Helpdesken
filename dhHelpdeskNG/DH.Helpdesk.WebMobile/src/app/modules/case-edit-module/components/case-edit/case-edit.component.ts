@@ -298,16 +298,21 @@ export class CaseEditComponent {
                     this.caseId = caseId;
                     return true;
                   }),
-                  catchError((e) => throwError(e))
+                  catchError((e) => {
+                    this.alertService.showMessage(e.error.message, AlertType.Error, 3);
+                    //return throwError(e);
+                    return EMPTY.pipe(defaultIfEmpty(false));
+                  })
                 );
               } else {
                 return EMPTY.pipe(defaultIfEmpty(false));
               }
             }),
-            untilDestroyed(this),
+            untilDestroyed(this), 
             catchError((e) => {
-              this.alertService.showMessage('Extended Case save was not succeed!', AlertType.Error, 3);
-              return throwError(e);
+              this.alertService.showMessage(e.error.message, AlertType.Error, 3);
+              //return throwError(e);
+              return EMPTY.pipe(defaultIfEmpty(false));
             })
           );
         }
@@ -318,6 +323,7 @@ export class CaseEditComponent {
       untilDestroyed(this),
       catchError((e) => throwError(e))
     ).subscribe((isSaved: boolean) => {
+      console.log('isSaved', isSaved);
       if (isSaved) {
         if (reload) {
           if (this.caseData.id == 0) { // New case route to saved case
@@ -329,9 +335,13 @@ export class CaseEditComponent {
           this.goToCases();
         }
       }
+      else{
+        this.loadCaseData(this.caseId);
+      }
     });
     this.syncExtendedCaseValues();
     this.validateExtendedCase(false, finishingType);
+
   }
 
   cleanTempFiles(caseId: number) {

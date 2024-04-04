@@ -126,6 +126,17 @@ namespace DH.Helpdesk.WebApi.Controllers
             var oldCase = isEdit ? await _caseService.GetDetachedCaseByIdAsync(caseId.Value) : new Case();
             if (isEdit)
             {
+                //Business rules (Before save)
+                //We need to run this method twice, one that compares against current data, and one that compares against incoming data.
+                var ret = _caseService.ExecuteBusinessActionsError(oldCase.Customer_Id, model.FinishingDate.ToString(), "", model.StateSecondaryId.ToString());
+                var ret2 = _caseService.ExecuteBusinessActionsError(oldCase.Customer_Id, model.FinishingDate.ToString(), oldCase.Status_Id.ToString(), oldCase.StateSecondary_Id.ToString());
+
+                //This is a fail, we must skip this iteration
+                if (ret == false || ret2 == false)
+                {
+                    return BadRequest($"Ärendet uppfyller inte villkoren i business rules.");
+                }
+
                 //todo: to be removed when case switching is implemented on mobile 
                 if (oldCase.Customer_Id != customerId)
                     throw new Exception($"Case customer({oldCase.Customer_Id}) and current customer({customerId}) are different");
