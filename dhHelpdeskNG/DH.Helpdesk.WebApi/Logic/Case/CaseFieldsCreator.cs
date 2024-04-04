@@ -80,6 +80,7 @@ namespace DH.Helpdesk.WebApi.Logic.Case
         private readonly IProductAreaService _productAreaService;
         private readonly ICaseExtraFollowersService _caseExtraFollowersService;
         private readonly IStateSecondaryService _stateSecondaryService;
+        private readonly ICaseService _caseService;
 
         public CaseFieldsCreator(ICaseFileService caseFileService,
             ICaseFieldSettingsHelper caseFieldSettingsHelper,
@@ -93,7 +94,8 @@ namespace DH.Helpdesk.WebApi.Logic.Case
             ICaseTypeService caseTypeService,
             IProductAreaService productAreaService,
             ICaseExtraFollowersService caseExtraFollowersService,
-            IStateSecondaryService stateSecondaryService)
+            IStateSecondaryService stateSecondaryService,
+            ICaseService caseService)
         {
             _caseExtraFollowersService = caseExtraFollowersService;
             _stateSecondaryService = stateSecondaryService;
@@ -108,6 +110,7 @@ namespace DH.Helpdesk.WebApi.Logic.Case
             _watchDateCalendarService = watchDateCalendarService;
             _caseTypeService = caseTypeService;
             _productAreaService = productAreaService;
+            _caseService = caseService;
         }
 
         public void CreateInitiatorSection(int customerId, CustomerUser customerUserSetting,
@@ -1040,7 +1043,13 @@ namespace DH.Helpdesk.WebApi.Logic.Case
         {
             IBaseCaseField field;
             var noMailToNotifier = false;
-            if (userOverview.CloseCasePermission.ToBool())
+
+            //New from BusinessRules  - Disable closure if BR sais so
+            bool dontShowClosingFields = false;
+            List<string> disableCaseFields = new List<string>();
+            (disableCaseFields, dontShowClosingFields) = _caseService.ExecuteBusinessActionsDisable(currentCase);
+
+            if (userOverview.CloseCasePermission.ToBool() && !dontShowClosingFields)
             {
                 {
                     field = GetField(
@@ -1050,11 +1059,13 @@ namespace DH.Helpdesk.WebApi.Logic.Case
                         CaseFieldsNamesApi.FinishingDescription, GlobalEnums.TranslationCaseFields.FinishingDescription,
                         CaseSectionType.Communication,
                         caseFieldSettings, caseFieldTranslations, currentCase?.Id, caseTemplateSettings);
+
                     AddMaxLengthOption(field.Options, 200);
+
                     model.Fields.Add(field);
                 }
 
-                // Closing Reason
+                // Closing Reason 
                 {
                     int? finishingCause = null;
                     var lastLog = currentCase?.Logs?.OrderByDescending(l => l.ChangeTime).FirstOrDefault();
