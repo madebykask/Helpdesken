@@ -299,8 +299,8 @@ export class CaseEditComponent {
                     return true;
                   }),
                   catchError((e) => {
-                    this.alertService.showMessage(e.error.message, AlertType.Error, 3);
-                    //return throwError(e);
+                    const errormessage = this.translateService.instant(e.error.message);
+                    this.alertService.showMessage(errormessage, AlertType.Error, 3);
                     return EMPTY.pipe(defaultIfEmpty(false));
                   })
                 );
@@ -310,8 +310,8 @@ export class CaseEditComponent {
             }),
             untilDestroyed(this), 
             catchError((e) => {
-              this.alertService.showMessage(e.error.message, AlertType.Error, 3);
-              //return throwError(e);
+              const errormessage = this.translateService.instant(e.error.message);
+              this.alertService.showMessage(errormessage, AlertType.Error, 3);
               return EMPTY.pipe(defaultIfEmpty(false));
             })
           );

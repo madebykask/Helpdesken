@@ -698,4 +698,14 @@ begin
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(30064, 2, 'Inform')
 end
 
+If not exists (select * from tbltext where id = 30065)
+begin
+	insert into tbltext (id, TextString, TextType) VALUES (30065, 'Ärendet uppfyller inte villkoren i business rules.', @MobileType)
+end
+
+If not exists (select * from tblTextTranslation where text_id = 30065 and Language_Id = 2)
+begin
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(30065, 2, 'The case does not fulfill the conditions in the business rules.')
+end
+
 
