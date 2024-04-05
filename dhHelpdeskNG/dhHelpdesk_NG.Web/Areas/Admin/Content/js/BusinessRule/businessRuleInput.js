@@ -421,8 +421,9 @@
 
             $(".BR-chosen-select").chosen({
                 width: "350px",
-                'placeholder_text_multiple': placeholder_text_multiple,
-                'no_results_text': no_results_text
+                'placeholder_text_multiple': placeholder_text_multiple, 
+                'placeholder_text_single': placeholder_text_single,
+                'no_results_text': no_results_text,
             }).change(function (evt, params) {
                 $(evt.target).trigger("focusout");
             });
@@ -430,7 +431,8 @@
             $(".BR-chosen-single-select").chosen({
                 width: "350px",
                 'placeholder_text_multiple': placeholder_text_multiple,
-                'no_results_text': no_results_text
+                'placeholder_text_single': placeholder_text_single,
+                'no_results_text': no_results_text,
             }).change(function (evt, params) {
                 $(evt.target).trigger("focusout");
             });

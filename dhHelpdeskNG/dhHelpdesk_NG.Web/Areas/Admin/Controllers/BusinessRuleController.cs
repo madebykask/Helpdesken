@@ -94,13 +94,13 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
 			var currentValue = new List<DdlModel>
 			{
-				new DdlModel {Value = BRConstItem.CURRENT_VALUE.ToString(), Text = "[CurrentValue]", Selected = false}
+				new DdlModel {Value = BRConstItem.CURRENT_VALUE.ToString(), Text = "[" + Translation.Get("Nuvarande värde") +"]", Selected = false}
 			};
 
 			var fieldItems = new List<DdlModel>
 			{
-				new DdlModel {Value = BRConstItem.NULL.ToString(), Text = "[Null]", Selected = false},
-				new DdlModel {Value = BRConstItem.ANY.ToString(), Text = "[Any]", Selected = false}
+				new DdlModel {Value = BRConstItem.NULL.ToString(), Text = "[" + Translation.Get("Tomt") +"]", Selected = false},
+				new DdlModel {Value = BRConstItem.ANY.ToString(), Text = "[" + Translation.Get("Vilket som") +"]", Selected = false}
 			};
 
 			var productAreas = _productAreaService.GetAll(customerId);
@@ -163,16 +163,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				Sequence = rule.RuleSequence
 			};
 
-			var currentValue = new List<DdlModel>
-			{
-				new DdlModel {Value = BRConstItem.CURRENT_VALUE.ToString(), Text = "[CurrentValue]", Selected = false}
-			};
+            var currentValue = new List<DdlModel>
+            {
+                new DdlModel {Value = BRConstItem.CURRENT_VALUE.ToString(), Text = "[" + Translation.Get("Nuvarande värde") +"]", Selected = false}
+            };
 
-			var fieldItems = new List<DdlModel>
-			{
-				new DdlModel {Value = BRConstItem.NULL.ToString(), Text = "[Null]", Selected = false},
-				new DdlModel {Value = BRConstItem.ANY.ToString(), Text = "[Any]", Selected = false}
-			};
+            var fieldItems = new List<DdlModel>
+            {
+                new DdlModel {Value = BRConstItem.NULL.ToString(), Text = "[" + Translation.Get("Tomt") +"]", Selected = false},
+                new DdlModel {Value = BRConstItem.ANY.ToString(), Text = "[" + Translation.Get("Vilket som") +"]", Selected = false}
+            };
 
 			var productAreas = _productAreaService.GetAll(rule.CustomerId);
 			var lastLevels = new List<ProductArea>();

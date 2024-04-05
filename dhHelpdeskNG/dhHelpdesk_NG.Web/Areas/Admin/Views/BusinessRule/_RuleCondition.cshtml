@@ -27,7 +27,7 @@
 
         <tr>
             <td>
-                @Translation.Get("Process")
+                @Translation.Get("Produktområde")
             </td>
             <td>
                 @Html.ListBoxExtendedOptionsFor(x => x.ProcessesFromValue, (List<DdlModel>)@ViewBag.ProcessList, new { @id = "lstProcessFrom", @name = "lstProcessFrom", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
