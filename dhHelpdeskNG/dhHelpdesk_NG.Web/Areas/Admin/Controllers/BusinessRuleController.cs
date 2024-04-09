@@ -100,7 +100,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 			var fieldItems = new List<DdlModel>
 			{
 				new DdlModel {Value = BRConstItem.NULL.ToString(), Text = "[" + Translation.Get("Tomt") +"]", Selected = false},
-				new DdlModel {Value = BRConstItem.ANY.ToString(), Text = "[" + Translation.Get("Vilket som") +"]", Selected = false}
+				new DdlModel {Value = BRConstItem.ANY.ToString(), Text = "[" + Translation.Get("Endera") +"]", Selected = false}
 			};
 
 			var productAreas = _productAreaService.GetAll(customerId);
@@ -171,7 +171,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var fieldItems = new List<DdlModel>
             {
                 new DdlModel {Value = BRConstItem.NULL.ToString(), Text = "[" + Translation.Get("Tomt") +"]", Selected = false},
-                new DdlModel {Value = BRConstItem.ANY.ToString(), Text = "[" + Translation.Get("Vilket som") +"]", Selected = false}
+                new DdlModel {Value = BRConstItem.ANY.ToString(), Text = "[" + Translation.Get("Endera") +"]", Selected = false}
             };
 
 			var productAreas = _productAreaService.GetAll(rule.CustomerId);

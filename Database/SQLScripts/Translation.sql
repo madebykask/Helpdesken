@@ -8672,7 +8672,7 @@ If not exists (select * from tblTextTranslation where text_id = 2180 and Languag
 GO
 
 If not exists (select * from tbltext where id = 2181)
-	insert into tbltext (id, TextString) VALUES (2181, 'Vilket som')
+	insert into tbltext (id, TextString) VALUES (2181, 'Endera')
 GO
 If not exists (select * from tblTextTranslation where text_id = 2181 and Language_Id = 2)
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2181, 2, 'Any')
