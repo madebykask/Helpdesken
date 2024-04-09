@@ -128,7 +128,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 //Business rules (Before save)
                 //We need to run this method twice, one that compares against current data, and one that compares against incoming data.
-                var ret = _caseService.ExecuteBusinessActionsError(oldCase.Customer_Id, model.FinishingDate.ToString(), "", model.StateSecondaryId.ToString());
+                var ret = _caseService.ExecuteBusinessActionsError(oldCase.Customer_Id, model.FinishingDate.ToString(), model.StatusId.ToString(), model.StateSecondaryId.ToString());
                 var ret2 = _caseService.ExecuteBusinessActionsError(oldCase.Customer_Id, model.FinishingDate.ToString(), oldCase.Status_Id.ToString(), oldCase.StateSecondary_Id.ToString());
 
                 //This is a fail, we must skip this iteration
