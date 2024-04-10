@@ -23,7 +23,7 @@
                     .Select(c => new { c.Name, c.Id, c.SortOrder })
                     .ToList();
 
-            var models = anonymus.Select(c => new TypeGroupModel(c.Id, c.SortOrder, c.Name)).ToList();
+            var models = anonymus.Select(c => new TypeGroupModel(c.Id, c.SortOrder, c.Name)).OrderBy(x => x.SortOrder).ToList();
 
             return models;
         }

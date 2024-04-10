@@ -438,7 +438,7 @@ namespace DH.Helpdesk.Dal.Repositories.Computers.Concrete
                 query = query.Where(x => x.Computer.ContractStartDate >= contractStartDateFrom);
 
             if (contractStartDateTo.HasValue)
-                query = query.Where(x => x.Computer.ContractStartDate <= contractStartDateFrom);
+                query = query.Where(x => x.Computer.ContractStartDate <= contractStartDateTo);
 
             if (contractEndDateFrom.HasValue)
                 query = query.Where(x => x.Computer.ContractEndDate >= contractEndDateFrom);
