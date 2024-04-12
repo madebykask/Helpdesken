@@ -55,6 +55,14 @@ steps:
     FailOnWarning: false
     DisableTelemetry: false
 
+
+# Prepare Analysis Configuration task
+- task: SonarQubePrepare@5
+  inputs:
+    SonarQube: 'SonarQube'
+    scannerMode: 'MSBuild'
+    projectKey: 'Dh-DHHelpdesk_dh-helpdesk_31603d68-d813-49cd-86e5-87e686bf8cc2'
+
 - task: MSBuild@1
   displayName: Build DH.Helpdesk.Web
   inputs:
@@ -132,6 +140,13 @@ steps:
     solution: '**/dhHelpdeskNG/DH.Helpdesk.LicenseReporter/DH.Helpdesk.LicenseReporter.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.LicenseReporter"'
 
+# Run Code Analysis task
+- task: SonarQubeAnalyze@5
+
+# Publish Quality Gate Result task
+- task: SonarQubePublish@5
+  inputs:
+    pollingTimeoutSec: '300'
 
 #Copying files
 - task: CopyFiles@2
