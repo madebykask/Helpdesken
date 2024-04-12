@@ -47,7 +47,10 @@ namespace DH.Helpdesk.WebApi.Controllers
             //New from BusinessRules 
             bool dontShowClosingWorksteps = false;
             List<string> disableCaseFields = new List<string>();
-            (disableCaseFields, dontShowClosingWorksteps) = _caseService.ExecuteBusinessActionsDisable(caseEntity);
+            if (caseEntity != null)
+            {
+                (disableCaseFields, dontShowClosingWorksteps) = _caseService.ExecuteBusinessActionsDisable(caseEntity);
+            }
 
             if (dontShowClosingWorksteps)
             {

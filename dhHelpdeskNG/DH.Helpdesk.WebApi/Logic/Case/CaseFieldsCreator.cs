@@ -1046,9 +1046,12 @@ namespace DH.Helpdesk.WebApi.Logic.Case
 
             //New from BusinessRules  - Disable closure if BR sais so
             bool dontShowClosingFields = false;
-            List<string> disableCaseFields = new List<string>();
-            (disableCaseFields, dontShowClosingFields) = _caseService.ExecuteBusinessActionsDisable(currentCase);
-
+            if (currentCase != null)
+            {
+                List<string> disableCaseFields = new List<string>();
+                (disableCaseFields, dontShowClosingFields) = _caseService.ExecuteBusinessActionsDisable(currentCase);
+            }
+            
             if (userOverview.CloseCasePermission.ToBool() && !dontShowClosingFields)
             {
                 {
