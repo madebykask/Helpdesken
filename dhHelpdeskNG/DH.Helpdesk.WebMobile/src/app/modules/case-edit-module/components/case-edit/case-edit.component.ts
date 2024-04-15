@@ -324,19 +324,46 @@ export class CaseEditComponent {
       catchError((e) => throwError(e))
     ).subscribe((isSaved: boolean) => {
       console.log('isSaved', isSaved);
+      console.log('reload', reload);
       if (isSaved) {
         if (reload) {
           if (this.caseData.id == 0) { // New case route to saved case
+            //This is wrong?
+            console.log('caseId is 0?', this.caseId);
             this.router.navigate(['/case', this.caseId]);
+            //return;
           } else {
+            console.log('caseId is: ', this.caseId);
             this.ngOnInit();
           }
         } else {
+          console.log('no reload');
           this.goToCases();
         }
       }
       else{
-        this.loadCaseData(this.caseId);
+        {
+          if (this.caseData.id == 0) 
+            {
+              //Stay on the same page
+              console.log('no reload, stay on the same page');
+              //get the url from the browser
+              var url = this.router.url;
+              if(url.includes('template')){
+                //Navigate to template/1/4738
+                console.log('url includes template:' + url);
+                  this.router.navigate(['/case/template', this.customerId, this.templateId]);
+              }
+              else{
+                return;
+              }
+            }
+            else{
+                this.loadCaseData(this.caseId);
+            }
+          
+        }
+        
       }
     });
     this.syncExtendedCaseValues();

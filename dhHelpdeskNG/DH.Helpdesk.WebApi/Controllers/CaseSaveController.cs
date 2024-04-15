@@ -153,6 +153,15 @@ namespace DH.Helpdesk.WebApi.Controllers
                     return BadRequest($"No permission to edit case {caseId}.");
                 }
             }
+            else
+            {
+                //Check rules on new case
+                var ret = _caseService.ExecuteBusinessActionsError(cid, model.FinishingDate.ToString(), model.StatusId.ToString(), model.StateSecondaryId.ToString());
+                if(ret == false)
+                {
+                    return BadRequest($"Ärendet uppfyller inte villkoren i business rules.");
+                }
+            }
 
             var customerUserSetting = await _customerUserService.GetCustomerUserSettingsAsync(customerId, UserId);
             if (customerUserSetting == null)
