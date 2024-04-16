@@ -16,6 +16,12 @@ variables:
   group: build-variables
 
 steps:
+
+- task: SonarQubePrepare@5
+  inputs:
+    SonarQube: 'SonarQube'
+    scannerMode: 'MSBuild'
+    projectKey: 'Dh-DHHelpdesk_dh-helpdesk_2a1e1b2c-0f9f-4bae-9728-5379b77adc14'
 - task: CmdLine@2
   inputs:
     script: |
