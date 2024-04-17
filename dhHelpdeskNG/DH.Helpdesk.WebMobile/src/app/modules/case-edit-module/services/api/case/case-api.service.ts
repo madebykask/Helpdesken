@@ -33,4 +33,8 @@ export class CaseApiService extends HttpApiServiceBase {
   getNewCase(templateId: number, customerId: number): Observable<Array<any>> {
     return this.getJson<Array<any>>(this.buildResourseUrl(`/api/case/new/${templateId}`, { cid: customerId }, false, true));
   }
+  checkBusinessRulesOnSave(data: CaseEditOutputModel, customerId: number): Observable<any> {
+    return this.postJson<boolean>(this.buildResourseUrl('/api/case/checkbusinessrulesonsave'), data, { cid: customerId });
+  }
+
 }

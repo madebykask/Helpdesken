@@ -262,114 +262,266 @@ export class CaseEditComponent {
     if (this.caseSections == null) { return null; }
     return this.caseSections.find(s => s.type == type).isEditCollapsed ? null : true;
   }
-
+  //Saving the case
   saveCase(reload: boolean = false) {
-
-    let finishingType = 0;    
-
+    let errorMessage = '';
+    let finishingType = 0;  // Assume this is determined by some form value.
+  
+    // Check for a valid closing reason and assign it to finishingType.
     if (!isNaN(this.form.getValue(CaseFieldsNames.ClosingReason))
         && this.form.getValue(CaseFieldsNames.ClosingReason) !== null
         && this.form.getValue(CaseFieldsNames.ClosingReason) !== undefined) {
       finishingType = this.form.getValue(CaseFieldsNames.ClosingReason);
     }
-
-    if (!this.canSave) { return; }
-    if (this.caseData.extendedCaseData != null && !this.isEcLoaded) {
+  
+    // Early return if conditions to save are not met.
+    if (!this.canSave) {
+      this.alertService.showMessage('Saving is currently disabled', AlertType.Error, 3);
       return;
     }
+    if (this.caseData.extendedCaseData != null && !this.isEcLoaded) {
+      this.alertService.showMessage('Extended case data is not loaded', AlertType.Error, 3);
+      return;
+    }
+  
+    // Validate extended case, then proceed with business rules check.
     this.extendedCaseValidationObserver.pipe(
       take(1),
-      switchMap((isEcValid: boolean) => {
-
-        this.isExtendedCaseInvalid = !isEcValid;
+      switchMap(isEcValid => {
+        if (!isEcValid) {
+          this.alertService.showMessage('Extended case validation failed', AlertType.Error, 3);
+          return EMPTY;
+        }
         this.form.submit();
-        
-        if (this.form.valid && isEcValid) {
-          return this.saveExtendedCase(false, finishingType).pipe(
-            take(1),
-            switchMap((isEcSaved: boolean) => {
-              if (isEcSaved) {
-                this.isLoaded = false;
-                this.isEcLoaded = false;
-                this.currentTab = TabNames.Case;
-                return this.caseSaveService.saveCase(this.form, this.caseData).pipe(
-                  take(1),
-                  map((caseId: number) => {
-                    this.caseId = caseId;
-                    return true;
-                  }),
-                  catchError((e) => {
-                    const errormessage = this.translateService.instant(e.error.message);
-                    this.alertService.showMessage(errormessage, AlertType.Error, 3);
-                    return EMPTY.pipe(defaultIfEmpty(false));
-                  })
-                );
-              } else {
-                return EMPTY.pipe(defaultIfEmpty(false));
-              }
-            }),
-            untilDestroyed(this), 
-            catchError((e) => {
-              const errormessage = this.translateService.instant(e.error.message);
-              this.alertService.showMessage(errormessage, AlertType.Error, 3);
-              return EMPTY.pipe(defaultIfEmpty(false));
-            })
-          );
-        }
-        const errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
-        this.alertService.showMessage(errormessage, AlertType.Error, 3);
-        return EMPTY.pipe(defaultIfEmpty(false));
+  
+        // Check business rules, handle rule failures and technical errors separately.
+        return this.caseSaveService.checkBusinessRulesOnSave(this.form, this.templateCid).pipe(
+          take(1),
+          catchError(e => {
+            this.alertService.showMessage('Error checking business rules: ' + e.message, AlertType.Error, 3);
+            return EMPTY;
+          })
+        );
       }),
-      untilDestroyed(this),
-      catchError((e) => throwError(e))
-    ).subscribe((isSaved: boolean) => {
-      console.log('isSaved', isSaved);
-      console.log('reload', reload);
-      if (isSaved) {
-        if (reload) {
-          if (this.caseData.id == 0) { // New case route to saved case
-            //This is wrong?
-            console.log('caseId is 0?', this.caseId);
-            this.router.navigate(['/case', this.caseId]);
-            //return;
-          } else {
-            console.log('caseId is: ', this.caseId);
-            this.ngOnInit();
-          }
-        } else {
-          console.log('no reload');
-          this.goToCases();
+      switchMap(brIsValid => {
+        if (!brIsValid) {
+          const errorMessage = this.translateService.instant('Ärendet uppfyller inte villkoren i business rules.');
+          this.alertService.showMessage(errorMessage, AlertType.Error, 3);
+          return EMPTY;
         }
+        if (!this.form.valid) {
+          const errormessage = this.translateService.instant('Fyll i obligatoriska fält.');
+          this.alertService.showMessage(errormessage, AlertType.Error, 3);
+          return EMPTY;
+        }
+  
+        // If everything is valid, proceed to save the case.
+        return this.saveExtendedCase(false, finishingType).pipe(
+          take(1),
+          switchMap(isEcSaved => {
+            if (!isEcSaved) {
+              this.alertService.showMessage('Extended case saving failed', AlertType.Error, 3);
+              return EMPTY;
+            }
+            return this.caseSaveService.saveCase(this.form, this.caseData).pipe(
+              take(1),
+              map(caseId => {
+                this.caseId = caseId;
+                this.alertService.showMessage('Case saved successfully', AlertType.Success, 3);
+                return true;
+              }),
+              catchError(e => {
+                console.error('Save case failed:', e);
+                this.alertService.showMessage('Failed to save the case', AlertType.Error, 3);
+                return EMPTY;
+              })
+            );
+          }),
+          catchError(e => {
+            console.error('Extended case save failed:', e);
+            return EMPTY;
+          })
+        );
+      }),
+      catchError(e => {
+        console.error('An error occurred:', e);
+        this.alertService.showMessage('An unexpected error occurred', AlertType.Error, 3);
+        return EMPTY;
+      })
+    ).subscribe(isSaved => {
+      if (!isSaved) {
+        this.alertService.showMessage('Saving process was interrupted', AlertType.Warning, 3);
       }
-      else{
-        {
-          if (this.caseData.id == 0) 
-            {
-              //Stay on the same page
-              console.log('no reload, stay on the same page');
-              //get the url from the browser
-              var url = this.router.url;
-              if(url.includes('template')){
-                //Navigate to template/1/4738
-                console.log('url includes template:' + url);
-                  this.router.navigate(['/case/template', this.customerId, this.templateId]);
-              }
-              else{
-                return;
-              }
-            }
-            else{
-                this.loadCaseData(this.caseId);
-            }
-          
+      else {
+        this.goToCases();
+      }
+      if (reload) {
+        if (this.caseData.id === 0) {  // New case scenario.
+          this.router.navigate(['/case', this.caseId]);
+        } else {
+          this.ngOnInit();  // Refresh the component to reflect the saved data.
         }
-        
       }
     });
+  
+    // Sync and validate extended case values at the end, outside the main save logic.
     this.syncExtendedCaseValues();
     this.validateExtendedCase(false, finishingType);
-
   }
+  
+  
+  
+  // saveCase(reload: boolean = false) {
+
+  //   let errorMessage = '';
+  //   let finishingType = 0;    
+  //   let isBusinessRulesValid = false;
+
+  //   if (!isNaN(this.form.getValue(CaseFieldsNames.ClosingReason))
+  //       && this.form.getValue(CaseFieldsNames.ClosingReason) !== null
+  //       && this.form.getValue(CaseFieldsNames.ClosingReason) !== undefined) {
+  //     finishingType = this.form.getValue(CaseFieldsNames.ClosingReason);
+  //   }
+
+  //   if (!this.canSave) {
+  //      return; 
+  //     }
+  //   if (this.caseData.extendedCaseData != null && !this.isEcLoaded) {
+  //     return;
+  //   }
+  //   this.extendedCaseValidationObserver.pipe(
+  //     take(1),
+  //     switchMap((isEcValid: boolean) => {
+  //       console.log("isEcValid: " + isEcValid);
+
+  //       this.isExtendedCaseInvalid = !isEcValid;
+  //       this.form.submit();
+      
+  //       this.caseSaveService.checkBusinessRulesOnSave(this.form, this.templateCid).pipe(
+  //         take(1),
+  //         catchError((e) => {
+  //           console.log('Error checking business rules', e);
+  //           return throwError(e);
+  //         })
+  //       ).subscribe(brIsValid => {
+  //         if (brIsValid) {
+  //           console.log('Business rules are valid');
+  //           isBusinessRulesValid = true;
+  //           console.log("isBusinessRulesValid:" +isBusinessRulesValid);
+  //         } else {
+  //           isBusinessRulesValid = false;
+  //           errorMessage = 'Business rules validation failed';
+  //           console.log(errorMessage);
+  //           console.log("isBusinessRulesValid:" +isBusinessRulesValid);
+  //           this.alertService.showMessage(errorMessage, AlertType.Error, 3);
+  //           return EMPTY.pipe(defaultIfEmpty(false));
+  //         }
+  //       });
+  //       //I never reach this even if the business rules are valid
+  //       if (this.form.valid && isEcValid && isBusinessRulesValid) {
+  //         return this.saveExtendedCase(false, finishingType).pipe(
+  //           take(1),
+  //           switchMap((isEcSaved: boolean) => {
+  //             if (isEcSaved) {
+  //               this.isLoaded = false;
+  //               this.isEcLoaded = false;
+  //               this.currentTab = TabNames.Case;
+  //               return this.caseSaveService.saveCase(this.form, this.caseData).pipe(
+  //                 take(1),
+  //                 map((caseId: number) => {
+  //                   this.caseId = caseId;
+  //                   return true;
+  //                 }),
+  //                 catchError((e) => {
+  //                   console.log("1");
+  //                   const errormessage = this.translateService.instant(e.error.message);
+  //                   this.alertService.showMessage(errormessage, AlertType.Error, 3);
+  //                   return EMPTY.pipe(defaultIfEmpty(false));
+  //                 })
+  //               );
+  //             } else {
+  //               console.log("2");
+  //               return EMPTY.pipe(defaultIfEmpty(false));
+  //             }
+  //           }),
+  //           untilDestroyed(this), 
+  //           catchError((e) => {
+  //             console.log("3");
+  //             const errormessage = this.translateService.instant(e.error.message);
+  //             this.alertService.showMessage(errormessage, AlertType.Error, 3);
+  //             return EMPTY.pipe(defaultIfEmpty(false));
+  //           })
+  //         );
+  //       }
+
+  //       console.log("4");
+  //       errorMessage = 'Please fill in all required fields';
+  //       const required = this.translateService.instant(errorMessage);
+  //       this.alertService.showMessage(required, AlertType.Error, 3);
+  //       return EMPTY.pipe(defaultIfEmpty(false));
+  //     }),
+  //     untilDestroyed(this),
+  //     catchError((e) => throwError(e))
+  //   ).subscribe((isSaved: boolean) => {
+  //     console.log('isSaved', isSaved);
+  //     console.log('reload', reload);
+  //     console.log("5");
+  //     if (isSaved) {
+  //       this.alertService.showMessage('Case saved', AlertType.Success, 3);
+  //       if (reload) {
+  //         if (this.caseData.id == 0) { // New case route to saved case
+  //           //This is wrong?
+  //           console.log('caseId is 0?', this.caseId);
+  //           this.router.navigate(['/case', this.caseId]);
+  //           console.log("7");
+  //           //return;
+  //         } else {
+  //           console.log("8");
+  //           this.ngOnInit();
+  //         }
+  //       } else {
+  //         console.log('no reload');
+  //         console.log("6");
+  //         this.goToCases();
+  //       }
+
+  //     }
+  //     // else {
+
+  //     //   if (this.caseData.id == 0) {
+  //     //     //Stay on the same page
+  //     //     console.log("9");
+  //     //     //get the url from the browser
+  //     //     var url = this.router.url;
+  //     //     if (url.includes('template')) {
+
+  //     //       console.log("10");
+  //     //       //Navigate to template/1/4738
+  //     //       console.log('url includes template:' + url);
+  //     //       //this.router.navigate(['/case/template', this.customerId, this.templateId]);
+  //     //       //this.ngOnInit();
+  //     //       isContinue = false
+  //     //       return EMPTY.pipe(defaultIfEmpty(false));
+  //     //     }
+  //     //     else {
+  //     //       console.log("11");
+  //     //       return;
+  //     //     }
+  //     //   }
+  //     //   else {
+  //     //     console.log("12");
+  //     //     this.loadCaseData(this.caseId);
+  //     //   }
+  //     // }
+  //   });
+
+
+  //   this.syncExtendedCaseValues();
+  //   this.validateExtendedCase(false, finishingType);
+
+
+
+  // }
 
   cleanTempFiles(caseId: number) {
     this.caseFileService.deleteTemplFiles(caseId, this.dataSource.currentCaseCustomerId$.value).pipe(
