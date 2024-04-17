@@ -104,7 +104,15 @@ export class CaseSaveService {
 
     return this.caseApiService.saveCaseData(model, caseInputData.customerId);
   }
-
+  public checkBusinessRulesOnSave(form: CaseFormGroup,cid: number): Observable<any>{
+    const model = new CaseEditOutputModel();
+    model.closingReason = this.getNumericValue(form, CaseFieldsNames.ClosingReason);
+    model.finishingDate = this.getDateValue(form, CaseFieldsNames.FinishingDate);
+    model.statusId = this.getNumericValue(form, CaseFieldsNames.StatusId);
+    model.stateSecondaryId = this.getNumericValue(form, CaseFieldsNames.StateSecondaryId);
+    let isValid = this.caseApiService.checkBusinessRulesOnSave(model, cid);
+    return isValid;
+    }
   private getNumericValue(form: CaseFormGroup, fieldName: string): number {
     if (this.hasValue(form, fieldName)) {
       const value = form.controls[fieldName].value;

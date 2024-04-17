@@ -1051,7 +1051,6 @@ namespace DH.Helpdesk.WebApi.Logic.Case
                 List<string> disableCaseFields = new List<string>();
                 (disableCaseFields, dontShowClosingFields) = _caseService.ExecuteBusinessActionsDisable(currentCase);
             }
-
             if (userOverview.CloseCasePermission.ToBool() && !dontShowClosingFields)
             {
                 {

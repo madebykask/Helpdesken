@@ -2,7 +2,7 @@
 
 # First install node.js version 14.17.3
 # run npm i
-# run npm install -g @angular/cli
+# run npm install -g @angular/core@8.2.14
 # run command npm run ng build
 # npm run ng serve
 # run DH.Helpdesk.WebApi
