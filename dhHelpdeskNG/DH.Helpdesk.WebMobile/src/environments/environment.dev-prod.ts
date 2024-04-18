@@ -6,7 +6,7 @@ export const environment = {
   };
 
   export const config = {
-    apiUrl: 'http://localhost:8049',
+    apiUrl: 'http://localhost:8080',
     clientId: 'hd',
     version: '#{AssemblyInfo.ProductVersion}',
     internalVersion: '#{AssemblyInfo.FileVersion}',
