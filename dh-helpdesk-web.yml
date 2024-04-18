@@ -17,6 +17,25 @@ variables:
 
 steps:
 
+- task: JavaToolInstaller@0
+  inputs:
+    versionSpec: '11'
+    jdkArchitectureOption: 'x64'
+    jdkSourceOption: 'PreInstalled'
+- script: |
+    echo "Java version:"
+    java -version
+    echo "Running build and analysis"
+  displayName: 'Run Java and Build'
+
+- task: SonarQubePrepare@5
+  inputs:
+    SonarQube: 'SonarQube'
+    scannerMode: 'MSBuild'
+    projectKey: 'Dh-DHHelpdesk_dh-helpdesk_2a1e1b2c-0f9f-4bae-9728-5379b77adc14'
+
+
+
 - task: CmdLine@2
   inputs:
     script: |
@@ -134,6 +153,13 @@ steps:
     solution: '**/dhHelpdeskNG/DH.Helpdesk.LicenseReporter/DH.Helpdesk.LicenseReporter.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.LicenseReporter"'
 
+# Run Code Analysis task
+- task: SonarQubeAnalyze@5
+
+# Publish Quality Gate Result task
+- task: SonarQubePublish@5
+  inputs:
+    pollingTimeoutSec: '300'
 
 #Copying files
 - task: CopyFiles@2
