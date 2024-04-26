@@ -106,12 +106,12 @@
 }
 
 @{
-    List<int> groups = Model.DynamicFieldModels.Select(x => x.GroupId).Distinct().OrderBy(x => x).ToList();
+    List<TypeGroupModel> groups = Model.TypeGroupModels.OrderBy(x => x.SortOrder).ToList();
     List<DynamicFieldModel> allModels = Model.DynamicFieldModels.OrderBy(x => x.GroupId).ThenBy(x => x.Position).ToList();
 
     foreach (var group in groups)
     {
-        var id = group;
+        var id = group.Id;
         var dynamicFieldModels = Model.DynamicFieldModels.Where(x => x.GroupId == id).OrderBy(x => x.Position).ToList();
 
         if (!dynamicFieldModels.Any())
@@ -119,9 +119,9 @@
             continue;
         }
 
-        var groupName = Model.TypeGroupModels.FirstOrDefault(x => x.Id == group);
+        var groupName = group.Name;
 
-        var header = groupName != null ? groupName.Name : string.Empty;
+        var header = groupName != null ? groupName : string.Empty;
         <h4>@Html.DisplayFor(m => header)</h4>
 
         <div class="row">
