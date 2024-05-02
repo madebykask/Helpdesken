@@ -9,11 +9,13 @@
     <add key="UpKeeperUrl" value="#{ApiUrl}" />
     <add key="UserName" value="#{UpKeeperUserName}" />
     <add key="Password" value="#{UpKeeperPassword}" />
+		<add key="ClientId" value="#{ClientId}"/>
     <add key="Customer_Id" value="#{UpKeeperCustID}" />
-    <add key="CreateInventory" value="true" />
+    <add key="CreateInventory" value="true" />  
     <add key="UpdateInventory" value="true" />
     <add key="UpdateUpKeeper" value="false" />
     <add key="UpKeeperOrgNo" value="#{UpKeeperOrgNo}" />
+		<add key="UpKeeperVersion" value="#{UpKeeperVersion}"/>
 
   </appSettings>
-</configuration>
+</configuration>  

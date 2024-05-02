@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 using RestSharp;
 using upKeeper2Helpdesk.entities;
 
@@ -9,13 +11,56 @@ namespace upKeeper2Helpdesk.api
     public class BaseAPI
     {
         private readonly string _BaseUrl;
-
+        private static string version = System.Configuration.ConfigurationManager.AppSettings["UpkeeperVersion"];
         public BaseAPI(string BaseUrl)
         {
             _BaseUrl = BaseUrl;
         }
 
-        public Token Login(string Username, string Password)
+        public Token Login(string username, string password, string clientId)
+        {
+
+            if(version == "5")
+            {
+                var tokenUrl = System.Configuration.ConfigurationManager.AppSettings["TokenUrl"];
+                var client = new RestClient(_BaseUrl + tokenUrl);
+                var request = new RestRequest(Method.POST);
+                request.AddHeader("Cache-Control", "no-cache");
+                request.AddHeader("Content-Type", "application/json");
+
+                // Create an object to serialize into JSON
+                var body = new
+                {
+                    Username = username,
+                    Password = password,
+                    ClientId = clientId
+                };
+                // Serialize the object to JSON and add it to the request body
+                request.AddJsonBody(body);
+
+                // Execute the request
+                var response = client.Execute(request);
+
+                Token t = null;
+
+                // Check if the response is successful
+                if (response.StatusCode == System.Net.HttpStatusCode.OK)
+                {
+                    t = JsonConvert.DeserializeObject<Token>(response.Content);
+                    t.Access_token = t.Access_token_v5;
+                }
+
+                return t;
+            }
+            else
+            {
+                return LoginOldVersion(username, password);
+            }
+
+            
+        }
+
+        public Token LoginOldVersion(string Username, string Password)
         {
 
             var client = new RestClient(_BaseUrl + "/token");
@@ -35,12 +80,8 @@ namespace upKeeper2Helpdesk.api
 
             return t;
         }
-
-
         public IEnumerable<IDictionary<string, string>> GetComputerNames(Token t, string UpKeeperOrgNo)
         {
-            //var client = new RestClient(_BaseUrl + "/api/68/ComputerNames"); //When connecting against UpKeeper test account
-            //var client = new RestClient(_BaseUrl + "/api/1/ComputerNames");
             var client = new RestClient(_BaseUrl + "/api/" + UpKeeperOrgNo + "/ComputerNames");
             var request = new RestRequest(Method.GET);
             request.AddHeader("cache-control", "no-cache");
@@ -52,13 +93,13 @@ namespace upKeeper2Helpdesk.api
             return values;
         }
 
-        public Computer GetComputer(string ComputerId, Token t, string UpKeeperOrgNo)
+        public Computer GetComputer(string ComputerId, string UpKeeperOrgNo)
         {
             Computer c = null;
 
             try
             {
-
+                Token t = Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
                 var client = new RestClient(_BaseUrl + "/api/" + UpKeeperOrgNo + "/ComputerDetail/" + ComputerId);
                 var request = new RestRequest(Method.GET);
                 request.AddHeader("cache-control", "no-cache");
@@ -87,10 +128,9 @@ namespace upKeeper2Helpdesk.api
             return c;
         }
 
-        public ComputerDetail GetComputerDetail(string ComputerId, Token t, string UpKeeperOrgNo)
+        public ComputerDetail GetComputerDetail(string ComputerId, string UpKeeperOrgNo)
         {
-            //var client = new RestClient(_BaseUrl + "/api/68/ComputerDetail/" + ComputerId); //When connecting against UpKeeper test account
-            //var client = new RestClient(_BaseUrl + "/api/1/ComputerDetail/" + ComputerId);
+            Token t = Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
             var client = new RestClient(_BaseUrl + "/api/" + UpKeeperOrgNo + "/ComputerDetail/" + ComputerId);
             var request = new RestRequest(Method.GET);
             request.AddHeader("cache-control", "no-cache");
@@ -102,9 +142,9 @@ namespace upKeeper2Helpdesk.api
             return cd;
         }
 
-        public string GetComputerByName(string Name, Token t, string UpKeeperOrgNo)
+        public string GetComputerByName(string Name, string UpKeeperOrgNo)
         {
-            //var client = new RestClient(_BaseUrl + "/api/68/ComputerByName/" + Name); //When connecting against UpKeeper test account
+            Token t = Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
             var client = new RestClient(_BaseUrl + "/api/" + UpKeeperOrgNo + "/ ComputerByName/" + Name);
             var request = new RestRequest(Method.GET);
             request.AddHeader("cache-control", "no-cache");
@@ -116,10 +156,9 @@ namespace upKeeper2Helpdesk.api
             return c;
         }
 
-        public Hardware GetHardware(string ComputerId, Token t, string UpKeeperOrgNo)
+        public Hardware GetHardware(string ComputerId, string UpKeeperOrgNo)
         {
-            //var client = new RestClient(_BaseUrl + "/api/68/Computers/" + ComputerId + "/HardwareInventoryBasic"); //When connecting against UpKeeper test account
-            //var client = new RestClient(_BaseUrl + "/api/1/Computers/" + ComputerId + "/HardwareInventoryBasic");
+            Token t = Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
             var client = new RestClient(_BaseUrl + "/api/" + UpKeeperOrgNo + "/Computers/" + ComputerId + "/HardwareInventoryBasic");
             var request = new RestRequest(Method.GET);
             request.AddHeader("cache-control", "no-cache");
@@ -131,14 +170,13 @@ namespace upKeeper2Helpdesk.api
             return h;
         }
 
-        public List<Software> GetComputerSoftware(string ComputerId, Token t, string UpKeeperOrgNo)
+        public List<Software> GetComputerSoftware(string ComputerId, string UpKeeperOrgNo)
         {
             var sl = new List<Software>();
 
             try
             {
-                //var client = new RestClient(_BaseUrl + "/api/68/Computers/" + ComputerId + "/SoftwareInventory"); //When connecting against UpKeeper test account
-                //var client = new RestClient(_BaseUrl + "/api/1/Computers/" + ComputerId + "/SoftwareInventory");
+                Token t = Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
                 var client = new RestClient(_BaseUrl + "/api/"  + UpKeeperOrgNo + "/Computers/" + ComputerId + "/SoftwareInventory");
                 var request = new RestRequest(Method.GET);
                 request.AddHeader("cache-control", "no-cache");
@@ -169,12 +207,11 @@ namespace upKeeper2Helpdesk.api
             return sl;
         }
 
-        public List<Hotfix> GetComputerUpdates(string ComputerId, Token t, string UpKeeperOrgNo)
+        public List<Hotfix> GetComputerUpdates(string ComputerId, string UpKeeperOrgNo)
         {
             var hl = new List<Hotfix>();
 
-            //var client = new RestClient(_BaseUrl + "/api/68/Computers/" + ComputerId + "/UpdateInventory"); //When connecting against UpKeeper test account
-            //var client = new RestClient(_BaseUrl + "/api/1/Computers/" + ComputerId + "/UpdateInventory");
+            Token t = Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
             var client = new RestClient(_BaseUrl + "/api/"  + UpKeeperOrgNo + "/Computers/" + ComputerId + "/UpdateInventory");
             var request = new RestRequest(Method.GET);
             request.AddHeader("cache-control", "no-cache");
@@ -196,11 +233,12 @@ namespace upKeeper2Helpdesk.api
             return hl;
         }
 
-        public string SaveComputerDetails(string Id, ComputerDetail cd, Token t, string UpKeeperOrgNo)
+        public string SaveComputerDetails(string Id, ComputerDetail cd,string UpKeeperOrgNo)
         {
             try
             {
-                //var client = new RestClient(_BaseUrl + "/api/68/Computer/" + Id); //When connecting against UpKeeper test account
+                Token t = Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
+
                 var client = new RestClient(_BaseUrl + "/api/" + UpKeeperOrgNo + "/Computer/" + Id);
                 var request = new RestRequest(Method.PUT);
                 request.AddHeader("cache-control", "no-cache");
@@ -219,9 +257,9 @@ namespace upKeeper2Helpdesk.api
         }
 
 
-        public void DeleteComputer(string Id, Token t, string UpKeeperOrgNo)
+        public void DeleteComputer(string Id, string UpKeeperOrgNo)
         {
-            //var client = new RestClient(_BaseUrl + "/api/68/Computer/" + Id); //When connecting against UpKeeper test account
+            Token t = Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
             var client = new RestClient(_BaseUrl + "/api/" + UpKeeperOrgNo + "/Computer/" + Id);
             var request = new RestRequest(Method.DELETE);
             request.AddHeader("cache-control", "no-cache");
