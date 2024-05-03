@@ -13,7 +13,7 @@
   </configSections>
 
   <appSettings>
-    <add key="LoginMode" value="Microsoft" />
+    <add key="LoginMode" value="#{LoginMode}" />
     <add key="ClientValidationEnabled" value="true" />
     <add key="UnobtrusiveJavaScriptEnabled" value="true" />
     <add key="dh_filesDirectory" value="#{FilesDirectory}" />
@@ -33,12 +33,12 @@
 
 
     <add key="webpages:Enabled" value="false" />
-    <add key="ClientId" value="#{SelfserviceClientId}" /> 
-    <add key="Tenant" value="#{SelfserviceTenant}" /> <!--If your application supports My organization only, replace this value with the Tenant Id or Tenant name (for example, contoso.onmicrosoft.com)
+    <add key="ClientId" value="#{ClientId}" /> 
+    <add key="Tenant" value="#{Tenant}" /> <!--If your application supports My organization only, replace this value with the Tenant Id or Tenant name (for example, contoso.onmicrosoft.com)
     If your application supports Accounts in any organizational directory, replace this value with "organizations"
     If your application supports All Microsoft account users, replace this value with "common"-->
-    <add key="Authority" value="#{SelfserviceAuthority}" />
-    <add key="RedirectUri" value="#{SelfserviceRedirectUri}" />
+    <add key="Authority" value="#{Authority}" />
+    <add key="RedirectUri" value="#{RedirectUri}" />
   </appSettings>
 
   <!--
@@ -76,7 +76,7 @@
         <add assembly="System.Web.WebPages, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31BF3856AD364E35" />
       </assemblies>
     </compilation>
-	  <authentication mode="None" />
+	  <authentication mode="#{AuthenticationMode}" />
 	  <identity impersonate="false" />
     <pages controlRenderingCompatibilityVersion="4.0">
       <namespaces>
@@ -209,6 +209,33 @@
       <provider invariantName="System.Data.SqlClient" type="System.Data.Entity.SqlServer.SqlProviderServices, EntityFramework.SqlServer" />
     </providers>
   </entityFramework>
+	#{if IsSingleSignOnConfigurable}
+	<!--This is for Single Sign-->
+	<system.identityModel>
+		<identityConfiguration>
+			<audienceUris>
+				<add value="#{SSOAdudienceUri}" />
+			</audienceUris>
+			<issuerNameRegistry type="System.IdentityModel.Tokens.ValidatingIssuerNameRegistry, System.IdentityModel.Tokens.ValidatingIssuerNameRegistry">
+				<authority name="#{SSOIssuerTrust}">
+					<keys>
+						<add thumbprint="#{SSOIssuerTumbprint}" />
+					</keys>
+					<validIssuers>
+						<add name="#{SSOIssuerTrust}" />
+					</validIssuers>
+				</authority>
+			</issuerNameRegistry>
+			<certificateValidation certificateValidationMode="None" />
+		</identityConfiguration>
+	</system.identityModel>
 
+	<system.identityModel.services>
+		<federationConfiguration>
+			<cookieHandler requireSsl="false" />
+			<wsFederation passiveRedirectEnabled="true" issuer="#{AdfsIssuer}" realm="#{AdfsIssuerRealm}" requireHttps="#{AdfsRequireHttps}" />
+		</federationConfiguration>
+	</system.identityModel.services>
+	#{/if}
 
 </configuration>
