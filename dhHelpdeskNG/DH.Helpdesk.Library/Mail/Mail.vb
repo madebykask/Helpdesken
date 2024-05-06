@@ -188,6 +188,11 @@ Public Class Mail
             sSubject = Replace(sSubject, getMailTemplateIdentifier("Performer_Email"), objCase.PerformerEMail)
             sBody = Replace(sBody, getMailTemplateIdentifier("Performer_Email"), objCase.PerformerEMail)
 
+
+            '[#73]
+            sSubject = Replace(sSubject, getMailTemplateIdentifier("IsAbout_PersonsName"), objCase.IsAbout_PersonsName)
+            sBody = Replace(sBody, getMailTemplateIdentifier("IsAbout_PersonsName"), objCase.IsAbout_PersonsName)
+
             '[#80]
             sSubject = Replace(sSubject, getMailTemplateIdentifier("AutoCloseDays"), objCase.AutoCloseDays)
             sBody = Replace(sBody, getMailTemplateIdentifier("AutoCloseDays"), objCase.AutoCloseDays)

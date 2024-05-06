@@ -147,7 +147,7 @@ Imports System.Text.RegularExpressions
     End Function
 
     Public Shared Sub executeSQL(sConnectionstring As String, sSql As String)
-        DbHelper.executeNonQuery(sConnectionString, sSql, CommandType.Text)
+        DbHelper.executeNonQuery(sConnectionstring, sSql, CommandType.Text)
     End Sub
 
     Public Shared Function getMailTemplateIdentifier(ByVal FieldName As String)
@@ -214,6 +214,8 @@ Imports System.Text.RegularExpressions
                 Return "[#71]"
             Case "PERFORMER_EMAIL"
                 Return "[#72]"
+            Case "ISABOUT_PERSONSNAME"
+                Return "[#73]"
             Case "AUTOCLOSEDAYS"
                 Return "[#80]"
             Case Else
@@ -221,11 +223,11 @@ Imports System.Text.RegularExpressions
         End Select
     End Function
 
-    #Region "Database Helper Methods"
+#Region "Database Helper Methods"
 
-   
 
-    #End Region
+
+#End Region
 
     Public Shared Sub executeSQLHTTP(ByVal sSQL As String)
         Dim sURL As String
@@ -339,7 +341,7 @@ Imports System.Text.RegularExpressions
     End Function
 
     Public Shared Function extractAnswerFromBody(ByVal sBodyText As String, ByVal sEMailAnswerSeparator As String) As String
-        
+
         Dim aEMailAnswerSeparator() As String
         Dim iPos As Integer = 0
         Dim iPos_new As Integer = 0
@@ -351,10 +353,10 @@ Imports System.Text.RegularExpressions
 
             Dim match As Match = Regex.Match(sBodyText, emailSeparatorPattern, RegexOptions.IgnoreCase Or RegexOptions.Multiline)
 
-            If match.Success 
+            If match.Success Then
 
                 iPos = match.Index
-            
+
                 ' Compare with prev results which match is the closest one to the beginning
                 If iPos > 0 Then
                     If iPos_new = 0 Then
@@ -367,7 +369,7 @@ Imports System.Text.RegularExpressions
 
                 End If
             End If
-            
+
         Next
 
         If iPos_new = 0 Then
@@ -595,21 +597,21 @@ Imports System.Text.RegularExpressions
         createMessageId = sTemp0 & sTemp1 & "@" & sTemp2
     End Function
 
-    Public Shared Function GetAppSettingValue(key As String) as String
-        Dim val as String = ConfigurationManager.AppSettings(key)
-        Return If (IsNullOrEmpty(val), "", val)
+    Public Shared Function GetAppSettingValue(key As String) As String
+        Dim val As String = ConfigurationManager.AppSettings(key)
+        Return If(IsNullOrEmpty(val), "", val)
     End Function
 
-    Public Shared Function IsNullOrEmpty(val as String, Optional checkForWhitespace As Boolean = True)
+    Public Shared Function IsNullOrEmpty(val As String, Optional checkForWhitespace As Boolean = True)
         'Extra check for VB.NET
-        If val Is Nothing Then 
-            Return true
+        If val Is Nothing Then
+            Return True
         End If
-        
+
         If (checkForWhitespace) Then
             Return String.IsNullOrWhiteSpace(val)
-         Else 
-             Return String.IsNullOrEmpty(val)
+        Else
+            Return String.IsNullOrEmpty(val)
         End If
     End Function
 

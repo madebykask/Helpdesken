@@ -1787,6 +1787,7 @@ namespace DH.Helpdesk.Services.Services
             ret.Add(new Field { Key = "[#70]", StringValue = admin != null ? adminFields.Phone : string.Empty });
             ret.Add(new Field { Key = "[#71]", StringValue = admin != null ? adminFields.CellPhone : string.Empty });
             ret.Add(new Field { Key = "[#72]", StringValue = admin != null ? adminFields.Email : string.Empty });
+            ret.Add(new Field { Key = "[#73]", StringValue = string.IsNullOrEmpty(c.IsAbout_PersonsName) ? string.Empty : c.IsAbout_PersonsName });
             var priority = c.Priority_Id.HasValue ? _priorityService.GetPriority(c.Priority_Id.Value) : null;
             ret.Add(new Field { Key = "[#12]", StringValue = priority != null ? priority.Name : string.Empty });
             ret.Add(new Field { Key = "[#20]", StringValue = priority != null ? priority.Description : string.Empty });
