@@ -6,16 +6,16 @@
   <appSettings>
     <add key="HelpdeskDB" value="Data Source=#{DatabaseServer};Initial Catalog=#{DatabaseName};User Id=#{DatabaseUser};Password=#{DatabasePassword}" />
     <add key="UpKeeperUrl" value="#{ApiUrl}" />
-		<add key="TokenUrl" value="#{TokenUrl}"/>
+		<add key="TokenUrl" value="#{UpkeeperTokenUrl}"/><!--  for version 5.1 it's /auth/login, older it's /token-->
     <add key="UserName" value="#{UpKeeperUserName}" />
     <add key="Password" value="#{UpKeeperPassword}" />
-		<add key="ClientId" value="#{ClientId}"/>
+		<add key="ClientId" value="#{UpkeeperClientId}"/><!--  for version 5.1 it's ngAuthApp, leave empty otherwise -->
     <add key="Customer_Id" value="#{UpKeeperCustID}" />
     <add key="CreateInventory" value="true" />  
     <add key="UpdateInventory" value="true" />
     <add key="UpdateUpKeeper" value="false" />
     <add key="UpKeeperOrgNo" value="#{UpKeeperOrgNo}" />
-		<add key="UpKeeperVersion" value="#{UpKeeperVersion}"/>
+		<add key="UpKeeperVersion" value="#{UpKeeperVersion}"/><!-- 5 for version 5.1, otherwise empty-->
 		<add key="ClientSettingsProvider.ServiceUri" value=""/>
   </appSettings>
 </configuration>  
