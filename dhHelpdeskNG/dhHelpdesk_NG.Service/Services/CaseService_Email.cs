@@ -885,7 +885,7 @@ namespace DH.Helpdesk.Services.Services
             }
         }
 
-        private List<FeedbackField> GetFeedbackFields(int mailTemplateId, Case newCase, CaseMailSetting cms, List<Field> fields,
+        public List<FeedbackField> GetFeedbackFields(int mailTemplateId, Case newCase, CaseMailSetting cms, List<Field> fields,
             string recepient, ref string body, IList<string> filterFieldsEmails, bool applyFeedbackFilter)
         {
             var templateFields = new List<FeedbackField>();
@@ -992,7 +992,7 @@ namespace DH.Helpdesk.Services.Services
             return emailList.ToList();
         }
 
-        private void UpdateFeedbackStatus(List<FeedbackField> templateFields)
+        public void UpdateFeedbackStatus(List<FeedbackField> templateFields)
         {
 
             if (templateFields != null && templateFields.Any())

@@ -169,6 +169,10 @@
       <Project>{300807ad-e3da-4bf5-93fc-2503d617edc1}</Project>
       <Name>DH.Helpdesk.Library</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DH.Helpdesk.VBCSharpBridge\DH.Helpdesk.VBCSharpBridge.csproj">
+      <Project>{468e0378-c78b-4da0-899c-81fab600e45e}</Project>
+      <Name>DH.Helpdesk.VBCSharpBridge</Name>
+    </ProjectReference>
     <ProjectReference Include="..\dhHelpdesk_NG.Common\DH.Helpdesk.Common.csproj">
       <Project>{90defcb6-e297-4f99-a532-da1e0522aa49}</Project>
       <Name>DH.Helpdesk.Common</Name>

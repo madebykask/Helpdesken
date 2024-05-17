@@ -486,24 +486,6 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                     firstEmail = "";
                 }
 
-                //if(emailLogs.Any())
-                //{
-                //    if (!String.IsNullOrEmpty(emailLogs.Where(x => x.MailId == 1).FirstOrDefault()?.From))
-                //    {
-                //        firstEmail = emailLogs.Where(x => x.MailId == 1).FirstOrDefault().From;
-                //    }
-                //    else
-                //    {
-                //        //Ersätta med helpdeskAdress?
-                //        firstEmail = "";
-                //    }
-
-                //}
-                //else
-                //{
-                //    //Ersätta med helpdeskAdress?
-                //    firstEmail = "";
-                //}
                 var oldLogs = _logService.GetLogsByCaseId(newCase.Id).Where(x => x.Case_Id == log.CaseId && x.Id != log.Id).OrderByDescending(z => z.Id).ToList();
                 if (oldLogs.Any())
                 {
@@ -545,35 +527,6 @@ namespace DH.Helpdesk.Services.Infrastructure.Email.Concrete
                     }
                    
                 }
-                //Plus Extra body with Description from Case
-                //*Reported by is descided by this rule:
-                //1.User_ID - But never show personal emails, instead look for the first email in emaillogs with mailId 1
-                //2.RegUserName
-                //3.RegUserID
-                //if (newCase.User_Id != null)
-                //{
-                //    if (!String.IsNullOrEmpty(firstEmail))
-                //    {
-                //        userEmailToShow = firstEmail;
-                //    }
-                //    else
-                //    {
-                //        userEmailToShow = "";
-                //    }
-                //}
-                //else if (!String.IsNullOrEmpty(newCase.RegUserName))
-                //{
-                //    userEmailToShow = newCase.RegUserName;
-                //}
-                //else if (newCase.RegUserId != null)
-                //{
-                //    //Check this
-                //    userEmailToShow = newCase.RegUserId;
-                //}
-                //else
-                //{
-                //    userEmailToShow = "";
-                //}
 
                 correctedDate = TimeZoneInfo.ConvertTimeFromUtc(newCase.RegTime, customerTimeZone);
                 var description = newCase.Description.Replace("<p><br></p>", "").Replace("<p>\r\n</p>", "").Replace("<o:p>&nbsp;</o:p>", "");

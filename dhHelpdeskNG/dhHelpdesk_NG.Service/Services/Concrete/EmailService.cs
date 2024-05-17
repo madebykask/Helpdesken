@@ -221,7 +221,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
             }
             return res;
         }
-
+        //Use this from schedule
         public EmailResponse SendEmail(
             EmailLog el,
             string from,
@@ -260,7 +260,7 @@ namespace DH.Helpdesk.Services.Services.Concrete
         }
 
 
-        private MailMessage GetMailMessage(
+        public MailMessage GetMailMessage(
             string from,
             string to,
             string cc,

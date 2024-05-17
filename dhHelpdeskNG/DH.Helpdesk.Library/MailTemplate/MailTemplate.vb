@@ -6,6 +6,7 @@ Public Class MailTemplate
     Private msSubject As String
     Private msBody As String
     Private msSendMethod As EmailSendMethod
+    Private msIncludeLogExternal As Boolean
 #End Region
 
 #Region "Constructors"
@@ -15,6 +16,7 @@ Public Class MailTemplate
         msSubject = dr("Subject")
         msBody = dr("Body")
         msSendMethod = dr("SendMethod")
+        msIncludeLogExternal = dr("IncludeLogText_External")
     End Sub
 
 #End Region
@@ -53,6 +55,14 @@ Public Class MailTemplate
         End Get
         Set(ByVal Value As String)
             msSendMethod = Value
+        End Set
+    End Property
+    Public Property IncludeLogExternal() As String
+        Get
+            Return msIncludeLogExternal
+        End Get
+        Set(ByVal Value As String)
+            msIncludeLogExternal = Value
         End Set
     End Property
 #End Region

@@ -19,7 +19,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Mappers.Feedback
                 FieldType = FieldTypes.String,
                 Key = ffield.Key,
                 StringValue = ffield.StringValue,
-                DateTimeValue = ffield.DateTimeValue
+                DateTimeValue = ffield.DateTimeValue 
             };
         }
     }

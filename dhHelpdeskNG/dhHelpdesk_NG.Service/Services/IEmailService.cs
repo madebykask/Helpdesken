@@ -11,6 +11,7 @@ namespace DH.Helpdesk.Services.Services
 
     public interface IEmailService
     {
+        MailMessage GetMailMessage(string from, string to, string cc, string subject, string body, List<Field> fields, string mailMessageId = "", bool highPriority = false, List<MailFile> files = null, string siteSelfService = "", string siteHelpdesk = "", EmailType emailType = EmailType.ToMail, string siteSelfServiceMergeParent = "");
         #region Public Methods and Operators
 
         string GetMailMessageId(string helpdeskFromAddress);
