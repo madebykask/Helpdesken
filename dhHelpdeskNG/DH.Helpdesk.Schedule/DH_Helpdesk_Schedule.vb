@@ -4,9 +4,6 @@ Imports DH.Helpdesk.Library
 Imports System.IO
 Imports DH.Helpdesk.Library.SharedFunctions
 Imports DH.Helpdesk.Common.Constants
-Imports DH.Helpdesk.Common.Enums
-Imports System.Linq
-Imports DH.Helpdesk.Common.Extensions.[Object]
 
 Module DH_Helpdesk_Schedule
     'Private objLogFile As StreamWriter
@@ -36,13 +33,13 @@ Module DH_Helpdesk_Schedule
         Dim aArguments() As String = sCommand.Split(",")
 
 
-
-        'Debugging autoclose - testmode
+        'Debugging lines for autoclose - testmode
         Dim sConnectionstringTest = GetConnectionString(aArguments)
         openLogFile()
         objLogFile.WriteLine(Now() & ", CaseAutoClose")
         caseAutoClose(sConnectionstringTest)
         closeLogFile()
+        'end test autoclose
 
         If aArguments.Length > 0 Then
 
@@ -257,7 +254,7 @@ Module DH_Helpdesk_Schedule
 
             objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailPlanDate, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
-            If Not objMailTemplate Is Nothing Then
+            If objMailTemplate IsNot Nothing Then
                 sMessageId = createMessageId(objCustomer.HelpdeskEMail)
 
                 Dim iCaseHistory_Id As Integer = objCaseData.saveCaseHistory(objCase.Id, "DH Helpdesk")
@@ -306,7 +303,7 @@ Module DH_Helpdesk_Schedule
 
             objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailWatchDate, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
-            If Not objMailTemplate Is Nothing Then
+            If objMailTemplate IsNot Nothing Then
                 Dim iCaseHistory_Id As Integer = objCaseData.saveCaseHistory(objCase.Id, "DH Helpdesk")
 
                 sMessageId = createMessageId(objCustomer.HelpdeskEMail)
@@ -382,7 +379,7 @@ Module DH_Helpdesk_Schedule
             If objCase.Performer_User_Id <> 0 And objCase.PerformerEMail <> "" Then
                 objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailAssignCasePerformer, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
-                If Not objMailTemplate Is Nothing Then
+                If objMailTemplate IsNot Nothing Then
                     sMessageId = createMessageId(objCustomer.HelpdeskEMail)
 
                     Dim sSendTime As DateTime = Date.Now()
@@ -395,7 +392,7 @@ Module DH_Helpdesk_Schedule
             End If
 
 
-            If Not objCaseSolution.ExtendedCaseFormId Is Nothing Then
+            If objCaseSolution.ExtendedCaseFormId IsNot Nothing Then
                 If objCaseSolution.ExtendedCaseFormId.HasValue And objCaseSolution.ExtendedCaseFormId.Value > 0 Then
                     Dim extendedCaseDataId = objExtendedCaseService.CreateExtendedCaseData(objCaseSolution.ExtendedCaseFormId.Value)
                     objCaseData.CreateExtendedCaseConnection(objCase.Id, objCaseSolution.ExtendedCaseFormId.Value, extendedCaseDataId)
@@ -459,7 +456,7 @@ Module DH_Helpdesk_Schedule
             If objCase.Persons_EMail <> "" Then
                 objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailReminderNotifier, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
-                If Not objMailTemplate Is Nothing Then
+                If objMailTemplate IsNot Nothing Then
                     sMessageId = createMessageId(objCustomer.HelpdeskEMail)
 
                     Dim sSendTime As DateTime = Date.Now()
@@ -517,9 +514,8 @@ Module DH_Helpdesk_Schedule
                 Dim iCaseHistory_Id As Integer = objCaseData.saveCaseHistory(objCase.Id, "DH Helpdesk")
 
                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
-                Dim textExternal As String = objTextTranslationData.getTextTranslation("Ärendet autoavslutat", objCase.RegLanguage_Id)
                 ' Save Logs (Logga händelsen)
-                Dim iLog_Id As Integer = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", textExternal, 0, "DH Helpdesk", iCaseHistory_Id, objCase.StateSecondary_FinishingCause_Id)
+                Dim iLog_Id As Integer = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", "", 0, "DH Helpdesk", iCaseHistory_Id, objCase.StateSecondary_FinishingCause_Id)
                 objCaseData.closeCase(objCase)
 
                 objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailCaseClosed, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
@@ -529,7 +525,7 @@ Module DH_Helpdesk_Schedule
 
                     'Get surveyfields
                     Dim caseService As New DH.Helpdesk.VBCSharpBridge.CaseExposure
-                    Dim bodyWithSurvey As String = caseService.GetSurveyBodyString(objCase.Customer_Id, objCase.Id, objMailTemplate.Id, objCase.Persons_EMail, objCustomer.HelpdeskEMail, ConfigurationManager.AppSettings("HelpdeskAddress"), objMailTemplate.Body)
+                    Dim bodyWithSurvey As String = caseService.GetSurveyBodyString(objCase.Customer_Id, objCase.Id, objMailTemplate.Id, objCase.Persons_EMail, objCustomer.HelpdeskEMail, objGlobalSettings.ServerPort, objGlobalSettings.ServerName, objMailTemplate.Body)
                     'Replace surveyfields and add it to body
                     objMailTemplate.Body = bodyWithSurvey
                     Dim caseEmailer As New DH.Helpdesk.VBCSharpBridge.CaseEmailExposure
@@ -1296,75 +1292,4 @@ Module DH_Helpdesk_Schedule
         objLogFile.Close()
     End Sub
 
-    'Public Function GetExternalLogTextHistory(ByVal newCase As CCase, ByVal helpdeskMailFromAddress As String, ByVal log As CCaseLog) As String
-    '    Dim extraBody As String = ""
-    '    Try
-    '        Dim userEmailToShow As String = helpdeskMailFromAddress
-    '        Dim objCustomerData As New CustomerData
-    '        Dim curCustomer As Customer = objCustomerData.getCustomerById(newCase.Customer_Id)
-    '        Dim customerTimeZone As TimeZoneInfo = TimeZoneInfo.FindSystemTimeZoneById(curCustomer.TimeZoneId)
-    '        Dim correctedDate As DateTime = New DateTime()
-    '        Dim firstEmail As String = ""
-
-    '        Dim emailLogs = _emailLogRepository.GetEmailLogsByCaseId(newCase.Id).OrderByDescending(Function(z) z.Id).ToList()
-    '        Dim historyLogs = _caseHistoryRepository.GetCaseHistoryByCaseId(newCase.Id)
-
-    '        If historyLogs.Any() Then
-    '            historyLogs = historyLogs.OrderBy(Function(z) z.Id).ToList()
-    '            Dim historyEmail As String = historyLogs.FirstOrDefault().PersonsEmail
-    '            If Not String.IsNullOrEmpty(historyEmail) Then
-    '                firstEmail = historyEmail
-    '            Else
-    '                firstEmail = ""
-    '            End If
-    '        Else
-    '            firstEmail = ""
-    '        End If
-
-    '        Dim oldLogs = _logService.GetLogsByCaseId(newCase.Id).Where(Function(x) x.Case_Id = log.CaseId AndAlso x.Id <> log.Id).OrderByDescending(Function(z) z.Id).ToList()
-    '        If oldLogs.Any() Then
-    '            For Each post In oldLogs
-    '                ' Checking if external lognote is not empty
-    '                If post.Text_External IsNot Nothing AndAlso post.Text_External.Replace("<p><br></p>", "") <> "" Then
-    '                    If post.Text_External.EndsWith("<div><p><b>") Then
-    '                        post.Text_External = post.Text_External.Replace("<div><p><b>", "")
-    '                    End If
-    '                    post.Text_External = post.Text_External.Replace("<p><br></p>", "").Replace("<p>" & vbCrLf & "</p>", "").Replace("<o:p>&nbsp;</o:p>", "")
-
-    '                    ' Check if oldLogs contains an id corresponding LogId in EmailLog
-    '                    Dim emailLogExists = emailLogs.FirstOrDefault(Function(x) x.Log_Id IsNot Nothing AndAlso x.Log_Id = post.Id)
-
-    '                    If Not String.IsNullOrEmpty(post.RegUser) Then
-    '                        userEmailToShow = post.RegUser
-    '                    ElseIf emailLogExists IsNot Nothing AndAlso Not String.IsNullOrEmpty(emailLogExists.From) Then
-    '                        userEmailToShow = emailLogExists.From
-    '                    Else
-    '                        userEmailToShow = helpdeskMailFromAddress
-    '                    End If
-
-    '                    ' Get corrected date and time for the customer
-    '                    correctedDate = TimeZoneInfo.ConvertTimeFromUtc(post.LogDate, customerTimeZone)
-
-    '                    extraBody += "<br /><hr>"
-    '                    extraBody += "<div id=""externalLogNotesHistory"">"
-    '                    extraBody += "<font face=""verdana"" size=""2""><strong>" + correctedDate.ToString("g") + "</strong>"
-    '                    extraBody += "<br />" + userEmailToShow
-    '                    extraBody += "<br />" + post.Text_External + "</font></div>"
-    '                End If
-    '            Next
-    '        End If
-
-    '        correctedDate = TimeZoneInfo.ConvertTimeFromUtc(newCase.RegTime, customerTimeZone)
-    '        Dim description As String = newCase.Description.Replace("<p><br></p>", "").Replace("<p>" & vbCrLf & "</p>", "").Replace("<o:p>&nbsp;</o:p>", "")
-    '        extraBody += "<br /><hr>"
-    '        extraBody += "<div id=""externalLogNotesDescription"">"
-    '        extraBody += "<font face=""verdana"" size=""2""><strong>" + correctedDate.ToString("g") + "</strong>"
-    '        extraBody += "<br />" + firstEmail
-    '        extraBody += "<br />" + description + "</font></div>"
-    '        Return extraBody
-    '    Catch ex As Exception
-    '        ' Add to error log?
-    '        Return extraBody
-    '    End Try
-    'End Function
 End Module

@@ -1,23 +1,19 @@
-﻿using DH.Helpdesk.Common.Enums.BusinessRule;
-using DH.Helpdesk.Domain;
+﻿using DH.Helpdesk.Domain;
 using DH.Helpdesk.VBCSharpBridge.Interfaces;
 using DH.Helpdesk.VBCSharpBridge.Models;
 using DH.Helpdesk.VBCSharpBridge.Resolver;
 using DH.Helpdesk.Services.Services;
-using Newtonsoft.Json;
 using System;
 using DH.Helpdesk.BusinessData.Models.Case;
 using System.Collections.Generic;
 using DH.Helpdesk.BusinessData.Models.Feedback;
-using System.Net.Mail;
-using DH.Helpdesk.Services.Services.Concrete;
 
 namespace DH.Helpdesk.VBCSharpBridge
 {
     public class CaseExposure : ICaseExposure
     {
-
-        private ICaseService _caseService;
+        private string _absoluteUri = "";
+        private readonly ICaseService _caseService;
 
         public CaseExposure()
         {
@@ -66,20 +62,29 @@ namespace DH.Helpdesk.VBCSharpBridge
         {
             return _caseService.GetCaseById(caseId);
         }
-        public string GetSurveyBodyString(int customerId, int caseId, int mailtemplateId, string toEmail, string helpdeskEmail, string helpdeskAddress, ref string body)
+        public string GetSurveyBodyString(int customerId, int caseId, int mailtemplateId, string toEmail, string helpdeskEmail, string port, string helpdeskAddress, ref string body)
         {
             CaseExposure caseExposure = new CaseExposure();
             Case caseObj = caseExposure.GetCaseById(caseId);
-            CaseMailSetting caseMailSetting = new CaseMailSetting(string.Empty, helpdeskEmail, helpdeskAddress, 1);
+
+            if(port == "443")
+            {
+                _absoluteUri = "https://" + helpdeskAddress;
+            }
+            else
+            {
+                _absoluteUri = "http://" + helpdeskAddress;
+            }
+            CaseMailSetting caseMailSetting = new CaseMailSetting(string.Empty, helpdeskEmail, _absoluteUri, 1);
+
             List<Field> fields = new List<Field>();
             List<FeedbackField> feedbackFeelds = _caseService.GetFeedbackFields(mailtemplateId, caseObj, caseMailSetting, fields, toEmail, ref body, null, true);
+            
+            CaseEmailBridge caseEmailBridge = new CaseEmailBridge();
+            caseEmailBridge.SurveyBody = AddInformationToMailBodyAndSubject(body, feedbackFeelds);
 
-            //MailMessage mail = new MailMessage();
-            //CaseEmailExposure caseEmailExposure = new CaseEmailExposure();
-            //mail = caseEmailExposure.GetMailMessage(customerId, caseId, mailtemplateId, toEmail, helpdeskEmail, fields);
-            string apa = AddInformationToMailBodyAndSubject(body, feedbackFeelds);
             UpdateFeedbackStatus(feedbackFeelds);
-            return apa;
+            return caseEmailBridge.SurveyBody;
         }
         private string AddInformationToMailBodyAndSubject(string text, List<FeedbackField> fields)
         {
