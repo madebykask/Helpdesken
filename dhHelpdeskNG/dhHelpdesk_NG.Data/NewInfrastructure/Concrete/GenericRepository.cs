@@ -115,19 +115,19 @@ namespace DH.Helpdesk.Dal.NewInfrastructure.Concrete
         /// <param name="newList">New selection, list of entries to what a repository needs to be updated to</param>
         /// /// <param name="comparePredicate">Comparer expression used to compare old and new entries</param>
         /// <returns></returns>
-        //public void MergeList(Expression<Func<TEntity, bool>> currentPredicate, IList<TEntity> newList, Func<TEntity, TEntity, bool> comparePredicate)
-        //{
-        //    var current = GetAll().Where(currentPredicate).ToList();
+        public void MergeList(Expression<Func<TEntity, bool>> currentPredicate, IList<TEntity> newList, Func<TEntity, TEntity, bool> comparePredicate)
+        {
+            var current = GetAll().Where(currentPredicate).ToList();
 
-        //    foreach (var toDel in current.Where(x => !newList.Any(y => comparePredicate(x, y))).ToList())
-        //    {
-        //        Delete(toDel);
-        //    }
-        //    foreach (var toIns in newList.Where(x => !current.Any(y => comparePredicate(x, y))).ToList())
-        //    {
-        //        Add(toIns);
-        //    }
-        //}
+            foreach (var toDel in current.Where(x => !newList.Any(y => comparePredicate(x, y))).ToList())
+            {
+                Delete(toDel);
+            }
+            foreach (var toIns in newList.Where(x => !current.Any(y => comparePredicate(x, y))).ToList())
+            {
+                Add(toIns);
+            }
+        }
         public void MergeList(IList<TEntity> current, IList<TEntity> newList, Func<TEntity, TEntity, bool> comparePredicate)
         {
             foreach (var toDel in current.Where(x => !newList.Any(y => comparePredicate(x, y))).ToList())
