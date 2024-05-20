@@ -206,6 +206,7 @@
             }
         }
 
+        //Old version of UpdateCircular  - KA
         //public void UpdateCircular(CircularForUpdate businessModel, List<int> caseIds = null)
         //{
         //    using (IUnitOfWork uof = this.unitOfWorkFactory.Create())
@@ -304,6 +305,8 @@
         //        uof.Save();
         //    }
         //}
+
+        //New version of UpdateCircular  - 240520 KA
         public void UpdateCircular(CircularForUpdate businessModel, List<int> caseIds = null)
         {
             using (IUnitOfWork uof = this.unitOfWorkFactory.Create())

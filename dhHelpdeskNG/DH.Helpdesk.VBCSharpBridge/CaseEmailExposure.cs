@@ -1,16 +1,7 @@
 ﻿using DH.Helpdesk.Services.Infrastructure.Email;
 using DH.Helpdesk.Domain;
-using DH.Helpdesk.VBCSharpBridge.Interfaces;
-using DH.Helpdesk.VBCSharpBridge.Models;
 using DH.Helpdesk.VBCSharpBridge.Resolver;
-using DH.Helpdesk.Services.Services;
 using DH.Helpdesk.BusinessData.Models.Case;
-using System.Net.Mail;
-using System.Collections.Generic;
-using System.Reflection;
-using DH.Helpdesk.BusinessData.Models.MailTemplates;
-using DH.Helpdesk.Domain.MailTemplates;
-using DH.Helpdesk.BusinessData.Models.Feedback;
 
 namespace DH.Helpdesk.VBCSharpBridge
 {

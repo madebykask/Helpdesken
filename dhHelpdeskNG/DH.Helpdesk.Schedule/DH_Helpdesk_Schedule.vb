@@ -33,13 +33,13 @@ Module DH_Helpdesk_Schedule
         Dim aArguments() As String = sCommand.Split(",")
 
 
-        'Debugging lines for autoclose - testmode
-        Dim sConnectionstringTest = GetConnectionString(aArguments)
-        openLogFile()
-        objLogFile.WriteLine(Now() & ", CaseAutoClose")
-        caseAutoClose(sConnectionstringTest)
-        closeLogFile()
-        'end test autoclose
+        ''Debugging lines for autoclose - testmode
+        'Dim sConnectionstringTest = GetConnectionString(aArguments)
+        'openLogFile()
+        'objLogFile.WriteLine(Now() & ", CaseAutoClose")
+        'caseAutoClose(sConnectionstringTest)
+        'closeLogFile()
+        ''end test autoclose
 
         If aArguments.Length > 0 Then
 
@@ -499,8 +499,8 @@ Module DH_Helpdesk_Schedule
         ' Hämta ärenden
         Dim colCase As Collection = objCaseData.getCaseAutoClose
         'For debug only - remove
-        Dim debugCase As CCase = objCaseData.getCase(39360)
-        colCase.Add(debugCase)
+        'Dim debugCase As CCase = objCaseData.getCase(39360)
+        'colCase.Add(debugCase)
 
 
 
