@@ -33,13 +33,13 @@ Module DH_Helpdesk_Schedule
         Dim aArguments() As String = sCommand.Split(",")
 
 
-        ''Debugging lines for autoclose - testmode
+        'Debugging lines for autoclose - testmode
         'Dim sConnectionstringTest = GetConnectionString(aArguments)
         'openLogFile()
         'objLogFile.WriteLine(Now() & ", CaseAutoClose")
         'caseAutoClose(sConnectionstringTest)
         'closeLogFile()
-        ''end test autoclose
+        'end test autoclose
 
         If aArguments.Length > 0 Then
 
@@ -498,102 +498,101 @@ Module DH_Helpdesk_Schedule
 
         ' Hämta ärenden
         Dim colCase As Collection = objCaseData.getCaseAutoClose
+
         'For debug only - remove
         'Dim debugCase As CCase = objCaseData.getCase(39360)
-        'colCase.Add(debugCase)
-
-
+        '    colCase.Add(debugCase)
 
         For i As Integer = 1 To colCase.Count
-            objCase = colCase(i)
+                objCase = colCase(i)
 
-            If objCase.StateSecondary_FinishingCause_Id IsNot Nothing Then
+                If objCase.StateSecondary_FinishingCause_Id IsNot Nothing Then
 
-                objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber)
+                    objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber)
 
-                Dim iCaseHistory_Id As Integer = objCaseData.saveCaseHistory(objCase.Id, "DH Helpdesk")
+                    Dim iCaseHistory_Id As Integer = objCaseData.saveCaseHistory(objCase.Id, "DH Helpdesk")
 
-                objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
-                ' Save Logs (Logga händelsen)
-                Dim iLog_Id As Integer = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", "", 0, "DH Helpdesk", iCaseHistory_Id, objCase.StateSecondary_FinishingCause_Id)
-                objCaseData.closeCase(objCase)
+                    objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
+                    ' Save Logs (Logga händelsen)
+                    Dim iLog_Id As Integer = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", "", 0, "DH Helpdesk", iCaseHistory_Id, objCase.StateSecondary_FinishingCause_Id)
+                    objCaseData.closeCase(objCase)
 
-                objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailCaseClosed, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                    objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailCaseClosed, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
 
-                If objMailTemplate IsNot Nothing Then
+                    If objMailTemplate IsNot Nothing Then
 
-                    'Get surveyfields
-                    Dim caseService As New DH.Helpdesk.VBCSharpBridge.CaseExposure
-                    Dim bodyWithSurvey As String = caseService.GetSurveyBodyString(objCase.Customer_Id, objCase.Id, objMailTemplate.Id, objCase.Persons_EMail, objCustomer.HelpdeskEMail, objGlobalSettings.ServerPort, objGlobalSettings.ServerName, objMailTemplate.Body)
-                    'Replace surveyfields and add it to body
-                    objMailTemplate.Body = bodyWithSurvey
-                    Dim caseEmailer As New DH.Helpdesk.VBCSharpBridge.CaseEmailExposure
-                    If objMailTemplate.IncludeLogExternal Then
-                        Dim extraBody As String = caseEmailer.GetExternalLogTextHistory(objCase.Id, iLog_Id, objCustomer.HelpdeskEMail)
-                        objMailTemplate.Body += extraBody
-                    End If
-
-                    If objCase.Persons_EMail <> "" Then
-                        If objMailTemplate.SendMethod = "1" Then
-                            sEmailList = objCase.Persons_EMail
-                        Else
-                            sMessageId = createMessageId(objCustomer.HelpdeskEMail)
-
-                            Dim sSendTime As DateTime = Date.Now()
-                            Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
-                            Dim objMail As New Mail
-                            Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
-
-                            objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
-
+                        'Get surveyfields
+                        Dim caseService As New DH.Helpdesk.VBCSharpBridge.CaseExposure
+                        Dim bodyWithSurvey As String = caseService.GetSurveyBodyString(objCase.Customer_Id, objCase.Id, objMailTemplate.Id, objCase.Persons_EMail, objCustomer.HelpdeskEMail, objGlobalSettings.ServerPort, objGlobalSettings.ServerName, objMailTemplate.Body)
+                        'Replace surveyfields and add it to body
+                        objMailTemplate.Body = bodyWithSurvey
+                        Dim caseEmailer As New DH.Helpdesk.VBCSharpBridge.CaseEmailExposure
+                        If objMailTemplate.IncludeLogExternal Then
+                            Dim extraBody As String = caseEmailer.GetExternalLogTextHistory(objCase.Id, iLog_Id, objCustomer.HelpdeskEMail)
+                            objMailTemplate.Body += extraBody
                         End If
 
-                    End If
-
-
-                    Dim followers As List(Of String) = objCaseData.getCaseExtraFollowers(objCase.Id)
-
-                    If followers.Count > 0 Then
-                        For Each follower As String In followers
+                        If objCase.Persons_EMail <> "" Then
                             If objMailTemplate.SendMethod = "1" Then
-                                If sEmailList = "" Then
-                                    sEmailList = follower
-                                Else
-                                    sEmailList = sEmailList & ";" & follower
-                                End If
-
+                                sEmailList = objCase.Persons_EMail
                             Else
                                 sMessageId = createMessageId(objCustomer.HelpdeskEMail)
 
                                 Dim sSendTime As DateTime = Date.Now()
                                 Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                                 Dim objMail As New Mail
-                                Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, follower, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
+                                Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
-                                objLogData.createEMailLog(iCaseHistory_Id, follower, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
 
                             End If
-                        Next
 
-                    End If
+                        End If
 
-                    If sEmailList <> "" Then
-                        sMessageId = createMessageId(objCustomer.HelpdeskEMail)
 
-                        Dim sSendTime As DateTime = Date.Now()
-                        Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
-                        Dim objMail As New Mail
-                        Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, sEmailList, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
+                        Dim followers As List(Of String) = objCaseData.getCaseExtraFollowers(objCase.Id)
 
-                        objLogData.createEMailLog(iCaseHistory_Id, sEmailList, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                        If followers.Count > 0 Then
+                            For Each follower As String In followers
+                                If objMailTemplate.SendMethod = "1" Then
+                                    If sEmailList = "" Then
+                                        sEmailList = follower
+                                    Else
+                                        sEmailList = sEmailList & ";" & follower
+                                    End If
+
+                                Else
+                                    sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+
+                                    Dim sSendTime As DateTime = Date.Now()
+                                    Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                                    Dim objMail As New Mail
+                                    Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, follower, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
+
+                                    objLogData.createEMailLog(iCaseHistory_Id, follower, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+
+                                End If
+                            Next
+
+                        End If
+
+                        If sEmailList <> "" Then
+                            sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+
+                            Dim sSendTime As DateTime = Date.Now()
+                            Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                            Dim objMail As New Mail
+                            Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, sEmailList, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
+
+                            objLogData.createEMailLog(iCaseHistory_Id, sEmailList, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+
+                        End If
 
                     End If
 
                 End If
-
-            End If
-        Next
+            Next
         'End If
 
     End Sub

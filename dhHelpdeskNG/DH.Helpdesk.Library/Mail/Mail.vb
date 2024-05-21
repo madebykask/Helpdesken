@@ -16,8 +16,7 @@ Public Class Mail
                              sMessageId As String,
                              sEMailLogGUID As String,
                              connectionString As String,
-                             Optional files As List(Of MailFile) = Nothing,
-                             Optional survey As String = Nothing
+                             Optional files As List(Of MailFile) = Nothing
                              ) As String
         ' Skicka mail
         Dim sSubject As String
