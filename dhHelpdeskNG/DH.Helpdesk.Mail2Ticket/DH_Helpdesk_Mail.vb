@@ -28,6 +28,7 @@ Imports Rebex.Mime
 Imports Rebex.Mime.Headers
 Imports Rebex.Net
 Imports Winnovative
+Imports AttachmentCollection = Microsoft.Exchange.WebServices.Data.AttachmentCollection
 
 
 Module DH_Helpdesk_Mail
@@ -1452,7 +1453,7 @@ Module DH_Helpdesk_Mail
                             Dim retval As String
                             If Not attach.IsInline Then
                                 Dim b As Boolean = False
-                                Dim strName As String = fileAttach.Name
+                                Dim strName As String = SanitizeFileName(fileAttach.Name)
                                 If InStr(strName, "/") > 0 Or InStr(strName, "~") > 0 Or InStr(strName, ":") > 0 Or InStr(strName, "\") > 0 Or InStr(strName, "*") > 0 Or InStr(strName, "?") > 0 Or InStr(strName, Chr(34)) > 0 Or InStr(strName, "<") > 0 Or InStr(strName, ">") > 0 Or InStr(strName, "|") > 0 Then
                                     If InStr(strName, "\") > 0 Then
                                         Dim iRevPos As Integer
@@ -1471,8 +1472,7 @@ Module DH_Helpdesk_Mail
                                         b = True
                                     End If
 
-                                Else
-                                    strName = fileAttach.Name
+
                                 End If
 
                                 If b = True Then
@@ -1493,17 +1493,13 @@ Module DH_Helpdesk_Mail
 
 
                                 Else
-                                    Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(fileAttach.Content), fileAttach.Name)
+                                    Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(fileAttach.Content), strName)
                                     message.Attachments.Add(newAttachment)
                                 End If
 
                             Else
-                                Dim invalidChars As String = New String(Path.GetInvalidFileNameChars()) + New String(Path.GetInvalidPathChars())
-                                Dim sanitizedFileName As String = fileAttach.Name
+                                Dim sanitizedFileName As String = SanitizeFileName(fileAttach.Name)
 
-                                For Each c As Char In invalidChars
-                                    sanitizedFileName = sanitizedFileName.Replace(c.ToString(), "")
-                                Next
                                 Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), sanitizedFileName, fileAttach.ContentType)
                                 If Not fileAttach.ContentId Is Nothing Then
                                     newResource.ContentId = fileAttach.ContentId
@@ -1569,6 +1565,26 @@ Module DH_Helpdesk_Mail
 
         Return messages
     End Function
+    ' Helper method to sanitize file names
+    Private Function SanitizeFileName(fileName As String) As String
+        Dim invalidChars As String = New String(System.IO.Path.GetInvalidFileNameChars()) & New String(System.IO.Path.GetInvalidPathChars())
+        Dim sanitizedFileName As String = fileName
+        For Each c As Char In invalidChars
+            sanitizedFileName = sanitizedFileName.Replace(c.ToString(), "_")
+        Next
+
+        ' Extract file extension if it exists
+        Dim extension As String = System.IO.Path.GetExtension(sanitizedFileName)
+        If Not String.IsNullOrEmpty(extension) Then
+            sanitizedFileName = sanitizedFileName.Substring(0, sanitizedFileName.Length - extension.Length)
+        End If
+
+        ' Append timestamp in the HHmmssfff format
+        sanitizedFileName = $"{sanitizedFileName}_{DateTime.Now:HHmmssfff}{extension}"
+
+        Return sanitizedFileName
+    End Function
+
 
     Private Function FindEwsFolder(objCustomer As Customer, emailFolder As String, service As ExchangeService) As Folder
         Dim emailFolders As String()
