@@ -870,6 +870,27 @@ Go
 
 -- 5.6.1
 
+-- Fulltextsearch on ExtendedCaseValues
+-- Check if the unique index IX_ExtendedCaseValues_Id exists
+IF NOT EXISTS (SELECT * FROM sys.indexes WHERE name = 'IX_ExtendedCaseValues_Id' AND object_id = OBJECT_ID('dbo.ExtendedCaseValues'))
+BEGIN
+    CREATE UNIQUE INDEX IX_ExtendedCaseValues_Id ON dbo.ExtendedCaseValues(Id);
+END
+
+-- Drop existing full-text index if it exists
+IF EXISTS (SELECT * FROM sys.fulltext_indexes fti WHERE fti.object_id = OBJECT_ID(N'[dbo].[ExtendedCaseValues]'))
+    DROP FULLTEXT INDEX ON [dbo].[ExtendedCaseValues]
+GO
+
+-- Create full-text index on ExtendedCaseValues table
+CREATE FULLTEXT INDEX ON dbo.ExtendedCaseValues  
+(			 
+    Value
+)  
+KEY INDEX IX_ExtendedCaseValues_Id
+ON SearchCasesFTS  
+WITH STOPLIST = SYSTEM;
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.6.1'
