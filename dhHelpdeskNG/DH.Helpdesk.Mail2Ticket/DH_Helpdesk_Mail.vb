@@ -1441,6 +1441,7 @@ Module DH_Helpdesk_Mail
 
                 If mail.Attachments.Any() Then
                     For Each attach As Microsoft.Exchange.WebServices.Data.Attachment In mail.Attachments
+                        ' Handling FileAttachment
                         If attach.GetType() = GetType(FileAttachment) Then
                             Try
                                 attach.Load()
@@ -1450,110 +1451,52 @@ Module DH_Helpdesk_Mail
                             End Try
 
                             Dim fileAttach As FileAttachment = attach
-                            Dim retval As String
                             If Not attach.IsInline Then
-                                Dim b As Boolean = False
-                                Dim strName As String = SanitizeFileName(fileAttach.Name)
-                                If InStr(strName, "/") > 0 Or InStr(strName, "~") > 0 Or InStr(strName, ":") > 0 Or InStr(strName, "\") > 0 Or InStr(strName, "*") > 0 Or InStr(strName, "?") > 0 Or InStr(strName, Chr(34)) > 0 Or InStr(strName, "<") > 0 Or InStr(strName, ">") > 0 Or InStr(strName, "|") > 0 Then
-                                    If InStr(strName, "\") > 0 Then
-                                        Dim iRevPos As Integer
-                                        iRevPos = InStrRev(strName, "\")
-                                        Dim strNewFileName As String
-                                        strNewFileName = Mid(strName, iRevPos + 1, Len(strName) - (iRevPos))
-                                        strNewFileName = Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(strNewFileName, "/", ""), "~", ""), ":", ""), "*", ""), "?", ""), Chr(34), ""), "<", ""), ">", ""), "|", "")
-                                        strName = strNewFileName
-                                        fileAttach.Load(temppath & "\" & strName)
-                                        retval = temppath & "\" & strName
-                                        b = True
-                                    Else
-                                        strName = Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(strName, "/", ""), "~", ""), ":", ""), "\", ""), "*", ""), "?", ""), Chr(34), ""), "<", ""), ">", ""), "|", "")
-                                        fileAttach.Load(temppath & "\" & strName)
-                                        retval = temppath & "\" & strName
-                                        b = True
-                                    End If
-
-
-                                End If
-
-                                If b = True Then
-                                    Dim bData As Byte()
-                                    Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(retval))
-                                    bData = br.ReadBytes(br.BaseStream.Length)
-
-                                    Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(bData, 0, bData.Length), strName)
-                                    message.Attachments.Add(newAttachment)
-                                    newAttachment = Nothing
-                                    bData = Nothing
-                                    br = Nothing
-                                    bData = Nothing
-
-                                    itemattach(intArray) = temppath & "\" & strName
-                                    intArray = intArray + 1
-
-
-
-                                Else
+                                Try
+                                    Dim strName As String = SanitizeFileName(fileAttach.Name)
                                     Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(fileAttach.Content), strName)
                                     message.Attachments.Add(newAttachment)
-                                End If
-
+                                Catch ex As Exception
+                                    LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
+                                    Continue For
+                                End Try
                             Else
-                                Dim sanitizedFileName As String = SanitizeFileName(fileAttach.Name)
-
-                                Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), sanitizedFileName, fileAttach.ContentType)
-                                If Not fileAttach.ContentId Is Nothing Then
-                                    newResource.ContentId = fileAttach.ContentId
-                                End If
-                                If Not fileAttach.ContentLocation Is Nothing Then
-                                    newResource.ContentLocation = fileAttach.ContentLocation
-                                End If
-                                message.Resources.Add(newResource)
+                                Try
+                                    Dim sanitizedFileName As String = SanitizeFileName(fileAttach.Name)
+                                    Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), sanitizedFileName, fileAttach.ContentType)
+                                    If fileAttach.ContentId IsNot Nothing Then
+                                        newResource.ContentId = fileAttach.ContentId
+                                    End If
+                                    If fileAttach.ContentLocation IsNot Nothing Then
+                                        newResource.ContentLocation = fileAttach.ContentLocation
+                                    End If
+                                    message.Resources.Add(newResource)
+                                Catch ex As Exception
+                                    LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
+                                    Continue For
+                                End Try
                             End If
-
                         End If
+
+                        ' Handling ItemAttachment
                         If attach.GetType() = GetType(ItemAttachment) Then
                             Try
-
-
                                 Dim itemAttachment As ItemAttachment = attach
                                 itemAttachment.Load(ItemSchema.MimeContent)
 
-                                Dim fileName As String = temppath & "\" & itemAttachment.Item.Subject.Replace(":", "").Replace(",", "").Replace("?", "").Replace(" ", "").Replace("/", "-").Replace("~", "").Replace("\", "").Replace("*", "").Replace(Chr(34), "").Replace(">", "").Replace("<", "").Replace("|", "") + ".eml"
+                                ' Sanitize file name
+                                Dim fileName As String = temppath & "\" & SanitizeFileName(itemAttachment.Item.Subject) & ".eml"
 
+                                ' Save to file and add to message attachments
                                 File.WriteAllBytes(fileName, itemAttachment.Item.MimeContent.Content)
-
                                 message.Attachments.Add(New Rebex.Mail.Attachment(fileName))
 
+                                ' Delete the temporary file
                                 System.IO.File.Delete(fileName)
-
-
-
-
-                                'attach.Load()
-                                ''Todo - Save itemAttach?
-
-
-
-
-                                'Dim itemAttach As ItemAttachment = attach
-                                'Dim byteArray(itemAttach.Size) As Byte
-                                'Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(byteArray), itemAttach.Name.Replace(":", "-").Replace("vbCrLf", " "))
-                                ''newAttachment.FileName = newAttachment.FileName & ".eml"
-
-
-                                ''Dim attach1 As Microsoft.Exchange.WebServices.Data.Attachment = attach
-                                'message.Attachments.Add(newAttachment)
                             Catch ex As Exception
                                 LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
                                 Continue For
-
                             End Try
-
-
-                            'TODO - save And add it to the message
-                            ' Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(itemAttach.ContentType, itemAttach.Name))
-
-
                         End If
                     Next
                 End If
