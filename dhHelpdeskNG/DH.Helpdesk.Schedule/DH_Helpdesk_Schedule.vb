@@ -501,7 +501,7 @@ Module DH_Helpdesk_Schedule
 
         'For debug only - remove
         'Dim debugCase As CCase = objCaseData.getCase(39360)
-        '    colCase.Add(debugCase)
+        'colCase.Add(debugCase)
 
         For i As Integer = 1 To colCase.Count
                 objCase = colCase(i)
@@ -524,9 +524,9 @@ Module DH_Helpdesk_Schedule
 
                         'Get surveyfields
                         Dim caseService As New DH.Helpdesk.VBCSharpBridge.CaseExposure
-                        Dim bodyWithSurvey As String = caseService.GetSurveyBodyString(objCase.Customer_Id, objCase.Id, objMailTemplate.Id, objCase.Persons_EMail, objCustomer.HelpdeskEMail, objGlobalSettings.ServerPort, objGlobalSettings.ServerName, objMailTemplate.Body)
-                        'Replace surveyfields and add it to body
-                        objMailTemplate.Body = bodyWithSurvey
+                    Dim bodyWithSurvey As String = caseService.GetSurveyBodyString(objCase.Id, objMailTemplate.Id, objCase.Persons_EMail, objCustomer.HelpdeskEMail, objGlobalSettings.ServerPort, objGlobalSettings.ServerName, objMailTemplate.Body)
+                    'Replace surveyfields and add it to body
+                    objMailTemplate.Body = bodyWithSurvey
                         Dim caseEmailer As New DH.Helpdesk.VBCSharpBridge.CaseEmailExposure
                         If objMailTemplate.IncludeLogExternal Then
                             Dim extraBody As String = caseEmailer.GetExternalLogTextHistory(objCase.Id, iLog_Id, objCustomer.HelpdeskEMail)

@@ -62,7 +62,7 @@ namespace DH.Helpdesk.VBCSharpBridge
         {
             return _caseService.GetCaseById(caseId);
         }
-        public string GetSurveyBodyString(int customerId, int caseId, int mailtemplateId, string toEmail, string helpdeskEmail, string port, string helpdeskAddress, ref string body)
+        public string GetSurveyBodyString(int caseId, int mailtemplateId, string toEmail, string helpdeskEmail, string port, string helpdeskAddress, ref string body)
         {
             CaseExposure caseExposure = new CaseExposure();
             Case caseObj = caseExposure.GetCaseById(caseId);

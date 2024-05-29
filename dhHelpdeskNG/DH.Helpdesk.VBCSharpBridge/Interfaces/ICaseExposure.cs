@@ -6,7 +6,7 @@ namespace DH.Helpdesk.VBCSharpBridge.Interfaces
     public interface ICaseExposure
     {
         Case GetCaseById(int caseId);
-        string GetSurveyBodyString(int customerId, int caseId, int mailtemplateId, string toEmail, string helpdeskEmail, string port, string helpdeskAddress, ref string body);
+        string GetSurveyBodyString(int caseId, int mailtemplateId, string toEmail, string helpdeskEmail, string port, string helpdeskAddress, ref string body);
         CaseBridge RunBusinessRules(CaseBridge caseObj);
     }
 }

@@ -83,7 +83,7 @@ namespace DH.Helpdesk.Upkeeper_New
 
                         if ((DateTime.Now - startTime).TotalSeconds > 300)
                         {
-                            t = api.Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
+                            api.Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
 
                             startTime = DateTime.Now;
                         }
@@ -259,7 +259,7 @@ namespace DH.Helpdesk.Upkeeper_New
                                                 computerDetail.Location = computer.Location2;
                                             }
 
-                                            string ret = api.SaveComputerDetails(computerId, computerDetail, UpKeeperOrgNo);
+                                            api.SaveComputerDetails(computerId, computerDetail, UpKeeperOrgNo);
                                         }
                                     }
 
