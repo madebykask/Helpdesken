@@ -647,23 +647,7 @@ namespace DH.Helpdesk.Dal.Repositories
             strBld.AppendLine(@"GROUP BY caseDep.Id");
             return strBld.ToString();
         }
-        private string BuildExtendedCaseFreeTextSearchQueryCte(string freeText, SearchQueryBuildContext ctx)
-        {
-            var filter = ctx.Criterias.SearchFilter;
-            var customerId = filter.CustomerId;
-            var strBld = new StringBuilder();
 
-            strBld.AppendLine(@"SELECT tblCase.Id
-                FROM tblCase 
-                JOIN tblCase_ExtendedCaseData  ON tblCase.id = tblCase_ExtendedCaseData.Case_id
-                JOIN ExtendedCaseData ON tblCase_ExtendedCaseData.ExtendedCaseData_Id = ExtendedCaseData.id
-                JOIN ExtendedCaseValues ON ExtendedCaseData.id = ExtendedCaseValues.extendedcasedataid
-                WHERE ExtendedCaseValues.Value Like '%" + freeText +"%'");
-            strBld.AppendFormat(" and tblCase.Customer_Id = {0} ", customerId).AppendLine();
-
-            strBld.AppendLine(@" Group by tblCase.Id");
-            return strBld.ToString();
-        }
         private string BuildExtendedCaseFreeTextSearchQueryCteContains(string freeText, SearchQueryBuildContext ctx)
         {
             var filter = ctx.Criterias.SearchFilter;
@@ -688,23 +672,7 @@ namespace DH.Helpdesk.Dal.Repositories
             query = query.Replace("@freeText", $"\"{freeText}*\"");
 
             return query;
-            //    strBld.AppendLine(@"SELECT tblCase.Id
-            //FROM tblCase 
-            //JOIN tblCase_ExtendedCaseData ON tblCase.id = tblCase_ExtendedCaseData.Case_id
-            //JOIN ExtendedCaseData ON tblCase_ExtendedCaseData.ExtendedCaseData_Id = ExtendedCaseData.id
-            //JOIN ExtendedCaseValues ON ExtendedCaseData.id = ExtendedCaseValues.extendedcasedataid
-            //WHERE CONTAINS(ExtendedCaseValues.Value, '@freeText')");
-            //    strBld.AppendFormat(" AND tblCase.Customer_Id = {0} ", customerId).AppendLine();
 
-            //    strBld.AppendLine(@"GROUP BY tblCase.Id");
-
-            //    // Convert StringBuilder to string
-            //    string query = strBld.ToString();
-
-            //    // Replace @freeText with the parameter surrounded by double quotes
-            //    query = query.Replace("@freeText", $"\"{freeText}*\"");
-
-            //    return query;
         }
         private string BuilFormFieldValueFreeTextSearchQueryCte(string freeText, SearchQueryBuildContext ctx)
         {
@@ -761,11 +729,6 @@ namespace DH.Helpdesk.Dal.Repositories
 
             tables.Add("from tblCase WITH (NOLOCK) ");
             tables.Add("inner join tblCustomer on tblCase.Customer_Id = tblCustomer.Id ");
-
-            // Adding the joins to include ExtendedCaseData and ExtendedCaseValues
-            tables.Add("inner join tblCase_ExtendedCaseData  ON tblCase.id = tblCase_ExtendedCaseData.Case_id");
-            tables.Add("inner join ExtendedCaseData ON tblCase_ExtendedCaseData.ExtendedCaseData_Id = ExtendedCaseData.id");
-            tables.Add("inner join ExtendedCaseValues ON ExtendedCaseData.id = ExtendedCaseValues.extendedcasedataid");
 
 
             if (ctx.Criterias.SearchFilter.IsExtendedSearch == false)
