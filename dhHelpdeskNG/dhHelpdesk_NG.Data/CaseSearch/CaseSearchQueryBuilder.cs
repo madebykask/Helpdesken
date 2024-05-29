@@ -155,12 +155,6 @@ namespace DH.Helpdesk.Dal.Repositories
             Tables.Log.Text_External
         };
 
-        private readonly string[] _freeTextExtendedCaseValueConditionFields = new string[]
-       {
-            Tables.ExtendedCaseValues.Value,
-            Tables.ExtendedCaseValues.SecondaryValue
-       };
-
         private readonly string[] _freeTextRegionConditionFields = new string[]
         {
             Tables.Region.RegionName
