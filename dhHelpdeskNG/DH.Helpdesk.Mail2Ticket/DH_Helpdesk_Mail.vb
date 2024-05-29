@@ -1441,7 +1441,6 @@ Module DH_Helpdesk_Mail
 
                 If mail.Attachments.Any() Then
                     For Each attach As Microsoft.Exchange.WebServices.Data.Attachment In mail.Attachments
-                        ' Handling FileAttachment
                         If attach.GetType() = GetType(FileAttachment) Then
                             Try
                                 attach.Load()
@@ -1451,19 +1450,33 @@ Module DH_Helpdesk_Mail
                             End Try
 
                             Dim fileAttach As FileAttachment = attach
+                            Dim retval As String
+                            Dim strName As String = SanitizeFileName(fileAttach.Name)
                             If Not attach.IsInline Then
-                                Try
-                                    Dim strName As String = SanitizeFileName(fileAttach.Name)
-                                    Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(fileAttach.Content), strName)
-                                    message.Attachments.Add(newAttachment)
-                                Catch ex As Exception
-                                    LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
-                                    Continue For
-                                End Try
+                                retval = Path.Combine(temppath, strName)
+                                fileAttach.Load(retval)
+
+                                Dim bData As Byte()
+                                Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(retval))
+                                bData = br.ReadBytes(br.BaseStream.Length)
+
+                                Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(bData, 0, bData.Length), strName)
+                                message.Attachments.Add(newAttachment)
+                                newAttachment = Nothing
+                                bData = Nothing
+                                br = Nothing
+                                bData = Nothing
+
+                                ' Ensure intArray does not exceed the bounds of the array.
+                                If intArray >= items.Count Then
+                                    ReDim Preserve itemattach(intArray)  ' Optionally expand the array as needed
+                                End If
+                                itemattach(intArray) = retval
+                                intArray = intArray + 1
+
                             Else
                                 Try
-                                    Dim sanitizedFileName As String = SanitizeFileName(fileAttach.Name)
-                                    Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), sanitizedFileName, fileAttach.ContentType)
+                                    Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), strName, fileAttach.ContentType)
                                     If fileAttach.ContentId IsNot Nothing Then
                                         newResource.ContentId = fileAttach.ContentId
                                     End If
@@ -1475,6 +1488,7 @@ Module DH_Helpdesk_Mail
                                     LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
                                     Continue For
                                 End Try
+
                             End If
                         End If
 
@@ -1485,7 +1499,7 @@ Module DH_Helpdesk_Mail
                                 itemAttachment.Load(ItemSchema.MimeContent)
 
                                 ' Sanitize file name
-                                Dim fileName As String = temppath & "\" & SanitizeFileName(itemAttachment.Item.Subject) & ".eml"
+                                Dim fileName As String = Path.Combine(temppath, SanitizeFileName(itemAttachment.Item.Subject) & ".eml")
 
                                 ' Save to file and add to message attachments
                                 File.WriteAllBytes(fileName, itemAttachment.Item.MimeContent.Content)
