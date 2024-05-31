@@ -906,8 +906,9 @@ namespace DH.Helpdesk.Dal.Repositories
                 sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblCase].[Miscellaneous]", text));
                 sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblDepartment].[Department]", text));
                 sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblDepartment].[DepartmentId]", text));
-                sb.AppendFormat(" OR {0}", this.GetSqlContains("[ExtendedCaseValues].[Value]", text));
-                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE CONTAINS([tblLog].[Text_Internal], N'\"*{0}*\"') OR CONTAINS([tblLog].[Text_External], N'\"*{0}*\"')))", text);
+                //If line below - the query takes very long time. 
+                //sb.AppendFormat("OR ([tblCase].[Id] IN ( SELECT tblCase.Id FROM tblCase JOIN tblCase_ExtendedCaseData ON tblCase.id = tblCase_ExtendedCaseData.Case_id JOIN ExtendedCaseData ON tblCase_ExtendedCaseData.ExtendedCaseData_Id = ExtendedCaseData.id JOIN ExtendedCaseValues ON ExtendedCaseData.id = ExtendedCaseValues.extendedcasedataid WHERE CONTAINS (Value, N'\"*{0}*\"')))", text);
+                sb.AppendFormat("OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE CONTAINS([tblLog].[Text_Internal], N'\"*{0}*\"') OR CONTAINS([tblLog].[Text_External], N'\"*{0}*\"')))", text);
                 //sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", text);
                 sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlContains("FormFieldValue", text));
                 sb.Append(") ");
@@ -1706,9 +1707,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private string BuildContainsExpession(string field, string text, string tableAlias = "", bool useWildcard = true)
         {
-            return (_useFts)
-                ? BuildFTSContainsExpession(field, text, tableAlias, useWildcard)
-                : BuildFTSContainsExpession(field, text, tableAlias, useWildcard);
+            return BuildFTSContainsExpession(field, text, tableAlias, useWildcard);
         }
 
         private string BuildFTSContainsExpession(string field, string text, string tableAlias = "", bool useWildcard = true)
