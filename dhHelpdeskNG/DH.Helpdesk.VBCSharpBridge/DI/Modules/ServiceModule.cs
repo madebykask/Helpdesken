@@ -194,7 +194,7 @@ namespace DH.Helpdesk.VBCSharpBridge.DI.Modules
             //IFeedbackTemplateService
             Bind<IFeedbackTemplateService>().To<FeedbackTemplateService>();
 
-            //IFeedbackService
+            //IFeedbackService  
             Bind<IFeedbackService>().To<FeedbackService>();
 
             //IQuestionnaireRepository

@@ -6,7 +6,7 @@ Public Class MailTemplateData
         Dim dt As DataTable
 
         Try
-            sSQL = "SELECT tblMailTemplate.MailId, tblMailTemplate_tblLanguage.Subject, tblMailTemplate_tblLanguage.Body, tblMailTemplate.SendMethod " &
+            sSQL = "SELECT tblMailTemplate.MailId, tblMailTemplate_tblLanguage.Subject, tblMailTemplate_tblLanguage.Body, tblMailTemplate.SendMethod, tblMailTemplate.IncludeLogText_External " &
                     "FROM tblMailTemplate " &
                         "INNER JOIN tblMailTemplate_tblLanguage ON tblMailTemplate.Id=tblMailTemplate_tblLanguage.MailTemplate_Id " &
                     "WHERE MailId = " & MailId &

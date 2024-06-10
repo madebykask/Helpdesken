@@ -262,15 +262,128 @@
 
         };
 
+        //dhHelpdesk.reports.onGeneratedShow = function () {
+        //    if (!dhHelpdesk.reports.doValidation())
+        //        return;
+
+        //    var filters = getBaseFilters();
+        //    console.log(filters);
+        //    var reportName = $(reportList).find("option:selected").data("identity");
+
+
+        //    var reportTypeId = $('#lstReports option:selected').attr("data-orig-report-id");
+        //    if (!reportTypeId)
+        //        reportTypeId = $('#lstReports option:selected').attr("data-id");
+
+        //    var getDataForParams = {
+        //        ReportTypeId: reportTypeId,
+        //        DepartmentIds: filters.departments,
+        //        WorkingGroupIds: filters.workingGroups,
+        //        CaseTypeIds: filters.caseTypes,
+        //        AdministratorsIds: filters.administrators,
+        //        CaseStatusIds: filters.caseStatuses,
+        //        ProductAreaIds: filters.productAreas,
+        //        PeriodFrom: filters.regDateFrom,
+        //        PeriodUntil: filters.regDateTo,
+        //        FieldIds: filters.fields,
+        //        ExtendedCaseFormId: filters.extendedCaseFormId,
+        //        ExtendedCaseFormFieldIds: filters.extendedCaseFormFields,
+        //        IsExcel: $(this).data("excel") || false,
+        //        IsPreview: $(this).data("preview") || false,
+        //        SortName: "",
+        //        SortBy: "",
+        //        CloseFrom: filters.closeDateFrom,
+        //        CloseTo: filters.closeDateTo,
+        //        ReportName: reportName
+        //    };
+
+        //    console.log("GetDataformParams: " +getDataForParams);
+        //    var getParams = $.param(getDataForParams, true);
+        //    console.log("getParams: " +getDataForParams);
+
+        //    var isPreview = ($(this).data("preview") === true);
+        //    if ($(this).data("excel") === true) {
+        //        console.log("excel true");
+        //        $("#showReportLoader").show();
+
+        //        fetch(showGeneratedReportUrl, {
+        //            method: 'POST',
+        //            body: JSON.stringify(getDataForParams),
+        //            headers: {
+        //                'Content-Type': 'application/json'  // specifying how we're sending the data
+        //            }
+
+        //        })
+        //            .then(response => {
+        //                if (!response.ok) {
+        //                    throw new Error("Network response was not ok");
+        //                }
+
+        //                // Extract filename from the Content-Disposition header
+        //                const contentDisposition = response.headers.get('Content-Disposition');
+        //                let filename = 'default_filename.xlsx';  // Default filename if not found in header
+
+        //                if (contentDisposition) {
+        //                    const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+        //                    if (filenameMatch && filenameMatch[1]) {
+        //                        filename = filenameMatch[1].replace(/['"]/g, '');  // Remove quotes if present
+        //                    }
+        //                }
+
+        //                return response.blob().then(blob => ({ blob, filename }));
+        //            })
+        //            .then(data => {
+        //                var downloadUrl = URL.createObjectURL(data.blob);
+        //                var downloadLink = document.createElement('a');
+        //                downloadLink.href = downloadUrl;
+        //                downloadLink.download = data.filename;
+        //                document.body.appendChild(downloadLink);
+        //                downloadLink.click();
+        //                document.body.removeChild(downloadLink);
+
+        //                // Hide the loader.
+        //                $("#showReportLoader").hide();
+        //            })
+        //            .catch(error => {
+        //                console.log("Error:", error);
+        //                $("#showReportLoader").hide();
+        //            });
+
+        //    } else {
+        //        console.log("excel false");
+        //        $("#showReportLoader").show();
+        //        $.ajax(
+        //        {
+        //            url: showGeneratedReportUrl,
+        //            type: "POST",
+        //            traditional: true,
+        //            data: getParams,
+        //            dataType: "html",
+        //            success: function (htmlData) {
+        //                if (isPreview) {
+        //                    if ($(htmlData).find('#showrun').val() === 'true') {
+        //                        dhHelpdesk.reports.togglePreviewMode(false);
+        //                    }
+        //                    else {
+        //                        $("#excelReport").each(function () { this.disabled = false; });
+        //                    }
+        //                }
+        //                $("#generateReportContainer").html(htmlData);
+        //            },
+        //            complete: function () {
+        //                $("#showReportLoader").hide();
+        //            }
+        //        });
+        //    }
+        //};
         dhHelpdesk.reports.onGeneratedShow = function () {
             if (!dhHelpdesk.reports.doValidation())
                 return;
 
             var filters = getBaseFilters();
-
+            console.log(filters);
             var reportName = $(reportList).find("option:selected").data("identity");
 
-       
             var reportTypeId = $('#lstReports option:selected').attr("data-orig-report-id");
             if (!reportTypeId)
                 reportTypeId = $('#lstReports option:selected').attr("data-id");
@@ -297,73 +410,70 @@
                 ReportName: reportName
             };
 
-
+            console.log("GetDataformParams: ", getDataForParams);
             var getParams = $.param(getDataForParams, true);
-
+            console.log("getParams: ", getParams);
 
             var isPreview = ($(this).data("preview") === true);
             if ($(this).data("excel") === true) {
-
+                console.log("excel true");
                 $("#showReportLoader").show();
 
-                fetch(showGeneratedReportUrl, {
-                    method: 'POST',
-                    body: JSON.stringify(getDataForParams),
-                    headers: {
-                        'Content-Type': 'application/json'  // specifying how we're sending the data
-                    }
+                var xhr = new XMLHttpRequest();
+                xhr.open('POST', showGeneratedReportUrl, true);
+                xhr.responseType = 'blob'; // Specify that the response type is blob
 
-                })
-                    .then(response => {
-                        if (!response.ok) {
-                            throw new Error("Network response was not ok");
-                        }
-
-                        // Extract filename from the Content-Disposition header
-                        const contentDisposition = response.headers.get('Content-Disposition');
-                        let filename = 'default_filename.xlsx';  // Default filename if not found in header
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        const contentDisposition = xhr.getResponseHeader('Content-Disposition');
+                        let filename = 'default_filename.xlsx'; // Default filename if not found in header
 
                         if (contentDisposition) {
                             const filenameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
                             if (filenameMatch && filenameMatch[1]) {
-                                filename = filenameMatch[1].replace(/['"]/g, '');  // Remove quotes if present
+                                filename = filenameMatch[1].replace(/['"]/g, ''); // Remove quotes if present
                             }
                         }
 
-                        return response.blob().then(blob => ({ blob, filename }));
-                    })
-                    .then(data => {
-                        var downloadUrl = URL.createObjectURL(data.blob);
+                        var blob = new Blob([xhr.response], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+                        var downloadUrl = URL.createObjectURL(blob);
                         var downloadLink = document.createElement('a');
                         downloadLink.href = downloadUrl;
-                        downloadLink.download = data.filename;
+                        downloadLink.download = filename;
                         document.body.appendChild(downloadLink);
                         downloadLink.click();
                         document.body.removeChild(downloadLink);
 
                         // Hide the loader.
                         $("#showReportLoader").hide();
-                    })
-                    .catch(error => {
-                        console.log("Error:", error);
+                    } else {
+                        console.log("Error: ", xhr.statusText);
                         $("#showReportLoader").hide();
-                    });
+                    }
+                };
+
+                xhr.onerror = function () {
+                    console.log("Network error");
+                    $("#showReportLoader").hide();
+                };
+
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+                xhr.send(getParams); // Send URL-encoded form data
 
             } else {
+                console.log("excel false");
                 $("#showReportLoader").show();
-                $.ajax(
-                {
+                $.ajax({
                     url: showGeneratedReportUrl,
                     type: "POST",
                     traditional: true,
                     data: getParams,
                     dataType: "html",
                     success: function (htmlData) {
-                        if (isPreview) {                      
-                            if ($(htmlData).find('#showrun').val() === 'true') {                           
+                        if (isPreview) {
+                            if ($(htmlData).find('#showrun').val() === 'true') {
                                 dhHelpdesk.reports.togglePreviewMode(false);
-                            }
-                            else {
+                            } else {
                                 $("#excelReport").each(function () { this.disabled = false; });
                             }
                         }
@@ -375,6 +485,8 @@
                 });
             }
         };
+
+
 
         dhHelpdesk.reports.resetErrors = function () {
             const errorClass = window.dhHelpdesk.reports.errorClass;

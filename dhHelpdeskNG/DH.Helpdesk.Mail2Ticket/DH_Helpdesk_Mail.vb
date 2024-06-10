@@ -28,6 +28,7 @@ Imports Rebex.Mime
 Imports Rebex.Mime.Headers
 Imports Rebex.Net
 Imports Winnovative
+Imports AttachmentCollection = Microsoft.Exchange.WebServices.Data.AttachmentCollection
 
 
 Module DH_Helpdesk_Mail
@@ -1450,114 +1451,66 @@ Module DH_Helpdesk_Mail
 
                             Dim fileAttach As FileAttachment = attach
                             Dim retval As String
+                            Dim strName As String = SanitizeFileName(fileAttach.Name)
                             If Not attach.IsInline Then
-                                Dim b As Boolean = False
-                                Dim strName As String = fileAttach.Name
-                                If InStr(strName, "/") > 0 Or InStr(strName, "~") > 0 Or InStr(strName, ":") > 0 Or InStr(strName, "\") > 0 Or InStr(strName, "*") > 0 Or InStr(strName, "?") > 0 Or InStr(strName, Chr(34)) > 0 Or InStr(strName, "<") > 0 Or InStr(strName, ">") > 0 Or InStr(strName, "|") > 0 Then
-                                    If InStr(strName, "\") > 0 Then
-                                        Dim iRevPos As Integer
-                                        iRevPos = InStrRev(strName, "\")
-                                        Dim strNewFileName As String
-                                        strNewFileName = Mid(strName, iRevPos + 1, Len(strName) - (iRevPos))
-                                        strNewFileName = Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(strNewFileName, "/", ""), "~", ""), ":", ""), "*", ""), "?", ""), Chr(34), ""), "<", ""), ">", ""), "|", "")
-                                        strName = strNewFileName
-                                        fileAttach.Load(temppath & "\" & strName)
-                                        retval = temppath & "\" & strName
-                                        b = True
-                                    Else
-                                        strName = Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(Replace(strName, "/", ""), "~", ""), ":", ""), "\", ""), "*", ""), "?", ""), Chr(34), ""), "<", ""), ">", ""), "|", "")
-                                        fileAttach.Load(temppath & "\" & strName)
-                                        retval = temppath & "\" & strName
-                                        b = True
-                                    End If
+                                retval = Path.Combine(temppath, strName)
+                                fileAttach.Load(retval)
 
-                                Else
-                                    strName = fileAttach.Name
+                                Dim bData As Byte()
+                                Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(retval))
+                                bData = br.ReadBytes(br.BaseStream.Length)
+
+                                Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(bData, 0, bData.Length), strName)
+                                message.Attachments.Add(newAttachment)
+                                newAttachment = Nothing
+                                bData = Nothing
+                                br = Nothing
+                                bData = Nothing
+
+                                ' Ensure intArray does not exceed the bounds of the array.
+                                If intArray >= items.Count Then
+                                    ReDim Preserve itemattach(intArray)  ' Optionally expand the array as needed
                                 End If
-
-                                If b = True Then
-                                    Dim bData As Byte()
-                                    Dim br As BinaryReader = New BinaryReader(System.IO.File.OpenRead(retval))
-                                    bData = br.ReadBytes(br.BaseStream.Length)
-
-                                    Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(bData, 0, bData.Length), strName)
-                                    message.Attachments.Add(newAttachment)
-                                    newAttachment = Nothing
-                                    bData = Nothing
-                                    br = Nothing
-                                    bData = Nothing
-
-                                    itemattach(intArray) = temppath & "\" & strName
-                                    intArray = intArray + 1
-
-
-
-                                Else
-                                    Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(fileAttach.Content), fileAttach.Name)
-                                    message.Attachments.Add(newAttachment)
-                                End If
+                                itemattach(intArray) = retval
+                                intArray = intArray + 1
 
                             Else
-                                Dim invalidChars As String = New String(Path.GetInvalidFileNameChars()) + New String(Path.GetInvalidPathChars())
-                                Dim sanitizedFileName As String = fileAttach.Name
+                                Try
+                                    Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), strName, fileAttach.ContentType)
+                                    If fileAttach.ContentId IsNot Nothing Then
+                                        newResource.ContentId = fileAttach.ContentId
+                                    End If
+                                    If fileAttach.ContentLocation IsNot Nothing Then
+                                        newResource.ContentLocation = fileAttach.ContentLocation
+                                    End If
+                                    message.Resources.Add(newResource)
+                                Catch ex As Exception
+                                    LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
+                                    Continue For
+                                End Try
 
-                                For Each c As Char In invalidChars
-                                    sanitizedFileName = sanitizedFileName.Replace(c.ToString(), "")
-                                Next
-                                Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(fileAttach.Content), sanitizedFileName, fileAttach.ContentType)
-                                If Not fileAttach.ContentId Is Nothing Then
-                                    newResource.ContentId = fileAttach.ContentId
-                                End If
-                                If Not fileAttach.ContentLocation Is Nothing Then
-                                    newResource.ContentLocation = fileAttach.ContentLocation
-                                End If
-                                message.Resources.Add(newResource)
                             End If
-
                         End If
+
+                        ' Handling ItemAttachment
                         If attach.GetType() = GetType(ItemAttachment) Then
                             Try
-
-
                                 Dim itemAttachment As ItemAttachment = attach
                                 itemAttachment.Load(ItemSchema.MimeContent)
 
-                                Dim fileName As String = temppath & "\" & itemAttachment.Item.Subject.Replace(":", "").Replace(",", "").Replace("?", "").Replace(" ", "").Replace("/", "-").Replace("~", "").Replace("\", "").Replace("*", "").Replace(Chr(34), "").Replace(">", "").Replace("<", "").Replace("|", "") + ".eml"
+                                ' Sanitize file name
+                                Dim fileName As String = Path.Combine(temppath, SanitizeFileName(itemAttachment.Item.Subject) & ".eml")
 
+                                ' Save to file and add to message attachments
                                 File.WriteAllBytes(fileName, itemAttachment.Item.MimeContent.Content)
-
                                 message.Attachments.Add(New Rebex.Mail.Attachment(fileName))
 
+                                ' Delete the temporary file
                                 System.IO.File.Delete(fileName)
-
-
-
-
-                                'attach.Load()
-                                ''Todo - Save itemAttach?
-
-
-
-
-                                'Dim itemAttach As ItemAttachment = attach
-                                'Dim byteArray(itemAttach.Size) As Byte
-                                'Dim newAttachment As Rebex.Mail.Attachment = New Rebex.Mail.Attachment(New MemoryStream(byteArray), itemAttach.Name.Replace(":", "-").Replace("vbCrLf", " "))
-                                ''newAttachment.FileName = newAttachment.FileName & ".eml"
-
-
-                                ''Dim attach1 As Microsoft.Exchange.WebServices.Data.Attachment = attach
-                                'message.Attachments.Add(newAttachment)
                             Catch ex As Exception
                                 LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
                                 Continue For
-
                             End Try
-
-
-                            'TODO - save And add it to the message
-                            ' Dim newResource As LinkedResource = New LinkedResource(New MemoryStream(itemAttach.ContentType, itemAttach.Name))
-
-
                         End If
                     Next
                 End If
@@ -1569,6 +1522,26 @@ Module DH_Helpdesk_Mail
 
         Return messages
     End Function
+    ' Helper method to sanitize file names
+    Private Function SanitizeFileName(fileName As String) As String
+        Dim invalidChars As String = New String(System.IO.Path.GetInvalidFileNameChars()) & New String(System.IO.Path.GetInvalidPathChars())
+        Dim sanitizedFileName As String = fileName
+        For Each c As Char In invalidChars
+            sanitizedFileName = sanitizedFileName.Replace(c.ToString(), "_")
+        Next
+
+        ' Extract file extension if it exists
+        Dim extension As String = System.IO.Path.GetExtension(sanitizedFileName)
+        If Not String.IsNullOrEmpty(extension) Then
+            sanitizedFileName = sanitizedFileName.Substring(0, sanitizedFileName.Length - extension.Length)
+        End If
+
+        ' Append timestamp in the HHmmssfff format
+        sanitizedFileName = $"{sanitizedFileName}_{DateTime.Now:HHmmssfff}{extension}"
+
+        Return sanitizedFileName
+    End Function
+
 
     Private Function FindEwsFolder(objCustomer As Customer, emailFolder As String, service As ExchangeService) As Folder
         Dim emailFolders As String()

@@ -75,6 +75,11 @@ namespace DH.Helpdesk.Dal.Repositories
                 public const string Text_Internal = "Text_Internal";
                 public const string Text_External = "Text_External";
             }
+            public static class ExtendedCaseValues
+            {
+                public const string Value = "Value";
+                public const string SecondaryValue = "SecondaryValue";
+            }
 
             public static class Region
             {
@@ -499,7 +504,8 @@ namespace DH.Helpdesk.Dal.Repositories
                         BuildDepartmentFreeTextSearchQueryCte(freeText, ctx),
                         BuildCaseIsAboutFreeTextSearchQueryCte(freeText, ctx),
                         BuildLogFreeTextSearchQueryCte(freeText, ctx),
-                        BuilFormFieldValueFreeTextSearchQueryCte(freeText, ctx)
+                        BuilFormFieldValueFreeTextSearchQueryCte(freeText, ctx),
+                        BuildExtendedCaseFreeTextSearchQueryCteContains(freeText, ctx)
                     };
 
                     strBld.AppendLine(string.Join($"{Environment.NewLine} UNION ALL {Environment.NewLine} ", items));
@@ -636,6 +642,32 @@ namespace DH.Helpdesk.Dal.Repositories
             return strBld.ToString();
         }
 
+        private string BuildExtendedCaseFreeTextSearchQueryCteContains(string freeText, SearchQueryBuildContext ctx)
+        {
+            var filter = ctx.Criterias.SearchFilter;
+            var customerId = filter.CustomerId;
+            var strBld = new StringBuilder();
+            strBld.AppendLine(@"SELECT tblCase.Id
+                FROM tblCase 
+                JOIN tblCase_ExtendedCaseData ON tblCase.id = tblCase_ExtendedCaseData.Case_id
+                JOIN ExtendedCaseData ON tblCase_ExtendedCaseData.ExtendedCaseData_Id = ExtendedCaseData.id
+                JOIN ExtendedCaseValues ON ExtendedCaseData.id = ExtendedCaseValues.extendedcasedataid
+                WHERE ");
+            strBld.AppendLine(BuildContainsExpession(Tables.ExtendedCaseValues.Value, freeText));
+            
+            strBld.AppendFormat(" AND tblCase.Customer_Id = {0} ", customerId).AppendLine();
+
+            strBld.AppendLine(@"GROUP BY tblCase.Id");
+
+            // Convert StringBuilder to string
+            string query = strBld.ToString();
+
+            // Replace @freeText with the parameter surrounded by double quotes
+            query = query.Replace("@freeText", $"\"{freeText}*\"");
+
+            return query;
+
+        }
         private string BuilFormFieldValueFreeTextSearchQueryCte(string freeText, SearchQueryBuildContext ctx)
         {
             var filter = ctx.Criterias.SearchFilter;
@@ -691,7 +723,8 @@ namespace DH.Helpdesk.Dal.Repositories
 
             tables.Add("from tblCase WITH (NOLOCK) ");
             tables.Add("inner join tblCustomer on tblCase.Customer_Id = tblCustomer.Id ");
-            
+
+
             if (ctx.Criterias.SearchFilter.IsExtendedSearch == false)
                 tables.Add("inner join tblCustomerUser on tblCase.Customer_Id = tblCustomerUser.Customer_Id ");
 
@@ -873,7 +906,9 @@ namespace DH.Helpdesk.Dal.Repositories
                 sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblCase].[Miscellaneous]", text));
                 sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblDepartment].[Department]", text));
                 sb.AppendFormat(" OR {0}", this.GetSqlContains("[tblDepartment].[DepartmentId]", text));
-                sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE CONTAINS([tblLog].[Text_Internal], N'\"*{0}*\"') OR CONTAINS([tblLog].[Text_External], N'\"*{0}*\"')))", text);
+                //If line below - the query takes very long time. 
+                //sb.AppendFormat("OR ([tblCase].[Id] IN ( SELECT tblCase.Id FROM tblCase JOIN tblCase_ExtendedCaseData ON tblCase.id = tblCase_ExtendedCaseData.Case_id JOIN ExtendedCaseData ON tblCase_ExtendedCaseData.ExtendedCaseData_Id = ExtendedCaseData.id JOIN ExtendedCaseValues ON ExtendedCaseData.id = ExtendedCaseValues.extendedcasedataid WHERE CONTAINS (Value, N'\"*{0}*\"')))", text);
+                sb.AppendFormat("OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE CONTAINS([tblLog].[Text_Internal], N'\"*{0}*\"') OR CONTAINS([tblLog].[Text_External], N'\"*{0}*\"')))", text);
                 //sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblLog] WHERE [tblLog].[Text_Internal] LIKE '%{0}%' OR [tblLog].[Text_External] LIKE '%{0}%'))", text);
                 sb.AppendFormat(" OR ([tblCase].[Id] IN (SELECT [Case_Id] FROM [tblFormFieldValue] WHERE {0}))", this.GetSqlContains("FormFieldValue", text));
                 sb.Append(") ");
@@ -1672,9 +1707,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
         private string BuildContainsExpession(string field, string text, string tableAlias = "", bool useWildcard = true)
         {
-            return (_useFts)
-                ? BuildFTSContainsExpession(field, text, tableAlias, useWildcard)
-                : BuildFTSContainsExpession(field, text, tableAlias, useWildcard);
+            return BuildFTSContainsExpession(field, text, tableAlias, useWildcard);
         }
 
         private string BuildFTSContainsExpession(string field, string text, string tableAlias = "", bool useWildcard = true)

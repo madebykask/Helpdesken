@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-//using Microsoft.Extensions.Configuration;
 using NLog;
 using upKeeper2Helpdesk;
 using upKeeper2Helpdesk.api;
@@ -14,28 +12,10 @@ namespace DH.Helpdesk.Upkeeper_New
     class Program
     {
         private static readonly Logger logger = LogManager.GetCurrentClassLogger();
+        
 
         static void Main(string[] args)
         {
-            //StreamWriter writer = null;
-            //string logfilepath = System.Reflection.Assembly.GetExecutingAssembly().Location.ToString().Replace("\\DH.Helpdesk.Upkeeper.exe", "") + "\\logfiles\\";
-            //if (!Directory.Exists(logfilepath))
-            //{
-            //    Directory.CreateDirectory(logfilepath);
-            //}
-            //string logfilename = "Logfile_" + DateTime.Now.ToShortDateString().Replace(" ", "").Replace(":", "").Replace("-", "") + ".txt";
-
-            //if (!System.IO.File.Exists(logfilepath + logfilename))
-            //{
-            //    // Create a file to write to.                
-            //    writer = System.IO.File.CreateText(logfilepath + logfilename);
-            //}
-            //else
-            //{
-            //    writer = System.IO.File.AppendText(logfilepath + logfilename);
-            //}
-
-
 
             try
             {
@@ -43,8 +23,9 @@ namespace DH.Helpdesk.Upkeeper_New
 
                 DateTime startTime = DateTime.Now;
                 BaseAPI api = new BaseAPI(System.Configuration.ConfigurationManager.AppSettings["UpKeeperUrl"]);
+                
+                Token t = api.Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
 
-                Token t = api.Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"]);
                 string UpKeeperOrgNo = System.Configuration.ConfigurationManager.AppSettings["UpKeeperOrgNo"];
 
                 logger.Debug("Token: " + t.Access_token.ToString());
@@ -102,7 +83,7 @@ namespace DH.Helpdesk.Upkeeper_New
 
                         if ((DateTime.Now - startTime).TotalSeconds > 300)
                         {
-                            t = api.Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"]);
+                            api.Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
 
                             startTime = DateTime.Now;
                         }
@@ -112,7 +93,7 @@ namespace DH.Helpdesk.Upkeeper_New
                         var computerId = c["Key"].ToString();
                         logger.Debug("computerId: " + computerId);
 
-                        var computer = api.GetComputer(computerId, t, UpKeeperOrgNo);
+                        var computer = api.GetComputer(computerId,UpKeeperOrgNo);
 
                         
 
@@ -140,14 +121,14 @@ namespace DH.Helpdesk.Upkeeper_New
                             {
                                 logger.Debug("DeleteComputer ");
 
-                                api.DeleteComputer(computerId, t, UpKeeperOrgNo);
+                                api.DeleteComputer(computerId, UpKeeperOrgNo);
 
                                 logger.Debug(computer.Name + " borttagen i upKeeper");
                             }
                             else if (UpdateInventory == true)
                             {
 
-                                var hardware = api.GetHardware(computerId, t, UpKeeperOrgNo);
+                                var hardware = api.GetHardware(computerId, UpKeeperOrgNo);
 
                                 if (hardware != null && hardware.Properties != null)
                                 {
@@ -228,9 +209,9 @@ namespace DH.Helpdesk.Upkeeper_New
 
                                     computer.ClientInformation.User_Id = data.GetComputerUserById(1, computer.ClientInformation.LastLoggedInUser);
 
-                                    computer.Software = api.GetComputerSoftware(computerId, t, UpKeeperOrgNo);
+                                    computer.Software = api.GetComputerSoftware(computerId, UpKeeperOrgNo);
 
-                                    computer.Hotfix = api.GetComputerUpdates(computerId, t, UpKeeperOrgNo);
+                                    computer.Hotfix = api.GetComputerUpdates(computerId, UpKeeperOrgNo);
 
                                     if (hardware.Disks != null)
                                     {
@@ -265,7 +246,7 @@ namespace DH.Helpdesk.Upkeeper_New
                                         logger.Debug(computer.Name + " Uppdatera upKeeper, location " + computer.Location2);
 
                                         // Uppdatera upKeeper
-                                        var computerDetail = api.GetComputerDetail(computerId, t, UpKeeperOrgNo);
+                                        var computerDetail = api.GetComputerDetail(computerId, UpKeeperOrgNo);
 
                                         if (computerDetail != null)
                                         {
@@ -278,7 +259,7 @@ namespace DH.Helpdesk.Upkeeper_New
                                                 computerDetail.Location = computer.Location2;
                                             }
 
-                                            string ret = api.SaveComputerDetails(computerId, computerDetail, t, UpKeeperOrgNo);
+                                            api.SaveComputerDetails(computerId, computerDetail, UpKeeperOrgNo);
                                         }
                                     }
 

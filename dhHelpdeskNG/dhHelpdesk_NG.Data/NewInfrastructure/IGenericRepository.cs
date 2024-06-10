@@ -39,5 +39,6 @@ namespace DH.Helpdesk.Dal.NewInfrastructure
 
         void MergeList(Expression<Func<TEntity, bool>> currentPredicate, IList<TEntity> newList,
             Func<TEntity, TEntity, bool> comparePredicate);
+        void MergeList(IList<TEntity> current, IList<TEntity> newList, Func<TEntity, TEntity, bool> comparePredicate);
     }
 }

@@ -128,5 +128,16 @@ namespace DH.Helpdesk.Dal.NewInfrastructure.Concrete
                 Add(toIns);
             }
         }
+        public void MergeList(IList<TEntity> current, IList<TEntity> newList, Func<TEntity, TEntity, bool> comparePredicate)
+        {
+            foreach (var toDel in current.Where(x => !newList.Any(y => comparePredicate(x, y))).ToList())
+            {
+                Delete(toDel);
+            }
+            foreach (var toIns in newList.Where(x => !current.Any(y => comparePredicate(x, y))).ToList())
+            {
+                Add(toIns);
+            }
+        }
     }
 }

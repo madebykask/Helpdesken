@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 
 using DH.Helpdesk.BusinessData.Models.Case;
+using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.MailTemplates;
 using DH.Helpdesk.Domain;
 

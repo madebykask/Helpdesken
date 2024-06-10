@@ -44,8 +44,8 @@ namespace DH.Helpdesk.VBCSharpBridge.DI.Modules
 
 
             Bind<IDatabaseFactory>().To<DatabaseFactory>().WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["Helpdesk"].ToString());
-            
-            Bind<ISessionFactory>().To<HelpdeskSessionFactory>();
+            Bind<ISessionFactory>().To<HelpdeskSessionFactory>().WithConstructorArgument("connectionString", ConfigurationManager.ConnectionStrings["Helpdesk"].ToString());
+
             Bind<IUnitOfWorkFactory>().To<UnitOfWorkFactory>();
 
             //EF: repositories

@@ -48,6 +48,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CaseEmailExposure.cs" />
+    <Compile Include="CaseLogExposure.cs" />
+    <Compile Include="ICaseLogExposure.cs" />
+    <Compile Include="Interfaces\ICaseEmailExposure.cs" />
+    <Compile Include="Models\CaseEmailBridge.cs" />
     <Compile Include="CaseExposure.cs" />
     <Compile Include="DI\Modules\DatabaseModule.cs" />
     <Compile Include="DI\Modules\InfrastructureModule.cs" />

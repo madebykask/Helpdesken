@@ -9,6 +9,7 @@ using DH.Helpdesk.BusinessData.Models.Case.CaseHistory;
 using DH.Helpdesk.BusinessData.Models.Case.ChidCase;
 using DH.Helpdesk.BusinessData.Models.Case.MergedCase;
 using DH.Helpdesk.BusinessData.Models.Case.Output;
+using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.User;
 using DH.Helpdesk.BusinessData.Models.User.Input;
 using DH.Helpdesk.Common.Enums;
@@ -17,6 +18,7 @@ using DH.Helpdesk.Common.Enums.Cases;
 using DH.Helpdesk.Dal.MapperData.CaseHistory;
 using DH.Helpdesk.Domain;
 using DH.Helpdesk.Domain.ExtendedCaseEntity;
+using DH.Helpdesk.Services.Services.Concrete;
 
 namespace DH.Helpdesk.Services.Services
 {
@@ -176,5 +178,8 @@ namespace DH.Helpdesk.Services.Services
         Task<Case> GetDetachedCaseByIdAsync(int id);
         void HandleSendMailAboutCaseToPerformer(CustomerUserInfo performerUser, int currentUserId, CaseLog caseLog);
         void SendMergedCaseEmail(Case mergedCase, Case mergeParent, CaseMailSetting cms, int caseHistoryId, TimeZoneInfo userTimeZone, CaseLog caseLog, IList<string> ccEmailList);
+        List<FeedbackField> GetFeedbackFields(int mailTemplateId, Case newCase, CaseMailSetting cms, List<Field> fields, string recepient, ref string body, IList<string> filterFieldsEmails, bool applyFeedbackFilter);
+        void UpdateFeedbackStatus(List<FeedbackField> templateFields);
+        
     }
 }
