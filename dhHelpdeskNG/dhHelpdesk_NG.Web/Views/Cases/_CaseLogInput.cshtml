@@ -776,13 +776,13 @@ Model.EnableTwoAttachments))
     });
 
     $(document).ready(function () {
-        let isCommunicationVisible = $('fake_CaseLog_EmailRecepientsInternalLogTo').is(':visible');
-        if(!isCommunicationVisible){
+        let isCommunicationVisible = $('#fake_CaseLog_EmailRecepientsInternalLogTo').is(':visible');
+        if (!isCommunicationVisible) {
             $('#sendMailToNotifyer').hide();
             $('#informNotifyerSpan').hide();
             $('#informPerformer').hide();
         }
-        else{
+        else {
             $('#sendMailToNotifyer').show();
             $('#informNotifyerSpan').show();
             $('#informPerformer').show();
