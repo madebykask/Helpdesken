@@ -776,13 +776,15 @@ Model.EnableTwoAttachments))
     });
 
     $(document).ready(function () {
-        let isCommunicationVisible = $('fake_CaseLog_EmailRecepientsInternalLogTo').is(':visible');
-        if(!isCommunicationVisible){
+        let showCummunication = $('#showCommunication').is(':visible');
+        if (showCummunication) {
+            console.log('Communication is not visible');
             $('#sendMailToNotifyer').hide();
             $('#informNotifyerSpan').hide();
             $('#informPerformer').hide();
         }
-        else{
+        else {
+            console.log('Communication is visible');
             $('#sendMailToNotifyer').show();
             $('#informNotifyerSpan').show();
             $('#informPerformer').show();
