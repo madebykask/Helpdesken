@@ -26,6 +26,7 @@ namespace DH.Helpdesk.Dal.Repositories
         public bool FetchInfoAboutParentChild { get; set; }
 
 		public bool HasAccessToInternalLogNotes { get; set; }
+        public bool IncludeExtendedCaseValues { get; set; }
 
 	}
 }

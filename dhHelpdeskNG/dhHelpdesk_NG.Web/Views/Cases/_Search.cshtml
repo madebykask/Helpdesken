@@ -400,16 +400,23 @@
 
          <div class="row">
              <div class="span12">
-                 <table class="tableform" >
+                 <table class="tableform">
                      <tr>
                          <td class="span3">@Translation.Get("Mina ärenden")</td>
-                         <td >
-                             @Html.CheckBoxFor(m => m.SearchInMyCasesOnly, new { @class = "switchcheckbox" })                             
-                         </td>                         
-                         <td colspan="3">
+                         <td>
+                             @Html.CheckBoxFor(m => m.SearchInMyCasesOnly, new { @class = "switchcheckbox" })
+                         </td>
+                         <td>
                              <select id="lstMyFavorites" name="@CaseFilterFields.CaseFilterFavoriteNameAttribute" selectedItem="@Model.caseSearchFilter.CaseFilterFavorite" data-placeholder="@Translation.Get("Välj favoritfilter")">
-                                 
                              </select>
+                         </td>
+                     </tr>
+                     <tr>
+                         <td class="span10">
+                             @Translation.Get("Inkludera utökat ärende")
+                         </td>
+                         <td>
+                             @Html.CheckBoxFor(m => m.IncludeExtendedCaseValues, new { @class = "switchcheckbox" })
                          </td>
                      </tr>
                      <tr>
@@ -417,8 +424,8 @@
                              @Translation.Get("Sök")
                          </td>
                          <td>
-                             <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="@CaseFilterFields.FreeTextSearchNameAttribute" 
-                                    rel="tooltip" 
+                             <input type="text" id="txtFreeTextSearch" value="@Model.caseSearchFilter.FreeTextSearch" name="@CaseFilterFields.FreeTextSearchNameAttribute"
+                                    rel="tooltip"
                                     title="@Translation.Get("Använd # för att söka efter") @Translation.GetForCase(GlobalEnums.TranslationCaseFields.CaseNumber.ToString(), SessionFacade.CurrentCustomer.Id)" />
                          </td>
                          <td>
@@ -430,13 +437,13 @@
                              </select>
                          </td>
                          <td>
-                             <input type="submit" class="submit btn" value="@Translation.Get("Sök")"/>
+                             <input type="submit" class="submit btn" value="@Translation.Get("Sök")" />
                          </td>
-                         <td class="span5">
+                         <td class="span6">
                              <a href="#" id="btnMore">
-                                 <i id="icoPlus" class="icon-plus-sign"></i> 
+                                 <i id="icoPlus" class="icon-plus-sign"></i>
                                  <i id="icoFilter" class="icon-filter"></i>
-                             </a>                           
+                             </a>
                          </td>
                      </tr>
                  </table>

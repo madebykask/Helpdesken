@@ -38,7 +38,8 @@ namespace DH.Helpdesk.Dal.Repositories
 				UserDepartments = userDepartments,
 				CaseTypes = caseTypes,
 				FetchInfoAboutParentChild = context.f.FetchInfoAboutParentChild,
-				HasAccessToInternalLogNotes = context.hasAccessToInternalLogNotes
+				HasAccessToInternalLogNotes = context.hasAccessToInternalLogNotes,
+				IncludeExtendedCaseValues = context.includeExtendedCaseValues
             };
 
 			

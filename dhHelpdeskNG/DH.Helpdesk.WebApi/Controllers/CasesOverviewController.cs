@@ -339,7 +339,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                 SearchInMyCasesOnly = input.SearchInMyCasesOnly,
                 IsConnectToParent = input.IsConnectToParent,
                 CurrentCaseId = input.IsConnectToParent ? input.CurrentCaseId : null,
-
+                IncludeExtendedCaseValues = input.IncludeExtendedCaseValues,
                 CaseProgress = ((int)input.CaseProgress).ToString(), // from params - frm.ReturnFormValue(CaseFilterFields.FilterCaseProgressNameAttribute);
                 CaseFilterFavorite = input.CaseFilterFavoriteId?.ToString() ?? string.Empty, // from params - frm.ReturnFormValue(CaseFilterFields.CaseFilterFavoriteNameAttribute);
                 FreeTextSearch = input.FreeTextSearch, //TODO: remove restricted symbols here. from params - frm.ReturnFormValue(CaseFilterFields.FreeTextSearchNameAttribute);

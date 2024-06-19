@@ -239,7 +239,8 @@ namespace DH.Helpdesk.Services.Services
                 caseIds = caseIds,
                 now = now,
                 useFullTextSearch = _globalSettingService.GetGlobalSettings().First().FullTextSearch != 0,
-				hasAccessToInternalLogNotes = hasInternalLogAccess
+				hasAccessToInternalLogNotes = hasInternalLogAccess,
+                includeExtendedCaseValues = f.IncludeExtendedCaseValues
 			};
 
             #endregion

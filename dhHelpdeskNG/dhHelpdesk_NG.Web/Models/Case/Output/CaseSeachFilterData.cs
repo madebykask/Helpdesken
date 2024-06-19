@@ -102,6 +102,9 @@ namespace DH.Helpdesk.Web.Models.Case.Output
         public CaseStatisticsViewModel CaseStatisticsModel { get; set; }
 
 		public bool IsAboutEnabled { get; set; }
+
+        public bool IncludeExtendedCaseValues { get; set; }
+
     }
 
     public class AdvancedSearchSpecificFilterData
