@@ -38,19 +38,17 @@
              <div class="span12">
                  <table class="tableform">
                      <tr>
-                         <td class="span3">
+                         <td width="208px">
                              <input type="hidden" value="@Model.filterCustomerId" id="hidFilterCustomer_Id" name="hidFilterCustomerId" />                             
                          </td>
-                         <td class="span4">
-                         </td>
-                         <td class="span5">
+                         <td>
                          </td>
                      </tr>
                      @if (Model.customerUserSetting.CaseInitiatorFilterShow)
                      {
                          <tr>
-                             <td>                                
-                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)                                   
+                             <td>
+                                 @Translation.Get(GlobalEnums.TranslationCaseFields.Persons_Name.ToString(), Enums.TranslationSource.CaseTranslation, Model.filterCustomerId)
                              </td>
 	                         <td>
 		                         @Html.TextBoxFor(m => m.CaseInitiatorFilter, new { @class = "fixed-length", id = "caseInitiatorText" })
@@ -402,25 +400,19 @@
              <div class="span12">
                  <table class="tableform">
                      <tr>
-                         <td class="span3">@Translation.Get("Mina ärenden")</td>
+                         <td class="span6" style="width:400pxpx">@Translation.Get("Mina ärenden")</td>
                          <td>
                              @Html.CheckBoxFor(m => m.SearchInMyCasesOnly, new { @class = "switchcheckbox" })
                          </td>
-                         <td>
+                         <td class="span3">
                              <select id="lstMyFavorites" name="@CaseFilterFields.CaseFilterFavoriteNameAttribute" selectedItem="@Model.caseSearchFilter.CaseFilterFavorite" data-placeholder="@Translation.Get("Välj favoritfilter")">
                              </select>
                          </td>
+                         <td>  </td>
+                         <td></td>
                      </tr>
                      <tr>
-                         <td class="span10">
-                             @Translation.Get("Inkludera utökat ärende")
-                         </td>
                          <td>
-                             @Html.CheckBoxFor(m => m.IncludeExtendedCaseValues, new { @class = "switchcheckbox" })
-                         </td>
-                     </tr>
-                     <tr>
-                         <td class="span3">
                              @Translation.Get("Sök")
                          </td>
                          <td>
@@ -439,11 +431,19 @@
                          <td>
                              <input type="submit" class="submit btn" value="@Translation.Get("Sök")" />
                          </td>
-                         <td class="span6">
+                         <td>
                              <a href="#" id="btnMore">
                                  <i id="icoPlus" class="icon-plus-sign"></i>
                                  <i id="icoFilter" class="icon-filter"></i>
                              </a>
+                         </td>
+                     </tr>
+                     <tr>
+                         <td>
+                             @Translation.Get("Inkludera utökat ärende")
+                         </td>
+                         <td>
+                             @Html.CheckBoxFor(m => m.IncludeExtendedCaseValues, new { @class = "switchcheckbox" })
                          </td>
                      </tr>
                  </table>
