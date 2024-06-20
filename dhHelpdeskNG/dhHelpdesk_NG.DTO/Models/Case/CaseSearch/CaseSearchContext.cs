@@ -53,6 +53,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case.CaseSearch
         public bool useFullTextSearch;
 
 		public bool hasAccessToInternalLogNotes;
+
         public bool includeExtendedCaseValues;
     }
 }

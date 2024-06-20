@@ -595,10 +595,12 @@ namespace DH.Helpdesk.Web.Controllers
                
             var customerUser = _customerUserService.GetCustomerUserSettings(customerId, userId);
             m.CaseSearchFilterData = CreateCaseSearchFilterData(customerId, SessionFacade.CurrentUser, customerUser, SessionFacade.CurrentCaseSearch);
+
             if (SessionFacade.CurrentCaseSearch != null && SessionFacade.CurrentCaseSearch.CaseSearchFilter.IncludeExtendedCaseValues)
             {
                 m.CaseSearchFilterData.IncludeExtendedCaseValues = SessionFacade.CurrentCaseSearch.CaseSearchFilter.IncludeExtendedCaseValues;
             }
+
             m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview, lang);
             _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
 
