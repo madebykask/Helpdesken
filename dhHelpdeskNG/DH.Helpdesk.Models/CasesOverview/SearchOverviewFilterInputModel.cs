@@ -30,6 +30,7 @@ namespace DH.Helpdesk.Models.CasesOverview
         public DateTime? CaseClosingDateEndFilter { get; set; }
         public int? CaseClosingReasonId { get; set; }
         public bool SearchInMyCasesOnly { get; set; }
+        public bool IncludeExtendedCaseValues { get; set; }
         public bool IsConnectToParent { get; set; }
         public CaseProgressFilterEnum CaseProgress { get; set; }
         public int? CaseFilterFavoriteId { get; set; }

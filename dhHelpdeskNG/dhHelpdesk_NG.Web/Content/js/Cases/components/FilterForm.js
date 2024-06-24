@@ -49,6 +49,7 @@ FilterForm.prototype.init = function (opt) {
     me.$searchField = me.$el.find('#txtFreeTextSearch');
     me.initiatorField = '#caseInitiatorText';
     me.$searchOnlyInMyCases = $('#SearchInMyCasesOnly');
+    me.$includeExtendedCaseValues = $('#IncludeExtendedCaseValues');
     me.$dateFields = ['CaseRegistrationDateStartFilter', 'CaseRegistrationDateEndFilter',
                       'CaseWatchDateStartFilter', 'CaseWatchDateEndFilter',
                       'CaseClosingDateStartFilter', 'CaseClosingDateEndFilter'];    
@@ -105,6 +106,13 @@ FilterForm.prototype.init = function (opt) {
     });
 
     me.$searchOnlyInMyCases.on('switchChange.bootstrapSwitch', function () {
+        if ($(this).prop('checked')) {
+            me.clear();
+        } else {
+            me.reset();
+        }
+    });
+    me.$includeExtendedCaseValues.on('switchChange.bootstrapSwitch', function () {
         if ($(this).prop('checked')) {
             me.clear();
         } else {

@@ -75,6 +75,7 @@ var GRID_STATE = {
 
         //// Bind elements
         me.$chkSearchThruFiles = $('#chkSearchThruFiles');
+        me.$includeExtendedCaseValues = $('#includeExtendedCaseValues');
         me.$customerCaseArea = $('div.customer-cases-area');
         me.$tableLoaderMsg = $('div.loading-msg');
         me.$tableNoDataMsg = $('div.no-data-msg');
@@ -324,6 +325,7 @@ var GRID_STATE = {
         };
 
         baseParams.push({ name: 'searchThruFiles', value: me.$chkSearchThruFiles.bootstrapSwitch('state') });
+        baseParams.push({ name: 'includeExtendedCaseValues', value: me.$includeExtendedCaseValues.bootstrapSwitch('state') });
 
         baseParams.push(
             { name: 'sortBy', value: me.sortSettings.sortBy },
@@ -657,8 +659,11 @@ var GRID_STATE = {
         var me = this;
         if (me.$txtFreeTextSearch.val().trim() === "") {
             me.$chkSearchThruFiles.bootstrapSwitch('state', false).bootstrapSwitch('disabled', true);
+            me.$includeExtendedCaseValues.bootstrapSwitch('state', false).bootstrapSwitch('disabled', true);
+            //Todo
         } else {
             me.$chkSearchThruFiles.bootstrapSwitch('disabled', false);
+            me.$includeExtendedCaseValues.bootstrapSwitch('disabled', false);
         }
     }
 

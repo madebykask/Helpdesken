@@ -505,9 +505,12 @@ namespace DH.Helpdesk.Dal.Repositories
                         BuildCaseIsAboutFreeTextSearchQueryCte(freeText, ctx),
                         BuildLogFreeTextSearchQueryCte(freeText, ctx),
                         BuilFormFieldValueFreeTextSearchQueryCte(freeText, ctx),
-                        BuildExtendedCaseFreeTextSearchQueryCteContains(freeText, ctx)
                     };
-
+                    if(ctx.Criterias.IncludeExtendedCaseValues)
+                    {
+                        string extendedCaseQuery = BuildExtendedCaseFreeTextSearchQueryCteContains(freeText, ctx);
+                        items.Add(extendedCaseQuery);
+                    }
                     strBld.AppendLine(string.Join($"{Environment.NewLine} UNION ALL {Environment.NewLine} ", items));
                     strBld.AppendLine(") ");
 

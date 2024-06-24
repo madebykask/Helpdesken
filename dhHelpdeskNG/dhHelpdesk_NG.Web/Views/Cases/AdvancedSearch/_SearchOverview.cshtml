@@ -16,10 +16,10 @@
                         <tr>
                             <td>@Translation.GetCoreTextTranslation("Kund")</td>
                             <td>
-                                <select id="lstfilterCustomers" name="lstfilterCustomers" 
-                                        data-field="customers" 
-                                        data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" 
-                                        multiple="multiple" 
+                                <select id="lstfilterCustomers" name="lstfilterCustomers"
+                                        data-field="customers"
+                                        data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")"
+                                        multiple="multiple"
                                         class="chosen-select">
                                     @foreach (var c in Model.CaseSearchFilterData.filterCustomers)
                                     {
@@ -31,8 +31,8 @@
                                         }
                                     }
                                 </select>
-                                <select id="lstIncludedCustomers" name="lstIncludedCustomers" 
-                                        data-field="customers" 
+                                <select id="lstIncludedCustomers" name="lstIncludedCustomers"
+                                        data-field="customers"
                                         style="display: none">
                                     @foreach (var c in Model.ExtendedCustomers)
                                     {
@@ -49,9 +49,9 @@
                         <tr>
                             <td>@Translation.GetForCase(GlobalEnums.TranslationCaseFields.Performer_User_Id.ToString(), Model.CaseSearchFilterData.filterCustomerId)</td>
                             <td>
-                                <select id="lstfilterPerformer" name="lstfilterPerformer" data-field="performers" 
-                                        data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")" 
-                                        multiple="multiple" 
+                                <select id="lstfilterPerformer" name="lstfilterPerformer" data-field="performers"
+                                        data-placeholder="@Translation.GetCoreTextTranslation("Välj en eller flera")"
+                                        multiple="multiple"
                                         class="chosen-select">
                                     @foreach (var e in Model.CaseSearchFilterData.AvailablePerformersList.Items)
                                     {
@@ -137,6 +137,14 @@
                         <td class="span3">
                             <div>
                                 @Html.CheckBoxFor(m => Model.CaseSearchFilterData.caseSearchFilter.SearchThruFiles, new { id = "chkSearchThruFiles", @class = "switchcheckbox" })
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="span3">@Translation.GetCoreTextTranslation("Inkludera utökat ärende")</td>
+                        <td class="span3">
+                            <div>
+                                @Html.CheckBoxFor(m => Model.CaseSearchFilterData.caseSearchFilter.IncludeExtendedCaseValues, new { id = "includeExtendedCaseValues", @class = "switchcheckbox" })
                             </div>
                         </td>
                     </tr>

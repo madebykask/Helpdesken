@@ -70,6 +70,7 @@ window.advancedSearchPage =
             this.$btnSearch = $("#btnSearch");
             this.$SpecificFilterDataPartial = $('#SpecificFilterDataPartial');
             this.$chkSearchThruFiles = $('#chkSearchThruFiles');
+            this.$includeExtendedCaseValues = $('#includeExtendedCaseValues');
             this.$customerCaseArea = $('div.customer-cases-area');
 
             this.$tableLoaderMsg = $('div.loading-msg');
@@ -266,7 +267,7 @@ window.advancedSearchPage =
             var sortOptions = self.getSortOptionsOrDefaults(customerId);
             self.setSortOptionsParams(sortOptions, filterData);
 
-            console.log('Fetching data for customer: ' + customerId);
+            console.log('Fetching data for customer: ' + customerId + "Filterdata: " + filterData);
             var request = self.fetchData(filterData);
             return request;
         }
@@ -365,7 +366,7 @@ window.advancedSearchPage =
         this.getSearchFilterData = function (sortOptions) {
             var self = this;
             var fd = $('#frmAdvanceSearch').serializeObject();
-            console.dir('formData: ', fd);
+            console.log('formData: ', fd);
 
             const nomalizeParamValue = function (value) {
                 if (Array.isArray(value)) {
@@ -390,7 +391,7 @@ window.advancedSearchPage =
                 FreeTextSearch: fd.txtFreeTextSearch || '',
                 MaxRows: fd.lstfilterMaxRows,
                 SearchThruFiles: self.$chkSearchThruFiles.bootstrapSwitch('state'),
-                
+                IncludeExtendedCaseValues: self.$includeExtendedCaseValues.bootstrapSwitch('state'),
                 // customer filter fields
                 WorkingGroup: '',
                 Department: '',
@@ -670,8 +671,11 @@ window.advancedSearchPage =
             if (self.$txtFreeTextSearch.val().trim() === "") {
                 self.$chkSearchThruFiles.bootstrapSwitch('state', false);
                 self.$chkSearchThruFiles.bootstrapSwitch('disabled', true);
+                self.$includeExtendedCaseValues.bootstrapSwitch('state', false);
+                self.$includeExtendedCaseValues.bootstrapSwitch('disabled', true);
             } else {
                 self.$chkSearchThruFiles.bootstrapSwitch('disabled', false);
+                self.$includeExtendedCaseValues.bootstrapSwitch('disabled', false);
             }
         }
 

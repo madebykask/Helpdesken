@@ -592,9 +592,15 @@ namespace DH.Helpdesk.Web.Controllers
 
             var m = new JsonCaseIndexViewModel();
             var lang = SessionFacade.CurrentLanguageId;
-
+               
             var customerUser = _customerUserService.GetCustomerUserSettings(customerId, userId);
             m.CaseSearchFilterData = CreateCaseSearchFilterData(customerId, SessionFacade.CurrentUser, customerUser, SessionFacade.CurrentCaseSearch);
+
+            if (SessionFacade.CurrentCaseSearch != null && SessionFacade.CurrentCaseSearch.CaseSearchFilter.IncludeExtendedCaseValues)
+            {
+                m.CaseSearchFilterData.IncludeExtendedCaseValues = SessionFacade.CurrentCaseSearch.CaseSearchFilter.IncludeExtendedCaseValues;
+            }
+
             m.CaseTemplateTreeButton = GetCaseTemplateTreeModel(customerId, userId, CaseSolutionLocationShow.OnCaseOverview, lang);
             _caseSettingService.GetCaseSettingsWithUser(customerId, userId, SessionFacade.CurrentUser.UserGroupId);
 
@@ -645,6 +651,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             #region Code from old method. TODO: code review wanted
             var f = new CaseSearchFilter();
+            f.IncludeExtendedCaseValues = frm.IsFormValueTrue(CaseFilterFields.IncludeExtendedCaseValues);
             f.CustomerId = SessionFacade.CurrentCustomer.Id;
             f.UserId = SessionFacade.CurrentUser.Id;
             f.Initiator = frm.ReturnFormValue(CaseFilterFields.InitiatorNameAttribute);

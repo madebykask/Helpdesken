@@ -352,7 +352,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
                 CaseType = 0,
                 ProductArea = string.Empty,
                 CaseClosingReasonFilter = string.Empty,
-
+                IncludeExtendedCaseValues = input.IncludeExtendedCaseValues,
                 //tood: check if correct value is passed from client
                 MaxRows = input.MaxRows.ToString(),
             };
@@ -411,7 +411,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Behaviors
             var f = new CaseSearchFilter();
             f.IsExtendedSearch = frm.IsFormValueTrue(CaseFilterFields.IsExtendedSearch);
             //f.CustomerId = customerId;//int.Parse(frm.ReturnFormValue("currentCustomerId"));
-
+            f.IncludeExtendedCaseValues = frm.IsFormValueTrue("IncludeExtendedCaseValues");
             f.Customer = frm.ReturnFormValue("lstfilterCustomers");
             f.CaseProgress = frm.ReturnFormValue("lstFilterCaseProgress");
             f.UserPerformer = frm.ReturnFormValue("lstFilterPerformer");

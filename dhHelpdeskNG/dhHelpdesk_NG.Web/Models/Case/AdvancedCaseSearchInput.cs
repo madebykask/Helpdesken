@@ -24,6 +24,8 @@ namespace DH.Helpdesk.Web.Models.Case
         public string CaseNumber { get; set; }
         public bool SearchThruFiles { get; set; }
 
+        public bool IncludeExtendedCaseValues { get; set; }
+
         //customer seach fields
         public string WorkingGroup { get; set; }
         public string Department { get; set; }

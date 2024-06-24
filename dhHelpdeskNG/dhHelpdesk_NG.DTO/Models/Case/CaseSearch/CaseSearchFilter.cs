@@ -112,6 +112,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
         public bool FetchInfoAboutParentChild { get; set; }
         public string SortBy { get; set; }
         public bool Ascending { get; set; }
+        public bool IncludeExtendedCaseValues { get; set; }
 
         public CaseSearchFilter Copy(CaseSearchFilter o)
         {
@@ -169,6 +170,7 @@ namespace DH.Helpdesk.BusinessData.Models.Case
             r.IsExtendedSearch = o.IsExtendedSearch;
             r.FetchInfoAboutParentChild = o.FetchInfoAboutParentChild;
             r.ToBeMerged = o.ToBeMerged;
+            r.IncludeExtendedCaseValues = o.IncludeExtendedCaseValues;
 
             if (CaseOverviewCriteria != null)
             {
