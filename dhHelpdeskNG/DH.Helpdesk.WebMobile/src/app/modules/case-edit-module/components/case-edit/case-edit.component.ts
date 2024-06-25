@@ -574,6 +574,7 @@ export class CaseEditComponent {
     if (caseData.extendedCaseData != null) {
       const userData = this.localStorageService.getCurrentUser();
       const ouId = this.caseDataHelpder.getField(caseData, CaseFieldsNames.OrganizationUnitId).value;
+      console.log('ouId', ouId);
       const empty$ = () => EMPTY.pipe(defaultIfEmpty(null));
       const getOU = (_ouId) => _ouId != null ? this.oUsService.getOU(_ouId, caseData.customerId) : empty$();
       const getWhiteList = this.caseFileApiService.getFileUploadWhiteList();
