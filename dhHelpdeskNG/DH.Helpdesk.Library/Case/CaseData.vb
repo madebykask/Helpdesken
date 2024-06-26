@@ -674,6 +674,14 @@ Public Class CaseData
         End Try
     End Function
 
+    Public Function getCaseByCaseNumberAndCustomer(ByVal iCaseNumber As Integer, ByVal iCustomerId As Integer) As CCase
+        Try
+            Return getCaseByCaseNumberAndCustomerId(iCaseNumber:=iCaseNumber, iCustomerId:=iCustomerId)
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
+
     Public Function GetCaseByExternalCaseNumber(ByVal sExternalCaseNumber As String) As CCase
         Try
             Return getCaseById(sExternalCaseNumber:=sExternalCaseNumber)
@@ -808,6 +816,65 @@ Public Class CaseData
         End Try
     End Function
 
+    Private Function getCaseByCaseNumberAndCustomerId(ByVal iCaseNumber As Integer, ByVal iCustomerId As Integer) As CCase
+        Dim sSQL As String = ""
+        Dim dt As DataTable
+
+        Try
+            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.ExternalCaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
+                       "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
+                       "tblCase.Project_Id, tblCase.System_Id, tblCase.Urgency_Id, tblCase.Impact_Id, tblCase.Supplier_Id, tblCase.SMS, tblCase.VerifiedDescription, tblCase.SolutionRate, " &
+                       "tblCase.InventoryType, tblCase.InventoryLocation, tblCase.Cost, tblCase.OtherCost, tblCase.Currency, tblCase.ContactBeforeAction, tblCase.Change_Id, tblCase.Problem_Id, " &
+                       "tblCase.ReportedBy, tblCase.Persons_Name, tblCase.InvoiceNumber, tblCase.Caption, tblCase.Description, tblCase.Miscellaneous, tblUsers.FirstName AS PerformerFirstName, tblUsers.SurName AS PerformerSurName, tblUsers.EMail AS PerformerEMail, " &
+                       "tblUsers.Phone As PerformerPhone, tblUsers.Cellphone As PerformerCellPhone, " &
+                       "u2.FirstName AS RegUserFirstName, u2.SurName AS RegUserSurName, tblCase.WorkingGroup_Id, tblCase.PlanDate, tblCase.CausingPartId, tblCase.AgreedDate, tblCase.Verified, " &
+                       "tblCase.Persons_EMail, tblCase.Persons_Phone, tblCase.Place, tblCase.UserCode, tblCase.CostCentre, tblPriority.PriorityName, tblPriority.PriorityDescription, " &
+                       "tblWorkingGroup.WorkingGroup AS PerformerWorkingGroup, tblWorkingGroup.Id AS PerformerWorkingGroup_Id, tblWorkingGroup.AllocateCaseMail AS PerformerWorkingGroupAllocateCaseMail, " &
+                       "tblWorkingGroup_1.WorkingGroup AS CaseWorkingGroup, ISNULL(tblWorkingGroup_1.WorkingGroupEMail, '') AS WorkingGroupEMail, tblWorkingGroup_1.AllocateCaseMail AS AllocateCaseMail, " &
+                       "tblCase.RegTime, tblCase.ChangeTime, u3.FirstName AS ChangedName, u3.SurName AS ChangedSurName, tblCase.InventoryNumber, tblCase.Persons_CellPhone, tblCaseType.AutomaticApproveTime, " &
+                       "tblCase.CaseSolution_Id,tblCase.FinishingDate, tblCase.FinishingDescription, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
+                       "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.WatchDate, tblCase.RegistrationSource, tblCase.RegistrationSourceCustomer_Id, " &
+                       "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, tblCase.Available, tblCase.ReferenceNumber, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, " &
+                       "tblStateSecondary.FinishingCause_Id AS StateSecondary_FinishingCause_Id, tblStateSecondary.ReminderDays AS StateSecondary_ReminderDays, tblStateSecondary.AutoCloseDays AS StateSecondary_AutoCloseDays, tblCase.ExternalTime, tblCase.LeadTime, tblCase.Status " &
+                   "FROM tblCase " &
+                       "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
+                       "LEFT OUTER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &
+                       "LEFT JOIN tblUsers u2 ON tblCase.User_Id = u2.Id " &
+                       "LEFT OUTER JOIN tblWorkingGroup ON tblUsers.Default_WorkingGroup_Id = tblWorkingGroup.Id " &
+                       "LEFT OUTER JOIN tblWorkingGroup tblWorkingGroup_1 ON tblCase.WorkingGroup_Id = tblWorkingGroup_1.Id " &
+                       "LEFT JOIN tblPriority ON tblCase.Priority_Id = tblPriority.Id " &
+                       "LEFT JOIN tblUsers u3 ON tblCase.ChangeByUser_Id = u3.Id " &
+                       "INNER JOIN tblCaseType ON tblCase.CaseType_Id = tblCaseType.Id " &
+                       "LEFT JOIN tblStateSecondary ON tblCase.StateSecondary_Id=tblStateSecondary.Id " &
+                       "LEFT JOIN tblCategory ON tblCase.Category_Id=tblCategory.Id " &
+                       "LEFT JOIN tblProductArea ON tblCase.ProductArea_Id=tblProductArea.Id " &
+                       "LEFT JOIN tblDepartment ON tblCase.Department_Id=tblDepartment.Id "
+
+            If iCaseNumber <> 0 AndAlso iCustomerId <> 0 Then
+                sSQL = sSQL & "WHERE tblCase.CaseNumber=" & iCaseNumber & " AND tblCase.Customer_Id = " & iCustomerId
+            End If
+
+
+            dt = getDataTable(gsConnectionString, sSQL)
+
+            If dt.Rows.Count > 0 Then
+                Dim c As CCase
+
+                c = New CCase(dt.Rows(0))
+
+                Return c
+            Else
+                Return Nothing
+            End If
+
+        Catch ex As Exception
+            If giLoglevel > 0 Then
+                objLogFile.WriteLine(Now() & ", ERROR getCaseById " & ex.Message.ToString & ", " & sSQL)
+            End If
+
+            Throw ex
+        End Try
+    End Function
     Public Function getMailIDByMessageID(ByVal sMessageId As String) As Integer
         Dim sSQL As String = ""
         Dim dt As DataTable

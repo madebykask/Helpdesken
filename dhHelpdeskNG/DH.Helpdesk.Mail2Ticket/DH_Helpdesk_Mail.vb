@@ -631,7 +631,7 @@ Module DH_Helpdesk_Mail
 
                                             objCase = objCaseData.GetCaseByExternalCaseNumber(sExternalCaseNumber)
 
-                                            If Not objCase Is Nothing Then
+                                            If objCase IsNot Nothing Then
                                                 LogToFile("Found existing case by ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
                                             End If
                                         End If
@@ -639,13 +639,18 @@ Module DH_Helpdesk_Mail
 
                                     ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
                                     If objCustomer.EMailSubjectPattern <> "" And objCase Is Nothing Then
-                                        LogToFile("Subject: " & sSubject, iPop3DebugLevel)
+                                        LogToFile("Found EmailSubjectPattern: " & objCustomer.EMailSubjectPattern & " on customerId: " & objCustomer.Id & ". Mailsubject: " & sSubject, iPop3DebugLevel)
 
                                         iCaseNumber = extractCaseNumberFromSubject(sSubject, objCustomer.EMailSubjectPattern)
-                                        LogToFile("CaseNumber: " & iCaseNumber, iPop3DebugLevel)
-
+                                        'New 2024-06-26
+                                        'Added an extra parameter for customerId, as it only matched on CaseNumber despite the customer.'
                                         If iCaseNumber <> 0 Then
-                                            objCase = objCaseData.getCaseByCaseNumber(iCaseNumber)
+                                            objCase = objCaseData.getCaseByCaseNumberAndCustomer(iCaseNumber, objCustomer.Id)
+                                        End If
+                                        If objCase IsNot Nothing Then
+                                            LogToFile("Found existing case on Customer by EMailSubjectPattern and CaseNumber: " & iCaseNumber & " Customer_id: " & objCustomer.Id, iPop3DebugLevel)
+                                        Else
+                                            LogToFile("No existing case found on Customer by EMailSubjectPattern and CaseNumber: " & iCaseNumber & " Customer_id: " & objCustomer.Id, iPop3DebugLevel)
                                         End If
 
                                     End If
