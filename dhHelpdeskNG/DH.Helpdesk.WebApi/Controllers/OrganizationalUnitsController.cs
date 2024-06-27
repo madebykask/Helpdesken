@@ -52,7 +52,7 @@ namespace DH.Helpdesk.WebApi.Controllers
             {
                 var ou = _ouService.GetOU(id);
                 if (ou.Department_Id.HasValue)
-                    if (_departmentService.IsUserDepartment(ou.Department_Id.Value, UserId, cid))
+                    if (!_departmentService.IsUserDepartment(ou.Department_Id.Value, UserId, cid))
                         return Forbidden("User has no access to ou department");
 
                 return Ok(new
