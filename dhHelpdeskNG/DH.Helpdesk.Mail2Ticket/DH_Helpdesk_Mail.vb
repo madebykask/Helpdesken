@@ -586,7 +586,7 @@ Module DH_Helpdesk_Mail
                                 If bEnableNewEmailProcessing Then
                                     'New logic to find existing case by email
                                     Dim messageIds As List(Of String) = ExtractMessageIds(message)
-                                    LogToFile(String.Format("MessageIds found: {0}", String.Join(",", messageIds)), objCustomer.POP3DebugLevel)
+                                    LogToFile(String.Format("MessageIds found: {0}", String.Join(",", messageIds)), iPop3DebugLevel)
 
                                     ' Iterate over all UniqueMessageIds from the email to find matching case
                                     For Each messageId As String In messageIds
@@ -596,24 +596,30 @@ Module DH_Helpdesk_Mail
                                         If (objCase IsNot Nothing) Then
                                             ' Kontrollera vilket mailID detta är ett svar på | Check which mailID this is an answer to
                                             iMailID = objCaseData.getMailIDByMessageID(messageId)
-                                            LogToFile(Now() & "getMailIDByMessageID: " & iMailID.ToString(), objCustomer.POP3DebugLevel)
+                                            LogToFile("Found case by getMailIDByMessageID: " & iMailID.ToString() & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
                                             Exit For
+                                        Else
+                                            LogToFile("Did not find case by getMailIDByMessageID: " & iMailID.ToString() & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
                                         End If
                                     Next
                                 Else
                                     'old logic 
                                     If message.InReplyTo.Count > 0 Then
                                         Dim replyToId As String = message.InReplyTo(0).ToString()
-                                        LogToFile(Now() & ", Reply From: " & replyToId, iPop3DebugLevel)
-
-                                        LogToFile(Now() & ", getCaseByMessageID. InReplyTo: " & replyToId, iPop3DebugLevel)
+                                        LogToFile("Reply From: " & replyToId, iPop3DebugLevel)
                                         objCase = objCaseData.getCaseByMessageID(replyToId)
-
-                                        If objCase Is Nothing And objCustomer.ModuleOrder = 1 Then
-                                            LogToFile(Now() & ", getCaseByOrderMessageID. InReplyTo: " & replyToId, iPop3DebugLevel)
+                                        'No case found by InReplyTo, try with getCaseByOrderMessageID
+                                        If objCase Is Nothing AndAlso objCustomer.ModuleOrder = 1 Then
+                                            LogToFile("Did not find case by replyToId: " & replyToId.ToString() & "Trying with getCaseByOrderMessageID", iPop3DebugLevel)
                                             objCase = objCaseData.getCaseByOrderMessageID(replyToId)
+                                            If objCase IsNot Nothing Then
+                                                LogToFile("Found case by getCaseByOrderMessageID: " & replyToId.ToString() & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
+                                            Else
+                                                LogToFile("Did not find case by getCaseByOrderMessageID: " & replyToId.ToString() & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
+                                            End If
+                                        Else
+                                            LogToFile("Found case by :   " & replyToId.ToString() & " CaseNumber: " & objCase.Casenumber, objCustomer.POP3DebugLevel)
                                         End If
-
                                         ' Kontrollera vilket mailID detta ar ett svar pa
                                         iMailID = objCaseData.getMailIDByMessageID(replyToId)
                                     Else
@@ -627,30 +633,32 @@ Module DH_Helpdesk_Mail
                                         sExternalCaseNumber = ExtractExternalCaseNumberFromSubject(sSubject, objCustomer.ExternalEMailSubjectPattern)
 
                                         If sExternalCaseNumber <> "" Then
-                                            LogToFile("Found ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
+                                            LogToFile("Found ExternalEMailSubjectPattern :" & objCustomer.ExternalEMailSubjectPattern & " and ExternalCaseNumber:  " & sExternalCaseNumber & " Subject: " & sSubject, iPop3DebugLevel)
 
                                             objCase = objCaseData.GetCaseByExternalCaseNumber(sExternalCaseNumber)
 
-                                            If Not objCase Is Nothing Then
+                                            If objCase IsNot Nothing Then
+                                                LogToFile("Found existing case by ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
+                                            Else
                                                 LogToFile("Found existing case by ExternalCaseNumber: " & sExternalCaseNumber, iPop3DebugLevel)
                                             End If
                                         End If
                                     End If
-
                                     ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
-                                    If objCustomer.EMailSubjectPattern <> "" And objCase Is Nothing Then
-                                        LogToFile("Subject: " & sSubject, iPop3DebugLevel)
-
+                                    If objCustomer.EMailSubjectPattern <> "" AndAlso objCase Is Nothing Then
+                                        LogToFile("Found EmailSubjectPattern: " & objCustomer.EMailSubjectPattern & " on customerId: " & objCustomer.Id & ". Mailsubject: " & sSubject, iPop3DebugLevel)
                                         iCaseNumber = extractCaseNumberFromSubject(sSubject, objCustomer.EMailSubjectPattern)
-                                        LogToFile("CaseNumber: " & iCaseNumber, iPop3DebugLevel)
+                                        LogToFile("Found CaseNumber from EmailSubjectPattern: " & iCaseNumber, iPop3DebugLevel)
 
                                         If iCaseNumber <> 0 Then
                                             objCase = objCaseData.getCaseByCaseNumber(iCaseNumber)
+                                            LogToFile("Found existing case from EmailSubjectPattern: " & iCaseNumber, iPop3DebugLevel)
+                                        Else
+                                            LogToFile("Did not find existing case from EmailSubjectPattern: " & iCaseNumber, iPop3DebugLevel)
                                         End If
 
                                     End If
                                 End If
-
                                 objComputerUser = objComputerUserData.getComputerUserByEMail(sFromEMailAddress, objCustomer.Id)
 
 
@@ -671,6 +679,7 @@ Module DH_Helpdesk_Mail
                                     End Try
 
                                     isHtml = True
+
                                 End If
 
                                 If message.HasBodyText = True And message.HasBodyHtml = False Then
