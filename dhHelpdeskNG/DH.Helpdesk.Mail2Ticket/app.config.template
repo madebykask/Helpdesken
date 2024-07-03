@@ -12,7 +12,7 @@
     <add key="LogFolder" value="" /> <!--Example: C:\temp-->
     <add key="LogIdentifier" value="" /> <!-- -->
     <add key="ProductAreaSeparator" value="" /> <!--separator symbol. Example: ;-->
-	<add key="DefaultSmtpServer" value="" /><!--smtp.datahalland.se -->
+	<add key="DefaultSmtpServer" value="#{SMTPServer}" />
 	<add key="MaxConnectionAttempts" value="1" />
   </appSettings>
   <connectionStrings>

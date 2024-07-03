@@ -16,8 +16,8 @@
 		<add key="dh_selfserviceaddress" value="#{SelfServiceAddress}" />
 		<add key="dh_helpdeskaddress" value="#{HelpdeskAddress}" />
 		<add key="DefaultCulture" value="sv" />
-		<add key="SmtpServer" value="smtp.datahalland.se" />
-		<add key="SmtpPort" value="25" />
+		<add key="SmtpServer" value="#{SMTPServer}" />
+		<add key="SmtpPort" value="587" />
 		<add key="logRequest" value="false" />
 		<add key="MicrosoftClientId" value="#{MicrosoftClientIdApi}"/>
 		<add key="MicrosoftTenant" value="#{MicrosoftTenantApi}"/>
