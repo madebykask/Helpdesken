@@ -24,8 +24,8 @@
 		<add key="InitFromSelfService" value="false"/>
 		<add key="InitFromSelfServiceWorkflowInitValue" value="10"/>
 		<add key="log4net.Internal.Debug" value="false"/>
-		<add key="SmtpServer" value="smtp.datahalland.se"/>
-		<add key="SmtpPort" value="25"/>
+		<add key="SmtpServer" value="#{SMTPServer}"/>
+		<add key="SmtpPort" value="587"/>
 		<add key="aspnet:MaxJsonDeserializerMembers" value="150000"/>
 		<add key="aspnet:RequestQueueLimitPerSession" value="2147483647"/>
         <add key="aspnet:AllowConcurrentRequestsPerSession" value="true" />
