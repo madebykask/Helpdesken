@@ -25,6 +25,10 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using System.Web;
 using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -97,11 +101,13 @@ namespace DH.Helpdesk.Web.Controllers
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Login(LoginInputModel inputData) 
+        public  ActionResult Login(LoginInputModel inputData) 
         {
             var userName = inputData.txtUid?.Trim();
             var password = inputData.txtPwd?.Trim();
             var returnUrl = inputData.returnUrl;
+            var reCaptchaToken = inputData.reCaptchaToken;
+            var verified = VerifyRecaptcha(reCaptchaToken);
             if(string.IsNullOrEmpty(returnUrl))
             {
                 returnUrl = "~/";
@@ -132,17 +138,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                     _caseLockService.CaseLockCleanUp();
 
-                    #region Token based authentication
-
-                    //var token = GetToken(userName, password);
-                    //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
-                    //if (token != null)
-                    //{
-                    //    TempData[TokenKey] = GetTokenData(token.access_token, token.refresh_token);                        
-                    //}
-
-                    #endregion
-
                     RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
                 }
                 else
@@ -163,6 +158,29 @@ namespace DH.Helpdesk.Web.Controllers
             return View("Login");
 
 
+        }
+        public bool VerifyRecaptcha(string token)
+        {
+            appconfig = new ApplicationConfiguration();
+            var secret = appconfig.GetRecaptchaSecretKey;
+            using (var client = new HttpClient())
+            {
+                var values = new Dictionary<string, string>
+                {
+                    { "secret", secret },
+                    { "response", token }
+                };
+
+                var content = new FormUrlEncodedContent(values);
+
+                var response =client.PostAsync("https://www.google.com/recaptcha/api/siteverify", content);
+                var responseString = response.Result.Content.ReadAsStringAsync().Result;
+
+                var responseJson = JObject.Parse(responseString);
+                var success = responseJson["success"].Value<bool>();
+
+                return success;
+            }
         }
 
         [AllowAnonymous]

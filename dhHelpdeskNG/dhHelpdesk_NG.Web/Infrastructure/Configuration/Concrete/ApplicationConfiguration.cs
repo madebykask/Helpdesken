@@ -93,5 +93,13 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
                     ConfigurationManager.AppSettings["MicrosoftLogin"] : "";
             }
         }
+        public string GetRecaptchaSecretKey
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["RecaptchaSecretKey"] != null ?
+                    ConfigurationManager.AppSettings["RecaptchaSecretKey"] : "";
+            }
+        }
     }
 }
