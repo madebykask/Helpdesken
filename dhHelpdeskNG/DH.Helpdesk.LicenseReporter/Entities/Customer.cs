@@ -14,5 +14,7 @@ namespace DH.Helpdesk.LicenseReporter.Entities
 
         public string Address { get; set; }
 
+        public string ERPContractNumber { get; set; }
+
     }
 }

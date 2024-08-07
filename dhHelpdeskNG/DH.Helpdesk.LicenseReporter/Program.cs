@@ -40,7 +40,17 @@ namespace DH.Helpdesk.LicenseReporter
                 //Exclude DH SOlutons email.
                 users = users.Where(x => !x.Email.Contains("dhsolution")).ToList();
 
-                body = body + customer.Name + " " + "<b>" + users.Count + "</b>" + " st" + "<br>";
+                if (!string.IsNullOrEmpty(customer.ERPContractNumber))
+                {
+                    body = body + customer.Name + " " + "<b>" + users.Count + "</b>" + " st" + "<br>";
+                }
+
+                else
+                {
+                    body = body + customer.ERPContractNumber + " - " + customer.Name + " " + "<b>" + users.Count + "</b>" + " st" + "<br>";
+                }
+
+                
 
             }
 
@@ -89,7 +99,7 @@ namespace DH.Helpdesk.LicenseReporter
         {
             var customers = new List<Customer>();
 
-            string query = "select * from tblCustomer where Status = 1 order by Name asc";
+            string query = "select * from tblCustomer where Status = 1 order by ERPContractNumber,Name asc";
 
             using (SqlConnection connection = new SqlConnection($"Data Source={dbServerInstance};Initial Catalog={dbDatabase};User Id={dbUsername};Password={dbPassword};"))
             {
@@ -105,7 +115,8 @@ namespace DH.Helpdesk.LicenseReporter
                         {
                             Id = reader.SafeGetInteger("Id"),
                             Name = reader.SafeGetString("Name"),
-                            Address = reader.SafeGetString("Address")
+                            Address = reader.SafeGetString("Address"),
+                            ERPContractNumber = reader.SafeGetString("ERPContractNumber")
                         };
 
                         customers.Add(customer);
