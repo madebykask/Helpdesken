@@ -40,7 +40,7 @@ namespace DH.Helpdesk.LicenseReporter
                 //Exclude DH SOlutons email.
                 users = users.Where(x => !x.Email.Contains("dhsolution")).ToList();
 
-                if (!string.IsNullOrEmpty(customer.ERPContractNumber))
+                if (string.IsNullOrEmpty(customer.ERPContractNumber))
                 {
                     body = body + customer.Name + " " + "<b>" + users.Count + "</b>" + " st" + "<br>";
                 }
