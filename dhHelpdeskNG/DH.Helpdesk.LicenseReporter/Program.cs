@@ -139,6 +139,8 @@ namespace DH.Helpdesk.LicenseReporter
             string subject = ConfigurationManager.AppSettings["emailSubject"];
             string smtpServer = ConfigurationManager.AppSettings["smtpServer"];
             int smtpPort = int.Parse(ConfigurationManager.AppSettings["smtpPort"]);
+            string smtpUserName = ConfigurationManager.AppSettings["smtpUserName"];
+            string smtpPassword = ConfigurationManager.AppSettings["smtpPassword"];
 
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress(from);
@@ -155,6 +157,13 @@ namespace DH.Helpdesk.LicenseReporter
             {
                 using (SmtpClient smtp = smtpPort == 0 ? new SmtpClient(smtpServer) : new SmtpClient(smtpServer, smtpPort))
                 {
+                    if (!string.IsNullOrEmpty(smtpUserName) && !string.IsNullOrEmpty(smtpPassword))
+                    {
+                        Console.WriteLine("Using SMTP authentication");
+                        smtp.Credentials = new System.Net.NetworkCredential(smtpUserName, smtpPassword);
+                    }
+
+
                     smtp.Send(mail);
                     Console.WriteLine("Email sent successfully");
                 }
