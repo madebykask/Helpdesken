@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Configuration;
 using System.IO;
+using DH.Helpdesk.LicenseReporter.Entities;
+using DH.Helpdesk.LicenseReporter.Helpers;
 
 namespace DH.Helpdesk.LicenseReporter
 {
@@ -21,43 +23,112 @@ namespace DH.Helpdesk.LicenseReporter
 
         static void Main(string[] args)
         {
+
+            //Result
             string body = "";
-            body += GetCountLicenses(ConfigurationManager.AppSettings["customerName"]);
-            body += "<br>";
+
+            //Get all customers
+            var customers = GetCustomers();
+
+            //Filter out customers where address is excluded
+            customers = customers.Where(x => !x.Address.Contains("licensefree")).ToList();
+
+            foreach (var customer in customers)
+            {
+                var users = GetUsersByCustomer(customer.Id);
+
+                //Exclude DH SOlutons email.
+                users = users.Where(x => !x.Email.Contains("dhsolution")).ToList();
+
+                if (string.IsNullOrEmpty(customer.ERPContractNumber))
+                {
+                    body = body + customer.Name + " " + "<b>" + users.Count + "</b>" + " st" + "<br>";
+                }
+
+                else
+                {
+                    body = body + customer.ERPContractNumber + " - " + customer.Name + " " + "<b>" + users.Count + "</b>" + " st" + "<br>";
+                }
+
+                
+
+            }
+
 
             SendEmail(body);
         }
         
-        public static string GetCountLicenses(string customer)
+        public static List<User> GetUsersByCustomer(int id)
         {
-            string customerDB = (customer == "Logisnext") ? "'Logisnext IT Servicedesk' or tblCustomer.name = 'Parts support'" : $"'{customer}'";
-            string query = $@"select count (tblUsers.email) AS 'customer' from tblUsers INNER JOIN tblCustomer ON tblUsers.Customer_Id = tblCustomer.Id where (tblCustomer.name = {customerDB}) and email not like '%dhsolutions%' and tblUsers.Status=1";
+            var users = new List<User>();
 
-            using (SqlConnection conn = new SqlConnection($"Data Source={dbServerInstance};Initial Catalog={dbDatabase};User Id={dbUsername};Password={dbPassword};"))
+            string query = "select * from tblUsers where [Status] = 1 and Customer_Id = @Id";
+
+            using (SqlConnection connection = new SqlConnection($"Data Source={dbServerInstance};Initial Catalog={dbDatabase};User Id={dbUsername};Password={dbPassword};"))
             {
-                conn.Open();
-                SqlDataAdapter da = new SqlDataAdapter(query, conn);
-                DataTable dt = new DataTable();
-                da.Fill(dt);
+                connection.Open();
 
-                int number = Convert.ToInt32(dt.Rows[0]["customer"].ToString());
-                string minLicense = "";
+                using (SqlCommand command = new SqlCommand(query, connection) { CommandType = CommandType.Text })
+                {
 
-                if (customer == "LinSon" && number < 5)
-                {
-                    number = 5;
-                }
-                if (number < 7)
-                {
-                    number = 7;
-                }
-                if (customer == "Logisnext" && number > 50)
-                {
-                    number = 50;
+                    command.Parameters.AddWithValue("@Id", id);
+
+                    var reader = command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var user = new User()
+                        {
+                            Id = reader.SafeGetInteger("Id"),
+                            Email = reader.SafeGetString("Email")
+                            
+                        };
+
+                        users.Add(user);
+
+                    }
                 }
 
-                return $"{customer}: <b>{number}</b>st";
+
             }
+
+            return users;
+        }
+
+        public static List<Customer> GetCustomers()
+        {
+            var customers = new List<Customer>();
+
+            string query = "select * from tblCustomer where Status = 1 order by ERPContractNumber,Name asc";
+
+            using (SqlConnection connection = new SqlConnection($"Data Source={dbServerInstance};Initial Catalog={dbDatabase};User Id={dbUsername};Password={dbPassword};"))
+            {
+                connection.Open();
+
+                using (SqlCommand command = new SqlCommand(query, connection) { CommandType = CommandType.Text })
+                {
+                    var reader =  command.ExecuteReader();
+
+                    while (reader.Read())
+                    {
+                        var customer  = new Customer()
+                        {
+                            Id = reader.SafeGetInteger("Id"),
+                            Name = reader.SafeGetString("Name"),
+                            Address = reader.SafeGetString("Address"),
+                            ERPContractNumber = reader.SafeGetString("ERPContractNumber")
+                        };
+
+                        customers.Add(customer);
+
+                    }
+                }
+
+
+            }
+
+            return customers;
+
         }
 
 
@@ -68,6 +139,8 @@ namespace DH.Helpdesk.LicenseReporter
             string subject = ConfigurationManager.AppSettings["emailSubject"];
             string smtpServer = ConfigurationManager.AppSettings["smtpServer"];
             int smtpPort = int.Parse(ConfigurationManager.AppSettings["smtpPort"]);
+            string smtpUserName = ConfigurationManager.AppSettings["smtpUserName"];
+            string smtpPassword = ConfigurationManager.AppSettings["smtpPassword"];
 
             MailMessage mail = new MailMessage();
             mail.From = new MailAddress(from);
@@ -84,11 +157,22 @@ namespace DH.Helpdesk.LicenseReporter
             {
                 using (SmtpClient smtp = smtpPort == 0 ? new SmtpClient(smtpServer) : new SmtpClient(smtpServer, smtpPort))
                 {
+                    if (!string.IsNullOrEmpty(smtpUserName) && !string.IsNullOrEmpty(smtpPassword))
+                    {
+                        Console.WriteLine("Using SMTP authentication");
+                        smtp.Credentials = new System.Net.NetworkCredential(smtpUserName, smtpPassword);
+                    }
+
+
                     smtp.Send(mail);
+                    Console.WriteLine("Email sent successfully");
                 }
             }
             catch (Exception ex)
             {
+
+                Console.WriteLine(ex.ToString());
+
                 // Log exception to a text file at the same location as the exe file
                 string logFilePath = AppDomain.CurrentDomain.BaseDirectory + "log.txt";
                 using (StreamWriter sw = new StreamWriter(logFilePath, true)) // true to append text

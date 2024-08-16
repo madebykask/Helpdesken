@@ -892,6 +892,19 @@ ON SearchCasesFTS
 WITH STOPLIST = SYSTEM;
 GO
 
+--License reporter
+IF NOT EXISTS (
+    SELECT 1
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_NAME = 'tblCustomer' 
+      AND COLUMN_NAME = 'ERPContractNumber'
+)
+BEGIN
+    ALTER TABLE tblCustomer
+    ADD ERPContractNumber NVARCHAR(12) NULL;
+END;
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.6.1'
 GO
