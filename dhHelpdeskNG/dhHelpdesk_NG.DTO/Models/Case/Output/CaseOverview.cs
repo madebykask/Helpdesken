@@ -357,6 +357,8 @@ namespace DH.Helpdesk.BusinessData.Models.Case.Output
         /// </summary>
         public int? ChangeId { get; set; }
 
+        public int? MovedFromCustomer_Id { get; set; }
+
         /// <summary>
         /// Gets or sets the change.
         /// </summary>

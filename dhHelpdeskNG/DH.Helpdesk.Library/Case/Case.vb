@@ -112,6 +112,7 @@ Imports System.Data
     Private mCaseSolution_Id As Integer
     Private msExtendedCaseFormId As Nullable(Of Integer)
     Private miStatus As Integer
+    Private miMovedFromCustomer_Id As Integer
 
 
 #End Region
@@ -628,6 +629,11 @@ Imports System.Data
         End If
 
         miStatus = dr("Status")
+        If IsDBNull(dr("MovedFromCustomer_Id")) Then
+            miMovedFromCustomer_Id = 0
+        Else
+            miMovedFromCustomer_Id = dr("MovedFromCustomer_Id")
+        End If
     End Sub
 
 #End Region
@@ -1587,6 +1593,15 @@ Imports System.Data
         End Get
         Set(ByVal Value As Integer)
             miStatus = Value
+        End Set
+    End Property
+
+    Public Property MovedFromCustomer_Id() As Integer
+        Get
+            Return miMovedFromCustomer_Id
+        End Get
+        Set(ByVal Value As Integer)
+            miMovedFromCustomer_Id = Value
         End Set
     End Property
 #End Region
