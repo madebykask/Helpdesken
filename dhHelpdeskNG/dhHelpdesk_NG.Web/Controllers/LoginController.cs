@@ -178,14 +178,14 @@ namespace DH.Helpdesk.Web.Controllers
                 };
 
                 var content = new FormUrlEncodedContent(values);
-
-                var response =client.PostAsync("https://www.google.com/recaptcha/api/siteverify", content);
+                var recaptchaEndPoint = appconfig.GetRecaptchaEndPoint;
+                var response =client.PostAsync(recaptchaEndPoint, content);
                 var responseString = response.Result.Content.ReadAsStringAsync().Result;
-
+                var recaptchaMinScore = appconfig.GetRecaptchaMinScore;
                 //Deserialize the incoming object
 
                 var responseJson = JsonConvert.DeserializeObject<RecaptchaResponse>(responseString);
-                if(responseJson.Success && responseJson.Score >= 0.9)
+                if(responseJson.Success && responseJson.Score > recaptchaMinScore)
                 {
                     return true;
                 }

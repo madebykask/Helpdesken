@@ -101,5 +101,27 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
                     ConfigurationManager.AppSettings["RecaptchaSecretKey"] : "";
             }
         }
+        public string GetRecaptchaEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["RecaptchaEndPoint"] != null ?
+                    ConfigurationManager.AppSettings["RecaptchaEndPoint"] : "";
+            }
+        }
+        public int GetRecaptchaMinScore
+        {
+            get
+            {
+                if(ConfigurationManager.AppSettings["RecaptchaMinScore"] != null)
+                {
+                    return Convert.ToInt32(ConfigurationManager.AppSettings["RecaptchaMinScore"]);
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
     }
 }
