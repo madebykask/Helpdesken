@@ -109,13 +109,21 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
                     ConfigurationManager.AppSettings["RecaptchaEndPoint"] : "";
             }
         }
-        public int GetRecaptchaMinScore
+        public double GetRecaptchaMinScore
         {
             get
             {
-                if(ConfigurationManager.AppSettings["RecaptchaMinScore"] != null)
+                if (ConfigurationManager.AppSettings["RecaptchaMinScore"] != null)
                 {
-                    return Convert.ToInt32(ConfigurationManager.AppSettings["RecaptchaMinScore"]);
+                    string value = ConfigurationManager.AppSettings["RecaptchaMinScore"].ToString();
+                    if (double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out double result))
+                    {
+                        return result;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
                 }
                 else
                 {

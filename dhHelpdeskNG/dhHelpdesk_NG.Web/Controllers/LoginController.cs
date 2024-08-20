@@ -150,7 +150,7 @@ namespace DH.Helpdesk.Web.Controllers
             }
             else
             {
-                TempData["LoginFailed"] = $"Login failed! Couldn't verify you mith reCaptcha".Trim();
+                TempData["LoginFailed"] = $"Login failed! Couldn't verify you with reCaptcha".Trim();
             }
 
             appconfig = new ApplicationConfiguration();
