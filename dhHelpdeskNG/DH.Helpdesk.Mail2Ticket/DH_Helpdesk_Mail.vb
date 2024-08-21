@@ -644,25 +644,35 @@ Module DH_Helpdesk_Mail
                                             End If
                                         End If
                                     End If
-                                    ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
-                                    If objCustomer.EMailSubjectPattern <> "" AndAlso objCase Is Nothing Then
-                                        LogToFile("Found EmailSubjectPattern: " & objCustomer.EMailSubjectPattern & " on customerId: " & objCustomer.Id & ". Mailsubject: " & sSubject, iPop3DebugLevel)
-                                        iCaseNumber = extractCaseNumberFromSubject(sSubject, objCustomer.EMailSubjectPattern)
-                                        LogToFile("Found CaseNumber from EmailSubjectPattern: " & iCaseNumber, iPop3DebugLevel)
+                                End If
+                                ' Kontrollera om det är svar på ett befintligt ärende | Check if there is an answer to an existing case
+                                'denna är ju lurig - kunden och/eller nya kunden om ärendet är flyttat måste ha emailsubjectpattern för att det ska bli kontroll
+                                If objCustomer.EMailSubjectPattern <> "" AndAlso objCase Is Nothing Then
+                                    LogToFile("Found EmailSubjectPattern: " & objCustomer.EMailSubjectPattern & " on customerId: " & objCustomer.Id & ". Mailsubject: " & sSubject, iPop3DebugLevel)
+                                    iCaseNumber = extractCaseNumberFromSubject(sSubject, objCustomer.EMailSubjectPattern)
 
-                                        If iCaseNumber <> 0 Then
-                                            objCase = objCaseData.getCaseByCaseNumber(iCaseNumber)
-                                            LogToFile("Found existing case from EmailSubjectPattern: " & iCaseNumber, iPop3DebugLevel)
+                                    If iCaseNumber <> 0 Then
+                                        LogToFile("Found CaseNumber from EmailSubjectPattern: " & iCaseNumber, iPop3DebugLevel)
+                                        objCase = objCaseData.getCaseByCaseNumber(iCaseNumber)
+                                        If objCase.Customer_Id <> objCustomer.Id Then
+                                            If objCase.MovedFromCustomer_Id = objCustomer.Id Then
+                                                LogToFile("Found existing moved case with EmailSubjectPattern: " & iCaseNumber & " MovedFromCustomer: " & objCustomer.Id, iPop3DebugLevel)
+                                            Else
+                                                objCase = Nothing
+                                                LogToFile("Did not find existing moved case with EmailSubjectPattern: " & iCaseNumber, iPop3DebugLevel)
+                                            End If
                                         Else
-                                            LogToFile("Did not find existing case from EmailSubjectPattern: " & iCaseNumber, iPop3DebugLevel)
+                                            LogToFile("Found existing case with EmailSubjectPattern: " & iCaseNumber, iPop3DebugLevel)
                                         End If
 
                                     End If
+
                                 End If
+
                                 objComputerUser = objComputerUserData.getComputerUserByEMail(sFromEMailAddress, objCustomer.Id)
 
 
-                                If message.HasBodyHtml = True Then
+                                If message.HasBodyHtml Then
                                     LogToFile("HasBodyHtml ", 1)
                                     sBodyText = getInnerHtml(message.BodyHtml)
                                     Try

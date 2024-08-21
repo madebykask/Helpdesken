@@ -57,6 +57,7 @@ namespace DH.Helpdesk.Services.BusinessLogic.Cases
 
             // override customerId 
             @case.Customer_Id = newCustomerId;
+            @case.MovedFromCustomer_Id = oldCustomerId;
 
             //1. set case typeId
             var newCaseTypeId = 0;

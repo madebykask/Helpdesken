@@ -66,8 +66,9 @@
                            VerifiedDescription = entity.VerifiedDescription,
                            WatchDate = entity.WatchDate,
                            WorkingGroup = entity.Workinggroup,
-                           WorkingGroupId = entity.WorkingGroup_Id
-                       };
+                           WorkingGroupId = entity.WorkingGroup_Id,
+                           MovedFromCustomer_Id = entity.MovedFromCustomer_Id,
+            };
         }
     }
 }
