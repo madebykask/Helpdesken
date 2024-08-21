@@ -8,5 +8,6 @@
         public string timeZoneOffsetInJul1 { get; set; }
         public string returnUrl { get; set; }
         public string btnLogin { get; set; }
+        public string reCaptchaToken { get; set; }
     }
 }

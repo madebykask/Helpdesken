@@ -93,5 +93,43 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
                     ConfigurationManager.AppSettings["MicrosoftLogin"] : "";
             }
         }
+        public string GetRecaptchaSecretKey
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["RecaptchaSecretKey"] != null ?
+                    ConfigurationManager.AppSettings["RecaptchaSecretKey"] : "";
+            }
+        }
+        public string GetRecaptchaEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["RecaptchaEndPoint"] != null ?
+                    ConfigurationManager.AppSettings["RecaptchaEndPoint"] : "";
+            }
+        }
+        public double GetRecaptchaMinScore
+        {
+            get
+            {
+                if (ConfigurationManager.AppSettings["RecaptchaMinScore"] != null)
+                {
+                    string value = ConfigurationManager.AppSettings["RecaptchaMinScore"].ToString();
+                    if (double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out double result))
+                    {
+                        return result;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
+            }
+        }
     }
 }

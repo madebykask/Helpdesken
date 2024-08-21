@@ -12,6 +12,7 @@
     @Styles.Render("~/Content/css/login")
     @Styles.Render("~/img-profile/css")
     @Scripts.Render("~/bundles/common/login")
+    <script src="https://www.google.com/recaptcha/api.js?render=6Lf-hQIqAAAAABec6utu1g7Aw9eBNPOE0w7yA2zF"></script>
     <title>@ViewBag.Title</title>
 </head>
 <body class="login" onload="catchTime()">
@@ -31,21 +32,11 @@
             <br />
             @(Translation.Get("Password") + ":")<br />
             <input type="password" maxlength="50" name="txtPwd" id="txtPwd" class="input-block-level" placeholder="Password" />
-            <!--
-        @Translation.Get("Logga in med"):<br />
-        <select name="checkInWith" id="checkInWith" class="input-block-level">
-            <option value="0">@Translation.Get("Lokalt konto")</option>
-            <option value="1">@Translation.Get("Nätverkskonto")</option>
-        </select>
-        -->
+
             <br />
             <input type="hidden" id="timeZoneOffsetInJan1" name="timeZoneOffsetInJan1" />
             <input type="hidden" id="timeZoneOffsetInJul1" name="timeZoneOffsetInJul1" />
             <input type="submit" value="Login" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />
-            @*<input type="button" value="Get Access Token" name="btnAccessToken" id="btnAccessToken" class="btn btn-large btn-danger" style="width:100%;" />
-            <input type="button" value="Get New Access Token" name="btnRefreshToken" id="btnRefreshToken" class="btn btn-large btn-danger" style="width:100%;" />
-            <input type="button" value="Get Case" name="btnGetCase" id="btnGetCase" class="btn btn-large btn-warning" style="width:100%;" />
-            <input type="button" value="Save Case" name="btnSaveCase" id="btnSaveCase" class="btn btn-large btn-warning" style="width:100%;" />*@
         }
         @if (ViewBag.ShowMsButton != null)
         {
@@ -54,148 +45,78 @@
                 using (Html.BeginForm("SignIn", "Login", null, FormMethod.Post, new { id = "frmLoginMS", name = "frmLoginMS" }))
                 {
                     @Html.Hidden("returnUrl", Request.QueryString["returnUrl"])
-                    // Changed image 
+                    // Changed image
                     <div class="text-center">
-                        <input type="image" value="Login with Microsoft" name="btnLogin" id="btnLogin" src="~/Content/img/ms-symbollockup_signin_light-en.svg" />
+                        <input type="image" value="Login with Microsoft" name="btnLoginMS" id="btnLoginMS" src="~/Content/img/ms-symbollockup_signin_light-en.svg" />
                     </div>
-                    @*<input type="submit" value="Login with Microsoft" name="btnLogin" id="btnLogin" class="btn btn-large btn-success" style="width:100%;" />*@
                 }
             }
 
         }
 
     </div>
-        <div class="signin-bottom">
-            <p><img src="@Url.Content("~/Content/img/dhhelpdesk.png")" /></p>
-            <p>DH Helpdesk is a case handling system from DH Solutions</p>
-            <p>@Translation.Get("version")&nbsp;@ApplicationFacade.Version</p>
-            <a href="http://www.dhsolutions.se" target="_blank">www.dhsolutions.se</a>
-        </div>
+    <div class="signin-bottom">
+        <p><img src="@Url.Content("~/Content/img/dhhelpdesk.png")" /></p>
+        <p>DH Helpdesk is a case handling system from DH Solutions</p>
+        <p>@Translation.Get("version")&nbsp;@ApplicationFacade.Version</p>
+        <a href="http://www.dhsolutions.se" target="_blank">www.dhsolutions.se</a>
+    </div>
 
-        @if (ViewBag.ChangePasswordModel != null)
-        {
-            @Html.Partial("_ChangePassword", (ChangePasswordModel)ViewBag.ChangePasswordModel)
-        }
-
-        <script type="text/javascript">
-
-    $(function () {
-        if (window.ChangePasswordDialog) {
-            window.ChangePasswordDialog.SetSuccessCallback(window.onPasswordChanged);
-            window.ChangePasswordDialog.Show();
-        }
-    });
-
-    function onPasswordChanged(pwd) {
-        $('#txtPwd').val(pwd);
-        $('#frmLogin').submit();
+    @if (ViewBag.ChangePasswordModel != null)
+    {
+        @Html.Partial("_ChangePassword", (ChangePasswordModel)ViewBag.ChangePasswordModel)
     }
+    <script>
+        $(document).ready(function () {
+            $('#frmLogin').submit(function (e) {
+                e.preventDefault();
+                console.log("onClick");
+                grecaptcha.ready(function () {
+                    grecaptcha.execute('6Lf-hQIqAAAAABec6utu1g7Aw9eBNPOE0w7yA2zF', { action: 'submit' }).then(function (token) {
+                        console.log(token);
+                        // Add your logic to submit to your backend server here.
+                        // For example, add the token to the form and submit it.
+                        $('#frmLogin').append('<input type="hidden" name="reCaptchaToken" id="reCaptchaToken" value="' + token + '">');
+                        $('#frmLogin')[0].submit();
+                    });
+                });
+            });
+        });
+    </script>
+    <script type="text/javascript">
 
-    function catchTime() {
-        var now = new Date();
-        var Jan1 = new Date(now.getFullYear(), 0, 1);
-        var Jul1 = new Date(now.getFullYear(), 6, 1);
-        document.getElementById('timeZoneOffsetInJan1').value = Jan1.getTimezoneOffset();
-        document.getElementById('timeZoneOffsetInJul1').value = Jul1.getTimezoneOffset();
-        $("input:text:visible:first").focus();
-    };
-
-    localStorage.removeItem("TokenData");
-    sessionStorage.removeItem("GlobalData");
-
-    localStorage.removeItem("AccessToken");
-    localStorage.removeItem("RefreshToken");
-
-    $('#btnAccessToken').click(function () {
-        getToken();
-    });
-
-    $('#btnRefreshToken').click(function () {
-        refreshToken();
-    });
-
-    $('#btnGetCase').click(function () {
-        getCase();
-    });
-
-    $('#btnSaveCase').click(function () {
-        saveCase();
-    });
-
-    function getToken() {
-        $.post("@Url.Content("~/token")",
-            "username=admin" +
-            "&password=" +
-            "&grant_type=password",
-            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-        ).success(function (data) {
-            if (data == null)
-                alert("Error occurred!");
-            else {
-                localStorage.setItem('AccessToken', data.access_token);
-                localStorage.setItem('RefreshToken', data.refresh_token);
+        $(function () {
+            if (window.ChangePasswordDialog) {
+                window.ChangePasswordDialog.SetSuccessCallback(window.onPasswordChanged);
+                window.ChangePasswordDialog.Show();
             }
         });
-    };
 
-    function refreshToken() {
-        var _reftoken = localStorage.getItem('RefreshToken');
-        $.post("@Url.Content("~/token")",
-            "grant_type=refresh_token" +
-            "&refresh_token=" + _reftoken,
-            { headers: { 'Content-Type': 'application/x-www-form-urlencoded' } }
-        ).success(function (data) {
-            if (data == null)
-                alert("Error occurred!");
-            else {
-                localStorage.setItem('AccessToken', data.access_token);
-            }
-        });
-    };
-
-    function getCase() {
-        var _token = localStorage.getItem('AccessToken');
-        if (_token == null || _token == "") {
-            alert("Not authenticated!");
-            return;
+        function onPasswordChanged(pwd) {
+            $('#txtPwd').val(pwd);
+            $('#frmLogin').submit();
         }
 
-        $.ajax({
-            url: "@Url.Content("~/Api/CaseApi/GetCase?id=95879")",
-            type: 'GET',
-            headers: { "Authorization": "Bearer " + _token },
-            error: function (request, status, error) {
-            },
-            success: function (res, status, xhr) {
-
-            }
-        });
-    };
-
-    function saveCase() {
-        var _token = localStorage.getItem('AccessToken');
-        if (_token == null || _token == "") {
-            alert("Not authenticated!");
-            return;
-        }
-
-        var caseInfo = {
-            Id: 0,
-            Caption: "My Case Caption1",
-            Customer_Id: 29,
-            ProductAreaSetDate:"2017-05-12T12:41:55",
-            PersonsEmail: "mg@dhsolutions.se",
-            CurrentLanguageId: 1
+        function catchTime() {
+            var now = new Date();
+            var Jan1 = new Date(now.getFullYear(), 0, 1);
+            var Jul1 = new Date(now.getFullYear(), 6, 1);
+            document.getElementById('timeZoneOffsetInJan1').value = Jan1.getTimezoneOffset();
+            document.getElementById('timeZoneOffsetInJul1').value = Jul1.getTimezoneOffset();
+            $("input:text:visible:first").focus();
         };
 
-        $.ajax({
-            url: "@Url.Content("~/Api/CaseApi/SaveCase")",
-            data: JSON.stringify(caseInfo),
-            contentType: "application/json; charset=utf-8",
-            type: 'POST',
-            headers: { "Authorization": "Bearer " + _token }
+        $(function () {
+            if (window.ChangePasswordDialog) {
+            window.ChangePasswordDialog.SetSuccessCallback(window.onPasswordChanged);
+        window.ChangePasswordDialog.Show();
+            }
         });
-    };
-        </script>
-    </body>
+
+        function onPasswordChanged(pwd) {
+            $('#txtPwd').val(pwd);
+        $('#frmLogin').submit();
+        }
+    </script>
+</body>
 </html>
