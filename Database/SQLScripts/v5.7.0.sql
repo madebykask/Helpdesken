@@ -907,6 +907,40 @@ GO
 
 -- 5.7.0 
 
+RAISERROR ('Add Column MovedFromCustomer_Id to tblCase', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCase','MovedFromCustomer_Id') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblCase]
+		ADD MovedFromCustomer_Id int null
+	End
+Go
+
+WITH LastDifferentCustomer AS (
+    SELECT
+        h.Case_Id,
+        h.Customer_Id AS MovedFromCustomer_Id,
+        ROW_NUMBER() OVER (PARTITION BY h.Case_Id ORDER BY h.CreatedDate DESC) AS rn
+    FROM
+        tblCaseHistory h
+    INNER JOIN tblCase c
+        ON h.Case_Id = c.Id
+    WHERE
+        h.Customer_Id != c.Customer_Id
+)
+
+UPDATE c
+SET
+    c.MovedFromCustomer_Id = ldc.MovedFromCustomer_Id
+FROM
+    tblCase c
+INNER JOIN LastDifferentCustomer ldc
+    ON c.Id = ldc.Case_Id
+WHERE
+    ldc.rn = 1
+	and c.MovedFromCustomer_Id is null;
+
+Go
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.7.0'
 GO
