@@ -113,47 +113,48 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 TempData["LoginFailed"] = $"Login failed! Couldn't verify you with reCaptcha".Trim();
             }
-
-            if (string.IsNullOrEmpty(returnUrl))
+            else
             {
-                returnUrl = "~/";
-            }
-
-            if (IsValidLoginArgument(userName, password))
-            {
-                // try to login user
-                var res =
-                    _authenticationService.Login(
-                        HttpContext,
-                        userName,
-                        password,
-                        new UserTimeZoneInfo(inputData.timeZoneOffsetInJan1, inputData.timeZoneOffsetInJul1));
-
-                if (res.IsSuccess)
+                if (string.IsNullOrEmpty(returnUrl))
                 {
-                    SessionFacade.TimeZoneDetectionResult = res.TimeZoneAutodetect;
+                    returnUrl = "~/";
+                }
 
-                    if (res.PasswordExpired)
+                if (IsValidLoginArgument(userName, password))
+                {
+                    // try to login user
+                    var res =
+                        _authenticationService.Login(
+                            HttpContext,
+                            userName,
+                            password,
+                            new UserTimeZoneInfo(inputData.timeZoneOffsetInJan1, inputData.timeZoneOffsetInJul1));
+
+                    if (res.IsSuccess)
                     {
-                        var settings = _settingService.GetCustomerSetting(res.User.CustomerId);
+                        SessionFacade.TimeZoneDetectionResult = res.TimeZoneAutodetect;
 
-                        ViewBag.UserId = userName;
-                        ViewBag.ChangePasswordModel = GetPasswordChangeModel(res.User, settings);
-                        return View("Login");
+                        if (res.PasswordExpired)
+                        {
+                            var settings = _settingService.GetCustomerSetting(res.User.CustomerId);
+
+                            ViewBag.UserId = userName;
+                            ViewBag.ChangePasswordModel = GetPasswordChangeModel(res.User, settings);
+                            return View("Login");
+                        }
+
+                        _caseLockService.CaseLockCleanUp();
+
+                        RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
                     }
+                    else
+                    {
+                        TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
 
-                    _caseLockService.CaseLockCleanUp();
-
-                    RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
-                }
-                else
-                {
-                    TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
-
+                    }
                 }
             }
-
-
+            
             appconfig = new ApplicationConfiguration();
             var msLogin = appconfig.GetAppKeyValueMicrosoft;
             ViewBag.ShowMsButton = false;
