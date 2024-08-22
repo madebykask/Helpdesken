@@ -107,51 +107,52 @@ namespace DH.Helpdesk.Web.Controllers
             var password = inputData.txtPwd?.Trim();
             var returnUrl = inputData.returnUrl;
             var reCaptchaToken = inputData.reCaptchaToken;
-            if (VerifyRecaptcha(reCaptchaToken))
-            {
-                if (string.IsNullOrEmpty(returnUrl))
-                {
-                    returnUrl = "~/";
-                }
 
-                if (IsValidLoginArgument(userName, password))
-                {
-                    // try to login user
-                    var res =
-                        _authenticationService.Login(
-                            HttpContext,
-                            userName,
-                            password,
-                            new UserTimeZoneInfo(inputData.timeZoneOffsetInJan1, inputData.timeZoneOffsetInJul1));
-
-                    if (res.IsSuccess)
-                    {
-                        SessionFacade.TimeZoneDetectionResult = res.TimeZoneAutodetect;
-
-                        if (res.PasswordExpired)
-                        {
-                            var settings = _settingService.GetCustomerSetting(res.User.CustomerId);
-
-                            ViewBag.UserId = userName;
-                            ViewBag.ChangePasswordModel = GetPasswordChangeModel(res.User, settings);
-                            return View("Login");
-                        }
-
-                        _caseLockService.CaseLockCleanUp();
-
-                        RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
-                    }
-                    else
-                    {
-                        TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
-
-                    }
-                }
-            }
-            else
+            //Verify reCaptcha token
+            if (!VerifyRecaptcha(reCaptchaToken))
             {
                 TempData["LoginFailed"] = $"Login failed! Couldn't verify you with reCaptcha".Trim();
             }
+
+            if (string.IsNullOrEmpty(returnUrl))
+            {
+                returnUrl = "~/";
+            }
+
+            if (IsValidLoginArgument(userName, password))
+            {
+                // try to login user
+                var res =
+                    _authenticationService.Login(
+                        HttpContext,
+                        userName,
+                        password,
+                        new UserTimeZoneInfo(inputData.timeZoneOffsetInJan1, inputData.timeZoneOffsetInJul1));
+
+                if (res.IsSuccess)
+                {
+                    SessionFacade.TimeZoneDetectionResult = res.TimeZoneAutodetect;
+
+                    if (res.PasswordExpired)
+                    {
+                        var settings = _settingService.GetCustomerSetting(res.User.CustomerId);
+
+                        ViewBag.UserId = userName;
+                        ViewBag.ChangePasswordModel = GetPasswordChangeModel(res.User, settings);
+                        return View("Login");
+                    }
+
+                    _caseLockService.CaseLockCleanUp();
+
+                    RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
+                }
+                else
+                {
+                    TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
+
+                }
+            }
+
 
             appconfig = new ApplicationConfiguration();
             var msLogin = appconfig.GetAppKeyValueMicrosoft;
@@ -182,8 +183,8 @@ namespace DH.Helpdesk.Web.Controllers
                 var response =client.PostAsync(recaptchaEndPoint, content);
                 var responseString = response.Result.Content.ReadAsStringAsync().Result;
                 var recaptchaMinScore = appconfig.GetRecaptchaMinScore;
-                //Deserialize the incoming object
 
+                //Deserialize the incoming object
                 var responseJson = JsonConvert.DeserializeObject<RecaptchaResponse>(responseString);
                 if(responseJson.Success && responseJson.Score > recaptchaMinScore)
                 {
