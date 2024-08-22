@@ -39,6 +39,9 @@
     If your application supports All Microsoft account users, replace this value with "common"-->
 		<add key="Authority" value="https://login.microsoftonline.com/{0}/v2.0" />
 		<add key="RedirectUri" value="#{RedirectUri}" /><!-- Your applications RedirectUri from Azure eg homepage-->
+		<add key="RecaptchaSecretKey" value="#{RecaptchaSecretKey}" />
+		<add key="RecaptchaEndPoint" value="#{RecaptchaEndPoint}" />
+		<add key="RecaptchaMinScore" value="#{RecaptchaMinScore}" />
 		#{/if}
 		#{if AuthenticationMode == "windows"}<add key="LoginMode" value="Windows"/>#{/if}
 	</appSettings>

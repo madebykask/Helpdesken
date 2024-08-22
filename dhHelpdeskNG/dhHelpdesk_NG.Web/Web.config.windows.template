@@ -37,6 +37,9 @@
 		<add key="Tenant" value="" />
 		<add key="Authority" value="" />
 		<add key="RedirectUri" value="" />
+		<add key="RecaptchaSecretKey" value="#{RecaptchaSecretKey}" />
+		<add key="RecaptchaEndPoint" value="#{RecaptchaEndPoint}" />
+		<add key="RecaptchaMinScore" value="#{RecaptchaMinScore}" />
 	</appSettings>
 	<system.web.extensions>
 		<scripting>
