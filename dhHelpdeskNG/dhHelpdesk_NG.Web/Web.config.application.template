@@ -35,9 +35,9 @@
 		<add key="Tenant" value="common" />
 		<add key="Authority" value="https://login.microsoftonline.com/{0}/v2.0" />
 		<add key="RedirectUri" value="#{HelpdeskRedirectUri}" /><!-- Your applications RedirectUri from Azure eg homepage-->
-		<add key="RecaptchaSecretKey" value="#{RecaptchaSecretKey}" />
-		<add key="RecaptchaEndPoint" value="#{RecaptchaEndPoint}" />
-		<add key="RecaptchaMinScore" value="#{RecaptchaMinScore}" />
+		<add key="HelpdeskRecaptchaSecretKey" value="#{HelpdeskRecaptchaSecretKey}" />
+		<add key="HelpdeskRecaptchaEndPoint" value="#{HelpdeskRecaptchaEndPoint}" />
+		<add key="HelpdeskRecaptchaMinScore" value="#{HelpdeskRecaptchaMinScore}" />
 	</appSettings>
 	<system.web.extensions>
 		<scripting>
