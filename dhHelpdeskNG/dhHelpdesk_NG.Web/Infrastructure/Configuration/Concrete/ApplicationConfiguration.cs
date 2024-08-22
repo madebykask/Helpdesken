@@ -97,25 +97,25 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
         {
             get
             {
-                return ConfigurationManager.AppSettings["RecaptchaSecretKey"] != null ?
-                    ConfigurationManager.AppSettings["RecaptchaSecretKey"] : "";
+                return ConfigurationManager.AppSettings["HelpdeskRecaptchaSecretKey"] != null ?
+                    ConfigurationManager.AppSettings["HelpdeskRecaptchaSecretKey"] : "";
             }
         }
         public string GetRecaptchaEndPoint
         {
             get
             {
-                return ConfigurationManager.AppSettings["RecaptchaEndPoint"] != null ?
-                    ConfigurationManager.AppSettings["RecaptchaEndPoint"] : "";
+                return ConfigurationManager.AppSettings["HelpdeskRecaptchaEndPoint"] != null ?
+                    ConfigurationManager.AppSettings["HelpdeskRecaptchaEndPoint"] : "";
             }
         }
         public double GetRecaptchaMinScore
         {
             get
             {
-                if (ConfigurationManager.AppSettings["RecaptchaMinScore"] != null)
+                if (ConfigurationManager.AppSettings["HelpdeskRecaptchaMinScore"] != null)
                 {
-                    string value = ConfigurationManager.AppSettings["RecaptchaMinScore"].ToString();
+                    string value = ConfigurationManager.AppSettings["HelpdeskRecaptchaMinScore"].ToString();
                     if (double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out double result))
                     {
                         return result;
