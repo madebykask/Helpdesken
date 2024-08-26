@@ -941,6 +941,73 @@ WHERE
 
 Go
 
+RAISERROR ('Checking and creating sequence [dbo].[CaseNumberSequence] if it does not exist', 10, 1) WITH NOWAIT
+-- Declare a variable to hold the calculated start value
+DECLARE @StartValue INT;
+
+-- Calculate the start value based on the max(caseNumber) + 100
+SELECT @StartValue = ISNULL(MAX(caseNumber), 0) + 100 FROM dbo.tblCase;
+
+-- Check if the sequence already exists
+IF NOT EXISTS (SELECT * FROM sys.sequences WHERE name = 'CaseNumberSequence' AND schema_id = SCHEMA_ID('dbo'))
+BEGIN
+	-- If the sequence does not exist, create it
+	RAISERROR ('Creating sequence [dbo].[CaseNumberSequence]', 10, 1) WITH NOWAIT
+	DECLARE @SQL NVARCHAR(MAX);
+	SET @SQL = '
+		CREATE SEQUENCE [dbo].[CaseNumberSequence]
+		START WITH ' + CAST(@StartValue AS NVARCHAR(20)) + '
+		INCREMENT BY 1
+		MINVALUE 200
+	';
+
+	EXEC(@SQL);
+
+	RAISERROR ('Sequence [dbo].[CaseNumberSequence] created successfully', 10, 1) WITH NOWAIT
+END
+ELSE
+BEGIN
+	-- If the sequence already exists, output a message
+	RAISERROR ('Sequence [dbo].[CaseNumberSequence] already exists', 10, 1) WITH NOWAIT
+END
+GO
+
+IF EXISTS (SELECT * FROM sys.triggers WHERE name = 'TR_CreateCaseNumber' AND parent_id = OBJECT_ID('dbo.tblCase'))
+BEGIN
+    -- If the trigger exists, alter it using dynamic SQL
+	PRINT 'ALtering Trigger'
+    EXEC('
+    ALTER TRIGGER [dbo].[TR_CreateCaseNumber] 
+    ON [dbo].[tblCase]
+    AFTER INSERT
+    AS
+    BEGIN
+        -- Set the CaseNumber for the newly inserted rows
+        UPDATE e
+        SET e.CaseNumber = NEXT VALUE FOR CaseNumberSequence
+        FROM dbo.tblCase e
+        INNER JOIN inserted i ON e.Id = i.Id;
+    END;')
+END
+ELSE
+BEGIN
+    -- If the trigger does not exist, create it using dynamic SQL
+	 PRINT 'Creating Trigger'
+    EXEC('
+    CREATE TRIGGER [dbo].[TR_CreateCaseNumber] 
+    ON [dbo].[tblCase]
+    AFTER INSERT
+    AS
+    BEGIN
+        -- Set the CaseNumber for the newly inserted rows
+        UPDATE e
+        SET e.CaseNumber = NEXT VALUE FOR CaseNumberSequence
+        FROM dbo.tblCase e
+        INNER JOIN inserted i ON e.Id = i.Id;
+    END;')
+END
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.7.0'
 GO
