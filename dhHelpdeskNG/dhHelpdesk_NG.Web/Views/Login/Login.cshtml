@@ -3,6 +3,14 @@
 @{
     ViewBag.Title = "Login";
     Layout = null;
+    var reCaptchaSiteKey = "";
+    if(ViewBag.UseRecaptcha != null)
+    {
+        if(ViewBag.UseRecaptcha)
+        {
+            reCaptchaSiteKey = ViewBag.ReCaptchaSiteKey;
+        }
+    }
 }
 <!DOCTYPE html>
 <html>
@@ -12,7 +20,7 @@
     @Styles.Render("~/Content/css/login")
     @Styles.Render("~/img-profile/css")
     @Scripts.Render("~/bundles/common/login")
-    <script src="https://www.google.com/recaptcha/api.js?render=6Lf-hQIqAAAAABec6utu1g7Aw9eBNPOE0w7yA2zF"></script>
+    <script src="https://www.google.com/recaptcha/api.js?render=@reCaptchaSiteKey"></script>
     <title>@ViewBag.Title</title>
 </head>
 <body class="login" onload="catchTime()">
@@ -44,7 +52,7 @@
             {
                 using (Html.BeginForm("SignIn", "Login", null, FormMethod.Post, new { id = "frmLoginMS", name = "frmLoginMS" }))
                 {
-                    @Html.Hidden("returnUrl", Request.QueryString["returnUrl"])
+                    @Html.Hidden("returnUrlMS", Request.QueryString["returnUrlMS"])
                     // Changed image
                     <div class="text-center">
                         <input type="image" value="Login with Microsoft" name="btnLoginMS" id="btnLoginMS" src="~/Content/img/ms-symbollockup_signin_light-en.svg" />
@@ -67,22 +75,28 @@
         @Html.Partial("_ChangePassword", (ChangePasswordModel)ViewBag.ChangePasswordModel)
     }
     <script>
-        $(document).ready(function () {
-            $('#frmLogin').submit(function (e) {
-                e.preventDefault();
-                console.log("onClick");
+    // Assign the ViewBag.UseRecaptcha value to a JavaScript variable
+    var useRecaptcha = @Html.Raw(ViewBag.UseRecaptcha?.ToString().ToLower() ?? "false");
+
+    $(document).ready(function () {
+        $('#frmLogin').submit(function (e) {
+            e.preventDefault();
+            // Check the useRecaptcha value before executing the reCAPTCHA logic
+            if (useRecaptcha) {
                 grecaptcha.ready(function () {
-                    grecaptcha.execute('6Lf-hQIqAAAAABec6utu1g7Aw9eBNPOE0w7yA2zF', { action: 'submit' }).then(function (token) {
-                        console.log(token);
-                        // Add your logic to submit to your backend server here.
-                        // For example, add the token to the form and submit it.
+                    grecaptcha.execute('@ViewBag.ReCaptchaSiteKey', { action: 'submit' }).then(function (token) {
                         $('#frmLogin').append('<input type="hidden" name="reCaptchaToken" id="reCaptchaToken" value="' + token + '">');
                         $('#frmLogin')[0].submit();
                     });
                 });
-            });
+            } else {
+                // If reCAPTCHA is not used, simply submit the form
+                $('#frmLogin')[0].submit();
+            }
         });
+    });
     </script>
+
     <script type="text/javascript">
 
         $(function () {
@@ -108,14 +122,14 @@
 
         $(function () {
             if (window.ChangePasswordDialog) {
-            window.ChangePasswordDialog.SetSuccessCallback(window.onPasswordChanged);
-        window.ChangePasswordDialog.Show();
+                window.ChangePasswordDialog.SetSuccessCallback(window.onPasswordChanged);
+                window.ChangePasswordDialog.Show();
             }
         });
 
         function onPasswordChanged(pwd) {
             $('#txtPwd').val(pwd);
-        $('#frmLogin').submit();
+            $('#frmLogin').submit();
         }
     </script>
 </body>

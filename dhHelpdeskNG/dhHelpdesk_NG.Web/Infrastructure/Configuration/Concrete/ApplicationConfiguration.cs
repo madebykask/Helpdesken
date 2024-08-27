@@ -5,6 +5,7 @@ using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
 {
+    using System.Collections;
     using System.Configuration;
     using System.Globalization;
     using System.Linq;
@@ -93,13 +94,28 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
                     ConfigurationManager.AppSettings["MicrosoftLogin"] : "";
             }
         }
-        public string GetRecaptchaSecretKey
+        public string UseRecaptcha
         {
             get
             {
-                return ConfigurationManager.AppSettings["HelpdeskRecaptchaSecretKey"] != null ?
-                    ConfigurationManager.AppSettings["HelpdeskRecaptchaSecretKey"] : "";
+                return ConfigurationManager.AppSettings["UseRecaptcha"] != null ?
+                    ConfigurationManager.AppSettings["UseRecaptcha"] : "";
             }
+        }
+        public string GetRecaptchaSecretKey
+        {
+            get
+                {
+
+                string secret = Environment.GetEnvironmentVariable("RECAPTCHA_SECRET");
+                if (!string.IsNullOrEmpty(secret))
+                {
+                    return secret;
+                }
+
+                return "Environment variable RECAPTCHA_SECRET not found.";
+            }
+            
         }
         public string GetRecaptchaEndPoint
         {
@@ -107,6 +123,14 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
             {
                 return ConfigurationManager.AppSettings["HelpdeskRecaptchaEndPoint"] != null ?
                     ConfigurationManager.AppSettings["HelpdeskRecaptchaEndPoint"] : "";
+            }
+        }
+        public string GetRecaptchaSiteKey
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["HelpdeskRecaptchaSiteKey"] != null ?
+                    ConfigurationManager.AppSettings["HelpdeskRecaptchaSiteKey"] : "";
             }
         }
         public double GetRecaptchaMinScore

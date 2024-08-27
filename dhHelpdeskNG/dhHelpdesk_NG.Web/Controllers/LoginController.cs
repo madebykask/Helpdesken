@@ -95,78 +95,71 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 ViewBag.ShowMsButton = true;
             }
-            
+            var useReCaptcha = appconfig.UseRecaptcha;
+            ViewBag.UseRecaptcha = false;
+            if (useReCaptcha == "1")
+            {
+                ViewBag.UseRecaptcha = true;
+                ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
+            }
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public  ActionResult Login(LoginInputModel inputData) 
+        public ActionResult Login(LoginInputModel inputData)
         {
             var userName = inputData.txtUid?.Trim();
             var password = inputData.txtPwd?.Trim();
-            var returnUrl = inputData.returnUrl;
+            var returnUrl = string.IsNullOrEmpty(inputData.returnUrl) ? "~/" : inputData.returnUrl;
             var reCaptchaToken = inputData.reCaptchaToken;
+            var useRecaptcha = ViewBag.UseRecaptcha == "1";
 
-            //Verify reCaptcha token
-            if (!VerifyRecaptcha(reCaptchaToken))
+            // Verify reCaptcha token if required
+            if (useRecaptcha && !VerifyRecaptcha(reCaptchaToken))
             {
-                TempData["LoginFailed"] = $"Login failed! Couldn't verify you with reCaptcha".Trim();
+                TempData["LoginFailed"] = "Login failed! Couldn't verify you with reCaptcha".Trim();
+                return View("Login");
             }
-            else
+
+            // Validate login arguments
+            if (IsValidLoginArgument(userName, password))
             {
-                if (string.IsNullOrEmpty(returnUrl))
+                var res = _authenticationService.Login(
+                    HttpContext,
+                    userName,
+                    password,
+                    new UserTimeZoneInfo(inputData.timeZoneOffsetInJan1, inputData.timeZoneOffsetInJul1)
+                );
+
+                if (res.IsSuccess)
                 {
-                    returnUrl = "~/";
+                    SessionFacade.TimeZoneDetectionResult = res.TimeZoneAutodetect;
+
+                    if (res.PasswordExpired)
+                    {
+                        var settings = _settingService.GetCustomerSetting(res.User.CustomerId);
+                        ViewBag.UserId = userName;
+                        ViewBag.ChangePasswordModel = GetPasswordChangeModel(res.User, settings);
+                        return View("Login");
+                    }
+
+                    _caseLockService.CaseLockCleanUp();
+                    RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
                 }
-
-                if (IsValidLoginArgument(userName, password))
+                else
                 {
-                    // try to login user
-                    var res =
-                        _authenticationService.Login(
-                            HttpContext,
-                            userName,
-                            password,
-                            new UserTimeZoneInfo(inputData.timeZoneOffsetInJan1, inputData.timeZoneOffsetInJul1));
-
-                    if (res.IsSuccess)
-                    {
-                        SessionFacade.TimeZoneDetectionResult = res.TimeZoneAutodetect;
-
-                        if (res.PasswordExpired)
-                        {
-                            var settings = _settingService.GetCustomerSetting(res.User.CustomerId);
-
-                            ViewBag.UserId = userName;
-                            ViewBag.ChangePasswordModel = GetPasswordChangeModel(res.User, settings);
-                            return View("Login");
-                        }
-
-                        _caseLockService.CaseLockCleanUp();
-
-                        RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
-                    }
-                    else
-                    {
-                        TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
-
-                    }
+                    TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
                 }
             }
-            
-            appconfig = new ApplicationConfiguration();
-            var msLogin = appconfig.GetAppKeyValueMicrosoft;
-            ViewBag.ShowMsButton = false;
-            if (msLogin == "1")
-            {
-                ViewBag.ShowMsButton = true;
-            }
+
+            // Set ViewBag properties
+            var appconfig = new ApplicationConfiguration();
+            ViewBag.ShowMsButton = appconfig.GetAppKeyValueMicrosoft == "1";
 
             return View("Login");
-
-
         }
+
         public bool VerifyRecaptcha(string token)
         {
             appconfig = new ApplicationConfiguration();
@@ -201,18 +194,18 @@ namespace DH.Helpdesk.Web.Controllers
         [AllowAnonymous]
         public void SignIn(LoginInputModel inputData)
         {
-            var returnUrl = inputData.returnUrl;
-            if(!string.IsNullOrEmpty(returnUrl))
+            var returnUrlMS = inputData.returnUrlMS;
+            if(!string.IsNullOrEmpty(returnUrlMS))
             {
-                returnUrl = returnUrl.Replace("~/", "");
+                returnUrlMS = returnUrlMS.Replace("~/", "");
             }
             else
             {
-                returnUrl = "/";
+                returnUrlMS = "/";
             }
             _authenticationService.SetLoginModeToMicrosoft();
             HttpContext.GetOwinContext().Authentication.Challenge(
-                new AuthenticationProperties { RedirectUri = returnUrl },
+                new AuthenticationProperties { RedirectUri = returnUrlMS },
                 OpenIdConnectAuthenticationDefaults.AuthenticationType);
 
         }
