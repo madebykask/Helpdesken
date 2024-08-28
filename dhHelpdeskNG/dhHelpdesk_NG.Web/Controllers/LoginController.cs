@@ -193,7 +193,7 @@ namespace DH.Helpdesk.Web.Controllers
         [AllowAnonymous]
         public void SignIn(LoginInputModel inputData)
         {
-            var returnUrlMS = inputData.returnUrlMS;
+            var returnUrlMS = inputData.returnUrl;
             if(!string.IsNullOrEmpty(returnUrlMS))
             {
                 returnUrlMS = returnUrlMS.Replace("~/", "");
