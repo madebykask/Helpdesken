@@ -38,7 +38,6 @@ namespace DH.Helpdesk.Web.Controllers
         //private const string TokenKey = "Token_Data";
         //private const string Access_Token_Key = "Access_Token";
         //private const string Refresh_Token_Key = "Refresh_Token";
-        private ApplicationConfiguration appconfig;
         private readonly IUserService _userService;
         private readonly ISettingService _settingService;
         private readonly IUsersPasswordHistoryService _usersPasswordHistoryService;
@@ -88,7 +87,7 @@ namespace DH.Helpdesk.Web.Controllers
                 var loginUrl = _federatedAuthenticationService.GetSignInUrl();
                 return Redirect(loginUrl);
             }
-            appconfig = new ApplicationConfiguration();
+            var appconfig = new ApplicationConfiguration();
             var msLogin = appconfig.GetAppKeyValueMicrosoft;
             ViewBag.ShowMsButton = false;
             if (msLogin == "1")
@@ -113,10 +112,11 @@ namespace DH.Helpdesk.Web.Controllers
             var password = inputData.txtPwd?.Trim();
             var returnUrl = string.IsNullOrEmpty(inputData.returnUrl) ? "~/" : inputData.returnUrl;
             var reCaptchaToken = inputData.reCaptchaToken;
-            var useRecaptcha = inputData.useRecaptcha;
+            var appconfig = new ApplicationConfiguration();
+            var useRecaptcha = appconfig.UseRecaptcha;
 
             // Verify reCaptcha token if required
-            if (useRecaptcha && !VerifyRecaptcha(reCaptchaToken))
+            if (useRecaptcha == "1" && !VerifyRecaptcha(reCaptchaToken))
             {
                 TempData["LoginFailed"] = "Login failed! Couldn't verify you with reCaptcha".Trim();
                 return View("Login");
@@ -154,15 +154,14 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // Set ViewBag properties
-            var appconfig = new ApplicationConfiguration();
-            ViewBag.ShowMsButton = appconfig.GetAppKeyValueMicrosoft == "1";
+           ViewBag.ShowMsButton = appconfig.GetAppKeyValueMicrosoft == "1";
 
             return View("Login");
         }
 
         public bool VerifyRecaptcha(string token)
         {
-            appconfig = new ApplicationConfiguration();
+            var appconfig = new ApplicationConfiguration();
             var secret = appconfig.GetRecaptchaSecretKey;
             using (var client = new HttpClient())
             {
@@ -214,12 +213,19 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Logout()
         {
             _authenticationService.ClearLoginSession(ControllerContext.HttpContext);
-            appconfig = new ApplicationConfiguration();
+            var appconfig = new ApplicationConfiguration();
             var msLogin = appconfig.GetAppKeyValueMicrosoft;
             ViewBag.ShowMsButton = false;
             if (msLogin == "1")
             {
                 ViewBag.ShowMsButton = true;
+            }
+            var useReCaptcha = appconfig.UseRecaptcha;
+            ViewBag.UseRecaptcha = false;
+            if (useReCaptcha == "1")
+            {
+                ViewBag.UseRecaptcha = true;
+                ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
             }
             return View("Login");
         }

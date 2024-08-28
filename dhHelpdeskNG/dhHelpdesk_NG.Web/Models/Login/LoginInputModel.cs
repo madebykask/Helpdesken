@@ -10,6 +10,5 @@
         public string returnUrlMS { get; set; }
         public string btnLogin { get; set; }
         public string reCaptchaToken { get; set; }
-        public bool useRecaptcha { get; set; }
     }
 }

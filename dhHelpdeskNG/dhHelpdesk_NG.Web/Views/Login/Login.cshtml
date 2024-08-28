@@ -86,7 +86,6 @@
                 grecaptcha.ready(function () {
                     grecaptcha.execute('@ViewBag.ReCaptchaSiteKey', { action: 'submit' }).then(function (token) {
                         $('#frmLogin').append('<input type="hidden" name="reCaptchaToken" id="reCaptchaToken" value="' + token + '">');
-                        $('#frmLogin').append('<input type="hidden" name="useRecaptcha" id="useRecaptcha" value="true">');
                         $('#frmLogin')[0].submit();
                     });
                 });
