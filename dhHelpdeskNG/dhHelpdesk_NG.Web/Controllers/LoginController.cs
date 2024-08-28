@@ -113,7 +113,7 @@ namespace DH.Helpdesk.Web.Controllers
             var password = inputData.txtPwd?.Trim();
             var returnUrl = string.IsNullOrEmpty(inputData.returnUrl) ? "~/" : inputData.returnUrl;
             var reCaptchaToken = inputData.reCaptchaToken;
-            var useRecaptcha = ViewBag.UseRecaptcha == "1";
+            var useRecaptcha = inputData.useRecaptcha;
 
             // Verify reCaptcha token if required
             if (useRecaptcha && !VerifyRecaptcha(reCaptchaToken))

@@ -105,14 +105,22 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
         public string GetRecaptchaSecretKey
         {
             get
-                {
-
-                string secret = Environment.GetEnvironmentVariable("RECAPTCHA_SECRET");
+            {
+                // First check the app settings for developers 
+                var secret = ConfigurationManager.AppSettings["HelpdeskRecaptchaSecretKey"];
                 if (!string.IsNullOrEmpty(secret))
                 {
                     return secret;
                 }
 
+                // Fallback to environment variable
+                secret = Environment.GetEnvironmentVariable("RECAPTCHA_SECRET");
+                if (!string.IsNullOrEmpty(secret))
+                {
+                    return secret;
+                }
+
+                // If not found, return a clear message
                 return "Environment variable RECAPTCHA_SECRET not found.";
             }
             
