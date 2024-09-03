@@ -37,7 +37,6 @@
 		<add key="Tenant" value="" />
 		<add key="Authority" value="" />
 		<add key="RedirectUri" value="" />
-		<add key="UseRecaptcha" value="#{UseRecaptcha}" /><!-- Empty string if not in use -->
 		<add key="HelpdeskRecaptchaSiteKey" value="#{HelpdeskRecaptchaSiteKey}" /><!-- Empty string if not in use -->
 		<add key="HelpdeskRecaptchaEndPoint" value="#{HelpdeskRecaptchaEndPoint}" /><!-- Empty string if not in use -->
 		<add key="HelpdeskRecaptchaMinScore" value="#{HelpdeskRecaptchaMinScore}" /><!-- Empty string if not in use -->
