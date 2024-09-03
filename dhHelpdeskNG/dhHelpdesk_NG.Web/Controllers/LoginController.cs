@@ -81,26 +81,21 @@ namespace DH.Helpdesk.Web.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
-
+            var appconfig = new ApplicationConfiguration();
             if (_applicationConfiguration.LoginMode == LoginMode.SSO)
             {
                 var loginUrl = _federatedAuthenticationService.GetSignInUrl();
                 return Redirect(loginUrl);
             }
-            var appconfig = new ApplicationConfiguration();
+           
             var msLogin = appconfig.GetAppKeyValueMicrosoft;
             ViewBag.ShowMsButton = false;
             if (msLogin == "1")
             {
                 ViewBag.ShowMsButton = true;
             }
-            var useReCaptcha = appconfig.UseRecaptcha;
-            ViewBag.UseRecaptcha = false;
-            if (useReCaptcha == "1")
-            {
-                ViewBag.UseRecaptcha = true;
-                ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
-            }
+
+            ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
             return View();
         }
 
@@ -113,10 +108,9 @@ namespace DH.Helpdesk.Web.Controllers
             var returnUrl = string.IsNullOrEmpty(inputData.returnUrl) ? "~/" : inputData.returnUrl;
             var reCaptchaToken = inputData.reCaptchaToken;
             var appconfig = new ApplicationConfiguration();
-            var useRecaptcha = appconfig.UseRecaptcha;
 
             // Verify reCaptcha token if required
-            if (useRecaptcha == "1" && !VerifyRecaptcha(reCaptchaToken))
+            if (!String.IsNullOrEmpty(reCaptchaToken) && !VerifyRecaptcha(reCaptchaToken))
             {
                 TempData["LoginFailed"] = "Login failed! Couldn't verify you with reCaptcha".Trim();
                 return View("Login");
@@ -220,13 +214,7 @@ namespace DH.Helpdesk.Web.Controllers
             {
                 ViewBag.ShowMsButton = true;
             }
-            var useReCaptcha = appconfig.UseRecaptcha;
-            ViewBag.UseRecaptcha = false;
-            if (useReCaptcha == "1")
-            {
-                ViewBag.UseRecaptcha = true;
-                ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
-            }
+            ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
             return View("Login");
         }
 
@@ -280,7 +268,6 @@ namespace DH.Helpdesk.Web.Controllers
                 }
 
             }
-
             Response.Redirect(!string.IsNullOrEmpty(redirectTo) ? redirectTo : _routeResolver.ResolveStartPage(Url, startPage));
         }
 

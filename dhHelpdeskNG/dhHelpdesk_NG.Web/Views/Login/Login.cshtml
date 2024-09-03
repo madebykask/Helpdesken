@@ -3,14 +3,7 @@
 @{
     ViewBag.Title = "Login";
     Layout = null;
-    var reCaptchaSiteKey = "";
-    if(ViewBag.UseRecaptcha != null)
-    {
-        if(ViewBag.UseRecaptcha)
-        {
-            reCaptchaSiteKey = ViewBag.ReCaptchaSiteKey;
-        }
-    }
+    var reCaptchaSiteKey = ViewBag.ReCaptchaSiteKey;
 }
 <!DOCTYPE html>
 <html>
@@ -64,6 +57,12 @@
 
     </div>
     <div class="signin-bottom">
+        <script type="text/javascript">
+        @if (TempData["ConsoleMessage"] != null)
+        {
+            @Html.Raw(TempData["ConsoleMessage"])
+        }
+            </script>
         <p><img src="@Url.Content("~/Content/img/dhhelpdesk.png")" /></p>
         <p>DH Helpdesk is a case handling system from DH Solutions</p>
         <p>@Translation.Get("version")&nbsp;@ApplicationFacade.Version</p>
@@ -74,15 +73,15 @@
     {
         @Html.Partial("_ChangePassword", (ChangePasswordModel)ViewBag.ChangePasswordModel)
     }
-    <script>
+<script>
     // Assign the ViewBag.UseRecaptcha value to a JavaScript variable
-    var useRecaptcha = @Html.Raw(ViewBag.UseRecaptcha?.ToString().ToLower() ?? "false");
-
+    var reCaptchaSiteKey = '@ViewBag.ReCaptchaSiteKey';
+    //console.log("reKaptchaSiteKey: "+ reCaptchaSiteKey);
     $(document).ready(function () {
         $('#frmLogin').submit(function (e) {
             e.preventDefault();
-            // Check the useRecaptcha value before executing the reCAPTCHA logic
-            if (useRecaptcha) {
+            // Check if reCaptchaSiteKey has value before executing the reCAPTCHA logic
+            if (reCaptchaSiteKey != "") {
                 grecaptcha.ready(function () {
                     grecaptcha.execute('@ViewBag.ReCaptchaSiteKey', { action: 'submit' }).then(function (token) {
                         $('#frmLogin').append('<input type="hidden" name="reCaptchaToken" id="reCaptchaToken" value="' + token + '">');
@@ -95,7 +94,7 @@
             }
         });
     });
-    </script>
+</script>
 
     <script type="text/javascript">
 
