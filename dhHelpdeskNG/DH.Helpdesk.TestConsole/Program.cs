@@ -9,98 +9,144 @@ using DH.Helpdesk.Domain.ExtendedCaseEntity;
 using System.Text.RegularExpressions;
 using System.Data.SqlClient;
 using System.Threading;
+using DH.Helpdesk.BusinessData.Models.Notifiers;
 namespace DH.Helpdesk.TestConsole
 {
     class Program
     {
+        public string insertString = "";
         static void Main(string[] args)
         {
-            string connectionString = "Data Source=DHUTVSQL6;Initial Catalog=Helpdesk-Development;uid=DH_Helpdesk_JU_Test;Password=DHT3st16!!;";
-            for (int i = 0; i < 100; i++)
+            string connectionString = "Data Source=DHUTVSQL6;Initial Catalog=Helpdesk-Test;uid=helpdesk-test;Password=helpdesk-test;";
+            for (int i = 0; i < 5; i++)
             {
-
                 // Barrier to synchronize the start of the threads
-                Barrier barrier = new Barrier(6); // Two participants
+                Barrier barrier = new Barrier(6); 
 
                 // Task to represent the first thread
                 Task task1 = Task.Run(() =>
                 {
-                    //Console.WriteLine("Thread 1 waiting at the barrier...");
                     barrier.SignalAndWait(); // Signal and wait for the other thread
-                    SaveToDatabase(connectionString, "Data from thread 1");
+                    SaveToDatabase(connectionString, "Case " + i, "Description " + i);
                 });
 
                 // Task to represent the second thread
                 Task task2 = Task.Run(() =>
                 {
-                    //Console.WriteLine("Thread 2 waiting at the barrier...");
                     barrier.SignalAndWait(); // Signal and wait for the other thread
-                    SaveToDatabase(connectionString, "Data from thread 2");
+                    SaveToDatabase(connectionString, "Case " + i+1, "Description " + i+1);
                 });
                 Task task3 = Task.Run(() =>
                 {
-                    //Console.WriteLine("Thread 3 waiting at the barrier...");
                     barrier.SignalAndWait(); // Signal and wait for the other thread
-                    SaveToDatabase(connectionString, "Data from thread 3");
+                    SaveToDatabase(connectionString, "Case " + i+2, "Description " + i+2);
                 });
 
                 // Task to represent the second thread
                 Task task4 = Task.Run(() =>
                 {
-                    //Console.WriteLine("Thread 4 waiting at the barrier...");
                     barrier.SignalAndWait(); // Signal and wait for the other thread
-                    SaveToDatabase2(connectionString, "Data from thread 4");
+                    SaveToDatabase(connectionString, "Case " + i+3, "Description " + i+3);
                 });
                 Task task5 = Task.Run(() =>
                 {
-                    //Console.WriteLine("Thread 5 waiting at the barrier...");
                     barrier.SignalAndWait(); // Signal and wait for the other thread
-                    SaveToDatabase2(connectionString, "Data from thread 5");
+                    SaveToDatabase(connectionString, "Case " + i+4, "Description " + i+4);
                 });
 
                 // Task to represent the second thread
                 Task task6 = Task.Run(() =>
                 {
-                    //Console.WriteLine("Thread 6 waiting at the barrier...");
                     barrier.SignalAndWait(); // Signal and wait for the other thread
-                    SaveToDatabase2(connectionString, "Data from thread 6");
+                    SaveToDatabase(connectionString, "Case " + i+5, "Description " + i+5);
                 });
+                //Task task7 = Task.Run(() =>
+                //{
+                //    barrier.SignalAndWait(); // Signal and wait for the other thread
+                //    SaveToDatabase(connectionString, "Case " + i, "Description " + i);
+                //});
+                //Task task8 = Task.Run(() =>
+                //{
+                //    barrier.SignalAndWait(); // Signal and wait for the other thread
+                //    SaveToDatabase(connectionString, "Case " + i, "Description " + i);
+                //});
+                //Task task9 = Task.Run(() =>
+                //{
+                //    barrier.SignalAndWait(); // Signal and wait for the other thread
+                //    SaveToDatabase(connectionString, "Case " + i, "Description " + i);
+                //});
+                //Task task10 = Task.Run(() =>
+                //{
+
+                //    barrier.SignalAndWait(); // Signal and wait for the other thread
+                //    SaveToDatabase(connectionString, "Case " + i, "Description " + i);
+                //});
 
                 // Wait for both tasks to complete
                 Task.WaitAll(task1, task2, task3, task4, task5, task6);
 
-                Console.WriteLine("Both threads have completed.");
+                Console.WriteLine("All threads have completed.");
             }
 
 
             }
-        static void SaveToDatabase(string connectionString, string data)
+        static void SaveToDatabase(string connectionString, string caption, string description)
         {
+            Program p = new Program();
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 connection.Open();
-                string query = "INSERT INTO tblCaseTest (Caption) VALUES (@data)";
+                string query = p.InsertCase(caption, description);
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.AddWithValue("@data", data);
                     command.ExecuteNonQuery();
                 }
             }
-            Console.WriteLine("Data saved: " + data);
+            Console.WriteLine("Data saved");
         }
-        static void SaveToDatabase2(string connectionString, string data)
+
+        private string InsertCase(string caption, string description)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                connection.Open();
-                string query = "INSERT INTO tblCaseTest (Caption) VALUES (@data)";
-                using (SqlCommand command = new SqlCommand(query, connection))
-                {
-                    command.Parameters.AddWithValue("@data", data);
-                    command.ExecuteNonQuery();
-                }
-            }
-            Console.WriteLine("Data saved: " + data);
+            string sql = 
+            @"INSERT INTO tblCase (
+                    ReportedBy, 
+	                Persons_Name, 
+	                Persons_EMail, 
+	                Persons_CellPhone, 
+	                Customer_Id, 
+	                Region_Id, 
+	                Department_Id, 
+                    CaseType_Id, 
+	                Caption, Description,
+	                ContactBeforeAction, 
+	                SMS, 
+	                Performer_User_Id, 
+	                WorkingGroup_Id, 
+	                 RegistrationSource, 
+	                 RegTime, 
+	                 ChangeTime, 
+	                 RegUserName
+                )
+                VALUES(
+                    'katarina.ask1',
+                    'Katta Ask',
+                    'katarina.ask@dhsolutions.se',
+                    '12',
+                    1,
+                    206,
+                    1587,
+                    1245,
+                    '" + caption + "', '" + description + @"',
+                    0,
+                    0,
+                    498,
+                    60,
+                    3,
+                    GetDate(),
+                    GetDate(),
+                    'katarina.ask@dhsolutions.se'
+                ); ";
+            return sql;
         }
         //private static string ExtractFirstNameAttribute(string json)
         //{
