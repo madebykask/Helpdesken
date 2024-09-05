@@ -178,7 +178,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                             string requestedUrl = "~" + ctx.Request.Path;
                             var redirectUrl = HttpUtility.UrlEncode(requestedUrl);
                             var loginUrl = "~/Login/Login";
-                            if (!string.IsNullOrEmpty(requestedUrl) && requestedUrl != "~/")
+                            if (!string.IsNullOrEmpty(requestedUrl) && requestedUrl != "~/" && requestedUrl.ToLower().EndsWith("login/login/"))
                             {
                                 loginUrl = loginUrl + "?returnUrl=" + redirectUrl;
                             }
@@ -221,7 +221,7 @@ namespace DH.Helpdesk.Web.Infrastructure.Authentication
                     string requestedUrl = "~" + ctx.Request.Path;
                     var redirectUrl = HttpUtility.UrlEncode(requestedUrl);
                     var loginUrl = "~/Login/Login";
-                    if (!string.IsNullOrEmpty(requestedUrl) && requestedUrl != "~/")
+                    if (!string.IsNullOrEmpty(requestedUrl) && requestedUrl != "~/" && requestedUrl.ToLower().EndsWith("login/login/"))
                     {
                         loginUrl = loginUrl + "?returnUrl=" + redirectUrl;
                     }
