@@ -87,7 +87,6 @@ namespace DH.Helpdesk.Web.Controllers
                 var loginUrl = _federatedAuthenticationService.GetSignInUrl();
                 return Redirect(loginUrl);
             }
-           
             var msLogin = appconfig.GetAppKeyValueMicrosoft;
             ViewBag.ShowMsButton = false;
             if (msLogin == "1")
@@ -187,7 +186,7 @@ namespace DH.Helpdesk.Web.Controllers
         [AllowAnonymous]
         public void SignIn(LoginInputModel inputData)
         {
-            var returnUrlMS = inputData.returnUrl;
+            var returnUrlMS = inputData.returnUrlMS;
             if(!string.IsNullOrEmpty(returnUrlMS))
             {
                 returnUrlMS = returnUrlMS.Replace("~/", "");

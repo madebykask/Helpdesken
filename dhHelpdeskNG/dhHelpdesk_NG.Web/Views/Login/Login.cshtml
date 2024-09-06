@@ -45,7 +45,7 @@
             {
                 using (Html.BeginForm("SignIn", "Login", null, FormMethod.Post, new { id = "frmLoginMS", name = "frmLoginMS" }))
                 {
-                    @Html.Hidden("returnUrl", Request.QueryString["returnUrl"])
+                    @Html.Hidden("returnUrlMS", Request.QueryString["returnUrl"])
                     // Changed image
                     <div class="text-center">
                         <input type="image" value="Login with Microsoft" name="btnLoginMS" id="btnLoginMS" src="~/Content/img/ms-symbollockup_signin_light-en.svg" />
