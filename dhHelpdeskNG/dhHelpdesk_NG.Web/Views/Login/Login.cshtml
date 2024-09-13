@@ -75,13 +75,11 @@
     }
 <script>
     // Assign the ViewBag.UseRecaptcha value to a JavaScript variable
-    var reCaptchaSiteKey = '@ViewBag.ReCaptchaSiteKey';
-    console.log("reKaptchaSiteKey: "+ reCaptchaSiteKey);
     $(document).ready(function () {
         $('#frmLogin').submit(function (e) {
             e.preventDefault();
             // Check if reCaptchaSiteKey has value before executing the reCAPTCHA logic
-            if (reCaptchaSiteKey != "") {
+            if ('@ViewBag.ReCaptchaSiteKey' !== "") {
                 console.log("reCAPTCHA is used");
                 grecaptcha.ready(function () {
                     grecaptcha.execute('@ViewBag.ReCaptchaSiteKey', { action: 'submit' }).then(function (token) {
@@ -92,6 +90,7 @@
             } else {
                 // If reCAPTCHA is not used, simply submit the form
                 console.log("reCAPTCHA is not used");
+                $('#frmLogin').append('<input type="hidden" name="reCaptchaToken" id="reCaptchaToken" value="' + '' + '">');
                 $('#frmLogin')[0].submit();
             }
         });

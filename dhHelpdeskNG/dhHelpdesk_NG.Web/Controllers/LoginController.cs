@@ -107,11 +107,20 @@ namespace DH.Helpdesk.Web.Controllers
             var returnUrl = string.IsNullOrEmpty(inputData.returnUrl) ? "~/" : inputData.returnUrl;
             var reCaptchaToken = inputData.reCaptchaToken;
             var appconfig = new ApplicationConfiguration();
+            var siteKey = appconfig.GetRecaptchaSiteKey;
+
+            if (!string.IsNullOrEmpty(siteKey) && string.IsNullOrEmpty(inputData.reCaptchaToken))
+            {
+                TempData["LoginFailed"] = "Login failed! Couldn't verify you with reCaptcha".Trim();
+                ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
+                return View("Login");
+            }
 
             // Verify reCaptcha token if required
             if (!String.IsNullOrEmpty(reCaptchaToken) && !VerifyRecaptcha(reCaptchaToken))
             {
                 TempData["LoginFailed"] = "Login failed! Couldn't verify you with reCaptcha".Trim();
+                ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
                 return View("Login");
             }
 
@@ -147,8 +156,8 @@ namespace DH.Helpdesk.Web.Controllers
             }
 
             // Set ViewBag properties
-           ViewBag.ShowMsButton = appconfig.GetAppKeyValueMicrosoft == "1";
-
+            ViewBag.ShowMsButton = appconfig.GetAppKeyValueMicrosoft == "1";
+            ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
             return View("Login");
         }
 
