@@ -30,7 +30,7 @@
                                         @Translation.Get("Område", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
-                                        <select id="OU_Department_Region_Id" name="OU_Department_Region_Id" >
+                                        <select id="OU_Department_Region_Id" name="OU_Department_Region_Id">
                                             @foreach (var selectListItem in Model.Regions)
                                             {
                                                 <option @((Model.OU.Department != null && Model.OU.Department.Region_Id == int.Parse(selectListItem.Value)) ? "selected='selected'" : "") value="@selectListItem.Value">@selectListItem.Text</option>
@@ -117,9 +117,11 @@
                                     <td>
                                         @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="OU.Show" @(Model.OU.Show == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="OU.Show" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="OU.Show" @(Model.OU.Show == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="OU.Show" value="0" />
+                                            <input type="hidden" name="OU.ADSync" value="@(Model.OU.ADSync)" />
                                         </label>
                                     </td>
                                 </tr>
@@ -127,9 +129,10 @@
                                     <td>
                                         @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="OU.IsActive" @(Model.OU.IsActive == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="OU.IsActive" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="OU.IsActive" @(Model.OU.IsActive == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="OU.IsActive" value="0" />
                                         </label>
                                     </td>
                                 </tr>
