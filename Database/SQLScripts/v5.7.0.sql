@@ -946,7 +946,7 @@ RAISERROR ('Checking and creating sequence [dbo].[CaseNumberSequence] if it does
 DECLARE @StartValue INT;
 
 -- Calculate the start value based on the max(caseNumber) + 100
-SELECT @StartValue = ISNULL(MAX(caseNumber), 0) + 100 FROM dbo.tblCase;
+SELECT @StartValue = ISNULL(MAX(caseNumber), 0) + 100 FROM dbo.tblCase WITH (TABLOCKX);
 
 -- Check if the sequence already exists
 IF NOT EXISTS (SELECT * FROM sys.sequences WHERE name = 'CaseNumberSequence' AND schema_id = SCHEMA_ID('dbo'))
@@ -959,7 +959,7 @@ BEGIN
 		START WITH ' + CAST(@StartValue AS NVARCHAR(20)) + '
 		INCREMENT BY 1
 		MINVALUE 200
-	';
+		NO CACHE';  -- Disable cache to avoid any issues with cached values during system restarts
 
 	EXEC(@SQL);
 
@@ -975,35 +975,47 @@ GO
 IF EXISTS (SELECT * FROM sys.triggers WHERE name = 'TR_CreateCaseNumber' AND parent_id = OBJECT_ID('dbo.tblCase'))
 BEGIN
     -- If the trigger exists, alter it using dynamic SQL
-	PRINT 'ALtering Trigger'
+	PRINT 'Altering Trigger'
     EXEC('
     ALTER TRIGGER [dbo].[TR_CreateCaseNumber] 
     ON [dbo].[tblCase]
     AFTER INSERT
     AS
     BEGIN
+        -- Obtain an exclusive lock to prevent concurrent access to the sequence
+        EXEC sp_getapplock @Resource = ''CaseNumberSequenceLock'', @LockMode = ''Exclusive'';
+
         -- Set the CaseNumber for the newly inserted rows
         UPDATE e
         SET e.CaseNumber = NEXT VALUE FOR CaseNumberSequence
         FROM dbo.tblCase e
         INNER JOIN inserted i ON e.Id = i.Id;
+
+        -- Release the lock after updating
+        EXEC sp_releaseapplock @Resource = ''CaseNumberSequenceLock'';
     END;')
 END
 ELSE
 BEGIN
     -- If the trigger does not exist, create it using dynamic SQL
-	 PRINT 'Creating Trigger'
+	PRINT 'Creating Trigger'
     EXEC('
     CREATE TRIGGER [dbo].[TR_CreateCaseNumber] 
     ON [dbo].[tblCase]
     AFTER INSERT
     AS
     BEGIN
+        -- Obtain an exclusive lock to prevent concurrent access to the sequence
+        EXEC sp_getapplock @Resource = ''CaseNumberSequenceLock'', @LockMode = ''Exclusive'';
+
         -- Set the CaseNumber for the newly inserted rows
         UPDATE e
         SET e.CaseNumber = NEXT VALUE FOR CaseNumberSequence
         FROM dbo.tblCase e
         INNER JOIN inserted i ON e.Id = i.Id;
+
+        -- Release the lock after updating
+        EXEC sp_releaseapplock @Resource = ''CaseNumberSequenceLock'';
     END;')
 END
 GO
