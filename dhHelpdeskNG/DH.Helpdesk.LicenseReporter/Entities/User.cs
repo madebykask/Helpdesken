@@ -12,6 +12,8 @@ namespace DH.Helpdesk.LicenseReporter.Entities
 
         public string Email { get; set; }
 
+        public int UserGroup_Id { get; set; }
+
 
     }
 }
