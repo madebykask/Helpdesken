@@ -50,7 +50,7 @@ Public Class CustomerData
                                     ", tblDomain.LDAPBase, tblDomain.LDAPFilter "
                 End If
 
-                sSQL = sSQL & ", tblSettings.M2TNewCaseMailTo "
+                sSQL = sSQL & ", tblSettings.M2TNewCaseMailTo, tblCustomer.Status "
                 sSQL = sSQL & "FROM tblCustomer " & _
                                 "INNER JOIN tblSettings ON tblCustomer.Id = tblSettings.Customer_Id " & _
                                 "LEFT JOIN tblCaseType ON tblCustomer.Id = tblCaseType.Customer_Id AND tblCaseType.isEMailDefault=1 " & _
@@ -310,7 +310,7 @@ Public Class CustomerData
                         "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " &
                         "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, Null AS WorkingGroupEMail, tblCustomer.CaseStatisticsEMailList, " &
                         "tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.DefaultAdministratorExternal, Null AS WorkingGroupDefaultCaseType_Id, tblCustomer.NewCaseEMailList, " &
-                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization,  tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo "
+                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization,  tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo, tblCustomer.Status "
 
             sSQL = sSQL & ", tblSettings.M2TNewCaseMailTo "
 
@@ -363,7 +363,7 @@ Public Class CustomerData
                         "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.EMailImportType, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " &
                         "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, tblWorkingGroup.WorkingGroupEMail, tblCustomer.CaseStatisticsEMailList, " &
                         "tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.DefaultAdministratorExternal, tblWorkingGroup.EMailCaseType_Id AS WorkingGroupDefaultCaseType_Id, tblCustomer.NewCaseEMailList, " &
-                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization, tblSettings.M2TNewCaseMailTo, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo "
+                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization, tblSettings.M2TNewCaseMailTo, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo, tblCustomer.Status "
 
             sSQL = sSQL & "FROM tblCustomer " & _
                             "INNER JOIN tblSettings ON tblCustomer.Id = tblSettings.Customer_Id " & _
