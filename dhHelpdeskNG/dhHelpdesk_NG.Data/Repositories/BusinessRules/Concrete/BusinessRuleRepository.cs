@@ -727,8 +727,6 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         ParamValue = businessRule.DisableFinishingType.ToInt().ToString()
                     };
                     this.DbContext.BRActionParams.Add(actionParamEntity4);
-
-
                 }
                 else
                 {
@@ -843,7 +841,15 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                     };
                     this.DbContext.BRActionParams.Add(actionParamEntity4);
 
-                   
+                    var actionParamEntityWG = new BRActionParamEntity()
+                    {
+                        Id = 0,
+                        RuleAction_Id = action.Id,
+                        ParamType_Id = BRActionParamType.WorkingGroup,
+                        ParamValue = businessRule.WorkingGroups.GetSelectedStr()
+                    };
+                    this.DbContext.BRActionParams.Add(actionParamEntityWG);
+
                 }
                 else
                 {
@@ -867,7 +873,26 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         actionParamEntity4.ParamValue = businessRule.Administrators.GetSelectedStr();
                     }
 
-                   
+
+                    var actionParamEntityWG = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.WorkingGroup)
+                                                                       .FirstOrDefault();
+                    if (actionParamEntityWG == null)
+                    {
+                        actionParamEntityWG = new BRActionParamEntity()
+                        {
+                            Id = 0,
+                            RuleAction_Id = action.Id,
+                            ParamType_Id = BRActionParamType.WorkingGroup,
+                            ParamValue = businessRule.WorkingGroups.GetSelectedStr()
+                        };
+                        this.DbContext.BRActionParams.Add(actionParamEntityWG);
+                    }
+                    else
+                    {
+                        actionParamEntityWG.ParamValue = businessRule.WorkingGroups.GetSelectedStr();
+                    }
+
+
                 }
                 this.Commit();
             }

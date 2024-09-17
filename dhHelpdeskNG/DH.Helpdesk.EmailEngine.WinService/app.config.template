@@ -16,7 +16,7 @@
     <add key="Delay" value="60" />
     <add key="MaxAttempts" value="5" />
     <add key="DefaultSmtpServer" value="#{SMTPServer}" />
-    <add key="DefaultSmtpPort" value="587" />
+    <add key="DefaultSmtpPort" value="25" />
     <add key="ServiceName" value="#{ServiceName}"/>
   </appSettings>
   <log4net>

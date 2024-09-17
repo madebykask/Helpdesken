@@ -362,12 +362,12 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 		private List<DdlModel> GetWorkgroupsList(int customerId)
 		{
 			var wgs = _workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false)
-				.Select(wg => new DdlModel
+                 .Where(wg => wg.IsActive == 1)
+                .Select(wg => new DdlModel
 				{
 					Value = wg.Id.ToString(),
 					Text = wg.WorkingGroupName,
-					Selected = false,
-					Disabled = wg.IsActive != 1
+					Selected = false
 				}).OrderBy(x => x.Text).ToList();
 			return wgs;
 		}

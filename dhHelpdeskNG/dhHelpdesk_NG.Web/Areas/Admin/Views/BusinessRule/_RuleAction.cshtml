@@ -29,7 +29,7 @@
                 @Translation.Get("Driftgrupp")
             </td>
             <td>
-                @Html.ListBoxExtendedOptionsFor(x => x.WorkingGroupIds, (List<DdlModel>)@ViewBag.WorkingGroups, new { @id = "lstWorkingGroups", @name = "lstWorkingGroups", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
+                @Html.DropDownListFor(x => x.WorkingGroupIds, (List<DdlModel>)@ViewBag.WorkingGroups, "", new { @id = "lstWorkingGroups", @name = "lstWorkingGroups", @class = "BR-chosen-single-select" })
             </td>
         </tr>
         <tr id="BRActionAdministrator">

@@ -326,8 +326,8 @@
         }
 
         dhHelpdesk.businessRule.setupEvent = function () {
-            var selectedValue = $(elEventsDropDown).val();
-
+            let selectedValue = $(elEventsDropDown).val();
+            console.log(selectedValue);
             if (selectedValue === '1') {
                 $(elCondition1).show();
                 $(elCondition2).hide();
@@ -347,17 +347,31 @@
                 $(elBRActionDisableFinishingType).hide();
 
             } else if (selectedValue === '2') {
+                // Get how many items in lstWorkingGroups
+                let dropdownWg = document.getElementById("lstWorkingGroups");
+                let wgCount = dropdownWg.options.length;
+
+                console.log(wgCount);
 
                 $(elCondition1).hide();
                 $(elCondition2).show();
                 $(elCondition3).hide();
                 $(elCondition4).hide();
 
-                $(elBRActionAdministratorSingleSelect).show();
+               // $(elBRActionAdministratorSingleSelect).show();
 
                 $(elBRActionMailTemplate).hide();
                 $(elBRActionEmailGroup).hide();
-                $(elBRActionWorkingGroup).hide();
+                // Show WG if there is any
+                if (wgCount > 2) {
+                    $(elBRActionWorkingGroup).show();
+                    //Get Administrators for this workinggroup
+                    $(elBRActionAdministratorSingleSelect).show();
+                }
+                else {
+                    $(elBRActionWorkingGroup).hide();
+                    $(elBRActionAdministratorSingleSelect).show();
+                }
                 $(elBRActionAdministrator).hide();
                 $(elBRActionRecipients).hide();
                 $(elBRActionCreatedBy).hide();
