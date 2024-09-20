@@ -142,9 +142,11 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
 		public ICollection<string> WorkingGroupIds { get; set; }
 
-		public ICollection<string> AdministratorIds { get; set; }
+        public ICollection<string> AdministratorIds { get; set; }
 
         public int? Administrator { get; set; }
+
+        public int? WorkingGroup { get; set; }
 
         public string Recipients { get; set; }
 

@@ -29,7 +29,15 @@
                 @Translation.Get("Driftgrupp")
             </td>
             <td>
-                @Html.DropDownListFor(x => x.WorkingGroupIds, (List<DdlModel>)@ViewBag.WorkingGroups, "", new { @id = "lstWorkingGroups", @name = "lstWorkingGroups", @class = "BR-chosen-single-select" })
+                @Html.ListBoxExtendedOptionsFor(x => x.WorkingGroupIds, (List<DdlModel>)@ViewBag.WorkingGroups, new { @id = "lstWorkingGroups", @name = "lstWorkingGroups", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
+            </td>
+        </tr>
+        <tr id="BRActionWorkingGroupSingleSelect">
+            <td class="span2">
+                @Translation.Get("Driftgrupp")
+            </td>
+            <td>
+                 @Html.DropDownListFor(x => x.WorkingGroup, (List<DdlModel>)@ViewBag.WorkingGroups, "", new { @id = "lstWorkingGroups", name = "lstWorkingGroups", @class = "BR-chosen-single-select" })
             </td>
         </tr>
         <tr id="BRActionAdministrator">

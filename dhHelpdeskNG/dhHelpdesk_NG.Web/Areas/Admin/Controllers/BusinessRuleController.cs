@@ -228,7 +228,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 				EMailGroupIds = emailGroupList.Where(x => rule.EmailGroups.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				WorkingGroupIds = workingGroups.Where(x => rule.WorkingGroups.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
 				AdministratorIds = allAdmins.Where(x => rule.Administrators.Contains(int.Parse(x.Value))).Select(x => x.Value).ToList(),
-				Recipients = rule.Recipients != null ? string.Join(BRConstItem.Email_Separator, rule.Recipients) : null,
+                Recipients = rule.Recipients != null ? string.Join(BRConstItem.Email_Separator, rule.Recipients) : null,
 				CaseCreator = rule.CaseCreator,
 				Initiator = rule.Initiator,
 				CaseIsAbout = rule.CaseIsAbout,
@@ -288,7 +288,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 return RedirectToAction("EditRule", new { id = rule.Id });
             }
         }
+        [HttpPost]
+        public JsonResult GetAdministrators(int workingGroupId)
+        {
+            // For demonstration, let's assume you fetch administrators based on the ID.
+            // Replace this with your actual logic to fetch the administrators.
 
+            var administrators = new List<string> { "Admin 1", "Admin 2", "Admin 3" };  // Example
+
+            // Return a JSON result with status and data (administrators)
+            return Json(new { status = "OK", administrators });
+        }
         #endregion
 
         #region Private

@@ -1022,6 +1022,9 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             case BRActionParamType.Administrator:
                                 ret.Administrators.AddItems(param.ParamValue, false);
                                 break;
+                            case BRActionParamType.WorkingGroup:
+                                ret.WorkingGroups.AddItems(param.ParamValue, false);
+                                break;
 
                         }
                     }

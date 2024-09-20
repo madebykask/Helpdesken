@@ -4,6 +4,7 @@
         window.Params = window.Params || {};
         var saveRuleUrl = window.Params.saveRuleUrl;
         var overviewRuleUrl = window.Params.overviewRuleUrl;
+        var getAdmininstatorsUrl = window.Params.getAdmininstatorsUrl;
 
        
         var elBtnSaveRule = "#btnSaveRule";
@@ -25,7 +26,9 @@
 
         var elBRActionMailTemplate = "#BRActionMailTemplate";
         var elBRActionEmailGroup = "#BRActionEmailGroup";
+
         var elBRActionWorkingGroup = "#BRActionWorkingGroup";
+        var elBRActionWorkingGroupSingleSelect = "#BRActionWorkingGroupSingleSelect";
 
         var elBRActionAdministrator = "#BRActionAdministrator";
         var elBRActionAdministratorSingleSelect = "#BRActionAdministratorSingleSelect";
@@ -62,8 +65,10 @@
 
         var elEmailTemplatsDropDown = "#lstEmailTemplates";
         var elEmailGroupsDropDown = "#lstEmailGroups";
+
         var elWorkingGroupsDropDown = "#lstWorkingGroups";
         var elAdministratorsDropDown = "#lstAdministrators";
+
         var elRecipients = "#recipients";
         var elCaseCreator = "#caseCreator";
         var elInitiator = "#initiator";
@@ -147,6 +152,7 @@
                 emailTemplate: 0,
                 emailGroups: "",
                 workingGroups: "",
+                workingGroup: "",
                 administrators: "",
                 administrator: "",
                 recipients: "",
@@ -258,9 +264,16 @@
 
             $(elBRActionAdministratorSingleSelect + " option:selected").each(function () {
                 data.administrator = $(this).val();
+                console.log(data.administrator);
             });
 
+            $(elBRActionWorkingGroupSingleSelect + " option:selected").each(function () {
+                data.workingGroup = $(this).val();
+                data.workingGroups = $(this).val() + ",";
+                console.log(data.workingGroup);
+            });
 
+            console.log(data);
             return data;
         };       
       
@@ -270,7 +283,7 @@
 
             
             var data = getData();
-          
+            console.log(data);
             $.get(saveRuleUrl,
                 {
                     'data.CustomerId': data.customerId,
@@ -299,6 +312,7 @@
                     'data.EmailTemplate': data.emailTemplate,
                     'data.EmailGroups': data.emailGroups,
                     'data.WorkingGroups': data.workingGroups,
+                    'data.WorkingGroup': data.workingGroup,
                     'data.Administrators': data.administrators,
                     'data.Administrator': data.administrator,
                     'data.Recipients': data.recipients,
@@ -335,6 +349,7 @@
                 $(elCondition4).hide();
 
                 $(elBRActionAdministratorSingleSelect).hide();
+                $(elBRActionWorkingGroupSingleSelect).hide();
 
                 $(elBRActionMailTemplate).show();
                 $(elBRActionEmailGroup).show();
@@ -358,28 +373,29 @@
                 $(elCondition3).hide();
                 $(elCondition4).hide();
 
-               // $(elBRActionAdministratorSingleSelect).show();
+                $(elBRActionAdministratorSingleSelect).show();
+                $(elBRActionWorkingGroupSingleSelect).show();
 
                 $(elBRActionMailTemplate).hide();
                 $(elBRActionEmailGroup).hide();
                 // Show WG if there is any
-                if (wgCount > 2) {
-                    $(elBRActionWorkingGroup).show();
+                if (wgCount > 1) {
+                    console.log("Har wg");
+                    $(elBRActionWorkingGroupSingleSelect).show();
                     //Get Administrators for this workinggroup
-                    $(elBRActionAdministratorSingleSelect).show();
                 }
                 else {
-                    $(elBRActionWorkingGroup).hide();
-                    $(elBRActionAdministratorSingleSelect).show();
+                    console.log("Inga wg");
+                    $(elBRActionWorkingGroupSingleSelect).hide();
                 }
+
+                $(elBRActionWorkingGroup).hide();
                 $(elBRActionAdministrator).hide();
                 $(elBRActionRecipients).hide();
                 $(elBRActionCreatedBy).hide();
                 $(elBRActionRegistrator).hide();
                 $(elBRActionAbout).hide();
                 $(elBRActionDisableFinishingType).hide();
-
-
 
             }
             else if (selectedValue === '3') {
@@ -391,6 +407,7 @@
 
 
                 $(elBRActionAdministratorSingleSelect).hide();
+                $(elBRActionWorkingGroupSingleSelect).hide();
                 $(elBRActionMailTemplate).hide();
                 $(elBRActionEmailGroup).hide();
                 $(elBRActionWorkingGroup).hide();
@@ -412,6 +429,7 @@
 
 
                 $(elBRActionAdministratorSingleSelect).hide();
+                $(elBRActionWorkingGroupSingleSelect).hide();
                 $(elBRActionMailTemplate).hide();
                 $(elBRActionEmailGroup).hide();
                 $(elBRActionWorkingGroup).hide();
@@ -456,6 +474,42 @@
             $(elEventsDropDown).change(function () {
                 dhHelpdesk.businessRule.setupEvent();
             });
+            $(document).on('change', '#lstWorkingGroups', function () {
+                let workingGroupId = $(this).val();  // Get the selected WorkingGroupId
+                console.log(workingGroupId);  // Output the selected value
+
+                //$.get(getAdmininstatorsUrl,
+                //    {
+                //        'id': workingGroupId
+                //    },
+                //    function (result) {
+                //        console.log(result);  // Output the server response for debugging
+
+                //        if (result.status === "OK") {  // Check if the server responded with "OK"
+                //            console.log("Hej Katta");
+                //            window.location.href = overviewRuleUrl;  // Redirect if necessary
+                //        } else {
+                //            ShowToastMessage(result, "error");  // Display an error message if not OK
+                //        }
+                //    }
+                //);
+                if (workingGroupId) {
+                    $.ajax({
+                        url: getAdmininstatorsUrl,  // The URL of your action method
+                        type: 'POST',  // Use POST to securely send data
+                        data: { workingGroupId: workingGroupId },  // Pass the selected WorkingGroupId
+                        success: function (response) {
+                            console.log(response)
+                            // Assuming 'response' contains the list of administrators
+                            updateAdministratorList(response);  // Call the function to update the list
+                        },
+                        error: function () {
+                            alert('Error fetching administrators.');
+                        }
+                    });
+                }
+            });
+               
 
             dhHelpdesk.businessRule.setupEvent();
            
@@ -466,7 +520,24 @@
 
     dhHelpdesk.businessRule.init();
 });
+function updateAdministratorList(administrators) {
+    var listContainer = $('#lstWorkingGroups');  // The container for your <li> elements
+    console.log(listContainer)
+    listContainer.empty();  // Clear existing <li> elements
+    
+    // Loop through the administrators and add new <li> elements
+    $.each(administrators, function (i, administrator) {
+        console.log(administrator)
+        var listItem = $('<li>', {
+            'class': 'active-result',
+            'data-option-array-index': administrator.Id,  // Use the administrator's Id here
+            'text': administrator.Name
+        });
 
+        // Append the new <li> to the list
+        listContainer.append(listItem);
+    });
+}
 
 //$(function () {
 //    _ruleId = window.Params.ruleId;
