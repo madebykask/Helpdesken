@@ -834,6 +834,10 @@ Module DH_Helpdesk_Mail
                                             objCase.Performer_User_Id = result.Performer_User_Id
                                         End If
 
+                                        If result.WorkingGroup_Id IsNot Nothing Then
+                                            objCase.WorkingGroup_Id = result.WorkingGroup_Id
+                                        End If
+
                                         objCase = objCaseData.createCase(objCase)
                                     Catch ex As Exception
                                         LogError("Error creating Case in database: " & ex.Message.ToString(), objCustomer)

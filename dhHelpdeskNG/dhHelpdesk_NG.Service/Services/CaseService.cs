@@ -1053,6 +1053,27 @@ namespace DH.Helpdesk.Services.Services
                     }
 
                 }
+                if (!string.IsNullOrEmpty(r.DomainFrom) && r.WorkingGroups.Count > 0)
+                {
+                    string[] values = r.DomainFrom.Split(';');
+
+                    foreach (var v in values)
+                    {
+                        if (v != "")
+                        {
+                            if (caseEntity.RegUserDomain.Trim().Contains(v.Trim()))
+                            {
+                                caseEntity.WorkingGroup_Id = r.WorkingGroups[0];
+                                if(r.SendMailToWorkingGroup)
+                                {
+                                    //caseEntity.WorkingGroupAllocateCaseMail
+                                }
+
+                            }
+                        }
+                    }
+
+                }
             }
 
             return caseEntity;

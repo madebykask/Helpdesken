@@ -96,9 +96,9 @@
                 @Html.CheckBoxFor(m => Model.DisableFinishingType, new { @class = "switchcheckbox", id = "disableFinishingType" })
             </td>
         </tr>
-        <tr id="BRActionSendMailToWorkingGroup">
+        @*<tr id="BRActionSendMailToWorkingGroup">
             <td class="span2">
-                @Translation.Get("Skicka mejl till driftgrupp", Enums.TranslationSource.TextTranslation)
+                @Translation.Get("Skicka mejl till driftgruppen", Enums.TranslationSource.TextTranslation)
             </td>
             <td>
                 @Html.CheckBoxFor(m => Model.SendMailToWorkingGroup, new { @class = "switchcheckbox", id = "sendMailToWorkingGroup" })
@@ -111,6 +111,6 @@
             <td>
                 @Html.CheckBoxFor(m => Model.SendMailToAdministrator, new { @class = "switchcheckbox", id = "sendMailToAdministrator" })
             </td>
-        </tr>
+        </tr>*@
     </tbody>
 </table>
