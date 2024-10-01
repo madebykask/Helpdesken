@@ -11,5 +11,7 @@
         public const int Initiator     = 7;
         public const int CaseIsAbout   = 8;
         public const int DisableFinishingType = 9;
+        public const int SendMailToWorkingGroup = 10;
+        public const int SendMailToAdministrator = 11;
     }
 }

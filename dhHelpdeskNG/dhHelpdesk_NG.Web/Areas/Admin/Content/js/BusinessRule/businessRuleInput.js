@@ -2,96 +2,101 @@
     (function ($) {
 
         window.Params = window.Params || {};
-        var saveRuleUrl = window.Params.saveRuleUrl;
-        var overviewRuleUrl = window.Params.overviewRuleUrl;
-        var getAdmininstatorsUrl = window.Params.getAdmininstatorsUrl;
+        const saveRuleUrl = window.Params.saveRuleUrl;
+        const overviewRuleUrl = window.Params.overviewRuleUrl;
+        const getAdmininstatorsUrl = window.Params.getAdmininstatorsUrl;
 
        
-        var elBtnSaveRule = "#btnSaveRule";
+        const elBtnSaveRule = "#btnSaveRule";
 
-        var elCustomerId = "#CustomerId";
-        var elRuleId = "#RuleId";
+        const elCustomerId = "#CustomerId";
+        const elRuleId = "#RuleId";
 
-        var elRuleName = "#RuleName";
-        var elEventsDropDown = "#lstEvents";
-        var elRuleSequence = "#ruleSequence";
-        var elContinueOnSuccess = "#continueOnSuccess";
-        var elContinueOnError = "#continueOnError";
-        var elIsRuleActive = "#isRuleActive";
+        const elRuleName = "#RuleName";
+        const elEventsDropDown = "#lstEvents";
+        const elRuleSequence = "#ruleSequence";
+        //const elContinueOnSuccess = "#continueOnSuccess";
+        //const elContinueOnError = "#continueOnError";
+        const elIsRuleActive = "#isRuleActive";
 
-        var elCondition1 = "#BRCondition1";
-        var elCondition2 = "#BRCondition2";
-        var elCondition3 = "#BRCondition3";
-        var elCondition4 = "#BRCondition4";
+        const elCondition1 = "#BRCondition1";
+        const elCondition2 = "#BRCondition2";
+        const elCondition3 = "#BRCondition3";
+        const elCondition4 = "#BRCondition4";
 
-        var elBRActionMailTemplate = "#BRActionMailTemplate";
-        var elBRActionEmailGroup = "#BRActionEmailGroup";
+        const elBRActionMailTemplate = "#BRActionMailTemplate";
+        const elBRActionEmailGroup = "#BRActionEmailGroup";
 
-        var elBRActionWorkingGroup = "#BRActionWorkingGroup";
-        var elBRActionWorkingGroupSingleSelect = "#BRActionWorkingGroupSingleSelect";
+        const elBRActionWorkingGroup = "#BRActionWorkingGroup";
+        const elBRActionWorkingGroupSingleSelect = "#BRActionWorkingGroupSingleSelect";
 
-        var elBRActionAdministrator = "#BRActionAdministrator";
-        var elBRActionAdministratorSingleSelect = "#BRActionAdministratorSingleSelect";
+        const elBRActionAdministrator = "#BRActionAdministrator";
+        const elBRActionAdministratorSingleSelect = "#BRActionAdministratorSingleSelect";
 
-        var elBRActionRecipients = "#BRActionRecipients";
-        var elBRActionCreatedBy = "#BRActionCreatedBy";
-        var elBRActionRegistrator = "#BRActionRegistrator";
-        var elBRActionAbout = "#BRActionAbout";
-        var elBRActionDisableFinishingType = "#BRActionDisableFinishingType";
+        const elBRActionRecipients = "#BRActionRecipients";
+        const elBRActionCreatedBy = "#BRActionCreatedBy";
+        const elBRActionRegistrator = "#BRActionRegistrator";
+        const elBRActionAbout = "#BRActionAbout";
+        const elBRActionDisableFinishingType = "#BRActionDisableFinishingType";
 
-        
-        var elProcessFromDropDown = "#lstProcessFrom";
-        var elProcessToDropDown = "#lstProcessTo";
+        const elBRActionSendMailToWorkingGroup = "#BRActionSendMailToWorkingGroup";
+        const elBRActionSendMailToAdministrator = "#BRActionSendMailToAdministrator";
 
-        var elSubStatusFromDropDown = "#lstSubStatusFrom";
-        var elSubStatusToDropDown = "#lstSubStatusTo";
+        const elProcessFromDropDown = "#lstProcessFrom";
+        const elProcessToDropDown = "#lstProcessTo";
 
-        var elSubStatusFromDropDown2 = "#lstSubStatusFrom2";
-        var elSubStatusToDropDown2 = "#lstSubStatusTo2";
+        const elSubStatusFromDropDown = "#lstSubStatusFrom";
+        const elSubStatusToDropDown = "#lstSubStatusTo";
 
-        var elStatusFromDropDown = "#lstStatusFrom";
-        var elStatusToDropDown = "#lstStatusTo";
+        const elSubStatusFromDropDown2 = "#lstSubStatusFrom2";
+        const elSubStatusToDropDown2 = "#lstSubStatusTo2";
 
-        var elStatusFromDropDown2 = "#lstStatusFrom2";
-        var elStatusToDropDown2 = "#lstStatusTo2";
+        const elStatusFromDropDown = "#lstStatusFrom";
+        const elStatusToDropDown = "#lstStatusTo";
 
-        var elStatusFromDropDown3 = "#lstStatusFrom3";
-        var elStatusToDropDown3 = "#lstStatusTo3";
+        const elStatusFromDropDown2 = "#lstStatusFrom2";
+        const elStatusToDropDown2 = "#lstStatusTo2";
 
-        var elSubStatusFromDropDown3 = "#lstSubStatusFrom3";
-        var elSubStatusToDropDown3 = "#lstSubStatusTo3";
+        const elStatusFromDropDown3 = "#lstStatusFrom3";
+        const elStatusToDropDown3 = "#lstStatusTo3";
 
-        var elDomainEquals = "#lstEquals";
+        const elSubStatusFromDropDown3 = "#lstSubStatusFrom3";
+        const elSubStatusToDropDown3 = "#lstSubStatusTo3";
 
-        var elEmailTemplatsDropDown = "#lstEmailTemplates";
-        var elEmailGroupsDropDown = "#lstEmailGroups";
+        const elDomainEquals = "#lstEquals";
 
-        var elWorkingGroupsDropDown = "#lstWorkingGroups";
-        var elAdministratorsDropDown = "#lstAdministrators";
+        const elEmailTemplatsDropDown = "#lstEmailTemplates";
+        const elEmailGroupsDropDown = "#lstEmailGroups";
 
-        var elRecipients = "#recipients";
-        var elCaseCreator = "#caseCreator";
-        var elInitiator = "#initiator";
-        var elCaseIsAbout = "#caseIsAbout";
+        const elWorkingGroupsDropDown = "#lstWorkingGroups";
+        const elAdministratorsDropDown = "#lstAdministrators";
 
-        var elDisableFinishingType = "#disableFinishingType";
+        const elRecipients = "#recipients";
+        const elCaseCreator = "#caseCreator";
+        const elInitiator = "#initiator";
+        const elCaseIsAbout = "#caseIsAbout";
+
+        const elDisableFinishingType = "#disableFinishingType";
+
+        const elSendMailToWorkingGroup = "#sendMailToWorkingGroup";
+        const elSendMailToAdministrator = "#sendMailToAdministrator";
 
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.businessRule = window.dhHelpdesk.businessRule || {};
 
         (function ($) {
-            var originHighlight = $.validator.defaults.highlight;
-            var originUnhighlight = $.validator.defaults.unhighlight;
-            var $form = $("#newRule");
-            var validator = $form.data("validator");
+            let originHighlight = $.validator.defaults.highlight;
+            let originUnhighlight = $.validator.defaults.unhighlight;
+            let $form = $("#newRule");
+            let validator = $form.data("validator");
 
             $.extend(validator.settings, {
                 ignore: ":hidden, .ignore-validation",
                 highlight: function (element, errorClass, validClass) {
-                    var $element = $(element);
+                    let $element = $(element);
                     if ($element.hasClass("BR-chosen-single-select")
                         || $element.hasClass("BR-chosen-select")) {
-                        var chosenSelectInput = $element.next().find(".chosen-choices");
+                        let chosenSelectInput = $element.next().find(".chosen-choices");
                         if (chosenSelectInput.length > 0) {
                             element = chosenSelectInput[0];
                         } else {
@@ -102,10 +107,10 @@
                     originHighlight(element, errorClass, validClass);
                 },
                 unhighlight: function (element, errorClass, validClass) {
-                    var $element = $(element);
+                    let $element = $(element);
                     if ($element.hasClass("BR-chosen-single-select")
                         || $element.hasClass("BR-chosen-select")) {
-                        var chosenSelectInput = $element.next().find(".chosen-choices");
+                        let chosenSelectInput = $element.next().find(".chosen-choices");
                         if (chosenSelectInput.length > 0) {
                             element = chosenSelectInput[0];
                         } else {
@@ -118,8 +123,8 @@
             });
         })(jQuery);
 
-        var getData = function () {
-            var data = {
+        let getData = function () {
+            let data = {
                 customerId: 0,
                 ruleId: 0,
 
@@ -160,7 +165,9 @@
                 initiator: true,
                 caseIsAbout: true,
 
-                disableFinishingType: true
+                disableFinishingType: true,
+                sendMailToWorkingGroup: true,
+                sendMailToAdministrator: true,
             };
 
             data.customerId = $(elCustomerId).val();
@@ -258,22 +265,22 @@
 
             data.disableFinishingType = $(elDisableFinishingType).bootstrapSwitch("state");
 
+            data.sendMailToWorkingGroup = $(elSendMailToWorkingGroup).bootstrapSwitch("state");
+            data.sendMailToAdministrator = $(elSendMailToAdministrator).bootstrapSwitch("state");
+
             data.customerId = $(elCustomerId).val();
 
             data.equals = $(elDomainEquals).val();
 
             $(elBRActionAdministratorSingleSelect + " option:selected").each(function () {
                 data.administrator = $(this).val();
-                console.log(data.administrator);
             });
 
             $(elBRActionWorkingGroupSingleSelect + " option:selected").each(function () {
                 data.workingGroup = $(this).val();
                 data.workingGroups = $(this).val() + ",";
-                console.log(data.workingGroup);
             });
 
-            console.log(data);
             return data;
         };       
       
@@ -281,9 +288,7 @@
             if (!dhHelpdesk.businessRule.doValidation())
                 return;
 
-            
-            var data = getData();
-            console.log(data);
+            let data = getData();
             $.get(saveRuleUrl,
                 {
                     'data.CustomerId': data.customerId,
@@ -320,6 +325,8 @@
                     'data.Initiator': data.initiator,
                     'data.CaseIsAbout': data.caseIsAbout,
                     'data.DisableFinishingType': data.disableFinishingType,
+                    'data.SendMailToWorkingGroup': data.sendMailToWorkingGroup,
+                    'data.SendMailToAdministrator': data.sendMailToAdministrator,
                     curTime: new Date().getTime()
                 },
                 function (result) {
@@ -333,15 +340,14 @@
 
         dhHelpdesk.businessRule.doValidation = function () {
             "use strict";
-            var self = this;
-            var $form = $("#newRule");
-
+            let self = this;
+            let $form = $("#newRule");
             return $form.validate().form();
         }
 
         dhHelpdesk.businessRule.setupEvent = function () {
             let selectedValue = $(elEventsDropDown).val();
-            console.log(selectedValue);
+
             if (selectedValue === '1') {
                 $(elCondition1).show();
                 $(elCondition2).hide();
@@ -360,13 +366,24 @@
                 $(elBRActionRegistrator).show();
                 $(elBRActionAbout).show();
                 $(elBRActionDisableFinishingType).hide();
+                $(elBRActionSendMailToWorkingGroup).hide();
+                $(elBRActionSendMailToAdministrator).hide();
 
             } else if (selectedValue === '2') {
-                // Get how many items in lstWorkingGroups
-                let dropdownWg = document.getElementById("lstWorkingGroups");
-                let wgCount = dropdownWg.options.length;
+                //OnCreateCaseM2T
+                $('#lstWorkingGroupsSingle option').each(function () {
+                    if ($(this).text().includes('[Nuvarande värde]')) {
+                        $(this).remove();  // Remove the option
+                    }
+                });
+                $('#lstAdministratorsSingle option').each(function () {
+                    if ($(this).text().includes('[Nuvarande värde]')) {
+                        $(this).remove();  // Remove the option
+                    }
+                });
 
-                console.log(wgCount);
+                let wgCount = $('#lstWorkingGroupsSingle option').length;
+                console.log("Antal workinggroups: " + wgCount);  // Output the length of options
 
                 $(elCondition1).hide();
                 $(elCondition2).show();
@@ -380,12 +397,13 @@
                 $(elBRActionEmailGroup).hide();
                 // Show WG if there is any
                 if (wgCount > 1) {
-                    console.log("Har wg");
+                    //console.log("Har wg");
                     $(elBRActionWorkingGroupSingleSelect).show();
+                    $('#lstWorkingGroupsSingle').prop('required', true);
                     //Get Administrators for this workinggroup
                 }
                 else {
-                    console.log("Inga wg");
+                    //console.log("Inga wg");
                     $(elBRActionWorkingGroupSingleSelect).hide();
                 }
 
@@ -396,6 +414,8 @@
                 $(elBRActionRegistrator).hide();
                 $(elBRActionAbout).hide();
                 $(elBRActionDisableFinishingType).hide();
+                $(elBRActionSendMailToWorkingGroup).show();
+                $(elBRActionSendMailToAdministrator).show();
 
             }
             else if (selectedValue === '3') {
@@ -417,6 +437,8 @@
                 $(elBRActionRegistrator).hide();
                 $(elBRActionAbout).hide();
                 $(elBRActionDisableFinishingType).show();
+                $(elBRActionSendMailToWorkingGroup).hide();
+                $(elBRActionSendMailToAdministrator).hide();
 
             }
 
@@ -439,16 +461,27 @@
                 $(elBRActionRegistrator).hide();
                 $(elBRActionAbout).hide();
                 $(elBRActionDisableFinishingType).show();
+                $(elBRActionSendMailToWorkingGroup).hide();
+                $(elBRActionSendMailToAdministrator).hide();
 
             }
         };
 
         dhHelpdesk.businessRule.init = function () {
            
-            var saveButton = $(elBtnSaveRule);
+            let saveButton = $(elBtnSaveRule);
 
             saveButton.click(function () {
-                dhHelpdesk.businessRule.saveRule();
+                let selectedValue = $(elEventsDropDown).val();
+                let wgGroup = $('#lstWorkingGroupsSingle').val();
+                if (selectedValue == '2' && wgGroup === '') {
+                    alert("Please select a valid working group.");
+                }
+                else {
+                    dhHelpdesk.businessRule.saveRule();
+                }
+               
+                
             });
 
             $(".BR-chosen-select").chosen({
@@ -474,40 +507,25 @@
             $(elEventsDropDown).change(function () {
                 dhHelpdesk.businessRule.setupEvent();
             });
-            $(document).on('change', '#lstWorkingGroups', function () {
+            $(document).on('change', '#lstWorkingGroupsSingle', function () {
                 let workingGroupId = $(this).val();  // Get the selected WorkingGroupId
-                console.log(workingGroupId);  // Output the selected value
-
-                //$.get(getAdmininstatorsUrl,
-                //    {
-                //        'id': workingGroupId
-                //    },
-                //    function (result) {
-                //        console.log(result);  // Output the server response for debugging
-
-                //        if (result.status === "OK") {  // Check if the server responded with "OK"
-                //            console.log("Hej Katta");
-                //            window.location.href = overviewRuleUrl;  // Redirect if necessary
-                //        } else {
-                //            ShowToastMessage(result, "error");  // Display an error message if not OK
-                //        }
-                //    }
-                //);
-                if (workingGroupId) {
-                    $.ajax({
-                        url: getAdmininstatorsUrl,  // The URL of your action method
-                        type: 'POST',  // Use POST to securely send data
-                        data: { workingGroupId: workingGroupId },  // Pass the selected WorkingGroupId
-                        success: function (response) {
-                            console.log(response)
-                            // Assuming 'response' contains the list of administrators
-                            updateAdministratorList(response);  // Call the function to update the list
-                        },
-                        error: function () {
-                            alert('Error fetching administrators.');
+                console.log("Ändrat WG: " +workingGroupId);  // Output the selected value
+                let customerId = $(elCustomerId).val();
+                getData();
+                $.get(getAdmininstatorsUrl,
+                    {
+                        'customerId': customerId,
+                        'workingGroupId': workingGroupId
+                    },
+                    function (result) { // Output the server response for debugging
+                        if (result.status === "OK") {  // Check if the server responded with "OK"
+                            updateAdministratorList(result.allAdmins);
+                        } else {
+                            ShowToastMessage(result, "error");  // Display an error message if not OK
                         }
-                    });
-                }
+                    }
+                );
+
             });
                
 
@@ -521,24 +539,39 @@
     dhHelpdesk.businessRule.init();
 });
 function updateAdministratorList(administrators) {
-    var listContainer = $('#lstWorkingGroups');  // The container for your <li> elements
-    console.log(listContainer)
-    listContainer.empty();  // Clear existing <li> elements
-    
-    // Loop through the administrators and add new <li> elements
+    let $adminDropdown = $('#lstAdministratorsSingle');  
+
+    // Clear existing options
+    $adminDropdown.empty();
+    $adminDropdown.trigger('change'); 
+
     $.each(administrators, function (i, administrator) {
-        console.log(administrator)
-        var listItem = $('<li>', {
-            'class': 'active-result',
-            'data-option-array-index': administrator.Id,  // Use the administrator's Id here
-            'text': administrator.Name
+
+        // Create the <option> element
+        let option = $('<option>', {
+            value: administrator.Value,  
+            text: administrator.Text     
         });
 
-        // Append the new <li> to the list
-        listContainer.append(listItem);
+        // Set the 'disabled' attribute only if administrator.Disabled is true
+        if (administrator.Disabled) {
+            option.prop('disabled', true);
+        }
+
+        // Set the 'selected' attribute only if administrator.Selected is true
+        if (administrator.Selected) {
+            option.prop('selected', true);
+        }
+
+        // Append the new <option> to the <select>
+        $adminDropdown.append(option);
     });
+    $adminDropdown.trigger('chosen:updated');
+    // Log the number of options added for debugging
+    console.log('Number of options in the dropdown:', $adminDropdown.find('option').length);
 }
 
+//Gammalt utkommenterat - ta bort?
 //$(function () {
 //    _ruleId = window.Params.ruleId;
 //    _customerId = window.Params.customerId;

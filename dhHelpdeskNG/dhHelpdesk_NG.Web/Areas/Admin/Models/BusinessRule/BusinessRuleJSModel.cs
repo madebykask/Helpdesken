@@ -120,6 +120,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         public string Equals { get; set; }
 
         public string DisableFinishingType { get; set; }
+        public string SendMailToWorkingGroup { get; set; }
+        public string SendMailToAdministrator { get; set; }
     }
 
    
@@ -212,6 +214,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
             ret.EventId = int.Parse(it.EventId);
 
             ret.DisableFinishingType = bool.Parse(it.DisableFinishingType);
+            ret.SendMailToWorkingGroup = bool.Parse(it.SendMailToWorkingGroup);
+            ret.SendMailToAdministrator = bool.Parse(it.SendMailToAdministrator);
 
 
             return ret;
