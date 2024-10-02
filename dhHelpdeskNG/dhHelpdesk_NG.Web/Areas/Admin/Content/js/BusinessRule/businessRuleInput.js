@@ -4,7 +4,9 @@
         window.Params = window.Params || {};
         const saveRuleUrl = window.Params.saveRuleUrl;
         const overviewRuleUrl = window.Params.overviewRuleUrl;
-        const getAdmininstatorsUrl = window.Params.getAdmininstatorsUrl;
+        const getAdmininstatorsForWorkingGroupUrl = window.Params.getAdmininstatorsForWorkingGroupUrl;
+        const getWorkingGroupsForCustomerUrl = window.Params.getWorkingGroupsForCustomerUrl;
+        const getAdministratorsForCustomersUrl = window.Params.getAdministratorsForCustomersUrl;
 
        
         const elBtnSaveRule = "#btnSaveRule";
@@ -38,9 +40,6 @@
         const elBRActionRegistrator = "#BRActionRegistrator";
         const elBRActionAbout = "#BRActionAbout";
         const elBRActionDisableFinishingType = "#BRActionDisableFinishingType";
-
-        const elBRActionSendMailToWorkingGroup = "#BRActionSendMailToWorkingGroup";
-        const elBRActionSendMailToAdministrator = "#BRActionSendMailToAdministrator";
 
         const elProcessFromDropDown = "#lstProcessFrom";
         const elProcessToDropDown = "#lstProcessTo";
@@ -77,9 +76,6 @@
         const elCaseIsAbout = "#caseIsAbout";
 
         const elDisableFinishingType = "#disableFinishingType";
-
-        const elSendMailToWorkingGroup = "#sendMailToWorkingGroup";
-        const elSendMailToAdministrator = "#sendMailToAdministrator";
 
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.businessRule = window.dhHelpdesk.businessRule || {};
@@ -166,8 +162,6 @@
                 caseIsAbout: true,
 
                 disableFinishingType: true,
-                sendMailToWorkingGroup: true,
-                sendMailToAdministrator: true,
             };
 
             data.customerId = $(elCustomerId).val();
@@ -265,9 +259,6 @@
 
             data.disableFinishingType = $(elDisableFinishingType).bootstrapSwitch("state");
 
-            data.sendMailToWorkingGroup = $(elSendMailToWorkingGroup).bootstrapSwitch("state");
-            data.sendMailToAdministrator = $(elSendMailToAdministrator).bootstrapSwitch("state");
-
             data.customerId = $(elCustomerId).val();
 
             data.equals = $(elDomainEquals).val();
@@ -325,8 +316,6 @@
                     'data.Initiator': data.initiator,
                     'data.CaseIsAbout': data.caseIsAbout,
                     'data.DisableFinishingType': data.disableFinishingType,
-                    'data.SendMailToWorkingGroup': data.sendMailToWorkingGroup,
-                    'data.SendMailToAdministrator': data.sendMailToAdministrator,
                     curTime: new Date().getTime()
                 },
                 function (result) {
@@ -366,22 +355,10 @@
                 $(elBRActionRegistrator).show();
                 $(elBRActionAbout).show();
                 $(elBRActionDisableFinishingType).hide();
-                $(elBRActionSendMailToWorkingGroup).hide();
-                $(elBRActionSendMailToAdministrator).hide();
+
 
             } else if (selectedValue === '2') {
                 //OnCreateCaseM2T
-                $('#lstWorkingGroupsSingle option').each(function () {
-                    if ($(this).text().includes('[Nuvarande värde]')) {
-                        $(this).remove();  // Remove the option
-                    }
-                });
-                $('#lstAdministratorsSingle option').each(function () {
-                    if ($(this).text().includes('[Nuvarande värde]')) {
-                        $(this).remove();  // Remove the option
-                    }
-                });
-
                 let wgCount = $('#lstWorkingGroupsSingle option').length;
                 console.log("Antal workinggroups: " + wgCount);  // Output the length of options
 
@@ -391,16 +368,14 @@
                 $(elCondition4).hide();
 
                 $(elBRActionAdministratorSingleSelect).show();
-                $(elBRActionWorkingGroupSingleSelect).show();
 
                 $(elBRActionMailTemplate).hide();
                 $(elBRActionEmailGroup).hide();
                 // Show WG if there is any
                 if (wgCount > 1) {
-                    //console.log("Har wg");
+                    console.log("Har wg:s");
                     $(elBRActionWorkingGroupSingleSelect).show();
                     $('#lstWorkingGroupsSingle').prop('required', true);
-                    //Get Administrators for this workinggroup
                 }
                 else {
                     //console.log("Inga wg");
@@ -414,8 +389,6 @@
                 $(elBRActionRegistrator).hide();
                 $(elBRActionAbout).hide();
                 $(elBRActionDisableFinishingType).hide();
-                $(elBRActionSendMailToWorkingGroup).show();
-                $(elBRActionSendMailToAdministrator).show();
 
             }
             else if (selectedValue === '3') {
@@ -437,8 +410,6 @@
                 $(elBRActionRegistrator).hide();
                 $(elBRActionAbout).hide();
                 $(elBRActionDisableFinishingType).show();
-                $(elBRActionSendMailToWorkingGroup).hide();
-                $(elBRActionSendMailToAdministrator).hide();
 
             }
 
@@ -461,8 +432,6 @@
                 $(elBRActionRegistrator).hide();
                 $(elBRActionAbout).hide();
                 $(elBRActionDisableFinishingType).show();
-                $(elBRActionSendMailToWorkingGroup).hide();
-                $(elBRActionSendMailToAdministrator).hide();
 
             }
         };
@@ -473,7 +442,7 @@
 
             saveButton.click(function () {
                 let selectedValue = $(elEventsDropDown).val();
-                let wgGroup = $('#lstWorkingGroupsSingle').val();
+                let wgGroup = $('#lstWorkingGroupsSingle chosen').val();
                 if (selectedValue == '2' && wgGroup === '') {
                     alert("Please select a valid working group.");
                 }
@@ -511,14 +480,48 @@
                 let workingGroupId = $(this).val();  // Get the selected WorkingGroupId
                 console.log("Ändrat WG: " +workingGroupId);  // Output the selected value
                 let customerId = $(elCustomerId).val();
-                getData();
-                $.get(getAdmininstatorsUrl,
+                if (workingGroupId !== null) {
+                    $.get(getAdmininstatorsForWorkingGroupUrl,
+                        {
+                            'customerId': customerId,
+                            'workingGroupId': workingGroupId
+                        },
+                        function (result) { // Output the server response for debugging
+                            if (result.status === "OK") {  // Check if the server responded with "OK"
+                                updateAdministratorList(result.allAdmins);
+                            } else {
+                                ShowToastMessage(result, "error");  // Display an error message if not OK
+                            }
+                        }
+                    );
+                }
+               
+
+            });
+            $(document).on('change', '#lstEvents', function () {
+                let selectedValue = $(elEventsDropDown).val();
+                let customerId = $(elCustomerId).val();
+                console.log("Event Changed to: " + selectedValue);
+                $.get(getWorkingGroupsForCustomerUrl,
                     {
-                        'customerId': customerId,
-                        'workingGroupId': workingGroupId
+                        'customerId': customerId
                     },
                     function (result) { // Output the server response for debugging
                         if (result.status === "OK") {  // Check if the server responded with "OK"
+                            console.log("Hämtar WG:s");
+                            updateWorkingGroupList(result.allWgs);
+                        } else {
+                            ShowToastMessage(result, "error");  // Display an error message if not OK
+                        }
+                    }
+                );
+                $.get(getAdministratorsForCustomersUrl,
+                    {
+                        'customerId': customerId
+                    },
+                    function (result) { // Output the server response for debugging
+                        if (result.status === "OK") {  // Check if the server responded with "OK"
+                            console.log("Hämtar Admins for Customer");
                             updateAdministratorList(result.allAdmins);
                         } else {
                             ShowToastMessage(result, "error");  // Display an error message if not OK
@@ -545,6 +548,13 @@ function updateAdministratorList(administrators) {
     $adminDropdown.empty();
     $adminDropdown.trigger('change'); 
 
+    $adminDropdown.append($('<option>', {
+        value: '',
+        text: placeholder_text_single,
+        selected: true,  // Make this option selected by default
+        disabled: true   // Optionally disable this option so it can't be selected again
+    }));
+
     $.each(administrators, function (i, administrator) {
 
         // Create the <option> element
@@ -568,7 +578,46 @@ function updateAdministratorList(administrators) {
     });
     $adminDropdown.trigger('chosen:updated');
     // Log the number of options added for debugging
-    console.log('Number of options in the dropdown:', $adminDropdown.find('option').length);
+    console.log('Antal Admins för kund: ', $adminDropdown.find('option').length);
+}
+function updateWorkingGroupList(workgroups) {
+    let $workgroupDropdown = $('#lstWorkingGroupsSingle');
+    // Clear existing options
+    $workgroupDropdown.empty();
+    $workgroupDropdown.trigger('change');
+
+    // Create the <option> element
+    $workgroupDropdown.append($('<option>', {
+        value: '',
+        text: placeholder_text_single,
+        selected: true,  // Make this option selected by default
+        disabled: true   // Optionally disable this option so it can't be selected again
+    }));
+
+    $.each(workgroups, function (i, workgroup) {
+
+        let option = $('<option>', {
+            value: workgroup.Value,
+            text: workgroup.Text
+        });
+
+        // Set the 'disabled' attribute only if administrator.Disabled is true
+        if (workgroup.Disabled) {
+            option.prop('disabled', true);
+        }
+
+        // Set the 'selected' attribute only if administrator.Selected is true
+        if (workgroup.Selected) {
+            option.prop('selected', true);
+        }
+
+        // Append the new <option> to the <select>
+        $workgroupDropdown.append(option);
+    });
+    $workgroupDropdown.trigger('chosen:updated');
+    //$workgroupDropdown.trigger('change');
+    // Log the number of options added for debugging
+    console.log('Antal WG:s:', $workgroupDropdown.find('option').length -1);
 }
 
 //Gammalt utkommenterat - ta bort?

@@ -243,8 +243,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 Initiator = rule.Initiator,
                 CaseIsAbout = rule.CaseIsAbout,
                 DisableFinishingType = rule.DisableFinishingType,
-                SendMailToWorkingGroup = rule.SendMailToWorkingGroup,
-                SendMailToAdministrator = rule.SendMailToAdministrator,
                 Sequence = 1
             };
 
@@ -301,13 +299,43 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             }
         }
         [HttpGet]
-        public JsonResult GetAdministrators(int customerId, int workingGroupId)
+        public JsonResult GetAdministratorsForWorkingGroup(int customerId, int workingGroupId)
         {
             try
             {
                 var allAdmins = GetAdminsListForWorkingGroup(customerId, workingGroupId);
 
                 return Json(new { status = "OK", allAdmins }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception error)
+            {
+                return Json(new { status = "Error" + error.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        [HttpGet]
+        public JsonResult GetAdministratorsForCustomer(int customerId)
+        {
+            try
+            {
+                var allAdmins = GetAdminsList(customerId, null);
+
+                return Json(new { status = "OK", allAdmins }, JsonRequestBehavior.AllowGet);
+            }
+            catch (Exception error)
+            {
+                return Json(new { status = "Error" + error.Message }, JsonRequestBehavior.AllowGet);
+            }
+
+        }
+        [HttpGet]
+        public JsonResult GetWorkingGroupsForCustomer(int customerId)
+        {
+            try
+            {
+                var allWgs = GetWorkgroupsList(customerId);
+
+                return Json(new { status = "OK", allWgs }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception error)
             {

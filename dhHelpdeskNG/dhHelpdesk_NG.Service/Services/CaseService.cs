@@ -1064,10 +1064,6 @@ namespace DH.Helpdesk.Services.Services
                             if (caseEntity.RegUserDomain.Trim().Contains(v.Trim()))
                             {
                                 caseEntity.WorkingGroup_Id = r.WorkingGroups[0];
-                                if(r.SendMailToWorkingGroup)
-                                {
-                                    //caseEntity.WorkingGroupAllocateCaseMail
-                                }
 
                             }
                         }

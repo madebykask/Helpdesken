@@ -158,9 +158,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
         public bool DisableFinishingType { get; set; }
 
-        public bool SendMailToWorkingGroup { get; set; }
-
-        public bool SendMailToAdministrator { get; set; }
+        public bool IsWorkingGroupMandatory { get; set; }
 
     }
 }

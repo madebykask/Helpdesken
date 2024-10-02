@@ -79,8 +79,6 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
         public bool CaseIsAbout { get; set; }
 
         public bool DisableFinishingType { get; set; }
-        public bool SendMailToWorkingGroup { get; set; }
-        public bool SendMailToAdministrator { get; set; }
     }
 
     public class BusinessRuleActionModel
