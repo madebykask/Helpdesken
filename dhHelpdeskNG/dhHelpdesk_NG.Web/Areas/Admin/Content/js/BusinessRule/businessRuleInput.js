@@ -77,6 +77,9 @@
 
         const elDisableFinishingType = "#disableFinishingType";
 
+        const isWorkingGroupMandatory = "#isWorkingGroupMandatory";
+        const isAdminMandatory = "#isAdminMandatory";
+
         window.dhHelpdesk = window.dhHelpdesk || {};
         window.dhHelpdesk.businessRule = window.dhHelpdesk.businessRule || {};
 
@@ -360,7 +363,7 @@
             } else if (selectedValue === '2') {
                 //OnCreateCaseM2T
                 let wgCount = $('#lstWorkingGroupsSingle option').length;
-                console.log("Antal workinggroups: " + wgCount);  // Output the length of options
+                console.log("OnCreateCaseM2T - Antal workinggroups: " + wgCount);  // Output the length of options
 
                 $(elCondition1).hide();
                 $(elCondition2).show();
@@ -372,13 +375,12 @@
                 $(elBRActionMailTemplate).hide();
                 $(elBRActionEmailGroup).hide();
                 // Show WG if there is any
-                if (wgCount > 1) {
-                    console.log("Har wg:s");
+                if (wgCount > 2) {
+                    console.log("Kunden Har wg:s");
                     $(elBRActionWorkingGroupSingleSelect).show();
-                    $('#lstWorkingGroupsSingle').prop('required', true);
                 }
                 else {
-                    //console.log("Inga wg");
+                    console.log("Kunden har Inga wg");
                     $(elBRActionWorkingGroupSingleSelect).hide();
                 }
 
@@ -442,16 +444,31 @@
 
             saveButton.click(function () {
                 let selectedValue = $(elEventsDropDown).val();
-                let wgGroup = $('#lstWorkingGroupsSingle chosen').val();
-                console.log(wgGroup);
-                if (selectedValue == '2' && wgGroup === undefined) {
-                    alert("Please select a valid working group.");
+
+                let isWgMandatory = $(isWorkingGroupMandatory).val();
+                let isAdmMandatory = $(isAdminMandatory).val();
+                let wgGroup = $('#lstWorkingGroupsSingle').val();
+                let admin = $('#lstAdministratorsSingle').val();
+                let valid = true;
+
+                console.log("Wg mandatory: " + isWgMandatory);
+                console.log("Admin mandatory: " + isAdmMandatory);
+                console.log("Workinggroup: " + wgGroup);
+                console.log("Administrator: " + admin);
+                
+                if ((selectedValue == '2' && wgGroup === null && isWgMandatory === 'true')) {
+                    $('#errorWG').show();
+                    valid = false;
                 }
-                else {
+                if ((selectedValue == '2' && admin === null && isAdmMandatory === 'true')) {
+                    $('#errorAdmin').show();
+                    valid = false;
+                }
+                if (valid) {
+                    $('#errorWG').hide();
+                    $('#errorAdmin').hide();
                     dhHelpdesk.businessRule.saveRule();
                 }
-               
-                
             });
 
             $(".BR-chosen-select").chosen({
@@ -478,8 +495,10 @@
                 dhHelpdesk.businessRule.setupEvent();
             });
             $(document).on('change', '#lstWorkingGroupsSingle', function () {
-                let workingGroupId = $(this).val();  // Get the selected WorkingGroupId
-                console.log("Ändrat WG: " +workingGroupId);  // Output the selected value
+                $('#errorWG').hide();
+                $('#errorAdmin').hide();
+                let workingGroupId = $(this).val(); 
+                console.log("Ändrat WG: " +workingGroupId);  
                 let customerId = $(elCustomerId).val();
                 if (workingGroupId !== null) {
                     $.get(getAdmininstatorsForWorkingGroupUrl,
@@ -487,16 +506,19 @@
                             'customerId': customerId,
                             'workingGroupId': workingGroupId
                         },
-                        function (result) { // Output the server response for debugging
-                            if (result.status === "OK") {  // Check if the server responded with "OK"
+                        function (result) { 
+                            if (result.status === "OK") {  
                                 updateAdministratorList(result.allAdmins);
+                                if (result.isAdminMandatory === true) {
+                                    $(isAdminMandatory).val(true);
+                                    console.log("Admin is mandatory");
+                                }
                             } else {
-                                ShowToastMessage(result, "error");  // Display an error message if not OK
+                                ShowToastMessage(result, "error");  
                             }
                         }
                     );
                 }
-               
 
             });
             $(document).on('change', '#lstEvents', function () {
@@ -507,12 +529,17 @@
                     {
                         'customerId': customerId
                     },
-                    function (result) { // Output the server response for debugging
-                        if (result.status === "OK") {  // Check if the server responded with "OK"
-                            console.log("Hämtar WG:s");
+                    function (result) { 
+                        if (result.status === "OK") {  
+
                             updateWorkingGroupList(result.allWgs);
+                            if (result.isWGMandatory === true) {
+                                
+                                $(isWorkingGroupMandatory).val(true);
+                                console.log("WG is mandatory");
+                            }
                         } else {
-                            ShowToastMessage(result, "error");  // Display an error message if not OK
+                            ShowToastMessage(result, "error");  
                         }
                     }
                 );
@@ -520,12 +547,16 @@
                     {
                         'customerId': customerId
                     },
-                    function (result) { // Output the server response for debugging
-                        if (result.status === "OK") {  // Check if the server responded with "OK"
+                    function (result) { 
+                        if (result.status === "OK") {  
                             console.log("Hämtar Admins for Customer");
                             updateAdministratorList(result.allAdmins);
+                            if (result.isAdminMandatory === true) {
+                                $(isAdminMandatory).val(true);
+                                console.log("Admin is mandatory");
+                            }
                         } else {
-                            ShowToastMessage(result, "error");  // Display an error message if not OK
+                            ShowToastMessage(result, "error"); 
                         }
                     }
                 );

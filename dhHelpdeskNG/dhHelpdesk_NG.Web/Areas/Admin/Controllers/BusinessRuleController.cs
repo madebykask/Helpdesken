@@ -306,9 +306,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             try
             {
+                bool isAdminMandatory = false;
+                var caseFieldsettings = _caseFieldSettingService.GetCaseFieldSettings(customerId).Where(x => x.IsActive && x.Name == "Performer_User_Id" && x.Required == 1);
+                if (caseFieldsettings.Any())
+                {
+                    isAdminMandatory = true;
+                }
                 var allAdmins = GetAdminsListForWorkingGroup(customerId, workingGroupId);
 
-                return Json(new { status = "OK", allAdmins }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = "OK", allAdmins, isAdminMandatory }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception error)
             {
@@ -321,9 +327,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             try
             {
+                bool isAdminMandatory = false;
+                var caseFieldsettings = _caseFieldSettingService.GetCaseFieldSettings(customerId).Where(x => x.IsActive && x.Name == "Performer_User_Id" && x.Required == 1);
+                if (caseFieldsettings.Any())
+                {
+                    isAdminMandatory = true;
+                }
                 var allAdmins = GetAdminsList(customerId, null);
 
-                return Json(new { status = "OK", allAdmins }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = "OK", allAdmins, isAdminMandatory }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception error)
             {
@@ -336,10 +348,15 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             try
             {
-                var caseFieldsettings = _caseFieldSettingService.GetCaseFieldSettings(customerId).Where(x => x.IsActive && x.Name == "WorkingGroup_Id");
+                bool isWGMandatory = false;
+                var caseFieldsettings = _caseFieldSettingService.GetCaseFieldSettings(customerId).Where(x => x.IsActive && x.Name == "WorkingGroup_Id" && x.Required == 1);
+                if(caseFieldsettings.Any()) {
+                    isWGMandatory = true;
+                 }
+                    
                 var allWgs = GetWorkgroupsList(customerId);
 
-                return Json(new { status = "OK", allWgs }, JsonRequestBehavior.AllowGet);
+                return Json(new { status = "OK", allWgs, isWGMandatory }, JsonRequestBehavior.AllowGet);
             }
             catch (Exception error)
             {

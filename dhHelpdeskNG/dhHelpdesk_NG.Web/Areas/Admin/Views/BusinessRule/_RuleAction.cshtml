@@ -38,6 +38,11 @@
             </td>
             <td>
                 @Html.DropDownListFor(x => x.WorkingGroup, (List<DdlModel>)@ViewBag.WorkingGroups, "", new { @id = "lstWorkingGroupsSingle", name = "lstWorkingGroupsSingle", @class = "BR-chosen-single-select" })
+                <input id="isWorkingGroupMandatory" name="isWorkingGroupMandatory" type="hidden" value="false" />
+                
+            </td>
+            <td>
+                <label id="errorWG" class="field-validation-error" style="display:none;"> @Translation.Get("Driftgrupp måste anges")</label>
             </td>
         </tr>
         <tr id="BRActionAdministrator">
@@ -54,6 +59,11 @@
             </td>
             <td>
                 @Html.DropDownListFor(x => x.Administrator, (List<DdlModel>)@ViewBag.Administrators, "", new { @id = "lstAdministratorsSingle", name = "lstAdministratorsSingle", @class = "BR-chosen-single-select" })
+                <input id="isAdminMandatory" name="isAdminMandatory" type="hidden" value="false" />
+
+            </td>
+            <td>
+                <label id="errorAdmin" class="field-validation-error" style="display:none;"> @Translation.Get("Handläggare måste anges")</label>
             </td>
         </tr>
         <tr id="BRActionRecipients">

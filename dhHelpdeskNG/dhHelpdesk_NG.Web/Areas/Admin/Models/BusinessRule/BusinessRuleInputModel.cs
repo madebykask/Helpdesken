@@ -158,7 +158,6 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
 
         public bool DisableFinishingType { get; set; }
 
-        public bool IsWorkingGroupMandatory { get; set; }
 
     }
 }
