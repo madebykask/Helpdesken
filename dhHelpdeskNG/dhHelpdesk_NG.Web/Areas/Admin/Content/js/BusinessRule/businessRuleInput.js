@@ -443,7 +443,8 @@
             saveButton.click(function () {
                 let selectedValue = $(elEventsDropDown).val();
                 let wgGroup = $('#lstWorkingGroupsSingle chosen').val();
-                if (selectedValue == '2' && wgGroup === '') {
+                console.log(wgGroup);
+                if (selectedValue == '2' && wgGroup === undefined) {
                     alert("Please select a valid working group.");
                 }
                 else {

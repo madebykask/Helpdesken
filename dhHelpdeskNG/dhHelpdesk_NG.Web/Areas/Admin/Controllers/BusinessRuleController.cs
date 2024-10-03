@@ -24,6 +24,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         private readonly IWorkingGroupService _workingGroupService;
         private readonly IBusinessRuleService _businessRuleService;
         private readonly IStatusService _statusService;
+        private readonly ICaseFieldSettingService _caseFieldSettingService;
 
         public BusinessRuleController(IMasterDataService masterDataService,
                                       ICustomerService customerService,
@@ -35,7 +36,8 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                                       IEmailGroupService emailGroupService,
                                       IWorkingGroupService workingGroupService,
                                       IBusinessRuleService businessRuleService,
-                                      IStatusService statusService
+                                      IStatusService statusService,
+                                      ICaseFieldSettingService caseFieldSettingService
 
                                      )
             : base(masterDataService)
@@ -50,6 +52,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             _workingGroupService = workingGroupService;
             _businessRuleService = businessRuleService;
             _statusService = statusService;
+            _caseFieldSettingService = caseFieldSettingService;
 
         }
 
@@ -333,6 +336,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
         {
             try
             {
+                var caseFieldsettings = _caseFieldSettingService.GetCaseFieldSettings(customerId).Where(x => x.IsActive && x.Name == "WorkingGroup_Id");
                 var allWgs = GetWorkgroupsList(customerId);
 
                 return Json(new { status = "OK", allWgs }, JsonRequestBehavior.AllowGet);
