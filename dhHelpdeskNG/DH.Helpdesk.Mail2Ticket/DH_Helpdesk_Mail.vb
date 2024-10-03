@@ -1555,9 +1555,9 @@ Module DH_Helpdesk_Mail
         Dim extension As String = System.IO.Path.GetExtension(sanitizedFileName)
         Dim fileNameWithoutExtension As String = System.IO.Path.GetFileNameWithoutExtension(sanitizedFileName)
 
-        ' Truncate file name if it exceeds 150 characters (excluding the extension)
-        If fileNameWithoutExtension.Length > 150 - extension.Length Then
-            fileNameWithoutExtension = fileNameWithoutExtension.Substring(0, 150 - extension.Length)
+        ' Truncate file name if it exceeds 100 characters (excluding the extension)
+        If fileNameWithoutExtension.Length > 100 - extension.Length Then
+            fileNameWithoutExtension = fileNameWithoutExtension.Substring(0, 100 - extension.Length)
         End If
 
         ' Append timestamp in HHmmssfff format and combine with the extension
