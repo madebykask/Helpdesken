@@ -62,7 +62,7 @@
         const elSubStatusFromDropDown3 = "#lstSubStatusFrom3";
         const elSubStatusToDropDown3 = "#lstSubStatusTo3";
 
-        const elDomainEquals = "#lstEquals";
+        const elDomainEquals = "#Equals";
 
         const elEmailTemplatsDropDown = "#lstEmailTemplates";
         const elEmailGroupsDropDown = "#lstEmailGroups";

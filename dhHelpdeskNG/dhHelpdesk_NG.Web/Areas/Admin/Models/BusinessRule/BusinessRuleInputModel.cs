@@ -110,7 +110,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         [RequiredIfNotEmpty("DomainFromValue", "lstDomainFrom")]
         public string DomainToValue { get; set; }
         //End of domain
-
+        [Required]
         public string Equals { get; set; }
 
         public int Sequence { get; set; }
