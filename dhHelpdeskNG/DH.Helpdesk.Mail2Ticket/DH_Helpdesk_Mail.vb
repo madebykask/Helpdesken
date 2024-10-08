@@ -402,6 +402,7 @@ Module DH_Helpdesk_Mail
                             Next
 
                             iListCount = mails.Count()
+#Region "IMAP"
                         Else
                             eMailConnectionType = MailConnectionType.Imap
                             IMAPclient = New Imap()
@@ -499,7 +500,7 @@ Module DH_Helpdesk_Mail
                             iListCount = IMAPlist.Count()
                             LogToFile("IMAPlist.Count: " & iListCount, iPop3DebugLevel)
                         End If
-
+#End Region
                         Dim caseismerged As Integer = 0
                         Dim dFinDate As Date
                         Dim casefinsihed As Boolean = False
