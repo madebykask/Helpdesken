@@ -1876,23 +1876,29 @@ namespace DH.Helpdesk.Services.Services
             //if (caseSolution.Text_Internal != null && caseSolution.Text_Internal.Length > 3000)
             //    caseSolution.Text_Internal = caseSolution.Text_Internal.Substring(0, 3000);
 
-            if (caseSolution.Id == 0)
+            if (caseSolution.Id == 0) //New or copy
+            {
                 CaseSolutionRepository.Add(caseSolution);
+            }
+
             else
             {
                 CaseSolutionRepository.Update(caseSolution);
                 _caseSolutionScheduleRepository.Delete(x => x.CaseSolution_Id == caseSolution.Id);
             }
 
-            if (caseSolutionSchedule != null)
-            {
-                _caseSolutionScheduleRepository.Add(caseSolutionSchedule);
-            }
-
             if (errors.Count == 0)
-            { 
+            {
                 Commit();
 
+                if (caseSolutionSchedule != null)
+                {
+                    caseSolutionSchedule.CaseSolution_Id = caseSolution.Id;
+                    _caseSolutionScheduleRepository.Add(caseSolutionSchedule);
+                    //Need a Commit?
+                }
+
+                //if new casesolution
                 DeleteSplitToCaseSolutionDescendants(caseSolution.Id);
 
                 if (caseSolution.SplitToCaseSolutionDescendants != null)
