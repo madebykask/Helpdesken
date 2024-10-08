@@ -25,7 +25,7 @@
 		<add key="InitFromSelfServiceWorkflowInitValue" value="10" />
 		<add key="log4net.Internal.Debug" value="true" />
 		<add key="SmtpServer" value="#{SMTPServer}" />
-		<add key="SmtpPort" value="25" />
+		<add key="SmtpPort" value="587" />
         <add key="aspnet:RequestQueueLimitPerSession" value="2147483647"/>
         <add key="aspnet:AllowConcurrentRequestsPerSession" value="true" />
 		<add key="DHProfiler:Application" value="Helpdesk" />
