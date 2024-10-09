@@ -1559,7 +1559,7 @@ Module DH_Helpdesk_Mail
         Next
 
         ' Extract file extension if it exists
-        Dim extension As String = System.IO.Path.GetExtension(sanitizedFileName)
+        Dim extension As String = System.IO.Path.GetExtension(fileName)
         If Not String.IsNullOrEmpty(extension) Then
             sanitizedFileName = sanitizedFileName.Substring(0, sanitizedFileName.Length - extension.Length)
         End If

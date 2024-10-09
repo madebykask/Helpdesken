@@ -452,7 +452,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
 
         private List<DdlModel> GetWorkgroupsList(int customerId)
         {
-            var wgs = _workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false)
+            var workingGroups = _workingGroupService.GetAllWorkingGroupsForCustomer(customerId, false)
                  .Where(wg => wg.IsActive == 1)
                 .Select(wg => new DdlModel
                 {
@@ -460,7 +460,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                     Text = wg.WorkingGroupName,
                     Selected = false
                 }).OrderBy(x => x.Text).ToList();
-            return wgs;
+            return workingGroups;
         }
 
         private List<DdlModel> GetEmailGroupsList(int customerId)

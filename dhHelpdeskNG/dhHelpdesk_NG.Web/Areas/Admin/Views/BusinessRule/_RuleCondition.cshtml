@@ -18,8 +18,8 @@
             <th style="width:25%">
                 @Translation.Get("Till värde")
             </th>
-            <th>
-
+            <th style="width:40%">
+                
             </th>
         </tr>
     </thead>
@@ -72,7 +72,7 @@
             <th style="width:25%">
 
             </th>
-            <th>
+            <th style="width:40%">
 
             </th>
         </tr>
@@ -87,10 +87,9 @@
             </td>
             <td>
                 @Html.TextAreaFor(m => Model.Equals, new { id = "Equals", @class = "BR-text", maxlength = "1000" })
-                @Html.ValidationMessageFor(x => x.Equals)
+                
             </td>
-            <td></td>
-
+            <td><label id="errorEquals" class="field-validation-error" style="display:none;"> @Translation.Get("Domän/E-postmönster") @Translation.Get("måste anges")</label></td>
             <td></td>
         </tr>
 
@@ -110,8 +109,7 @@
             <th style="width:25%">
                 @Translation.Get("Till värde")
             </th>
-            <th>
-
+            <th style="width:40%">
             </th>
         </tr>
     </thead>
@@ -143,7 +141,6 @@
                 @Html.ListBoxExtendedOptionsFor(x => x.SubStatusesToValue, (List<DdlModel>)@ViewBag.SubStatus, new { @id = "lstSubStatusTo2", @name = "lstSubStatusTo2", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
                 @Html.ValidationMessageFor(model => model.SubStatusesToValue)
             </td>
-
             <td></td>
         </tr>
     </tbody>
@@ -162,8 +159,7 @@
             <th style="width:25%">
                 @Translation.Get("Till värde")
             </th>
-            <th>
-
+            <th style="width:40%">
             </th>
         </tr>
     </thead>
@@ -195,7 +191,6 @@
                 @Html.ListBoxExtendedOptionsFor(x => x.SubStatusesToValue, (List<DdlModel>)@ViewBag.SubStatus, new { @id = "lstSubStatusTo3", @name = "lstSubStatusTo3", @class = "BR-chosen-select", @multiple = "" }, x => ((DdlModel)x).Disabled ? "DisabledChosen" : "")
                 @Html.ValidationMessageFor(model => model.SubStatusesToValue)
             </td>
-
             <td></td>
         </tr>
     </tbody>

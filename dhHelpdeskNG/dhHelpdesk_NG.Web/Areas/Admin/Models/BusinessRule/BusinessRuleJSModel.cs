@@ -116,7 +116,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         public string Initiator { get; set; }
 
         public string CaseIsAbout { get; set; }
-        [Required]
+
         public string Equals { get; set; }
 
         public string DisableFinishingType { get; set; }

@@ -308,7 +308,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             ActionType_Id = BRActionType.SendEmail,
                             Sequence = 1
                         };
-                        this.DbContext.BRActions.Add(actionEntity1);  
+                        this.DbContext.BRActions.Add(conditionEntity1);  
                     }                             
                     #endregion                                        
                 }
