@@ -55,11 +55,12 @@ Module DH_Helpdesk_Mail
 
     Dim eMailConnectionType As MailConnectionType
     Dim tempFolder = "\temp"
+    Dim workingModeNumber As Integer
 
 
     Public Sub Main()
         Dim processId As Integer = Process.GetCurrentProcess().Id
-        tempFolder = tempFolder & processId.ToString()
+
         Dim secureConnectionString As String = GetAppSettingValue("SecureConnectionString")
         If (Not IsNullOrEmpty(secureConnectionString) AndAlso secureConnectionString.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
             Dim fileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location)
@@ -83,6 +84,7 @@ Module DH_Helpdesk_Mail
         Dim logIdentifierArg As String = GetAppSettingValue("LogIdentifier")
         Dim productAreaSepArg As String = GetAppSettingValue("ProductAreaSeparator")
         Dim newModeArg As String = ""
+
 
 #Region "Optional params for diagnostic purposes"
 
@@ -125,8 +127,10 @@ Module DH_Helpdesk_Mail
         End If
 
         Dim workingMode = If(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
-        ' For testing purposes only
-        ' Dim workingMode = SyncType.SyncByWorkingGroup
+
+        workingModeNumber = CType(workingMode, Integer)
+
+        tempFolder = workingModeNumber.ToString() & "_temp_" & processId.ToString()
 
         If Not IsNullOrEmpty(logFolderArg) Then
             gsLogPath = logFolderArg
@@ -169,7 +173,7 @@ Module DH_Helpdesk_Mail
             closeLogFiles()
             Try
 
-
+                ' This is old ugly stuff
                 If itemattach IsNot Nothing Then
                     For i As Integer = 0 To itemattach.Count - 1
                         If itemattach(i) IsNot Nothing Then
@@ -319,14 +323,17 @@ Module DH_Helpdesk_Mail
                 If objCustomer.PhysicalFilePath = "" Then
                     objCustomer.PhysicalFilePath = objGlobalSettings.AttachedFileFolder
                 End If
-                'Make sure to empty temp-folder.
-                Try
-                    Dim di As DirectoryInfo = New DirectoryInfo(objCustomer.PhysicalFilePath & tempFolder)
-                    'For Each fi As FileInfo In di.GetFiles()
-                    '    fi.Delete()
-                    'Next
-                Catch ex As Exception
 
+                'Make sure to delete old tempfolders (if any error occured in previous session) if not M2T is already running
+                Try
+                    Dim tempFolders As String() = Directory.GetDirectories(objCustomer.PhysicalFilePath, workingModeNumber.ToString() & "_temp_*")
+
+                    For Each folder As String In tempFolders
+                        Dim di As DirectoryInfo = New DirectoryInfo(folder)
+                        di.Delete(True) ' True to delete recursively
+                    Next
+                Catch ex As Exception
+                    ' Log or handle the exception if necessary
                 End Try
 
                 If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) Then
@@ -698,7 +705,7 @@ Module DH_Helpdesk_Mail
                                     End Try
                                     Try
 
-                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & tempFolder & "\", sBodyText)
+                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\" & tempFolder & "\", sBodyText)
                                     Catch ex As Exception
                                         'LogError("Error CreateBase64Images " & ex.ToString(), Nothing)
                                     End Try
