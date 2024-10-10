@@ -389,7 +389,7 @@ Module DH_Helpdesk_Mail
                                                                                               objCustomer.EwsApplicationId,
                                                                                               objCustomer.EwsClientSecret,
                                                                                               objCustomer.EwsTenantId,
-                                                                                              objCustomer.PhysicalFilePath)
+                                                                                              $"{objCustomer.PhysicalFilePath}\{tempFolder}")
 
                                     'Successful Quit
                                     task.Wait()
@@ -705,7 +705,7 @@ Module DH_Helpdesk_Mail
                                     End Try
                                     Try
 
-                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & "\" & tempFolder & "\", sBodyText)
+                                        sBodyText = CreateBase64Images(objCustomer, message, $"{objCustomer.PhysicalFilePath}\{tempFolder}", sBodyText)
                                     Catch ex As Exception
                                         'LogError("Error CreateBase64Images " & ex.ToString(), Nothing)
                                     End Try
@@ -1058,7 +1058,7 @@ Module DH_Helpdesk_Mail
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
                                         Try
                                             DeleteFilesInsideFolder($"{objCustomer.PhysicalFilePath}\{objCase.Casenumber}\html", True)
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & tempFolder, True)
+                                            DeleteFilesInsideFolder($"{objCustomer.PhysicalFilePath}\{tempFolder}", True)
 
                                         Catch ex As Exception
                                             LogError("Error deleting files: " & ex.Message, Nothing)
@@ -1175,7 +1175,7 @@ Module DH_Helpdesk_Mail
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
                                         Try
                                             DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & tempFolder, True)
+                                            DeleteFilesInsideFolder($"{objCustomer.PhysicalFilePath}\{tempFolder}", True)
                                         Catch ex As Exception
                                             'LogError("Error deleting files: " & ex.Message, Nothing)
                                         End Try
@@ -1478,7 +1478,10 @@ Module DH_Helpdesk_Mail
                                 LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
                                 Continue For
                             End Try
-
+                            'New
+                            If Not Directory.Exists(temppath) Then
+                                Directory.CreateDirectory(temppath)
+                            End If
                             Dim fileAttach As FileAttachment = attach
                             Dim retval As String
                             Dim strName As String = SanitizeFileName(fileAttach.Name)
@@ -1983,7 +1986,7 @@ Module DH_Helpdesk_Mail
                                     sFileExtension = sMediaType.Replace("image/", "")
                                     iFileCount = iFileCount + 1
 
-                                    sContentLocation = sFolder & iFileCount & "." & sFileExtension
+                                    sContentLocation = sFolder & "\" & iFileCount & "." & sFileExtension
                                     res.Save(sContentLocation)
                                     'LogToFile("Saved file: " & sContentLocation, 1)
                                     Dim imgHref As String = ""
