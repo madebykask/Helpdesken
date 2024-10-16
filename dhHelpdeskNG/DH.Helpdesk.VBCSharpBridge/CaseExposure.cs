@@ -32,6 +32,7 @@ namespace DH.Helpdesk.VBCSharpBridge
                 // Run the business rules
                 caseEntity = _caseService.ExecuteBusinessActionsM2T(caseEntity);
                 caseObj.Performer_User_Id = caseEntity.Performer_User_Id;
+                caseObj.WorkingGroup_Id = caseEntity.WorkingGroup_Id;
 
             }
             catch (Exception ex)

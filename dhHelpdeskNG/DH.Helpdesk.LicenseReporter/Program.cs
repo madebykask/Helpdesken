@@ -37,7 +37,8 @@ namespace DH.Helpdesk.LicenseReporter
             {
                 var users = GetUsersByCustomer(customer.Id);
 
-                users = ExcludeUsersLogic(users);
+                //Exclude DH SOlutons email.
+                users = users.Where(x => !x.Email.Contains("dhsolution")).ToList();
 
                 if (string.IsNullOrEmpty(customer.ERPContractNumber))
                 {
@@ -49,37 +50,14 @@ namespace DH.Helpdesk.LicenseReporter
                     body = body + customer.ERPContractNumber + " - " + customer.Name + " " + "<b>" + users.Count + "</b>" + " st" + "<br>";
                 }
 
-
+                
 
             }
 
 
             SendEmail(body);
         }
-
-        private static List<User> ExcludeUsersLogic(List<User> users)
-        {
-
-            //Get settings
-            var onlyForDomain = ConfigurationManager.AppSettings["onlyForDomain"];
-            var notUserGroup = ConfigurationManager.AppSettings["notUserGroup"];
-
-            //Exclude DH Solutions email.
-            users = users.Where(x => !x.Email.Contains("dhsolution")).ToList();
-
-            if (!string.IsNullOrEmpty(onlyForDomain))
-            {
-                users = users.Where(x => x.Email.Contains(onlyForDomain)).ToList();
-            }
-
-            if (!string.IsNullOrEmpty(notUserGroup))
-            {
-                users = users.Where(x => x.UserGroup_Id != Int32.Parse(notUserGroup)).ToList();
-            }
-
-            return users;
-        }
-
+        
         public static List<User> GetUsersByCustomer(int id)
         {
             var users = new List<User>();
@@ -102,8 +80,8 @@ namespace DH.Helpdesk.LicenseReporter
                         var user = new User()
                         {
                             Id = reader.SafeGetInteger("Id"),
-                            Email = reader.SafeGetString("Email"),
-                            UserGroup_Id = reader.SafeGetInteger("UserGroup_Id")
+                            Email = reader.SafeGetString("Email")
+                            
                         };
 
                         users.Add(user);

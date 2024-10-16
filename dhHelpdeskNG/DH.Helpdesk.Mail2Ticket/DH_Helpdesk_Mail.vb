@@ -402,6 +402,7 @@ Module DH_Helpdesk_Mail
                             Next
 
                             iListCount = mails.Count()
+#Region "IMAP"
                         Else
                             eMailConnectionType = MailConnectionType.Imap
                             IMAPclient = New Imap()
@@ -499,7 +500,7 @@ Module DH_Helpdesk_Mail
                             iListCount = IMAPlist.Count()
                             LogToFile("IMAPlist.Count: " & iListCount, iPop3DebugLevel)
                         End If
-
+#End Region
                         Dim caseismerged As Integer = 0
                         Dim dFinDate As Date
                         Dim casefinsihed As Boolean = False
@@ -832,6 +833,10 @@ Module DH_Helpdesk_Mail
 
                                         If result.Performer_User_Id IsNot Nothing Then
                                             objCase.Performer_User_Id = result.Performer_User_Id
+                                        End If
+
+                                        If result.WorkingGroup_Id IsNot Nothing Then
+                                            objCase.WorkingGroup_Id = result.WorkingGroup_Id
                                         End If
 
                                         objCase = objCaseData.createCase(objCase)
@@ -1547,21 +1552,20 @@ Module DH_Helpdesk_Mail
     End Function
     ' Helper method to sanitize file names
     Private Function SanitizeFileName(fileName As String) As String
-        ' Replace invalid characters with an underscore
-        Dim invalidChars As Char() = System.IO.Path.GetInvalidFileNameChars().Concat(System.IO.Path.GetInvalidPathChars()).ToArray()
-        Dim sanitizedFileName As String = New String(fileName.Select(Function(c) If(invalidChars.Contains(c), "_"c, c)).ToArray())
+        Dim invalidChars As String = New String(System.IO.Path.GetInvalidFileNameChars()) & New String(System.IO.Path.GetInvalidPathChars())
+        Dim sanitizedFileName As String = fileName
+        For Each c As Char In invalidChars
+            sanitizedFileName = sanitizedFileName.Replace(c.ToString(), "_")
+        Next
 
-        ' Extract file extension and remove it from the sanitized file name
-        Dim extension As String = System.IO.Path.GetExtension(sanitizedFileName)
-        Dim fileNameWithoutExtension As String = System.IO.Path.GetFileNameWithoutExtension(sanitizedFileName)
-
-        ' Truncate file name if it exceeds 100 characters (excluding the extension)
-        If fileNameWithoutExtension.Length > 100 - extension.Length Then
-            fileNameWithoutExtension = fileNameWithoutExtension.Substring(0, 100 - extension.Length)
+        ' Extract file extension if it exists
+        Dim extension As String = System.IO.Path.GetExtension(fileName)
+        If Not String.IsNullOrEmpty(extension) Then
+            sanitizedFileName = sanitizedFileName.Substring(0, sanitizedFileName.Length - extension.Length)
         End If
 
-        ' Append timestamp in HHmmssfff format and combine with the extension
-        sanitizedFileName = $"{fileNameWithoutExtension}_{DateTime.Now:HHmmssfff}{extension}"
+        ' Append timestamp in the HHmmssfff format
+        sanitizedFileName = $"{sanitizedFileName}_{DateTime.Now:HHmmssfff}{extension}"
 
         Return sanitizedFileName
     End Function

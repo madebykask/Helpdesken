@@ -308,7 +308,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             ActionType_Id = BRActionType.SendEmail,
                             Sequence = 1
                         };
-                        this.DbContext.BRActions.Add(actionEntity1);  
+                        this.DbContext.BRActions.Add(conditionEntity1);  
                     }                             
                     #endregion                                        
                 }
@@ -356,7 +356,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             ActionType_Id = BRActionType.DisableCaseField,
                             Sequence = 1
                         };
-                        this.DbContext.BRActions.Add(actionEntity1);
+                        this.DbContext.BRActions.Add(conditionEntity1);
                     }
                     #endregion
                 }
@@ -404,7 +404,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             ActionType_Id = BRActionType.Warning,
                             Sequence = 1
                         };
-                        this.DbContext.BRActions.Add(actionEntity1);
+                        this.DbContext.BRActions.Add(conditionEntity1);
                     }
                     #endregion
                 }
@@ -452,7 +452,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             ActionType_Id = BRActionType.EditCaseField,
                             Sequence = 1
                         };
-                        this.DbContext.BRActions.Add(actionEntity1);
+                        this.DbContext.BRActions.Add(conditionEntity1);
                     }
                     #endregion
                 }
@@ -727,8 +727,6 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         ParamValue = businessRule.DisableFinishingType.ToInt().ToString()
                     };
                     this.DbContext.BRActionParams.Add(actionParamEntity4);
-
-
                 }
                 else
                 {
@@ -825,6 +823,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
 
         private string SaveBRActionParamsEditCaseField(BusinessRuleModel businessRule, bool isNew)
         {
+            //For rule OnCreateCaseM2T
             var action = this.DbContext.BRActions.Where(a => a.Rule_Id == businessRule.Id && a.ActionType_Id == BRActionType.EditCaseField)
                                                  .FirstOrDefault();
 
@@ -843,7 +842,15 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                     };
                     this.DbContext.BRActionParams.Add(actionParamEntity4);
 
-                   
+                    var actionParamEntityWG = new BRActionParamEntity()
+                    {
+                        Id = 0,
+                        RuleAction_Id = action.Id,
+                        ParamType_Id = BRActionParamType.WorkingGroup,
+                        ParamValue = businessRule.WorkingGroups.GetSelectedStr()
+                    };
+                    this.DbContext.BRActionParams.Add(actionParamEntityWG);
+
                 }
                 else
                 {
@@ -867,7 +874,24 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         actionParamEntity4.ParamValue = businessRule.Administrators.GetSelectedStr();
                     }
 
-                   
+
+                    var actionParamEntityWG = this.DbContext.BRActionParams.Where(a => a.RuleAction_Id == action.Id && a.ParamType_Id == BRActionParamType.WorkingGroup)
+                                                                       .FirstOrDefault();
+                    if (actionParamEntityWG == null)
+                    {
+                        actionParamEntityWG = new BRActionParamEntity()
+                        {
+                            Id = 0,
+                            RuleAction_Id = action.Id,
+                            ParamType_Id = BRActionParamType.WorkingGroup,
+                            ParamValue = businessRule.WorkingGroups.GetSelectedStr()
+                        };
+                        this.DbContext.BRActionParams.Add(actionParamEntityWG);
+                    }
+                    else
+                    {
+                        actionParamEntityWG.ParamValue = businessRule.WorkingGroups.GetSelectedStr();
+                    }
                 }
                 this.Commit();
             }
@@ -981,6 +1005,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             case BRActionParamType.CaseIsAbout:
                                 ret.CaseIsAbout = Int32.Parse(param.ParamValue).ToBool();
                                 break;
+
                         }                    
                     }
                 }
@@ -996,6 +1021,9 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             
                             case BRActionParamType.Administrator:
                                 ret.Administrators.AddItems(param.ParamValue, false);
+                                break;
+                            case BRActionParamType.WorkingGroup:
+                                ret.WorkingGroups.AddItems(param.ParamValue, false);
                                 break;
 
                         }
@@ -1018,6 +1046,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                         }
                     }
                 }
+
 
                 #endregion
 

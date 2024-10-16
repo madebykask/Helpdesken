@@ -142,8 +142,8 @@ namespace DH.Helpdesk.TestConsole
                     498,
                     60,
                     3,
-                    GetDate(),
-                    GetDate(),
+                    GETUTCDATE(),
+                    GETUTCDATE(),
                     'katarina.ask@dhsolutions.se'
                 ); ";
             return sql;
