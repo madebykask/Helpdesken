@@ -356,7 +356,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             ActionType_Id = BRActionType.DisableCaseField,
                             Sequence = 1
                         };
-                        this.DbContext.BRActions.Add(actionEntity1);
+                        this.DbContext.BRActions.Add(conditionEntity1);
                     }
                     #endregion
                 }
@@ -404,7 +404,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             ActionType_Id = BRActionType.Warning,
                             Sequence = 1
                         };
-                        this.DbContext.BRActions.Add(actionEntity1);
+                        this.DbContext.BRActions.Add(conditionEntity1);
                     }
                     #endregion
                 }
@@ -452,7 +452,7 @@ namespace DH.Helpdesk.Dal.Repositories.BusinessRules.Concrete
                             ActionType_Id = BRActionType.EditCaseField,
                             Sequence = 1
                         };
-                        this.DbContext.BRActions.Add(actionEntity1);
+                        this.DbContext.BRActions.Add(conditionEntity1);
                     }
                     #endregion
                 }
