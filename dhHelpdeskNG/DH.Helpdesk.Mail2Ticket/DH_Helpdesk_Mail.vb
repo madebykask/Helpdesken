@@ -1552,20 +1552,22 @@ Module DH_Helpdesk_Mail
     End Function
     ' Helper method to sanitize file names
     Private Function SanitizeFileName(fileName As String) As String
-        Dim invalidChars As String = New String(System.IO.Path.GetInvalidFileNameChars()) & New String(System.IO.Path.GetInvalidPathChars())
-        Dim sanitizedFileName As String = fileName
-        For Each c As Char In invalidChars
-            sanitizedFileName = sanitizedFileName.Replace(c.ToString(), "_")
-        Next
+        ' Replace invalid characters with an underscore
+        Dim invalidChars As Char() = System.IO.Path.GetInvalidFileNameChars().Concat(System.IO.Path.GetInvalidPathChars()).ToArray()
+        Dim sanitizedFileName As String = New String(fileName.Select(Function(c) If(invalidChars.Contains(c), "_"c, c)).ToArray())
 
         ' Extract file extension if it exists
         Dim extension As String = System.IO.Path.GetExtension(fileName)
-        If Not String.IsNullOrEmpty(extension) Then
-            sanitizedFileName = sanitizedFileName.Substring(0, sanitizedFileName.Length - extension.Length)
+
+        Dim fileNameWithoutExtension As String = System.IO.Path.GetFileNameWithoutExtension(sanitizedFileName)
+
+        ' Extract file extension and remove it from the sanitized file name
+        If fileNameWithoutExtension.Length > 100 - extension.Length Then
+            fileNameWithoutExtension = fileNameWithoutExtension.Substring(0, 100 - extension.Length)
         End If
 
-        ' Append timestamp in the HHmmssfff format
-        sanitizedFileName = $"{sanitizedFileName}_{DateTime.Now:HHmmssfff}{extension}"
+        ' Append timestamp in HHmmssfff format and combine with the extension
+        sanitizedFileName = $"{fileNameWithoutExtension}_{DateTime.Now:HHmmssfff}{extension}"
 
         Return sanitizedFileName
     End Function
