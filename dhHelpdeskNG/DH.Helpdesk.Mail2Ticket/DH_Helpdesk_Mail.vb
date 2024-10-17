@@ -171,7 +171,34 @@ Module DH_Helpdesk_Mail
             LogError("Error ReadMailBox " & workingModeArg & " " & ex.StackTrace() & " " & ex.ToString(), Nothing)
         Finally
             closeLogFiles()
+
             Try
+                Dim objCustomerData As New CustomerData
+                Dim iSyncType As SyncType = If(workingMode = SyncType.SyncByWorkingGroup, SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
+                Dim customers As List(Of Customer)
+                Dim objGlobalSettingsData As New GlobalSettingsData
+                Dim objGlobalSettings As GlobalSettings = objGlobalSettingsData.getGlobalSettings()
+                If iSyncType = SyncType.SyncByWorkingGroup Then
+                    customers = objCustomerData.getCustomersByWorkingGroup()
+                Else
+                    customers = objCustomerData.getCustomers().Where(Function(x) x.Status = 1).ToList()
+                End If
+                For Each objCustomer As Customer In customers
+                    If objCustomer.PhysicalFilePath = "" Then
+                        objCustomer.PhysicalFilePath = objGlobalSettings.AttachedFileFolder
+                    End If
+                    'Make sure to delete old temp folders (if any error occurred in session) 
+                    Try
+                        Dim tempFolders As String() = Directory.GetDirectories(objCustomer.PhysicalFilePath, workingModeNumber.ToString() & "_temp_" & processId)
+                        For Each folder As String In tempFolders
+                            Dim di As DirectoryInfo = New DirectoryInfo(folder)
+                            di.Delete(True) ' True to delete recursively
+                        Next
+                    Catch ex As Exception
+                        ' Log or handle the exception if necessary
+                        LogError("Error deleting tempfolders " & ex.ToString(), Nothing)
+                    End Try
+                Next
 
                 ' This is old ugly stuff
                 If itemattach IsNot Nothing Then
@@ -324,19 +351,7 @@ Module DH_Helpdesk_Mail
                     objCustomer.PhysicalFilePath = objGlobalSettings.AttachedFileFolder
                 End If
 
-                'Make sure to delete old tempfolders (if any error occured in previous session) if not M2T is already running
-                Try
-                    Dim tempFolders As String() = Directory.GetDirectories(objCustomer.PhysicalFilePath, workingModeNumber.ToString() & "_temp_*")
-
-                    For Each folder As String In tempFolders
-                        Dim di As DirectoryInfo = New DirectoryInfo(folder)
-                        di.Delete(True) ' True to delete recursively
-                    Next
-                Catch ex As Exception
-                    ' Log or handle the exception if necessary
-                End Try
-
-                If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) Then
+                If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) AndAlso Not IsNullOrEmpty(objCustomer.POP3Password) Then
 
                     LogToFile("M2T for " & objCustomer.Name & ", Nr: " & iCustomerCount & "(" & customers.Count & "), appVersion: " & CurrentAssemblyInfo.Version, iPop3DebugLevel)
 
@@ -1055,6 +1070,7 @@ Module DH_Helpdesk_Mail
 
                                         End If
                                     End If
+
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
                                         Try
                                             DeleteFilesInsideFolder($"{objCustomer.PhysicalFilePath}\{objCase.Casenumber}\html", True)
@@ -1374,8 +1390,6 @@ Module DH_Helpdesk_Mail
 
     Private Async Function ReadEwsFolderAsync(objCustomer As Customer, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String,
                                               applicationId As String, clientSecret As String, tenantId As String, temppath As String) As Task(Of List(Of MailMessage))
-        'emailFolder = "Inkorg/M2T_test"
-        'emailArchiveFolder = "Arkiv/M2T_test"
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
         Dim app As IConfidentialClientApplication = ConfidentialClientApplicationBuilder.Create(applicationId).WithAuthority(AzureCloudInstance.AzurePublic, tenantId).WithClientSecret(clientSecret).Build()
 
@@ -1383,7 +1397,6 @@ Module DH_Helpdesk_Mail
         Dim result As AuthenticationResult = Await task
 
 
-        'Dim service As ExchangeService = New ExchangeService()
         Dim service As ExchangeService = getExchangeService()
         ' TODO: Port? Maybe not
         service.Url = New Uri(server)
