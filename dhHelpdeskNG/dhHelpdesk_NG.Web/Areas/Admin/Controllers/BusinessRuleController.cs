@@ -349,12 +349,16 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             try
             {
                 bool isWGMandatory = false;
-                var caseFieldsettings = _caseFieldSettingService.GetCaseFieldSettings(customerId).Where(x => x.IsActive && x.Name == "WorkingGroup_Id" && x.Required == 1);
-                if(caseFieldsettings.Any()) {
-                    isWGMandatory = true;
+                var allWgs = new List<DdlModel>();
+                var workingGroupsSettingActive = _caseFieldSettingService.GetCaseFieldSettings(customerId).Where(x => x.Name == "WorkingGroup_Id" && x.IsActive);
+                if (workingGroupsSettingActive.Any()) {
+                    allWgs = GetWorkgroupsList(customerId);
+                    var isMandatory = workingGroupsSettingActive.Any(x => x.Required == 1);
+                    if (isMandatory)
+                    {
+                        isWGMandatory = true;
+                    }
                  }
-                    
-                var allWgs = GetWorkgroupsList(customerId);
 
                 return Json(new { status = "OK", allWgs, isWGMandatory }, JsonRequestBehavior.AllowGet);
             }

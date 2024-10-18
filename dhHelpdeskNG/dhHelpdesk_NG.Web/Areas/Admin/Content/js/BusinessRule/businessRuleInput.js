@@ -362,8 +362,10 @@
 
             } else if (selectedValue === '2') {
                 //OnCreateCaseM2T
-                let wgCount = $('#lstWorkingGroupsSingle option').length;
-
+                let wgCount = 0;
+                if ($('#lstWorkingGroupsSingle option').length > 0) {
+                    wgCount = $('#lstWorkingGroupsSingle option').length
+                } 
                 $(elCondition1).hide();
                 $(elCondition2).show();
                 $(elCondition3).hide();
@@ -519,23 +521,22 @@
             $(document).on('change', '#lstEvents', function () {
                 let selectedValue = $(elEventsDropDown).val();
                 let customerId = $(elCustomerId).val();
-                $.get(getWorkingGroupsForCustomerUrl,
-                    {
-                        'customerId': customerId
-                    },
-                    function (result) { 
-                        if (result.status === "OK") {  
-
+                $.get(getWorkingGroupsForCustomerUrl, { 'customerId': customerId }, function (result) {
+                    if (result.status === "OK") {
+                        // Ensure allWgs is an array and check if it has any elements
+                        if (Array.isArray(result.allWgs) && result.allWgs.length > 0) {
                             updateWorkingGroupList(result.allWgs);
                             if (result.isWGMandatory === true) {
-                                
                                 $(isWorkingGroupMandatory).val(true);
                             }
                         } else {
-                            ShowToastMessage(result, "error");  
+                            // Handle the case where no working groups are returned
+                            $(elBRActionWorkingGroupSingleSelect).hide();
                         }
+                    } else {
+                        ShowToastMessage(result, "error");
                     }
-                );
+                });
                 $.get(getAdministratorsForCustomersUrl,
                     {
                         'customerId': customerId
@@ -552,10 +553,10 @@
                     }
                 );
 
-            });
+        });
                
 
-            dhHelpdesk.businessRule.setupEvent();
+        dhHelpdesk.businessRule.setupEvent();
            
         }
 
