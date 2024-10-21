@@ -47,7 +47,15 @@
         {
             for (var i = 1; i <= columns; i++)
             {
-                worksheet.Column(i).AutoFit();
+                try
+                {
+                    worksheet.Column(i).AutoFit();
+                }
+                catch(Exception)
+                {
+                   //continue
+                }
+
             }
         }
 
