@@ -112,6 +112,28 @@
                 </td>
             }*@
                 </tr>
+                <tr id="trCaseTypes" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType)">
+                    <td>
+                        @Translation.GetCoreTextTranslation("Ärendetyp")
+                    </td>
+                    <td>
+                        <div id="divCaseType" class="btn-group">
+                            @{
+                                string disabledCaseType = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType);
+                            }
+                            <div class="btn @disabledCaseType" id="divBreadcrumbs_CaseType">@Model.ParantPath_CaseType</div>
+                            <button class="btn dropdown-toggle" data-toggle="dropdown" @disabledCaseType>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
+                                @Html.CaseTypeDropdownButtonString(Model.caseTypes)
+                            </ul>
+
+                            <input type="hidden" id="case__CaseType_Id" name="case_.CaseType_Id" value="@Model.case_.CaseType_Id.supressZero()" />
+                        </div>
+                    </td>
+                </tr>
                 @*<tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority)">
             <td>
                @Translation.GetCoreTextTranslation("Prioritet")
