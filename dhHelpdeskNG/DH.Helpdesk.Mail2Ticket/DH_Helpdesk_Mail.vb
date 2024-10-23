@@ -55,11 +55,12 @@ Module DH_Helpdesk_Mail
 
     Dim eMailConnectionType As MailConnectionType
     Dim tempFolder = "\temp"
+    Dim workingModeNumber As Integer
 
 
     Public Sub Main()
         Dim processId As Integer = Process.GetCurrentProcess().Id
-        tempFolder = tempFolder & processId.ToString()
+
         Dim secureConnectionString As String = GetAppSettingValue("SecureConnectionString")
         If (Not IsNullOrEmpty(secureConnectionString) AndAlso secureConnectionString.Equals(Boolean.TrueString, StringComparison.OrdinalIgnoreCase)) Then
             Dim fileName = Path.GetFileName(Assembly.GetExecutingAssembly().Location)
@@ -83,6 +84,7 @@ Module DH_Helpdesk_Mail
         Dim logIdentifierArg As String = GetAppSettingValue("LogIdentifier")
         Dim productAreaSepArg As String = GetAppSettingValue("ProductAreaSeparator")
         Dim newModeArg As String = ""
+
 
 #Region "Optional params for diagnostic purposes"
 
@@ -125,8 +127,10 @@ Module DH_Helpdesk_Mail
         End If
 
         Dim workingMode = If(workingModeArg = "5", SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
-        ' For testing purposes only
-        ' Dim workingMode = SyncType.SyncByWorkingGroup
+
+        workingModeNumber = CType(workingMode, Integer)
+
+        tempFolder = workingModeNumber.ToString() & "_temp_" & processId.ToString()
 
         If Not IsNullOrEmpty(logFolderArg) Then
             gsLogPath = logFolderArg
@@ -167,9 +171,36 @@ Module DH_Helpdesk_Mail
             LogError("Error ReadMailBox " & workingModeArg & " " & ex.StackTrace() & " " & ex.ToString(), Nothing)
         Finally
             closeLogFiles()
+
             Try
+                Dim objCustomerData As New CustomerData
+                Dim iSyncType As SyncType = If(workingMode = SyncType.SyncByWorkingGroup, SyncType.SyncByWorkingGroup, SyncType.SyncByCustomer)
+                Dim customers As List(Of Customer)
+                Dim objGlobalSettingsData As New GlobalSettingsData
+                Dim objGlobalSettings As GlobalSettings = objGlobalSettingsData.getGlobalSettings()
+                If iSyncType = SyncType.SyncByWorkingGroup Then
+                    customers = objCustomerData.getCustomersByWorkingGroup()
+                Else
+                    customers = objCustomerData.getCustomers().Where(Function(x) x.Status = 1).ToList()
+                End If
+                For Each objCustomer As Customer In customers
+                    If objCustomer.PhysicalFilePath = "" Then
+                        objCustomer.PhysicalFilePath = objGlobalSettings.AttachedFileFolder
+                    End If
+                    'Make sure to delete old temp folders (if any error occurred in session) 
+                    Try
+                        Dim tempFolders As String() = Directory.GetDirectories(objCustomer.PhysicalFilePath, workingModeNumber.ToString() & "_temp_" & processId)
+                        For Each folder As String In tempFolders
+                            Dim di As DirectoryInfo = New DirectoryInfo(folder)
+                            di.Delete(True) ' True to delete recursively
+                        Next
+                    Catch ex As Exception
+                        ' Log or handle the exception if necessary
+                        LogError("Error deleting tempfolders " & ex.ToString(), Nothing)
+                    End Try
+                Next
 
-
+                ' This is old ugly stuff
                 If itemattach IsNot Nothing Then
                     For i As Integer = 0 To itemattach.Count - 1
                         If itemattach(i) IsNot Nothing Then
@@ -319,17 +350,8 @@ Module DH_Helpdesk_Mail
                 If objCustomer.PhysicalFilePath = "" Then
                     objCustomer.PhysicalFilePath = objGlobalSettings.AttachedFileFolder
                 End If
-                'Make sure to empty temp-folder.
-                Try
-                    Dim di As DirectoryInfo = New DirectoryInfo(objCustomer.PhysicalFilePath & tempFolder)
-                    'For Each fi As FileInfo In di.GetFiles()
-                    '    fi.Delete()
-                    'Next
-                Catch ex As Exception
 
-                End Try
-
-                If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) Then
+                If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) AndAlso Not IsNullOrEmpty(objCustomer.POP3Password) Then
 
                     LogToFile("M2T for " & objCustomer.Name & ", Nr: " & iCustomerCount & "(" & customers.Count & "), appVersion: " & CurrentAssemblyInfo.Version, iPop3DebugLevel)
 
@@ -382,7 +404,7 @@ Module DH_Helpdesk_Mail
                                                                                               objCustomer.EwsApplicationId,
                                                                                               objCustomer.EwsClientSecret,
                                                                                               objCustomer.EwsTenantId,
-                                                                                              objCustomer.PhysicalFilePath)
+                                                                                              $"{objCustomer.PhysicalFilePath}\{tempFolder}")
 
                                     'Successful Quit
                                     task.Wait()
@@ -699,7 +721,7 @@ Module DH_Helpdesk_Mail
                                     End Try
                                     Try
 
-                                        sBodyText = CreateBase64Images(objCustomer, message, objCustomer.PhysicalFilePath & tempFolder & "\", sBodyText)
+                                        sBodyText = CreateBase64Images(objCustomer, message, $"{objCustomer.PhysicalFilePath}\{tempFolder}", sBodyText)
                                     Catch ex As Exception
                                         'LogError("Error CreateBase64Images " & ex.ToString(), Nothing)
                                     End Try
@@ -1053,10 +1075,11 @@ Module DH_Helpdesk_Mail
 
                                         End If
                                     End If
+
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
                                         Try
                                             DeleteFilesInsideFolder($"{objCustomer.PhysicalFilePath}\{objCase.Casenumber}\html", True)
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & tempFolder, True)
+                                            DeleteFilesInsideFolder($"{objCustomer.PhysicalFilePath}\{tempFolder}", True)
 
                                         Catch ex As Exception
                                             LogError("Error deleting files: " & ex.Message, Nothing)
@@ -1173,7 +1196,7 @@ Module DH_Helpdesk_Mail
                                     If Not IsNullOrEmpty(sHTMLFileName) Then
                                         Try
                                             DeleteFilesInsideFolder(Path.Combine(objCustomer.PhysicalFilePath, logSubFolderPrefix & iLog_Id) & "\html", True)
-                                            DeleteFilesInsideFolder(objCustomer.PhysicalFilePath & tempFolder, True)
+                                            DeleteFilesInsideFolder($"{objCustomer.PhysicalFilePath}\{tempFolder}", True)
                                         Catch ex As Exception
                                             'LogError("Error deleting files: " & ex.Message, Nothing)
                                         End Try
@@ -1372,8 +1395,6 @@ Module DH_Helpdesk_Mail
 
     Private Async Function ReadEwsFolderAsync(objCustomer As Customer, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String,
                                               applicationId As String, clientSecret As String, tenantId As String, temppath As String) As Task(Of List(Of MailMessage))
-        'emailFolder = "Inkorg/M2T_test"
-        'emailArchiveFolder = "Arkiv/M2T_test"
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
         Dim app As IConfidentialClientApplication = ConfidentialClientApplicationBuilder.Create(applicationId).WithAuthority(AzureCloudInstance.AzurePublic, tenantId).WithClientSecret(clientSecret).Build()
 
@@ -1381,7 +1402,6 @@ Module DH_Helpdesk_Mail
         Dim result As AuthenticationResult = Await task
 
 
-        'Dim service As ExchangeService = New ExchangeService()
         Dim service As ExchangeService = getExchangeService()
         ' TODO: Port? Maybe not
         service.Url = New Uri(server)
@@ -1476,7 +1496,10 @@ Module DH_Helpdesk_Mail
                                 LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
                                 Continue For
                             End Try
-
+                            'New
+                            If Not Directory.Exists(temppath) Then
+                                Directory.CreateDirectory(temppath)
+                            End If
                             Dim fileAttach As FileAttachment = attach
                             Dim retval As String
                             Dim strName As String = SanitizeFileName(fileAttach.Name)
@@ -1982,7 +2005,7 @@ Module DH_Helpdesk_Mail
                                     sFileExtension = sMediaType.Replace("image/", "")
                                     iFileCount = iFileCount + 1
 
-                                    sContentLocation = sFolder & iFileCount & "." & sFileExtension
+                                    sContentLocation = sFolder & "\" & iFileCount & "." & sFileExtension
                                     res.Save(sContentLocation)
                                     'LogToFile("Saved file: " & sContentLocation, 1)
                                     Dim imgHref As String = ""
