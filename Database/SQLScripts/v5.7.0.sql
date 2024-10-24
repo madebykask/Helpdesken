@@ -1020,6 +1020,815 @@ BEGIN
 END
 GO
 
+ALTER PROCEDURE [dbo].[sp_DeleteCases] 
+	@Cases IdsList READONLY
+AS
+BEGIN
+	BEGIN TRY
+
+		IF (OBJECT_ID ('tblLink_tblUsers', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblLink', 'U') IS NOT NULL  AND
+			OBJECT_ID ('tblCaseSolution', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE lu
+				FROM tblLink_tblUsers AS lu
+				INNER JOIN dbo.tblLink AS l
+					ON lu.Link_Id = l.Id
+				INNER JOIN dbo.tblCaseSolution  AS cs 
+					ON l.CaseSolution_Id= cs.Id
+				INNER JOIN dbo.tblChange AS ch
+					ON cs.Change_Id = ch.Id
+				INNER JOIN @Cases AS c
+					ON ch.SourceCase_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblLink_tblWorkingGroup', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblLink', 'U') IS NOT NULL  AND
+			OBJECT_ID ('tblCaseSolution', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE lw
+				FROM tblLink_tblWorkingGroup AS lw
+				INNER JOIN tblLink AS l	
+					ON lw.Link_Id = l.Id
+				INNER JOIN dbo.tblCaseSolution AS cs
+					ON l.CaseSolution_Id = cs.Id
+				INNER JOIN tblChange AS ch
+					ON cs.Change_Id = ch.Id
+				INNER JOIN @Cases AS c 
+					ON ch.SourceCase_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblChangeLog', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblChangeEMailLog', 'U') IS NOT NULL  AND
+			OBJECT_ID ('tblChangeHistory', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cl
+				FROM tblChangeLog AS cl
+				INNER JOIN dbo.tblChangeEMailLog AS cel
+					ON cl.ChangeEMailLog_Id = cel.Id
+				INNER JOIN dbo.tblChangeHistory AS chh
+					ON cel.ChangeHistory_Id = chh.Id
+				INNER JOIN dbo.tblChange AS ch
+					on chh.Change_Id = ch.Id
+				INNER JOIN @Cases AS c
+					on ch.SourceCase_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblParentChildCaseRelations', 'U') IS NOT NULL)
+			BEGIN
+				DELETE tpr 
+				FROM tblParentChildCaseRelations AS tpr
+				INNER JOIN @Cases AS c
+					ON c.Id = tpr.Descendant_Id;
+			END
+
+		IF (OBJECT_ID ('tblParentChildCaseRelations', 'U') IS NOT NULL)
+			BEGIN
+				DELETE tpr 
+				FROM tblParentChildCaseRelations AS tpr
+				INNER JOIN @Cases AS c
+					ON c.Id = tpr.Ancestor_Id;
+			END
+
+		IF (OBJECT_ID ('tblCase_ExtendedCaseData', 'U') IS NOT NULL)
+			BEGIN
+				DELETE tec
+				FROM tblCase_ExtendedCaseData AS tec
+				INNER JOIN @Cases AS c
+					ON c.Id = tec.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseIsAbout', 'U') IS NOT NULL)
+			BEGIN
+				DELETE tca
+				FROM tblCaseIsAbout AS tca
+				INNER JOIN @Cases AS c
+					ON c.Id = tca.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseQuestion', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblCaseQuestionCategory', 'U') IS NOT NULL  AND
+			OBJECT_ID ('tblCaseQuestionHeader', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cq
+				FROM tblCaseQuestion AS cq
+				INNER JOIN dbo.tblCaseQuestionCategory  AS cqc
+					on cq.CaseQuestionCategory_Id = cqc.Id
+				INNER JOIN dbo.tblCaseQuestionHeader AS cqh
+					on cqc.CaseQuestionHeader_Id = cqh.Id
+				INNER JOIN @Cases AS c
+					on cqh.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseQuestionCategory', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblCaseQuestionHeader', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cqc
+				FROM tblCaseQuestionCategory AS cqc
+				INNER JOIN dbo.tblCaseQuestionHeader AS cqh
+					on cqc.CaseQuestionHeader_Id = cqh.Id
+				INNER JOIN @Cases AS c
+					on cqh.Case_Id = c.Id; 
+			END
+
+		IF (OBJECT_ID ('tblCaseQuestionHeader', 'U') IS NOT NULL)
+			BEGIN
+ 				DELETE cqh
+				FROM tblCaseQuestionHeader AS cqh
+				INNER JOIN @Cases AS c 
+					ON cqh.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblLogFileExisting', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblLog', 'U') IS NOT NULL)
+			BEGIN
+ 				DELETE lfe
+				FROM tblLogFileExisting AS lfe
+				INNER JOIN dbo.tblLog AS l
+					ON lfe.Log_Id = l.Id
+				INNER JOIN @Cases AS c 
+					ON l.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblLogFileExisting', 'U') IS NOT NULL)
+			BEGIN
+				DELETE lfe
+				FROM tblLogFileExisting AS lfe
+				INNER JOIN @Cases AS c 
+					ON lfe.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblLogFileExisting', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblLog', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cd
+				FROM tblChange_tblDepartment AS cd
+				INNER JOIN dbo.tblChange AS ch
+					ON cd.Change_Id = ch.Id
+				INNER JOIN @Cases AS c 
+					ON ch.SourceCase_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblChange_tblChangeGroup', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE ccg
+				FROM tblChange_tblChangeGroup AS ccg
+				INNER JOIN tblChange AS ch
+					ON ccg.Change_Id = ch.Id
+				INNER JOIN @Cases AS c 
+					ON ch.SourceCase_Id = c.Id; 
+			END
+
+		IF (OBJECT_ID ('tblCaseInvoiceRow', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblInvoiceRow', 'U') IS NOT NULL)
+			BEGIN
+	 			DELETE cir
+				FROM tblCaseInvoiceRow AS cir
+				INNER JOIN tblInvoiceRow AS ir 
+					ON cir.InvoiceRow_Id = ir.Id
+				INNER JOIN @Cases AS c
+					ON ir.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseInvoiceRow', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cir
+				FROM tblCaseInvoiceRow AS cir
+				INNER JOIN @Cases AS c
+					ON cir.Case_Id = c.Id;			
+			END
+
+		IF (OBJECT_ID ('tblChangeCouncil', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cc
+				FROM tblChangeCouncil AS cc
+				INNER JOIN tblChange AS ch
+					ON cc.Change_Id = ch.Id
+				INNER JOIN @Cases AS c
+					ON ch.SourceCase_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblChangeContact', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cc
+				FROM tblChangeContact AS cc
+				INNER JOIN dbo.tblChange AS ch
+					ON cc.Change_Id = ch.Id
+				INNER JOIN @Cases AS c
+					ON ch.SourceCase_Id = c.Id; 
+			END
+
+		IF (OBJECT_ID ('tblChange_tblChange', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cch
+				FROM tblChange_tblChange AS cch
+				INNER JOIN dbo.tblChange AS ch
+					ON cch.RelatedChange_Id = ch.Id
+				INNER JOIN @Cases AS c
+					ON ch.SourceCase_Id = c.Id;	
+			END
+
+		IF (OBJECT_ID ('tblChangeFile', 'U') IS NOT NULL  AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cf
+				FROM tblChangeFile AS cf
+				INNER JOIN dbo.tblChange AS ch
+					ON cf.Change_Id = ch.Id
+				INNER JOIN @Cases AS c
+					ON ch.SourceCase_Id = c.Id; 
+			END
+
+		IF (OBJECT_ID ('tblLog', 'U') IS NOT NULL)
+			BEGIN
+				SELECT tl.Id, tl.Case_Id, tl.InvoiceRow_Id 
+				INTO #TmpLogs
+				FROM tblLog AS tl 
+				INNER JOIN @Cases AS c
+					ON c.Id = tl.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblLog', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblLogFile', 'U') IS NOT NULL)
+			BEGIN
+				DELETE lf
+				FROM tblLogFile AS lf
+				INNER JOIN #TmpLogs AS tmp
+					ON tmp.Id = lf.Log_Id;
+			END
+
+		IF (OBJECT_ID ('tblLog', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblMail2Ticket', 'U') IS NOT NULL)
+			BEGIN
+				DELETE m2t
+				FROM tblMail2Ticket AS m2t
+				INNER JOIN #TmpLogs AS tmp
+					ON tmp.Id = m2t.Log_Id;
+			END
+
+		IF (OBJECT_ID ('tblLog', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblMail2TicketCase', 'U') IS NOT NULL)
+			BEGIN
+				DELETE m2tc
+				FROM tblMail2TicketCase AS m2tc
+				INNER JOIN #TmpLogs AS tmp
+					ON tmp.Id = m2tc.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblMail2Ticket', 'U') IS NOT NULL)
+			BEGIN
+				DELETE m2t
+				FROM tblMail2Ticket AS m2t
+				INNER JOIN @Cases AS c
+					ON c.Id = m2t.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblLog', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblEmailLogAttempts', 'U') IS NOT NULL)
+			BEGIN
+				DELETE ela
+				FROM tblEmailLogAttempts AS ela
+				INNER JOIN #TmpLogs AS tmp
+					ON tmp.Id = ela.EmailLog_Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseHistory', 'U') IS NOT NULL)
+			BEGIN
+				SELECT ch.Id, ch.Case_Id
+				INTO #TmpCaseHistory
+				FROM tblCaseHistory AS ch
+				INNER JOIN @Cases AS c
+					ON ch.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseHistory', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblEmailLogAttempts', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblEmailLog', 'U') IS NOT NULL)
+			BEGIN
+				DELETE ela
+				FROM tblEmailLogAttempts AS ela
+				INNER JOIN tblEmailLog AS el
+					ON ela.EmailLog_Id = el.Id
+				INNER JOIN #TmpCaseHistory AS ch
+					ON ch.Id = el.CaseHistory_Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseHistory', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblEmailLog', 'U') IS NOT NULL)
+			BEGIN			
+				DELETE el
+				FROM tblEmailLog AS el
+				INNER JOIN #TmpCaseHistory AS ch
+					ON ch.Id = el.CaseHistory_Id;
+			END
+
+		IF (OBJECT_ID ('tblInvoiceRow', 'U') IS NOT NULL)
+			BEGIN	
+				SELECT ir.Id, ir.Case_Id, ir.InvoiceHeader_Id
+				INTO #tmpInvoiceRow
+				FROM tblInvoiceRow AS ir
+				INNER JOIN @Cases AS c
+					ON ir.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblInvoiceRow', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblEMailLog', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblLog', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblInvoiceHeader', 'U') IS NOT NULL)
+			BEGIN	
+				DELETE el 
+				FROM tblEMailLog AS el
+				INNER JOIN tblLog AS tl
+					ON el.Log_Id = tl.Id
+				INNER JOIN tblInvoiceRow AS ir
+					ON tl.InvoiceRow_Id = ir.Id
+				INNER JOIN tblInvoiceHeader AS ih
+					ON ir.InvoiceHeader_Id = ih.Id
+				INNER JOIN #tmpInvoiceRow AS tir
+					ON tir.InvoiceHeader_Id = ih.Id
+				INNER JOIN @Cases AS c
+					ON tir.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblEMailLog', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblLog', 'U') IS NOT NULL)
+			BEGIN	
+				DELETE el
+				FROM tblEmailLog AS el
+				INNER JOIN #TmpLogs As l
+					ON l.Id = el.Log_Id;
+			END
+			
+		IF (OBJECT_ID ('tblInvoiceRow', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblLog', 'U') IS NOT NULL)
+			BEGIN	
+				DELETE tl
+				FROM tblLog AS tl
+				INNER JOIN tblInvoiceRow AS ir
+					ON ir.Id = tl.InvoiceRow_Id
+				INNER JOIN @Cases AS c
+					ON ir.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblInvoiceRow', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblLog', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblInvoiceHeader', 'U') IS NOT NULL)
+			BEGIN	
+				DELETE tl
+				FROM tblLog AS tl
+				INNER JOIN tblInvoiceRow AS ir
+					ON tl.InvoiceRow_Id = ir.Id
+				INNER JOIN tblInvoiceHeader AS ih
+					ON ir.InvoiceHeader_Id = ih.Id
+				INNER JOIN #tmpInvoiceRow AS tir
+					ON tir.InvoiceHeader_Id = ih.Id
+				INNER JOIN @Cases AS c
+					ON tir.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblInvoiceRow', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblLog', 'U') IS NOT NULL)
+			BEGIN	
+				DELETE tl
+				FROM tblLog AS tl
+				INNER JOIN #tmpInvoiceRow as r
+					ON r.Id = tl.InvoiceRow_Id;
+			END
+
+		IF (OBJECT_ID ('tblLog', 'U') IS NOT NULL)
+			BEGIN	
+				DELETE tl
+				FROM tblLog AS tl
+				INNER JOIN #TmpLogs As l
+					ON l.Id = tl.Id;
+			END
+
+		IF (OBJECT_ID ('tblInvoiceRow', 'U') IS NOT NULL)
+			BEGIN	
+				DELETE ir
+				FROM tblInvoiceRow AS ir
+				INNER JOIN @Cases AS c
+					ON ir.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblInvoiceRow', 'U') IS NOT NULL)
+			BEGIN	
+				DELETE ir
+				FROM tblInvoiceRow AS ir
+				INNER JOIN tblInvoiceHeader AS ih
+					ON ir.InvoiceHeader_Id = ih.Id
+				INNER JOIN #tmpInvoiceRow AS tir
+					ON tir.InvoiceHeader_Id = ih.Id
+				INNER JOIN @Cases AS c
+					ON tir.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tempdb..#TmpLogs') IS NOT NULL)
+			BEGIN	
+				DROP TABLE #TmpLogs;
+			END
+
+		IF (OBJECT_ID ('tblInvoiceRow', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblInvoiceHeader', 'U') IS NOT NULL)
+			BEGIN	
+				DELETE ih
+				FROM tblInvoiceHeader AS ih
+				INNER JOIN #tmpInvoiceRow AS ir
+					ON ir.InvoiceHeader_Id = ih.Id
+				INNER JOIN @Cases AS c
+					ON ir.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tempdb..#tmpInvoiceRow') IS NOT NULL)
+			BEGIN			
+				DROP TABLE #tmpInvoiceRow;
+			END
+
+		RAISERROR('Deleting from dbo.tblCaseHistory:', 10, 1) WITH NOWAIT;
+
+		IF (OBJECT_ID ('tblCaseHistory', 'U') IS NOT NULL)
+			BEGIN	
+				--delete from dbo.tblCaseHistory
+				--from dbo.tblCaseHistory
+				--inner join dbo.tblEMailLog on dbo.tblCaseHistory.Id=dbo.tblEMailLog.CaseHistory_Id
+				--inner join dbo.tblLog on dbo.tblEMailLog.Log_Id=dbo.tblLog.Id
+				--inner join dbo.tblCase on dbo.tblLog.Case_Id=dbo.tblCase.Id
+				--where tblCase.Id IN (SELECT Id from @Cases)
+
+
+				DELETE ch
+				FROM tblCaseHistory AS ch
+				INNER JOIN #TmpCaseHistory AS t
+					ON t.Id = ch.Id;
+			END
+
+		IF (OBJECT_ID ('tempdb..#TmpCaseHistory') IS NOT NULL)
+			BEGIN	
+				DROP TABLE #TmpCaseHistory;
+			END
+
+		RAISERROR('Deleting from dbo.tblCaseLock:', 10, 1) WITH NOWAIT;
+
+		IF (OBJECT_ID ('tblCaseLock', 'U') IS NOT NULL)
+			BEGIN	
+				DELETE cl
+				FROM tblCaseLock AS cl
+				INNER JOIN  @Cases AS c
+					ON c.Id = cl.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseFile', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cf
+				FROM tblCaseFile AS cf
+				INNER JOIN  @Cases AS c
+					ON c.Id = cf.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblFileViewLog', 'U') IS NOT NULL)
+			BEGIN
+				DELETE fvl
+				FROM tblFileViewLog AS fvl
+				INNER JOIN  @Cases AS c
+					ON c.Id = fvl.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseInvoice', 'U') IS NOT NULL)
+			BEGIN
+				SELECT ci.Id
+				INTO #TmpCaseInvoice
+				FROM tblCaseInvoice AS ci
+				INNER JOIN  @Cases AS c
+					ON c.Id = ci.CaseId;
+			END
+
+		IF (OBJECT_ID ('tblCaseInvoiceArticle', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblCaseInvoiceOrder', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblCaseInvoice', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cia
+				FROM tblCaseInvoiceArticle AS cia
+				INNER JOIN tblCaseInvoiceOrder AS cio
+					ON cio.Id = cia.OrderId
+				INNER JOIN #TmpCaseInvoice AS t
+					ON t.Id = cio.InvoiceId;
+			END
+
+		IF (OBJECT_ID ('tblCaseInvoiceOrderFile', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblCaseInvoiceOrder', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblCaseInvoice', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cof
+				FROM tblCaseInvoiceOrderFile AS cof
+				INNER JOIN tblCaseInvoiceOrder AS cio
+					ON cio.Id = cof.OrderId
+				INNER JOIN #TmpCaseInvoice AS t
+					ON t.Id = cio.InvoiceId;
+			END
+
+		IF (OBJECT_ID ('tblCaseInvoiceOrder', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblCaseInvoice', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cio
+				FROM tblCaseInvoiceOrder AS cio
+				INNER JOIN #TmpCaseInvoice AS t
+					ON t.Id = cio.InvoiceId;
+			END
+
+		IF (OBJECT_ID ('tblCaseInvoice', 'U') IS NOT NULL)
+			BEGIN
+				DELETE ci
+				FROM tblCaseInvoice AS ci
+				INNER JOIN #TmpCaseInvoice AS t
+					ON t.Id = ci.Id;
+			END
+
+		IF (OBJECT_ID ('tempdb..#TmpCaseInvoice') IS NOT NULL)
+			BEGIN	
+				DROP TABLE #TmpCaseInvoice;
+			END
+
+		IF (OBJECT_ID ('tblCaseSolutionSchedule', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblCaseSolution', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE csc
+				FROM tblCaseSolutionSchedule AS csc
+				INNER JOIN tblCaseSolution AS cs
+					ON csc.CaseSolution_Id = cs.Id
+				INNER JOIN dbo.tblChange AS ch
+					ON cs.Change_Id = ch.Id
+				INNER JOIN @Cases AS c 
+					ON ch.SourceCase_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseSolutionFieldSettings', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblCaseSolution', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE csf 
+				FROM tblCaseSolutionFieldSettings  csf
+				INNER JOIN tblCaseSolution AS cs
+					ON csf.CaseSolution_Id = cs.Id
+				INNER JOIN tblChange AS ch
+					ON cs.Change_Id = ch.Id
+				INNER JOIN @Cases AS c 
+					ON ch.SourceCase_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblLink', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblCaseSolution', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+ 				DELETE l
+				FROM dbo.tblLink AS l
+				INNER JOIN tblCaseSolution AS cs
+					ON l.CaseSolution_Id = cs.Id
+				INNER JOIN dbo.tblChange AS ch
+					ON cs.Change_Id = ch.Id
+				INNER JOIN @Cases AS c 
+					ON ch.SourceCase_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseSolution_tblCaseSection_ExtendedCaseForm', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblCaseSolution', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cse
+				FROM tblCaseSolution_tblCaseSection_ExtendedCaseForm AS cse
+				INNER JOIN dbo.tblCaseSolution AS cs
+					on cse.tblCaseSolutionID = cs.Id
+				INNER JOIN dbo.tblChange AS ch
+					on cs.Change_Id = ch.Id
+				INNER JOIN @Cases AS c 
+					on ch.SourceCase_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseSolution_ExtendedCaseForms', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblCaseSolution', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cse
+				FROM tblCaseSolution_ExtendedCaseForms AS cse
+				INNER JOIN dbo.tblCaseSolution AS cs 
+					ON cse.CaseSolution_Id = cs.Id
+				INNER JOIN dbo.tblChange AS ch
+					ON cs.Change_Id = ch.Id
+				INNER JOIN @Cases AS c 
+					ON ch.SourceCase_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseSolutionCondition', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblCaseSolution', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE csc
+				FROM tblCaseSolutionCondition AS csc
+				INNER JOIN tblCaseSolution AS cs 
+					ON csc.CaseSolution_Id=cs.Id
+				INNER JOIN tblChange AS ch
+					ON cs.Change_Id=ch.Id
+				INNER JOIN @Cases AS c
+					ON ch.SourceCase_Id = c.Id; 
+			END
+
+		IF (OBJECT_ID ('tblCaseSolutionConditionLog', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblCaseSolution', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cscl
+				FROM tblCaseSolutionConditionLog AS cscl
+				INNER JOIN dbo.tblCaseSolution AS cs
+					ON cscl.CaseSolution_Id = cs.Id
+				INNER JOIN dbo.tblChange AS ch
+					ON cs.Change_Id = ch.Id
+				INNER JOIN @Cases AS c 
+					ON ch.SourceCase_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblChange', 'U') IS NOT NULL)
+			BEGIN
+				DELETE ch
+				FROM tblChange AS ch
+				INNER JOIN @Cases AS c
+					ON ch.SourceCase_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblContractLog', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cl
+				FROM tblContractLog AS cl
+				INNER JOIN  @Cases AS c
+					ON c.Id = cl.Case_Id;
+			END	
+
+		IF (OBJECT_ID ('tblCaseFollowUps', 'U') IS NOT NULL)
+			BEGIN
+				DELETE flu
+				FROM tblCaseFollowUps AS flu
+				INNER JOIN  @Cases AS c
+					ON c.Id = flu.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseExtraFollowers', 'U') IS NOT NULL)
+			BEGIN
+				DELETE ef
+				FROM tblCaseExtraFollowers AS ef
+				INNER JOIN  @Cases AS c
+					ON c.Id = ef.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblCase_tblCaseSection_ExtendedCaseData', 'U') IS NOT NULL)
+			BEGIN
+				DELETE tecd
+				FROM tblCase_tblCaseSection_ExtendedCaseData AS tecd
+				INNER JOIN  @Cases AS c
+					ON c.Id = tecd.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblQuestionnaireCircularPart', 'U') IS NOT NULL)
+			BEGIN
+				SELECT cp.Id
+				INTO #TmpQuestionnaireCircularPart
+				FROM tblQuestionnaireCircularPart AS cp
+				INNER JOIN  @Cases AS c
+					ON c.Id = cp.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblQuestionnaireCircularPart', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblQuestionnaireResult', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblQuestionnaireQuestionResult', 'U') IS NOT NULL)
+			BEGIN
+				DELETE qqr
+				FROM tblQuestionnaireResult AS qr			
+				INNER JOIN #TmpQuestionnaireCircularPart AS cp
+					ON qr.QuestionnaireCircularPartic_Id = cp.Id
+				INNER JOIN tblQuestionnaireQuestionResult AS qqr
+					ON qqr.QuestionnaireResult_Id = qr.Id;
+			END
+
+		IF (OBJECT_ID ('tblQuestionnaireCircularPart', 'U') IS NOT NULL AND 
+			OBJECT_ID ('tblQuestionnaireResult', 'U') IS NOT NULL)
+			BEGIN
+				DELETE qr
+				FROM tblQuestionnaireResult AS qr			
+				INNER JOIN #TmpQuestionnaireCircularPart AS cp
+					ON qr.QuestionnaireCircularPartic_Id = cp.Id;
+			END
+
+		IF (OBJECT_ID ('tblQuestionnaireCircularPart', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cp
+				FROM tblQuestionnaireCircularPart AS cp
+				INNER JOIN #TmpQuestionnaireCircularPart AS t
+					ON t.Id = cp.Id;
+			END
+
+		IF (OBJECT_ID ('tempdb..#TmpQuestionnaireCircularPart') IS NOT NULL)
+			BEGIN	
+				DROP TABLE #TmpQuestionnaireCircularPart;
+			END
+
+		IF (OBJECT_ID ('tblMergedCases', 'U') IS NOT NULL)
+			BEGIN
+				DELETE mc
+				FROM tblMergedCases AS mc
+				INNER JOIN  @Cases AS c
+					ON c.Id = mc.MergedChild_Id OR c.Id = mc.MergedParent_Id;
+			END
+
+		IF (OBJECT_ID ('tblLogProgram', 'U') IS NOT NULL)
+			BEGIN
+				DELETE lp 
+				FROM tblLogProgram AS lp
+				INNER JOIN @Cases AS c
+					ON c.Id = lp.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblLocalAdmin', 'U') IS NOT NULL)
+			BEGIN
+				DELETE la 
+				FROM tblLocalAdmin AS la
+				INNER JOIN @Cases AS c
+					ON c.Id = la.Case_Id;		
+			END
+
+		IF (OBJECT_ID ('tblFormFieldValueHistory', 'U') IS NOT NULL)
+			BEGIN
+				DELETE vh
+				FROM tblFormFieldValueHistory AS vh
+				INNER JOIN @Cases AS c
+					ON c.Id = vh.Case_Id;	
+			END
+
+		IF (OBJECT_ID ('tblFormFieldValueHistory', 'U') IS NOT NULL AND
+			OBJECT_ID ('tblFormFieldValue', 'U') IS NOT NULL)
+			BEGIN
+				DELETE vh
+				FROM tblFormFieldValueHistory AS vh
+				INNER JOIN tblFormFieldValue AS fv 
+					ON fv.Case_Id = vh.FormField_Id
+				INNER JOIN @Cases AS c 
+					ON fv.Case_Id = c.Id;
+			END
+
+		IF (OBJECT_ID ('tblFormFieldValue', 'U') IS NOT NULL)
+			BEGIN
+				DELETE tfv
+				FROM tblFormFieldValue AS tfv
+				INNER JOIN @Cases AS c
+					ON c.Id = tfv.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblCaseStatistics', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cs
+				FROM tblCaseStatistics AS cs
+				INNER JOIN @Cases AS c
+					ON c.Id = cs.Case_Id;			 
+			END
+
+		IF (OBJECT_ID ('tblChecklistRow', 'U') IS NOT NULL)
+			BEGIN
+				DELETE cr
+				FROM tblChecklistRow as cr
+				INNER JOIN @Cases AS c
+					ON c.Id = cr.Case_Id;
+			END
+
+		IF (OBJECT_ID ('tblCase', 'U') IS NOT NULL)
+			BEGIN
+				DELETE tc
+				FROM tblCase AS tc
+				INNER JOIN  @Cases AS c
+					ON tc.Id = c.Id;
+			END
+	END TRY
+
+	BEGIN CATCH
+
+		DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE()
+		DECLARE @ErrorSeverity INT = ERROR_SEVERITY()
+		DECLARE @ErrorState INT = ERROR_STATE()
+
+		-- Use RAISERROR inside the CATCH block to return error  
+		-- information about the original error that caused  
+		-- execution to jump to the CATCH block.  
+		RAISERROR (@ErrorMessage, -- Message text.  
+				   @ErrorSeverity, -- Severity.  
+				   @ErrorState -- State.  
+				   );
+	END CATCH
+END	
+GO
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.7.0'
 GO
