@@ -170,7 +170,6 @@ Module DH_Helpdesk_Mail
         Catch ex As Exception
             LogError("Error ReadMailBox " & workingModeArg & " " & ex.StackTrace() & " " & ex.ToString(), Nothing)
         Finally
-            closeLogFiles()
 
             Try
                 Dim objCustomerData As New CustomerData
@@ -213,8 +212,9 @@ Module DH_Helpdesk_Mail
                     Next
                 End If
             Catch ex As Exception
-                LogError("Error deleting logfiles " & ex.ToString(), Nothing)
+                LogToFile("Error in finally clause " & ex.ToString(), Nothing)
             End Try
+            closeLogFiles()
 
         End Try
 
