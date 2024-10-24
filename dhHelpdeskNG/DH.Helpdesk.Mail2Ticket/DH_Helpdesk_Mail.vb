@@ -196,7 +196,7 @@ Module DH_Helpdesk_Mail
                         Next
                     Catch ex As Exception
                         ' Log or handle the exception if necessary
-                        LogError("Error deleting tempfolders " & ex.ToString(), Nothing)
+                        'LogError("Error deleting tempfolders " & ex.ToString(), Nothing)
                     End Try
                 Next
 
@@ -351,7 +351,7 @@ Module DH_Helpdesk_Mail
                     objCustomer.PhysicalFilePath = objGlobalSettings.AttachedFileFolder
                 End If
 
-                If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) AndAlso Not IsNullOrEmpty(objCustomer.POP3Password) Then
+                If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) Then
 
                     LogToFile("M2T for " & objCustomer.Name & ", Nr: " & iCustomerCount & "(" & customers.Count & "), appVersion: " & CurrentAssemblyInfo.Version, iPop3DebugLevel)
 
@@ -1082,7 +1082,7 @@ Module DH_Helpdesk_Mail
                                             DeleteFilesInsideFolder($"{objCustomer.PhysicalFilePath}\{tempFolder}", True)
 
                                         Catch ex As Exception
-                                            LogError("Error deleting files: " & ex.Message, Nothing)
+                                            'LogError("Error deleting files: " & ex.Message, Nothing)
                                         End Try
                                     End If
 #End Region
