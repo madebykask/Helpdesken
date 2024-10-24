@@ -214,8 +214,17 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             var emailGroupList = GetEmailGroupsList(rule.CustomerId);
             ViewBag.EMailGroups = emailGroupList;
 
-            var wgs = GetWorkgroupsList(rule.CustomerId);
-            var workingGroups = rule.EventId != (int)BREventType.OnCreateCaseM2T ? currentValue.Union(wgs).ToList() : wgs.ToList();
+            var workingGroups = new List<DdlModel>();
+            var workingGroupsSettingActive = _caseFieldSettingService.GetCaseFieldSettings(rule.CustomerId).Where(x => x.Name == "WorkingGroup_Id" && x.IsActive);
+            if(workingGroupsSettingActive.Any() && rule.EventId == (int)BREventType.OnCreateCaseM2T)
+            {
+                workingGroups = GetWorkgroupsList(rule.CustomerId);
+            }
+            else if(rule.EventId != (int)BREventType.OnCreateCaseM2T)
+            {
+                workingGroups = currentValue.Union(GetWorkgroupsList(rule.CustomerId)).ToList();
+            }
+
             ViewBag.WorkingGroups = workingGroups;
 
             List<DdlModel> allAdmins;
@@ -223,11 +232,14 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             if (rule.WorkingGroups.Count > 0 && rule.EventId == (int)BREventType.OnCreateCaseM2T)
             {
                 allAdmins = GetAdminsListForWorkingGroup(rule.CustomerId, rule.WorkingGroups.FirstOrDefault());
-
             }
             else
             {
-                allAdmins = GetAdminsList(rule.CustomerId, currentValue);
+                var defaultValue = rule.EventId == (int)BREventType.OnCreateCaseM2T
+                    ? null
+                    : currentValue;
+
+                allAdmins = GetAdminsList(rule.CustomerId, defaultValue);
             }
 
             ViewBag.Administrators = allAdmins;
