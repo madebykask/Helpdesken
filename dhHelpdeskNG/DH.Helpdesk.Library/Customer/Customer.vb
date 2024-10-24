@@ -84,6 +84,8 @@
     Private strBlockedEmailRecipients As String
     Private strErrorMailTo As String
 
+    Private miStatus As Integer
+
 
 #End Region
 
@@ -323,6 +325,9 @@
 
             If Not IsDBNull(dr("ErrorMailTo")) Then
                 strErrorMailTo = dr("ErrorMailTo")
+            End If
+            If Not IsDBNull(dr("Status")) Then
+                miStatus = dr("Status")
             End If
 
 
@@ -934,6 +939,15 @@
         End Get
         Set(ByVal Value As String)
             strErrorMailTo = Value
+        End Set
+    End Property
+
+    Public Property Status() As Integer
+        Get
+            Return miStatus
+        End Get
+        Set(ByVal Value As Integer)
+            miStatus = Value
         End Set
     End Property
 

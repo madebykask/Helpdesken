@@ -64,7 +64,6 @@ namespace DH.Helpdesk.BusinessData.Models.BusinessRules
         public string DomainTo { get; set; }
 
         public int EmailTemplate { get; set; }
-
         public SelectedItems EmailGroups { get; set; }
 
         public SelectedItems WorkingGroups { get; set; }

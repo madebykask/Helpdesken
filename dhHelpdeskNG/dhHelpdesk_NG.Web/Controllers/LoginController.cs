@@ -25,6 +25,10 @@ using Microsoft.Owin.Security.Cookies;
 using Microsoft.Owin.Security.OpenIdConnect;
 using System.Web;
 using DH.Helpdesk.Web.Infrastructure.Configuration.Concrete;
+using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
+using System.Net.Http;
+using Newtonsoft.Json;
 
 namespace DH.Helpdesk.Web.Controllers
 {
@@ -34,7 +38,6 @@ namespace DH.Helpdesk.Web.Controllers
         //private const string TokenKey = "Token_Data";
         //private const string Access_Token_Key = "Access_Token";
         //private const string Refresh_Token_Key = "Refresh_Token";
-        private ApplicationConfiguration appconfig;
         private readonly IUserService _userService;
         private readonly ISettingService _settingService;
         private readonly IUsersPasswordHistoryService _usersPasswordHistoryService;
@@ -78,44 +81,58 @@ namespace DH.Helpdesk.Web.Controllers
         [AllowAnonymous]
         public ActionResult Login()
         {
-
+            var appconfig = new ApplicationConfiguration();
             if (_applicationConfiguration.LoginMode == LoginMode.SSO)
             {
                 var loginUrl = _federatedAuthenticationService.GetSignInUrl();
                 return Redirect(loginUrl);
             }
-            appconfig = new ApplicationConfiguration();
             var msLogin = appconfig.GetAppKeyValueMicrosoft;
             ViewBag.ShowMsButton = false;
             if (msLogin == "1")
             {
                 ViewBag.ShowMsButton = true;
             }
-            
+
+            ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
             return View();
         }
 
         [HttpPost]
         [AllowAnonymous]
-        public ActionResult Login(LoginInputModel inputData) 
+        public ActionResult Login(LoginInputModel inputData)
         {
             var userName = inputData.txtUid?.Trim();
             var password = inputData.txtPwd?.Trim();
-            var returnUrl = inputData.returnUrl;
-            if(string.IsNullOrEmpty(returnUrl))
+            var returnUrl = string.IsNullOrEmpty(inputData.returnUrl) ? "~/" : inputData.returnUrl;
+            var reCaptchaToken = inputData.reCaptchaToken;
+            var appconfig = new ApplicationConfiguration();
+            var siteKey = appconfig.GetRecaptchaSiteKey;
+
+            if (!string.IsNullOrEmpty(siteKey) && string.IsNullOrEmpty(inputData.reCaptchaToken))
             {
-                returnUrl = "~/";
+                TempData["LoginFailed"] = "Login failed! Couldn't verify you with reCaptcha".Trim();
+                ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
+                return View("Login");
             }
 
+            // Verify reCaptcha token if required
+            if (!String.IsNullOrEmpty(reCaptchaToken) && !VerifyRecaptcha(reCaptchaToken))
+            {
+                TempData["LoginFailed"] = "Login failed! Couldn't verify you with reCaptcha".Trim();
+                ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
+                return View("Login");
+            }
+
+            // Validate login arguments
             if (IsValidLoginArgument(userName, password))
             {
-                // try to login user
-                var res = 
-                    _authenticationService.Login(
-                        HttpContext, 
-                        userName, 
-                        password,
-                        new UserTimeZoneInfo(inputData.timeZoneOffsetInJan1, inputData.timeZoneOffsetInJul1));
+                var res = _authenticationService.Login(
+                    HttpContext,
+                    userName,
+                    password,
+                    new UserTimeZoneInfo(inputData.timeZoneOffsetInJan1, inputData.timeZoneOffsetInJul1)
+                );
 
                 if (res.IsSuccess)
                 {
@@ -124,62 +141,72 @@ namespace DH.Helpdesk.Web.Controllers
                     if (res.PasswordExpired)
                     {
                         var settings = _settingService.GetCustomerSetting(res.User.CustomerId);
-
                         ViewBag.UserId = userName;
                         ViewBag.ChangePasswordModel = GetPasswordChangeModel(res.User, settings);
                         return View("Login");
                     }
 
                     _caseLockService.CaseLockCleanUp();
-
-                    #region Token based authentication
-
-                    //var token = GetToken(userName, password);
-                    //TempData[TokenKey] = GetTokenData(string.Empty, string.Empty);
-                    //if (token != null)
-                    //{
-                    //    TempData[TokenKey] = GetTokenData(token.access_token, token.refresh_token);                        
-                    //}
-
-                    #endregion
-
                     RedirectFromLoginPage(returnUrl, res.User.StartPage, res.TimeZoneAutodetect);
                 }
                 else
                 {
                     TempData["LoginFailed"] = $"Login failed! {res.ErrorMessage ?? string.Empty}".Trim();
-                    
                 }
             }
 
-            appconfig = new ApplicationConfiguration();
-            var msLogin = appconfig.GetAppKeyValueMicrosoft;
-            ViewBag.ShowMsButton = false;
-            if (msLogin == "1")
-            {
-                ViewBag.ShowMsButton = true;
-            }
-
+            // Set ViewBag properties
+            ViewBag.ShowMsButton = appconfig.GetAppKeyValueMicrosoft == "1";
+            ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
             return View("Login");
+        }
 
+        public bool VerifyRecaptcha(string token)
+        {
+            var appconfig = new ApplicationConfiguration();
+            var secret = appconfig.GetRecaptchaSecretKey;
+            using (var client = new HttpClient())
+            {
+                var values = new Dictionary<string, string>
+                {
+                    { "secret", secret },
+                    { "response", token }
+                };
 
+                var content = new FormUrlEncodedContent(values);
+                var recaptchaEndPoint = appconfig.GetRecaptchaEndPoint;
+                var response =client.PostAsync(recaptchaEndPoint, content);
+                var responseString = response.Result.Content.ReadAsStringAsync().Result;
+                var recaptchaMinScore = appconfig.GetRecaptchaMinScore;
+
+                //Deserialize the incoming object
+                var responseJson = JsonConvert.DeserializeObject<RecaptchaResponse>(responseString);
+                if(responseJson.Success && responseJson.Score > recaptchaMinScore)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
         }
 
         [AllowAnonymous]
         public void SignIn(LoginInputModel inputData)
         {
-            var returnUrl = inputData.returnUrl;
-            if(!string.IsNullOrEmpty(returnUrl))
+            var returnUrlMS = inputData.returnUrlMS;
+            if(!string.IsNullOrEmpty(returnUrlMS))
             {
-                returnUrl = returnUrl.Replace("~/", "");
+                returnUrlMS = returnUrlMS.Replace("~/", "");
             }
             else
             {
-                returnUrl = "/";
+                returnUrlMS = "/";
             }
             _authenticationService.SetLoginModeToMicrosoft();
             HttpContext.GetOwinContext().Authentication.Challenge(
-                new AuthenticationProperties { RedirectUri = returnUrl },
+                new AuthenticationProperties { RedirectUri = returnUrlMS },
                 OpenIdConnectAuthenticationDefaults.AuthenticationType);
 
         }
@@ -188,13 +215,14 @@ namespace DH.Helpdesk.Web.Controllers
         public ActionResult Logout()
         {
             _authenticationService.ClearLoginSession(ControllerContext.HttpContext);
-            appconfig = new ApplicationConfiguration();
+            var appconfig = new ApplicationConfiguration();
             var msLogin = appconfig.GetAppKeyValueMicrosoft;
             ViewBag.ShowMsButton = false;
             if (msLogin == "1")
             {
                 ViewBag.ShowMsButton = true;
             }
+            ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
             return View("Login");
         }
 
@@ -246,19 +274,8 @@ namespace DH.Helpdesk.Web.Controllers
                 {
                     redirectTo = "";
                 }
-                //if (!string.IsNullOrEmpty(returnUrl) &&
-                //    HttpContext.Request.IsAbsoluteUrlLocalToHost(returnUrl) &&
-                //    _routeResolver.AbsolutePathToRelative(returnUrl) != Root)
-                //{
-                //    redirectTo = Server.UrlDecode(returnUrl);
-                //}
 
-                //if (!string.IsNullOrEmpty(redirectTo) && redirectTo.ToLower().Contains("login"))
-                //{
-                //    redirectTo = Root;
-                //}
             }
-
             Response.Redirect(!string.IsNullOrEmpty(redirectTo) ? redirectTo : _routeResolver.ResolveStartPage(Url, startPage));
         }
 
@@ -290,36 +307,15 @@ namespace DH.Helpdesk.Web.Controllers
             };
         }
 
-        #region Token based support
-
-        //private SimpleToken GetToken(string userName, string password)
-        //{
-        //    var baseUrl = string.Format("{0}://{1}{2}", Request.Url.Scheme, Request.Url.Authority, Request.ApplicationPath.TrimEnd('/'));
-        //    var webApiService = new WebApiService(baseUrl);
-        //    var token = AsyncHelper.RunSync(() => webApiService.GetAccessToken(userName, password));
-        //
-        //    if (token != null)
-        //    {
-        //        var encriptionKey = ConfigurationManager.AppSettings.AllKeys.Contains(AppSettingsKey.EncryptionKey) ?
-        //            ConfigurationManager.AppSettings[AppSettingsKey.EncryptionKey].ToString() : string.Empty;
-        //                    
-        //        token.access_token = AESCryptoProvider.Encrypt256(token.access_token, encriptionKey);
-        //        token.refresh_token = AESCryptoProvider.Encrypt256(token.refresh_token, encriptionKey);                
-        //    }
-        //
-        //    return token;
-        //}
-
-        //private Dictionary<string,string> GetTokenData(string access_token, string refresh_token)
-        //{
-        //    var tempData = new Dictionary<string, string>();
-        //    tempData.Add(Access_Token_Key, access_token);
-        //    tempData.Add(Refresh_Token_Key, refresh_token);
-        //    return tempData;
-        //}
-
         #endregion
+    }
+    class RecaptchaResponse
+    {
 
-        #endregion
+        public DateTime challenge_ts { get; set; }
+        public string Hostname { get; set; }
+        public bool Success { get; set; }
+        public double Score { get; set; }
+        public string Action { get; set; }
     }
 }

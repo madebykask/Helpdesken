@@ -103,6 +103,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Models.BusinessRule
         public string EmailGroups { get; set; }
 
         public string WorkingGroups { get; set; }
+        public string WorkingGroup { get; set; }
 
         public string Administrator { get; set; }
 

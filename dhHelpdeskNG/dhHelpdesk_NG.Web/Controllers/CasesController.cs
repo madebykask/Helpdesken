@@ -4060,7 +4060,11 @@ namespace DH.Helpdesk.Web.Controllers
                 case_.ProductAreaSetDate = utcNow;
 
             if (movedFromCustomerId.HasValue)
+            {
                 oldCase.ProductAreaSetDate = null;
+                case_.MovedFromCustomer_Id = movedFromCustomerId;
+            }
+                
 
             case_.LatestSLACountDate = _caseStatService.CalculateLatestSLACountDate(oldCase.StateSecondary_Id, case_.StateSecondary_Id, oldCase.LatestSLACountDate);
 
@@ -4114,6 +4118,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             // save case and case history
             // TODO: better time calculation (move to a service)
+
             int caseHistoryId = _caseService.SaveCase(
                         case_,
                         caseLog,

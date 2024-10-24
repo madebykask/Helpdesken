@@ -98,6 +98,7 @@ namespace DH.Helpdesk.Domain
         public int RelatedCaseNumber { get; set; }
         public int? Problem_Id { get; set; }
         public int? Change_Id { get; set; }
+        public int? MovedFromCustomer_Id { get; set; }
         public int Deleted { get; set; }
         public int Unread { get; set; }
         public int RegLanguage_Id { get; set; }

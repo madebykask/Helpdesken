@@ -25,7 +25,7 @@
 		<add key="InitFromSelfServiceWorkflowInitValue" value="10"/>
 		<add key="log4net.Internal.Debug" value="false"/>
 		<add key="SmtpServer" value="#{SMTPServer}"/>
-		<add key="SmtpPort" value="587"/>
+		<add key="SmtpPort" value="25"/>
 		<add key="aspnet:MaxJsonDeserializerMembers" value="150000"/>
         <add key="aspnet:RequestQueueLimitPerSession" value="2147483647"/>
         <add key="aspnet:AllowConcurrentRequestsPerSession" value="true" />
@@ -35,6 +35,9 @@
 		<add key="Tenant" value="common" />
 		<add key="Authority" value="https://login.microsoftonline.com/{0}/v2.0" />
 		<add key="RedirectUri" value="#{HelpdeskRedirectUri}" /><!-- Your applications RedirectUri from Azure eg homepage-->
+		<add key="HelpdeskRecaptchaSiteKey" value="#{HelpdeskRecaptchaSiteKey}" /><!-- Empty string if not in use -->
+		<add key="HelpdeskRecaptchaEndPoint" value="#{HelpdeskRecaptchaEndPoint}" /><!-- Empty string if not in use -->
+		<add key="HelpdeskRecaptchaMinScore" value="#{HelpdeskRecaptchaMinScore}" /><!-- Empty string if not in use -->
 	</appSettings>
 	<system.web.extensions>
 		<scripting>

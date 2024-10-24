@@ -5,6 +5,7 @@ using DH.Helpdesk.Common.Enums;
 
 namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
 {
+    using System.Collections;
     using System.Configuration;
     using System.Globalization;
     using System.Linq;
@@ -91,6 +92,67 @@ namespace DH.Helpdesk.Web.Infrastructure.Configuration.Concrete
             {
                 return ConfigurationManager.AppSettings["MicrosoftLogin"] != null ?
                     ConfigurationManager.AppSettings["MicrosoftLogin"] : "";
+            }
+        }
+        public string GetRecaptchaSecretKey
+        {
+            get
+            {
+                // First check the app settings for developers 
+                var secret = ConfigurationManager.AppSettings["HelpdeskRecaptchaSecretKey"];
+                if (!string.IsNullOrEmpty(secret))
+                {
+                    return secret;
+                }
+
+                // Fallback to environment variable
+                secret = Environment.GetEnvironmentVariable("RECAPTCHA_SECRET");
+                if (!string.IsNullOrEmpty(secret))
+                {
+                    return secret;
+                }
+
+                // If not found, return a clear message
+                return "Environment variable RECAPTCHA_SECRET not found.";
+            }
+            
+        }
+        public string GetRecaptchaEndPoint
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["HelpdeskRecaptchaEndPoint"] != null ?
+                    ConfigurationManager.AppSettings["HelpdeskRecaptchaEndPoint"] : "";
+            }
+        }
+        public string GetRecaptchaSiteKey
+        {
+            get
+            {
+                return ConfigurationManager.AppSettings["HelpdeskRecaptchaSiteKey"] != null ?
+                    ConfigurationManager.AppSettings["HelpdeskRecaptchaSiteKey"] : "";
+            }
+        }
+        public double GetRecaptchaMinScore
+        {
+            get
+            {
+                if (ConfigurationManager.AppSettings["HelpdeskRecaptchaMinScore"] != null)
+                {
+                    string value = ConfigurationManager.AppSettings["HelpdeskRecaptchaMinScore"].ToString();
+                    if (double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out double result))
+                    {
+                        return result;
+                    }
+                    else
+                    {
+                        return 0;
+                    }
+                }
+                else
+                {
+                    return 0;
+                }
             }
         }
     }

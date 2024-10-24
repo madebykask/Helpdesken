@@ -164,6 +164,7 @@
             this.Property(x => x.Problem_Id).IsOptional();
             this.Property(x => x.Project_Id).IsOptional();
             this.Property(x => x.Change_Id).IsOptional();
+            this.Property(x => x.MovedFromCustomer_Id).IsOptional();
             this.HasOptional(x => x.Supplier)
                 .WithMany()
                 .HasForeignKey(x => x.Supplier_Id)

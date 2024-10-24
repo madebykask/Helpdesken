@@ -1033,7 +1033,7 @@ namespace DH.Helpdesk.Services.Services
             var rules = _businessRuleService.GetRuleReadlist(caseEntity.Customer_Id);
 
             if (rules.Count > 0) {
-                rules = rules.Where(x => x.Event == BREventType.OnCreateCaseM2T && x.RuleActive == true).OrderBy(y => y.RuleSequence).ToList();
+                rules = rules.Where(x => x.Event == BREventType.OnCreateCaseM2T && x.RuleActive).OrderBy(y => y.RuleSequence).ToList();
             
             }
 
@@ -1041,17 +1041,24 @@ namespace DH.Helpdesk.Services.Services
             {
                 var r = _businessRuleService.GetRule(rule.Id);
 
-                if (!string.IsNullOrEmpty(r.DomainFrom) && r.Administrators.Count > 0) {
-                    string[] values = r.DomainFrom.Split(';');
+                if (!string.IsNullOrEmpty(r.DomainFrom))
+                {
+                    var domains = r.DomainFrom.Split(';')
+                        .Where(d => !string.IsNullOrEmpty(d))
+                        .Select(d => d.Trim());
 
-                    foreach (var v in values) {
-                        if (v != "") {
-                            if (caseEntity.RegUserDomain.Trim().Contains(v.Trim())) {
-                                caseEntity.Performer_User_Id = r.Administrators[0];
-                            }
+
+                    if (domains.Any(domain => caseEntity.RegUserDomain.Trim().Contains(domain)))
+                    {
+                        if (r.Administrators.Any())
+                        {
+                            caseEntity.Performer_User_Id = r.Administrators[0];
+                        }
+                        if (r.WorkingGroups.Any())
+                        {
+                            caseEntity.WorkingGroup_Id = r.WorkingGroups[0];
                         }
                     }
-
                 }
             }
 

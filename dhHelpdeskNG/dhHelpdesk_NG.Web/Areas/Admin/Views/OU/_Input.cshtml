@@ -3,24 +3,26 @@
 @model DH.Helpdesk.Web.Areas.Admin.Models.OUInputViewModel
 @if (TempData["Error"] != null)
 {
-    <div class="alert alert-error">@Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)
-        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
-    </div>    
+    <div class="alert alert-error">
+        @Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)
+    @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+</div>
 }
 <div class="content">
     <div class="container">
         <ul class="nav nav-tabs" id="myTab">
             <li class="active"><a href="#fragment-1">@Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)  @Model.Customer.Name</a></li>
         </ul>
-    <div class="tab-content">
+        <div class="tab-content">
             <div class="tab-pane tab-pane-border active" id="fragment1">
                 <div class="container">
                     @if (TempData["Error"] != null)
                     {
-                        <div class="alert alert-error">@Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)
-                            @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
-                        </div>    
-                    }
+                        <div class="alert alert-error">
+                            @Translation.Get("Organisationsenhet", Enums.TranslationSource.TextTranslation)
+                        @Translation.Get("som används går inte att ta bort", Enums.TranslationSource.TextTranslation)
+                    </div>
+                }
                     <h4>@Translation.Get("Allmänt", Enums.TranslationSource.TextTranslation)</h4>
                     <div class="row">
                         <div class="span12">
@@ -30,7 +32,7 @@
                                         @Translation.Get("Område", Enums.TranslationSource.TextTranslation)
                                     </td>
                                     <td class="span9">
-                                        <select id="OU_Department_Region_Id" name="OU_Department_Region_Id" >
+                                        <select id="OU_Department_Region_Id" name="OU_Department_Region_Id">
                                             @foreach (var selectListItem in Model.Regions)
                                             {
                                                 <option @((Model.OU.Department != null && Model.OU.Department.Region_Id == int.Parse(selectListItem.Value)) ? "selected='selected'" : "") value="@selectListItem.Value">@selectListItem.Text</option>
@@ -102,24 +104,26 @@
                                         @Html.TextBoxFor(model => Model.OU.Code, new { maxlength = "20" })
                                     </td>
                                 </tr>
-                                <tr>
-                                    <td>
-                                        @Translation.Get("Synkronisering", Enums.TranslationSource.TextTranslation)
-                                    </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="OU.ADSync" @(Model.OU.ADSync == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="OU.ADSync" value="0" />
-                                        &nbsp;@Translation.Get("användare som ingår i organisationsenheten", Enums.TranslationSource.TextTranslation)
-                                        </label>
-                                    </td>
-                                </tr>
+                                @*<tr>
+                                        <td>
+                                            @Translation.Get("Synkronisering", Enums.TranslationSource.TextTranslation)
+                                        </td>
+                                        <td><label class="checkbox">
+                                            <input type="checkbox" name="OU.ADSync" @(Model.OU.ADSync == 1 ? "checked=checked" : "") value="1"/>
+                                            <input type="hidden" name="OU.ADSync" value="0" />
+                                            &nbsp;@Translation.Get("användare som ingår i organisationsenheten", Enums.TranslationSource.TextTranslation)
+                                            </label>
+                                        </td>
+                                    </tr>*@
                                 <tr>
                                     <td>
                                         @Translation.Get("Visa", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="OU.Show" @(Model.OU.Show == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="OU.Show" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="OU.Show" @(Model.OU.Show == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="OU.Show" value="0" />
+                                            <input type="hidden" name="OU.ADSync" value="@(Model.OU.ADSync)" /> @*Special Hide for ADSync(Not used)*@
                                         </label>
                                     </td>
                                 </tr>
@@ -127,9 +131,10 @@
                                     <td>
                                         @Translation.Get("Aktivera", Enums.TranslationSource.TextTranslation)
                                     </td>
-                                    <td><label class="checkbox">
-                                        <input type="checkbox" name="OU.IsActive" @(Model.OU.IsActive == 1 ? "checked=checked" : "") value="1"/>
-                                        <input type="hidden" name="OU.IsActive" value="0" />
+                                    <td>
+                                        <label class="checkbox">
+                                            <input type="checkbox" name="OU.IsActive" @(Model.OU.IsActive == 1 ? "checked=checked" : "") value="1" />
+                                            <input type="hidden" name="OU.IsActive" value="0" />
                                         </label>
                                     </td>
                                 </tr>
@@ -150,7 +155,7 @@
                 @if (Model.OU.ComputerUserGroups != null && Model.OU.ComputerUserGroups.Any())
                 {
                     <h4>@Translation.Get("Grupper", Enums.TranslationSource.TextTranslation)</h4>
-                    
+
                     <div class="container">
                         <table class="table table-striped table-bordered table-hover" id="tblComputerUserGroups">
                             <thead>
@@ -197,78 +202,78 @@
 </div>
 
 <script type="text/javascript">
-    $(function () {
-        $("#OU_Department_Region_Id").focus();
-      
-        var departments = jQuery.parseJSON($("#sdepartments").val());
-        var $selDepartments = $("#OU_Department_Id");
-        var $orgUnits = $("#OU_Parent_OU_Id");
+            $(function () {
+                $("#OU_Department_Region_Id").focus();
 
-        var changeRegion = function () {
-            var regionId = $("#OU_Department_Region_Id").val();
-            var selDepartmentId = $selDepartments.val();
-            var selected;
+                var departments = jQuery.parseJSON($("#sdepartments").val());
+                var $selDepartments = $("#OU_Department_Id");
+                var $orgUnits = $("#OU_Parent_OU_Id");
 
-            $selDepartments.empty()
-                .append($("<option />").val("").text(""));
+                var changeRegion = function () {
+                    var regionId = $("#OU_Department_Region_Id").val();
+                    var selDepartmentId = $selDepartments.val();
+                    var selected;
 
-            jQuery.each(departments, function (i, v) {
-                selected = "";
-                if (selDepartmentId == v.Id)
-                    selected = "selected='selected'";
+                    $selDepartments.empty()
+                        .append($("<option />").val("").text(""));
 
-                if (regionId == undefined || regionId == "")
-                    $selDepartments.append($("<option />").val(v.Id).text(v.Name));
-                else if (regionId == v.Region_Id)
-                    $selDepartments.append($("<option " + selected + " />").val(v.Id).text(v.Name));
-            });
-        };
+                    jQuery.each(departments, function (i, v) {
+                        selected = "";
+                        if (selDepartmentId == v.Id)
+                            selected = "selected='selected'";
 
-        var changeDepartment = function () {
-            var deptId = $("#OU_Department_Id").val();
-            var currentOrgUnitId = parseInt($("#OU_Id").val(), 10);
-            var isCreatingNew = currentOrgUnitId === 0;
-            var orgUnits = jQuery.parseJSON($('#allAvailableOrganizationUnits').val()) || [];
-            var out = ['<option value=""></option>'];
-            var parentId = parseInt($('#parentId').val(), 10);
-            if (deptId != null) {
-                jQuery.each(orgUnits, function (i, unit) {
-                    if (unit.departmentId == deptId && (isCreatingNew || (!isCreatingNew && unit.id != currentOrgUnitId))) {
-                        var selected = !isNaN(parentId) && parentId == unit.id ? 'selected="selected"' : '';
-                        out.push(['<option value="', unit.id, '" ', selected, '>', unit.name, '</option>'].join(''));
+                        if (regionId == undefined || regionId == "")
+                            $selDepartments.append($("<option />").val(v.Id).text(v.Name));
+                        else if (regionId == v.Region_Id)
+                            $selDepartments.append($("<option " + selected + " />").val(v.Id).text(v.Name));
+                    });
+                };
+
+                var changeDepartment = function () {
+                    var deptId = $("#OU_Department_Id").val();
+                    var currentOrgUnitId = parseInt($("#OU_Id").val(), 10);
+                    var isCreatingNew = currentOrgUnitId === 0;
+                    var orgUnits = jQuery.parseJSON($('#allAvailableOrganizationUnits').val()) || [];
+                    var out = ['<option value=""></option>'];
+                    var parentId = parseInt($('#parentId').val(), 10);
+                    if (deptId != null) {
+                        jQuery.each(orgUnits, function (i, unit) {
+                            if (unit.departmentId == deptId && (isCreatingNew || (!isCreatingNew && unit.id != currentOrgUnitId))) {
+                                var selected = !isNaN(parentId) && parentId == unit.id ? 'selected="selected"' : '';
+                                out.push(['<option value="', unit.id, '" ', selected, '>', unit.name, '</option>'].join(''));
+                            }
+                        });
+                    }
+                    $orgUnits.empty().html(out.join(''));
+                }
+
+                changeRegion();
+                changeDepartment();
+
+                var validator = $("#target").validate({
+                    rules: {
+                        "OU.Name": {
+                            required: true
+                        },
+                        "OU.Department_Id": {
+                            required: true
+                        },
+                    },
+                    messages: {
+                        "OU.Name": {
+                            required: "@Translation.GetForJS("Du måste ange en organisationsenhet", Enums.TranslationSource.TextTranslation)"
+                        },
+                        "OU.Department_Id": {
+                             required: "@Translation.GetForJS("Du måste ange en avdelning", Enums.TranslationSource.TextTranslation)"
+                        }
+                    },
+                    submitHandler: function (form) {
+                        form.submit();
                     }
                 });
-            }
-            $orgUnits.empty().html(out.join(''));
-        }
 
-        changeRegion();
-        changeDepartment();
-
-        var validator = $("#target").validate({
-            rules: {
-                "OU.Name": {
-                    required: true
-                },
-                "OU.Department_Id": {
-                    required: true
-                },
-            },
-            messages: {
-                "OU.Name": {
-                    required: "@Translation.GetForJS("Du måste ange en organisationsenhet", Enums.TranslationSource.TextTranslation)"
-                },
-                "OU.Department_Id": {
-                     required: "@Translation.GetForJS("Du måste ange en avdelning", Enums.TranslationSource.TextTranslation)"
-                }
-            },
-            submitHandler: function (form) {
-                form.submit();
-            }
-        });
-
-        $("#OU_Department_Region_Id").change(changeRegion);
-        $("#OU_Department_Id").change(changeDepartment);
-    });
+                $("#OU_Department_Region_Id").change(changeRegion);
+                $("#OU_Department_Id").change(changeDepartment);
+            });
 
 </script>

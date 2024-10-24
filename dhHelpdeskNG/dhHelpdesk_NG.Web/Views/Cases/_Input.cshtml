@@ -180,6 +180,7 @@
                         @Html.HiddenFor(model => model.case_.ExternalTime)
                         @Html.HiddenFor(model => model.case_.DefaultOwnerWG_Id)
                         @Html.HiddenFor(model => model.case_.RegUserName)
+                        @Html.HiddenFor(model => model.case_.MovedFromCustomer_Id)
                         @Html.HiddenFor(model => model.CaseKey)
                         @Html.HiddenFor(model => model.CaseMailSetting.SendMailAboutNewCaseTo)
                         @Html.HiddenFor(model => model.CaseMailSetting.HelpdeskMailFromAdress)
@@ -2589,10 +2590,10 @@
             onChange: function (contents, $editable) {
 
                 $('.summernoteexternal').val($('.summernoteexternal').summernote('isEmpty') ? "" : contents);
-                
+
                 var $initiatorEmail = $('#case__PersonsEmail');
                 var plainText = $('<div>').html(contents).text().trim(); // Strip HTML and trim whitespace
-                
+
                 var isEmpty = !plainText.length && !(/<img[^>]*>/g).test(contents); // Check if the plain text is empty and not contains any image
 
                 if (!isEmpty) {

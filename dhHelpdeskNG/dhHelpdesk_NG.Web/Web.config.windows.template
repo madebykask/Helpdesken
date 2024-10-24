@@ -25,7 +25,7 @@
 		<add key="InitFromSelfServiceWorkflowInitValue" value="10" />
 		<add key="log4net.Internal.Debug" value="true" />
 		<add key="SmtpServer" value="#{SMTPServer}" />
-		<add key="SmtpPort" value="587" />
+		<add key="SmtpPort" value="25" />
         <add key="aspnet:RequestQueueLimitPerSession" value="2147483647"/>
         <add key="aspnet:AllowConcurrentRequestsPerSession" value="true" />
 		<add key="DHProfiler:Application" value="Helpdesk" />
@@ -37,6 +37,9 @@
 		<add key="Tenant" value="" />
 		<add key="Authority" value="" />
 		<add key="RedirectUri" value="" />
+		<add key="HelpdeskRecaptchaSiteKey" value="#{HelpdeskRecaptchaSiteKey}" /><!-- Empty string if not in use -->
+		<add key="HelpdeskRecaptchaEndPoint" value="#{HelpdeskRecaptchaEndPoint}" /><!-- Empty string if not in use -->
+		<add key="HelpdeskRecaptchaMinScore" value="#{HelpdeskRecaptchaMinScore}" /><!-- Empty string if not in use -->
 	</appSettings>
 	<system.web.extensions>
 		<scripting>
