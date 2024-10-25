@@ -17,10 +17,6 @@ namespace DH.Helpdesk.Dal.Repositories
     using DH.Helpdesk.Domain;
     using System;
     using DH.Helpdesk.BusinessData.Models.Reports.Data.ReportGenerator;
-    using System.Data.Common;
-    using System.Data.Entity.Infrastructure.Interception;
-
-
 
     #region REPORT
 
@@ -679,25 +675,7 @@ namespace DH.Helpdesk.Dal.Repositories
 
 		#endregion Private Methods
 	}
-    public class CommandInterceptor : DbCommandInterceptor
-    {
-        public override void NonQueryExecuting(DbCommand command, DbCommandInterceptionContext<int> interceptionContext)
-        {
-            LogSQL(command);
-            base.NonQueryExecuting(command, interceptionContext);
-        }
 
-        public override void ReaderExecuting(DbCommand command, DbCommandInterceptionContext<DbDataReader> interceptionContext)
-        {
-            LogSQL(command);
-            base.ReaderExecuting(command, interceptionContext);
-        }
-
-        private void LogSQL(DbCommand command)
-        {
-            Console.WriteLine("Intercepted SQL Command: " + command.CommandText);
-        }
-    }
     #endregion
 
     #region REPORTCUSTOMER
@@ -812,5 +790,4 @@ namespace DH.Helpdesk.Dal.Repositories
     }
 
     #endregion
-
 }

@@ -458,14 +458,18 @@
                                         </a>
                                     </td>
                                 </tr>
-                                <tr>
-                                <td>
-                                    @Translation.Get("Inkludera utökat ärende")
-                                </td>
-                                <td>
-                                    @Html.CheckBoxFor(m => m.IncludeExtendedCaseValues, new { @class = "switchcheckbox" })
-                                </td>
-                            </tr>
+                                @if (Model.customerSetting.EwsTenantId == "")
+                                {
+                                    <tr>
+                                        <td>
+                                            @Translation.Get("Inkludera utökat ärende")
+                                        </td>
+                                        <td>
+                                            @Html.CheckBoxFor(m => m.IncludeExtendedCaseValues, new { @class = "switchcheckbox" })
+                                        </td>
+                                    </tr>
+                                }
+
                             </table>
                         </div>
 
