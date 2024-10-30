@@ -630,38 +630,47 @@ Module DH_Helpdesk_Mail
                                     Next
                                 Else
                                     'old logic 
+                                    ' Check if the message is a reply by verifying InReplyTo count
                                     If message.InReplyTo.Count > 0 Then
                                         Dim replyToId As String = message.InReplyTo(0).ToString()
                                         LogToFile("Old logic. Reply From: " & replyToId, iPop3DebugLevel)
+
+                                        ' Attempt to find a case by the replyToId using getCaseByMessageID
                                         objCase = objCaseData.getCaseByMessageID(replyToId)
-                                        'No case found by InReplyTo, try with getCaseByOrderMessageID
+
+                                        ' No case found by InReplyTo; try with getCaseByOrderMessageID if ModuleOrder is 1
                                         If objCase Is Nothing AndAlso objCustomer.ModuleOrder = 1 Then
-                                            LogToFile("Did not find case by replyToId: " & replyToId.ToString() & "Trying with getCaseByOrderMessageID", iPop3DebugLevel)
+                                            LogToFile("Did not find case by replyToId: " & replyToId & " Trying with getCaseByOrderMessageID", iPop3DebugLevel)
+
+                                            ' Attempt to find a case by OrderMessageID
                                             objCase = objCaseData.getCaseByOrderMessageID(replyToId)
+
                                             If objCase IsNot Nothing Then
+                                                ' Check if the case was moved from the current customer
                                                 If objCase.Customer_Id <> objCustomer.Id AndAlso objCase.MovedFromCustomer_Id = objCustomer.Id Then
-                                                    'This case has been moved from this customer
-                                                    'Get the new correct customer
+                                                    ' Update to the new correct customer if the case was moved
                                                     objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
                                                 End If
-
-                                                LogToFile("Found case by getCaseByOrderMessageID: " & replyToId.ToString() & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
+                                                LogToFile("Found case by getCaseByOrderMessageID: " & replyToId & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
                                             Else
-                                                LogToFile("Did not find case by getCaseByOrderMessageID: " & replyToId.ToString(), iPop3DebugLevel)
+                                                LogToFile("Did not find case by getCaseByOrderMessageID: " & replyToId, iPop3DebugLevel)
                                             End If
-                                        Else
+                                        ElseIf objCase IsNot Nothing Then
+                                            ' Case found by getCaseByMessageID, check for customer transfer
                                             If objCase.Customer_Id <> objCustomer.Id AndAlso objCase.MovedFromCustomer_Id = objCustomer.Id Then
-                                                'This case has been moved from this customer
-                                                'Get the new correct customer
+                                                ' Update to the new correct customer if the case was moved
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
                                             End If
-                                            LogToFile("Found case by :   " & replyToId.ToString() & " CaseNumber: " & objCase.Casenumber, objCustomer.POP3DebugLevel)
+                                            LogToFile("Found case by getCaseByMessageID: " & replyToId & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
                                         End If
-                                        ' Kontrollera vilket mailID detta ar ett svar pa
+
+                                        ' Retrieve the associated email ID for this case
                                         iMailID = objCaseData.getMailIDByMessageID(replyToId)
                                     Else
+                                        ' If not a reply, set iMailID to 0
                                         iMailID = 0
                                     End If
+
                                 End If
 
                                 If objCase Is Nothing AndAlso objCustomer.ExternalEMailSubjectPattern <> "" Then
