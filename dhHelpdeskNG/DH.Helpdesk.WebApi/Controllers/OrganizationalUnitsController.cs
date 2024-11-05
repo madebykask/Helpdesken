@@ -57,7 +57,7 @@ namespace DH.Helpdesk.WebApi.Controllers
                     IList<Department> userDepartments = _departmentService.GetDepartmentsByUserPermissions(UserId, cid, false);
                     if (userDepartments.Count > 0 && !userDepartments.Any(d => d.Id == ou.Department_Id.Value))
                     {
-                        return BadRequest($"User has no access to ou department");
+                        return Forbidden($"User has no access to ou department");
                     }
                 }
                 return Ok(new
