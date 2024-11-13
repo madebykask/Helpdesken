@@ -120,6 +120,8 @@
             public const string Session = "SessionLog";
 
             public const string Client = "ClientLog";
+
+            public const string reCaptcha = "reCaptchaLog";
         }
     }
 }

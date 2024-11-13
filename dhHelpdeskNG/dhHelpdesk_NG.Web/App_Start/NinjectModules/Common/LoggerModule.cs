@@ -28,6 +28,12 @@
                 .InSingletonScope()
                 .Named(Log4NetLoggerService.LogType.Session)
                 .WithConstructorArgument(Log4NetLoggerService.LogType.Session);
+
+            this.Bind<ILoggerService>()
+                .To<Log4NetLoggerService>()
+                .InSingletonScope()
+                .Named(Log4NetLoggerService.LogType.reCaptcha)
+                .WithConstructorArgument(Log4NetLoggerService.LogType.reCaptcha);
         }
     }
 }
