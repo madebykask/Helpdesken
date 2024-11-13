@@ -33,15 +33,17 @@ Module DH_Helpdesk_Schedule
         Dim aArguments() As String = sCommand.Split(",")
 
 
-        'Debugging lines for autoclose - testmode
-        'Dim sConnectionstringTest = GetConnectionString(aArguments)
-        'openLogFile()
-        'objLogFile.WriteLine(Now() & ", CaseAutoClose")
-        'caseAutoClose(sConnectionstringTest)
-        'closeLogFile()
+        'Debugging lines  - testmode
+        Dim sConnectionstringTest = GetConnectionString(aArguments)
+        giLoglevel = 0
+        openLogFile()
+        objLogFile.WriteLine(Now() & ", caseSolutionSchedule")
+        caseSolutionSchedule(sConnectionstringTest)
+        closeLogFile()
+
         'end test autoclose
 
-        If aArguments.Length > 0 Then
+        If aArguments.Length < 0 Then
 
 
             ' parse command line args
@@ -351,53 +353,59 @@ Module DH_Helpdesk_Schedule
 
         ' Hämta ärendemallar
         Dim colCase As Collection = objCaseData.getCaseSolutionSchedule
-
+        objLogFile.WriteLine(Now() & ", CaseSolutionSchedule, Number of CaseSolutions:" & colCase.Count)
         For i As Integer = 1 To colCase.Count
-            objCaseSolution = colCase(i)
-            objLogFile.WriteLine(Now() & ", CaseSolutionSchedule, Caption:" & objCaseSolution.Caption)
+            Try
 
-            objCase = objCaseData.createCase(objCaseSolution)
-            objLogFile.WriteLine(Now() & ", CaseSolutionSchedule, CaseNumber:" & objCase.Casenumber)
+                objCaseSolution = colCase(i)
+                Dim cslId = objCaseSolution.CaseSolution_Id
+                objLogFile.WriteLine(Now() & ", CaseSolutionSchedule, Caption:" & objCaseSolution.Caption & " CaseSolution_Id: " & cslId)
 
-            Dim isAboutObj As ComputerUser = getIsAboutData(objCaseSolution)
-            objCaseData.saveCaseIsAbout(objCase.Id, isAboutObj)
+                objCase = objCaseData.createCase(objCaseSolution)
+                objLogFile.WriteLine(Now() & ", CaseSolutionSchedule, CaseNumber:" & objCase.Casenumber)
 
-            Dim iCaseHistory_Id As Integer = objCaseData.saveCaseHistory(objCase.Id, "DH Helpdesk")
+                Dim isAboutObj As ComputerUser = getIsAboutData(objCaseSolution)
+                objCaseData.saveCaseIsAbout(objCase.Id, isAboutObj)
 
-            objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
+                Dim iCaseHistory_Id As Integer = objCaseData.saveCaseHistory(objCase.Id, "DH Helpdesk")
 
-            objUser = objUserData.getUserById(objCase.Performer_User_Id)
+                objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
 
-            If objCaseSolution.Log.Count > 0 Then
-                If objCaseSolution.Log(0).Text_Internal <> "" Or objCaseSolution.Log(0).Text_External <> "" Then
-                    objLogData.createLog(objCase.Id, objCase.Persons_EMail, objCaseSolution.Log(0).Text_Internal, objCaseSolution.Log(0).Text_External, 0, "DH Helpdesk", iCaseHistory_Id, 0)
-                    objLog.Text_External = objCaseSolution.Log(0).Text_External
-                    objLog.Text_Internal = objCaseSolution.Log(0).Text_Internal
+                objUser = objUserData.getUserById(objCase.Performer_User_Id)
+
+                If objCaseSolution.Log.Count > 0 Then
+                    If objCaseSolution.Log(0).Text_Internal <> "" Or objCaseSolution.Log(0).Text_External <> "" Then
+                        objLogData.createLog(objCase.Id, objCase.Persons_EMail, objCaseSolution.Log(0).Text_Internal, objCaseSolution.Log(0).Text_External, 0, "DH Helpdesk", iCaseHistory_Id, 0)
+                        objLog.Text_External = objCaseSolution.Log(0).Text_External
+                        objLog.Text_Internal = objCaseSolution.Log(0).Text_Internal
+                    End If
                 End If
-            End If
 
-            If objCase.Performer_User_Id <> 0 And objCase.PerformerEMail <> "" Then
-                objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailAssignCasePerformer, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                'If objCase.Performer_User_Id <> 0 And objCase.PerformerEMail <> "" Then
+                '    objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailAssignCasePerformer, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
-                If objMailTemplate IsNot Nothing Then
-                    sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                '    If objMailTemplate IsNot Nothing Then
+                '        sMessageId = createMessageId(objCustomer.HelpdeskEMail)
 
-                    Dim sSendTime As DateTime = Date.Now()
-                    Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
-                    Dim objMail As New Mail
-                    Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
+                '        Dim sSendTime As DateTime = Date.Now()
+                '        Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
+                '        Dim objMail As New Mail
+                '        Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
-                    objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, SharedFunctions.EMailType.EMailAssignCasePerformer, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                '        objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, SharedFunctions.EMailType.EMailAssignCasePerformer, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                '    End If
+                'End If
+
+                If objCaseSolution.ExtendedCaseFormId IsNot Nothing Then
+                    If objCaseSolution.ExtendedCaseFormId.HasValue And objCaseSolution.ExtendedCaseFormId.Value > 0 Then
+                        Dim extendedCaseDataId = objExtendedCaseService.CreateExtendedCaseData(objCaseSolution.ExtendedCaseFormId.Value)
+                        objCaseData.CreateExtendedCaseConnection(objCase.Id, objCaseSolution.ExtendedCaseFormId.Value, extendedCaseDataId)
+                    End If
                 End If
-            End If
+            Catch ex As Exception
+                LogError(ex.ToString())
+            End Try
 
-
-            If objCaseSolution.ExtendedCaseFormId IsNot Nothing Then
-                If objCaseSolution.ExtendedCaseFormId.HasValue And objCaseSolution.ExtendedCaseFormId.Value > 0 Then
-                    Dim extendedCaseDataId = objExtendedCaseService.CreateExtendedCaseData(objCaseSolution.ExtendedCaseFormId.Value)
-                    objCaseData.CreateExtendedCaseConnection(objCase.Id, objCaseSolution.ExtendedCaseFormId.Value, extendedCaseDataId)
-                End If
-            End If
 
 
         Next

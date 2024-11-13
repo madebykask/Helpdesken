@@ -13,6 +13,8 @@ Public Class LogData
         Try
             If iLogType <> 1 Then
 
+                'Dim textInternal = If(InternalLogText, "")
+                'Dim textExternal = If(ExternalLogText, "")
                 Dim textInternal = InternalLogText
                 Dim textExternal = ExternalLogText
                 Dim utcNow = DateTime.UtcNow

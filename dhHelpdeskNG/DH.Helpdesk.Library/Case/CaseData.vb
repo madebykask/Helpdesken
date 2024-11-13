@@ -1063,7 +1063,7 @@ Public Class CaseData
         Dim colCase As New Collection
         Dim sSQL As String
         Dim dr As DataRow
-        Dim iTime As Integer = Now.Hour
+        Dim iTime As Integer = 7
         Dim flag As Boolean = False
         Dim c As CCase
         Dim iDay As Integer = 0
@@ -1102,12 +1102,12 @@ Public Class CaseData
                 sScheduleMonth = ""
                 iOrder = 0
                 iWeekday = 0
-
+                Dim today As Date = #2024-11-04#
                 Select Case dr("ScheduleType")
                     Case "1"
                         flag = True
                     Case "2"
-                        iDay = DatePart(DateInterval.Weekday, Today, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays)
+                        iDay = DatePart(DateInterval.Weekday, today, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays)
 
                         If IsDBNull(dr("ScheduleDay")) Then
                             sScheduleday = ""
@@ -1121,9 +1121,10 @@ Public Class CaseData
                             End If
                         End If
                     Case "3"
-                        iDay = DatePart(DateInterval.Day, Today.Date, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays)
 
-                        iMonth = DatePart(DateInterval.Month, Today.Date, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays)
+                        iDay = DatePart(DateInterval.Day, today, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays)
+
+                        iMonth = DatePart(DateInterval.Month, today, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays)
 
                         If IsDBNull(dr("ScheduleDay")) Then
                             sScheduleday = ""
@@ -1152,13 +1153,13 @@ Public Class CaseData
                                     flag = True
                                 End If
                             ElseIf iOrder = 5 Then
-                                If iWeekday = DatePart(DateInterval.Weekday, Today, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays) Then
+                                If iWeekday = DatePart(DateInterval.Weekday, today, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays) Then
                                     If isLastWeekDay() Then
                                         flag = True
                                     End If
                                 End If
                             Else
-                                If iWeekday = DatePart(DateInterval.Weekday, Today, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays) Then
+                                If iWeekday = DatePart(DateInterval.Weekday, today, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays) Then
 
                                     If iOrder = getWeekDayOrder() Then
                                         flag = True
@@ -1175,13 +1176,12 @@ Public Class CaseData
 
                 If flag = True Then
                     c = New CCase
-
                     c.CaseSolution_Id = dr("Id")
                     c.RegistrationSource = 4
                     c.RegLanguage_Id = dr("Language_Id")
 
                     If dr("ScheduleWatchDate") > 0 Then
-                        c.WatchDate = DateAdd(DateInterval.Day, dr("ScheduleWatchDate"), Today)
+                        c.WatchDate = DateAdd(DateInterval.Day, dr("ScheduleWatchDate"), today)
                     End If
 
                     If Not IsDBNull(dr("Department_Id")) Then
