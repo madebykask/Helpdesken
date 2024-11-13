@@ -25,5 +25,9 @@ namespace DH.Helpdesk.Web.Infrastructure.Logger
         {
             get { return ServiceLocator.Current.GetInstance<ILoggerService>(Log4NetLoggerService.LogType.Session); }
         }
+        public static ILoggerService reCaptcha
+        {
+            get { return ServiceLocator.Current.GetInstance<ILoggerService>(Log4NetLoggerService.LogType.reCaptcha); }
+        }
     }
 }

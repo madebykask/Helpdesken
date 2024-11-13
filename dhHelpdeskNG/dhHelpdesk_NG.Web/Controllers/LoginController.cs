@@ -35,6 +35,7 @@ namespace DH.Helpdesk.Web.Controllers
     public class LoginController : Controller
     {
         private const string Root = "/";
+        
         //private const string TokenKey = "Token_Data";
         //private const string Access_Token_Key = "Access_Token";
         //private const string Refresh_Token_Key = "Refresh_Token";
@@ -102,7 +103,9 @@ namespace DH.Helpdesk.Web.Controllers
         [AllowAnonymous]
         public ActionResult Login(LoginInputModel inputData)
         {
+            var logger = Infrastructure.Logger.LogManager.reCaptcha;
             //TODO: Logga inputData.reCaptchaToken
+            logger.Info($"Login: inputData.reCaptchaToken: {inputData.reCaptchaToken}");
 
             var userName = inputData.txtUid?.Trim();
             var password = inputData.txtPwd?.Trim();
@@ -112,11 +115,11 @@ namespace DH.Helpdesk.Web.Controllers
             var siteKey = appconfig.GetRecaptchaSiteKey;
 
             //TODO: Logga sitekey
-
+            logger.Info($"Login: siteKey: {siteKey}");
             if (!string.IsNullOrEmpty(siteKey) && string.IsNullOrEmpty(inputData.reCaptchaToken))
             {
                 //TODO: Logga att vi kom in här
-
+                logger.Info($"Login: inputData.reCaptchaToken is empty");
                 TempData["LoginFailed"] = "Login failed! Couldn't verify you with reCaptcha".Trim();
                 ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
                 return View("Login");
@@ -126,14 +129,14 @@ namespace DH.Helpdesk.Web.Controllers
             if (!String.IsNullOrEmpty(reCaptchaToken) && !VerifyRecaptcha(reCaptchaToken))
             {
                 //TODO: Logga att vi kom in här
-
+                logger.Info($"Login: VerifyRecaptcha failed");
                 TempData["LoginFailed"] = "Login failed! Couldn't verify you with reCaptcha".Trim();
                 ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
                 return View("Login");
             }
 
             //TODO: Logga att allting OK
-
+            logger.Info($"Login with reCaptcha: All OK");
             // Validate login arguments
             if (IsValidLoginArgument(userName, password))
             {
@@ -177,7 +180,8 @@ namespace DH.Helpdesk.Web.Controllers
             var secret = appconfig.GetRecaptchaSecretKey;
 
             //TODO: Logga secret
-
+            var logger = Infrastructure.Logger.LogManager.reCaptcha;
+            logger.Info($"VerifyRecaptcha: secret: {secret}");
             using (var client = new HttpClient())
             {
                 var values = new Dictionary<string, string>
@@ -193,19 +197,20 @@ namespace DH.Helpdesk.Web.Controllers
                 var recaptchaMinScore = appconfig.GetRecaptchaMinScore;
 
                 //TODO: Logga responseString && recaptchaMinScore
-
+                logger.Info($"VerifyRecaptcha: responseString: {responseString}");
+                logger.Info($"VerifyRecaptcha: recaptchaMinScore: {recaptchaMinScore}");
                 //Deserialize the incoming object
                 var responseJson = JsonConvert.DeserializeObject<RecaptchaResponse>(responseString);
                 if(responseJson.Success && responseJson.Score > recaptchaMinScore)
                 {
                     //TODO: Logga att vi kom in här
-
+                    logger.Info($"VerifyRecaptcha: Success && Score > recaptchaMinScore");
                     return true;
                 }
                 else
                 {
                     //TODO: Logga att vi kom in här
-
+                    logger.Info($"VerifyRecaptcha: Failed");
                     return false;
                 }
             }
