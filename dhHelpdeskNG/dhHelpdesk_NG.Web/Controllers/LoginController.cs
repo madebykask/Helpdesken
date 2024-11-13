@@ -102,6 +102,8 @@ namespace DH.Helpdesk.Web.Controllers
         [AllowAnonymous]
         public ActionResult Login(LoginInputModel inputData)
         {
+            //TODO: Logga inputData.reCaptchaToken
+
             var userName = inputData.txtUid?.Trim();
             var password = inputData.txtPwd?.Trim();
             var returnUrl = string.IsNullOrEmpty(inputData.returnUrl) ? "~/" : inputData.returnUrl;
@@ -109,8 +111,12 @@ namespace DH.Helpdesk.Web.Controllers
             var appconfig = new ApplicationConfiguration();
             var siteKey = appconfig.GetRecaptchaSiteKey;
 
+            //TODO: Logga sitekey
+
             if (!string.IsNullOrEmpty(siteKey) && string.IsNullOrEmpty(inputData.reCaptchaToken))
             {
+                //TODO: Logga att vi kom in här
+
                 TempData["LoginFailed"] = "Login failed! Couldn't verify you with reCaptcha".Trim();
                 ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
                 return View("Login");
@@ -119,10 +125,14 @@ namespace DH.Helpdesk.Web.Controllers
             // Verify reCaptcha token if required
             if (!String.IsNullOrEmpty(reCaptchaToken) && !VerifyRecaptcha(reCaptchaToken))
             {
+                //TODO: Logga att vi kom in här
+
                 TempData["LoginFailed"] = "Login failed! Couldn't verify you with reCaptcha".Trim();
                 ViewBag.ReCaptchaSiteKey = appconfig.GetRecaptchaSiteKey;
                 return View("Login");
             }
+
+            //TODO: Logga att allting OK
 
             // Validate login arguments
             if (IsValidLoginArgument(userName, password))
@@ -165,6 +175,9 @@ namespace DH.Helpdesk.Web.Controllers
         {
             var appconfig = new ApplicationConfiguration();
             var secret = appconfig.GetRecaptchaSecretKey;
+
+            //TODO: Logga secret
+
             using (var client = new HttpClient())
             {
                 var values = new Dictionary<string, string>
@@ -179,14 +192,20 @@ namespace DH.Helpdesk.Web.Controllers
                 var responseString = response.Result.Content.ReadAsStringAsync().Result;
                 var recaptchaMinScore = appconfig.GetRecaptchaMinScore;
 
+                //TODO: Logga responseString && recaptchaMinScore
+
                 //Deserialize the incoming object
                 var responseJson = JsonConvert.DeserializeObject<RecaptchaResponse>(responseString);
                 if(responseJson.Success && responseJson.Score > recaptchaMinScore)
                 {
+                    //TODO: Logga att vi kom in här
+
                     return true;
                 }
                 else
                 {
+                    //TODO: Logga att vi kom in här
+
                     return false;
                 }
             }
