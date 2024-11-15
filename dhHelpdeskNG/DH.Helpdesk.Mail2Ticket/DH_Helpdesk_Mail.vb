@@ -698,18 +698,19 @@ Module DH_Helpdesk_Mail
                                     If iCaseNumber <> 0 Then
                                         LogToFile("Found CaseNumber from EmailSubjectPattern: " & iCaseNumber, iPop3DebugLevel)
                                         objCase = objCaseData.getCaseByCaseNumber(iCaseNumber)
-                                        If objCase.Customer_Id <> objCustomer.Id Then
+                                        If objCase IsNot Nothing AndAlso objCase.Customer_Id <> objCustomer.Id Then
                                             If objCase.MovedFromCustomer_Id = objCustomer.Id Then
                                                 'This case has been moved from this customer
                                                 'Get the new correct customer
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
-                                                LogToFile("Found existing moved case with EmailSubjectPattern: " & iCaseNumber & " MovedFromCustomer: " & objCustomer.Id, iPop3DebugLevel)
+                                                LogToFile("Found existing moved case with EmailSubjectPattern and CaseNumber:: " & iCaseNumber & " MovedFromCustomer: " & objCustomer.Id, iPop3DebugLevel)
                                             Else
                                                 objCase = Nothing
-                                                LogToFile("Did not find existing moved case with EmailSubjectPattern: " & iCaseNumber, iPop3DebugLevel)
+                                                LogToFile("Did not find existing moved case with EmailSubjectPattern and CaseNumber: " & iCaseNumber, iPop3DebugLevel)
                                             End If
                                         Else
-                                            LogToFile("Found existing case with EmailSubjectPattern: " & iCaseNumber, iPop3DebugLevel)
+                                            objCase = Nothing
+                                            LogToFile("Did not find existing case with EmailSubjectPattern and CaseNumber: " & iCaseNumber, iPop3DebugLevel)
                                         End If
 
                                     End If
