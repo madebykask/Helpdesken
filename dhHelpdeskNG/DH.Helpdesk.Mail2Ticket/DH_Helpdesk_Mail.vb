@@ -709,7 +709,6 @@ Module DH_Helpdesk_Mail
                                                 LogToFile("Did not find existing moved case with EmailSubjectPattern and CaseNumber: " & iCaseNumber, iPop3DebugLevel)
                                             End If
                                         Else
-                                            objCase = Nothing
                                             LogToFile("Did not find existing case with EmailSubjectPattern and CaseNumber: " & iCaseNumber, iPop3DebugLevel)
                                         End If
 
