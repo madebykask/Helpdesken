@@ -14,6 +14,8 @@ namespace DH.Helpdesk.Domain
 
         public int Performer_User_Id { get; set; }
 
+        public int CaseType_Id { get; set; }
+
         public int WorkingGroup_Id { get; set; }
 
         public int StateSecondary_Id { get; set; }

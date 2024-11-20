@@ -1466,6 +1466,11 @@ namespace DH.Helpdesk.Web.Controllers
                     caseToUpdate.Problem_Id = inputData.Problem_Id;
                     updateCase = true;
                 }
+                if (inputData.CaseType_Id > 0 && caseToUpdate.CaseType_Id != inputData.CaseType_Id)
+                {
+                    caseToUpdate.CaseType_Id = inputData.CaseType_Id;
+                    updateCase = true;
+                }
 
                 if (!String.IsNullOrEmpty(inputData.FinishDescription) && caseToUpdate.FinishingDescription != inputData.FinishDescription)
                 {
