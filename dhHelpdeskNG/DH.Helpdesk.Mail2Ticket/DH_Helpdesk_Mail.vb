@@ -1502,7 +1502,7 @@ Module DH_Helpdesk_Mail
                             Try
                                 attach.Load()
                             Catch ex As Exception
-                                LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
+                                LogError("Error loading FileAttachment: " & ex.Message.ToString & " Customer: " & objCustomer.Id, objCustomer)
                                 Continue For
                             End Try
                             'New
@@ -1545,7 +1545,7 @@ Module DH_Helpdesk_Mail
                                     End If
                                     message.Resources.Add(newResource)
                                 Catch ex As Exception
-                                    LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
+                                    LogError("Error loading Not Inline Attachments: " & " Customer: " & objCustomer.Id, objCustomer)
                                     Continue For
                                 End Try
 
@@ -1558,6 +1558,9 @@ Module DH_Helpdesk_Mail
                                 Dim itemAttachment As ItemAttachment = attach
                                 itemAttachment.Load(ItemSchema.MimeContent)
 
+                                If Not Directory.Exists(temppath) Then
+                                    Directory.CreateDirectory(temppath)
+                                End If
                                 ' Sanitize file name
                                 Dim fileName As String = Path.Combine(temppath, SanitizeFileName(itemAttachment.Item.Subject) & ".eml")
 
@@ -1568,7 +1571,7 @@ Module DH_Helpdesk_Mail
                                 ' Delete the temporary file
                                 System.IO.File.Delete(fileName)
                             Catch ex As Exception
-                                LogError("Error loading attachment: " & ex.Message.ToString, objCustomer)
+                                LogError("Error loading ItemAttachment: " & ex.Message.ToString & " Customer: " & objCustomer.Id, objCustomer)
                                 Continue For
                             End Try
                         End If
