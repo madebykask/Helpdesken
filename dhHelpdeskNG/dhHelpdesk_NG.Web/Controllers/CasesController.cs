@@ -1524,6 +1524,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var logId = _logService.SaveLog(caseLog, 0, out errors);
                     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
                     // send emails
+                    // Todo - check if emails should be sent
                     _caseService.SendCaseEmail(caseToUpdate.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser);
                     
 
