@@ -1502,7 +1502,7 @@ Module DH_Helpdesk_Mail
                             Try
                                 attach.Load()
                             Catch ex As Exception
-                                LogError("Error loading FileAttachment: " & ex.Message.ToString & " Customer_id: " & objCustomer.Id, objCustomer)
+                                LogError($"Error loading FileAttachment: {ex.Message} Customer_Id: {objCustomer.Id}", objCustomer)
                                 Continue For
                             End Try
                             'New
@@ -1545,7 +1545,7 @@ Module DH_Helpdesk_Mail
                                     End If
                                     message.Resources.Add(newResource)
                                 Catch ex As Exception
-                                    LogError("Error loading Not Inline Attachments: " & ex.Message.ToString & " Customer_Id: " & objCustomer.Id, objCustomer)
+                                    LogError($"Error loading Not Inline Attachments: {ex.Message} Customer_Id: {objCustomer.Id}", objCustomer)
                                     Continue For
                                 End Try
 
@@ -1571,7 +1571,7 @@ Module DH_Helpdesk_Mail
                                 ' Delete the temporary file
                                 System.IO.File.Delete(fileName)
                             Catch ex As Exception
-                                LogError("Error loading ItemAttachment: " & ex.Message.ToString & " Customer_Id: " & objCustomer.Id, objCustomer)
+                                LogError($"Error loading ItemAttachment: {ex.Message} Customer_Id: {objCustomer.Id}", objCustomer)
                                 Continue For
                             End Try
                         End If
