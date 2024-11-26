@@ -1466,6 +1466,11 @@ namespace DH.Helpdesk.Web.Controllers
                     caseToUpdate.Problem_Id = inputData.Problem_Id;
                     updateCase = true;
                 }
+                if (inputData.CaseType_Id > 0 && caseToUpdate.CaseType_Id != inputData.CaseType_Id)
+                {
+                    caseToUpdate.CaseType_Id = inputData.CaseType_Id;
+                    updateCase = true;
+                }
 
                 if (!String.IsNullOrEmpty(inputData.FinishDescription) && caseToUpdate.FinishingDescription != inputData.FinishDescription)
                 {
@@ -1519,6 +1524,7 @@ namespace DH.Helpdesk.Web.Controllers
                     var logId = _logService.SaveLog(caseLog, 0, out errors);
                     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
                     // send emails
+                    // Todo - check if emails should be sent
                     _caseService.SendCaseEmail(caseToUpdate.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser);
                     
 
