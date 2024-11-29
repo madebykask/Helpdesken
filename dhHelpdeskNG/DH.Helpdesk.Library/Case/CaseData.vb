@@ -632,6 +632,245 @@ Public Class CaseData
 
         End Try
     End Function
+    Public Function createCaseFromCaseSolutionScedule(ByVal objCase As CCase) As CCase
+        Dim sSQL As String = ""
+        'Dim sDescription As String
+
+        Try
+            Convert.ToInt32("Katta")
+            ' Skapa nytt ärende
+            sSQL = "INSERT INTO tblCase(CaseGUID, ExternalCaseNumber, CaseType_Id, Customer_Id, ProductArea_Id,Category_Id, Region_Id, ReportedBy, Department_Id, OU_Id, " &
+                            "Project_Id, System_Id, Urgency_Id, Impact_Id, Supplier_Id, SMS, Cost, OtherCost, Problem_Id, Change_Id, CausingPartId, Verified, VerifiedDescription, SolutionRate," &
+                            "InventoryType, InventoryLocation, Currency, ContactBeforeAction, FinishingDescription, " &
+                            "Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Place, UserCode, CostCentre, InventoryNumber, InvoiceNumber, " &
+                            "Caption, Description, Miscellaneous, Available, ReferenceNumber, Priority_Id, WorkingGroup_Id, Performer_User_Id, Status_Id, StateSecondary_Id, " &
+                            "WatchDate, PlanDate, AgreedDate, FinishingDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id, RegUserName, CaseSolution_Id, RegTime, ChangeTime) " &
+                        "VALUES(" &
+                            getDBStringPrefix() & "'" & objCase.CaseGUID & "', " &
+                            getDBStringPrefix() & "'" & objCase.ExternalCasenumber & "', " &
+                            objCase.CaseType_Id & ", " &
+                            objCase.Customer_Id & ", "
+
+            If objCase.ProductArea_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.ProductArea_Id & ", "
+            End If
+
+            If objCase.Category_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Category_Id & ", "
+            End If
+
+            If objCase.Region_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Region_Id & ", "
+            End If
+            'Check this
+            If Not IsNullOrEmpty(objCase.ReportedBy) Then
+                sSQL = sSQL & getDBStringPrefix() & "'" & objCase.ReportedBy.Replace("'", "''") & "', "
+            Else
+                sSQL = sSQL & getDBStringPrefix() & "'" & objCase.ReportedBy & "', "
+            End If
+
+
+            If objCase.Department_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Department_Id & ", "
+            End If
+
+            If objCase.OU_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.OU_Id & ", "
+            End If
+
+            If objCase.Project_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Project_Id & ", "
+            End If
+
+            If objCase.System_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.System_Id & ", "
+            End If
+
+            If objCase.Urgency_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Urgency_Id & ", "
+            End If
+
+            If objCase.Impact_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Impact_Id & ", "
+            End If
+
+            If objCase.Supplier_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Supplier_Id & ", "
+            End If
+
+            If objCase.Sms = 0 Then
+                sSQL = sSQL & "0, "
+            Else
+                sSQL = sSQL & objCase.Sms & ", "
+            End If
+
+            If objCase.Cost = 0 Then
+                sSQL = sSQL & "0, "
+            Else
+                sSQL = sSQL & objCase.Cost & ", "
+            End If
+
+            If objCase.OtherCost = 0 Then
+                sSQL = sSQL & "0, "
+            Else
+                sSQL = sSQL & objCase.OtherCost & ", "
+            End If
+
+            If objCase.Problem_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Problem_Id & ", "
+            End If
+
+            If objCase.Change_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Change_Id & ", "
+            End If
+
+            If objCase.CausingPartId = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.CausingPartId & ", "
+            End If
+
+            If objCase.Verified = 0 Then
+                sSQL = sSQL & "0, "
+            Else
+                sSQL = sSQL & objCase.Verified & ", "
+            End If
+
+            sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(objCase.VerifiedDescription, "'", ""), 200) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.SolutionRate, "'", ""), 10) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.InventoryType, "'", ""), 50) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.InventoryLocation, "'", ""), 100) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.Currency, "'", ""), 10) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.ContactBeforeAction, "'", ""), 100) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.FinishingDescription, "'", ""), 200) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.Persons_Name, "'", "''"), 50) & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.Persons_EMail, "'", "") & "', " &
+                            getDBStringPrefix() & "'" & Replace(Left(objCase.Persons_Phone, 40), "'", "''") & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.Persons_CellPhone, "'", "''"), 30) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.Place, "'", "''"), 50) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.UserCode, "'", "''"), 20) & "', " &
+                            getDBStringPrefix() & "'" & Left(Replace(objCase.CostCentre, "'", "''"), 50) & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.InventoryNumber, "'", "") & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.InvoiceNumber, "'", "") & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.Caption, "'", "") & "', " &
+                            getDBStringPrefix() & "'" & ReplaceSingleApostrophe(objCase.Description) & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.Miscellaneous, "'", "''") & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.Available, "'", "''") & "', " &
+                            getDBStringPrefix() & "'" & Replace(objCase.ReferenceNumber, "'", "''") & "', "
+
+            If objCase.Priority_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Priority_Id & ", "
+            End If
+
+            If objCase.WorkingGroup_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.WorkingGroup_Id & ", "
+            End If
+
+            If objCase.Performer_User_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Performer_User_Id & ", "
+            End If
+
+            If objCase.Status_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.Status_Id & ", "
+            End If
+
+            If objCase.StateSecondary_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.StateSecondary_Id & ", "
+            End If
+
+            If objCase.WatchDate = Date.MinValue Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & convertDateTime(objCase.WatchDate, giDBType) & ", "
+            End If
+
+            If objCase.PlanDate = Date.MinValue Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & convertDateTime(objCase.PlanDate, giDBType) & ", "
+            End If
+
+            If objCase.AgreedDate = Date.MinValue Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & convertDateTime(objCase.AgreedDate, giDBType) & ", "
+            End If
+
+            If objCase.FinishingDate = Date.MinValue Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & convertDateTime(objCase.FinishingDate, giDBType) & ", "
+            End If
+
+            sSQL = sSQL & objCase.RegistrationSource & ", " & objCase.RegLanguage_Id & ", "
+
+            If objCase.RegistrationSourceCustomer_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.RegistrationSourceCustomer_Id & ", "
+            End If
+
+            sSQL = sSQL & getDBStringPrefix() & "'" & Left(Replace(objCase.RegUserName, "'", "''"), 200) & "', "
+
+            If objCase.CaseSolution_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.CaseSolution_Id & ", "
+            End If
+
+            sSQL = sSQL & "getutcdate(), getutcdate())"
+
+            executeSQL(gsConnectionString, sSQL)
+
+            Dim newCase As CCase = getCaseById(sCaseGUID:=objCase.CaseGUID)
+
+            If objCase.Form_Id <> 0 Then
+                sSQL = "INSERT INTO tblFormFieldValue(Case_Id, FormField_Id, FormFieldValue) " &
+                        "SELECT " & newCase.Id & ", Id, ' ' FROM tblFormField WHERE Form_Id=" & objCase.Form_Id
+
+                executeSQL(gsConnectionString, sSQL)
+
+            End If
+
+            Return newCase
+        Catch ex As Exception
+            Throw ex
+        End Try
+    End Function
 
 
     Public Function getCase(ByVal caseId As Integer) As CCase
