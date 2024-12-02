@@ -535,10 +535,9 @@ Imports System.Text.RegularExpressions
 
     Public Shared Function isLastWeekDay() As Boolean
         Dim iDaysPerMonth As Integer
-        Dim today As Date = #2024-11-04#
-        iDaysPerMonth = System.DateTime.DaysInMonth(today.Year, today.Month)
+        iDaysPerMonth = System.DateTime.DaysInMonth(Today.Year, Today.Month)
 
-        If iDaysPerMonth - today.Day < 7 Then
+        If iDaysPerMonth - Today.Day < 7 Then
             isLastWeekDay = True
         Else
             isLastWeekDay = False
@@ -546,8 +545,7 @@ Imports System.Text.RegularExpressions
     End Function
 
     Public Shared Function getWeekDayOrder() As Integer
-        Dim today As Date = #2024-11-04#
-        Dim iDay As Integer = today.Day
+        Dim iDay As Integer = Today.Day
 
         If iDay >= 1 And iDay <= 7 Then
             Return 1
