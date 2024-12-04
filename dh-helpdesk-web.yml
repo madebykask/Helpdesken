@@ -119,6 +119,13 @@ steps:
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.Schedule"'
 
 - task: MSBuild@1
+  displayName: Build DH.Helpdesk.CaseSolutionSchedule
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.CaseSolutionSchedule/DH.Helpdesk.CaseSolutionSchedule.vbproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.CaseSolutionSchedule"'
+
+- task: MSBuild@1
   displayName: Build DH.Helpdesk.TaskScheduler
   inputs:
     msbuildVersion: '17.0'  
@@ -231,6 +238,12 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.Schedule' 
     artifactName: 'DH.Helpdesk-Schedule'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.CaseSolutionSchedule
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.CaseSolutionSchedule' 
+    artifactName: 'DH.Helpdesk-CaseSolutionSchedule'
 
 - task: PublishBuildArtifacts@1
   displayName: Publish Artifact DH.Helpdesk.TaskScheduler
