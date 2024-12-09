@@ -536,6 +536,27 @@
                 }
             });
         });
+        $caseTypeId.change(function (d, source) {
+
+            $.post('/Cases/ChangeCaseType', { 'id': $(this).val() }, function (data) {
+                // set workinggroup id for CaseType if exists
+                var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroupId + ']').length;
+                if (exists > 0 && data.WorkingGroupId > 0 && source !== 'case__WorkingGroup_Id') {
+                    console.log(">>> Casetype Workinggroup_Id: " + data.WorkingGroupId);
+                    $caseWorkingGroupId
+                        .val(data.WorkingGroupId)
+                        .trigger('change', 'case__CaseType_Id');
+                }
+
+                //Set administrator for CaseType if exists
+                if (exists > 0 && data.UserId > 0 && source !== 'case__WorkingGroup_Id') {
+                    console.log(">>> Casetype Performer_Id: " + data.UserId);
+                    $casePerformer_Id
+                        .val(data.UserId)
+                        .trigger('change', 'case__CaseType_Id');
+                }
+            });
+        });
 
         $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
             e.preventDefault();
