@@ -33,7 +33,7 @@
                     </tr>
                 </thead>
                 <tr id="tr_WorkingGroup" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup)">
-                    <td>
+                    <td style="width:260px;">
                         @Translation.GetCoreTextTranslation("Driftgrupp")
                     </td>
                     <td>
@@ -327,9 +327,18 @@
                             }
                         </td>
                     </tr>
-                }
+                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.PersonsEmail)">
+                        <td>
+                            @Translation.GetCoreTextTranslation("Skicka inte avslutsmail till anmälare")  <span title="" class="icon-info-sign tooltipType" data-original-title="<div align='left'>@Translation.Get("Om kryssrutan markeras, skickas inget avslutsmail till anmälaren.") </div> <br />" data-html="true" rel="tooltip"></span>
+                        </td>
+                        <td>
+                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { id = "dontSendMailToNotifier" })
+                            @Html.HiddenFor(model => Model.CaseMailSetting.DontSendMailToNotifier)
+                        </td>
+                    </tr>
+                    }
 
-            </table>
+                </table>
         </div>
     </div>
     <input type="hidden" id="case__Customer_Id" value="@Model.CustomerId" />
@@ -380,8 +389,12 @@
     let $totalNumSelectedCases = $('#totalNumSelectedCases');
     let selectedCases = [];
     let processedCases = 0;
+    let dontSendMailToNotifier = $('#dontSendMailToNotifier');
 
     $(document).ready(function () {
+
+        var dontSendMailToNotifier = $('#dontSendMailToNotifier');
+        dontSendMailToNotifier.prop('checked', false);
 
         $('#divCaseType ul.dropdown-menu li a').click(function (e) {
             e.preventDefault();
@@ -594,7 +607,8 @@
             Problem_Id: $($caseProblemId.selector + ' option:selected').val(),
             FinishDescription: $finishDescription.val(),
             FinishTypeId: $finishTypeId.val(),
-            FinishDate: $finishDate.val()
+            FinishDate: $finishDate.val(),
+            DontSendMailToNotifyer: dontSendMailToNotifier.val()
         };
     }
 

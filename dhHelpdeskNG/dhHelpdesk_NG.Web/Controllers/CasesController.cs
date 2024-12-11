@@ -1421,9 +1421,6 @@ namespace DH.Helpdesk.Web.Controllers
 
                 mailSenders.SystemEmail = caseMailSetting.HelpdeskMailFromAdress;
 
-                // Positive: Send Mail to...
-                //caseMailSetting.DontSendMailToNotifier = caseMailSetting.DontSendMailToNotifier == false;
-
                 if (caseToUpdate.DefaultOwnerWG_Id.HasValue && caseToUpdate.DefaultOwnerWG_Id.Value > 0)
                 {
                     var defaultWGEmail = _workingGroupService.GetWorkingGroup(caseToUpdate.DefaultOwnerWG_Id.Value).EMail;
@@ -1523,10 +1520,11 @@ namespace DH.Helpdesk.Web.Controllers
                     
                     var logId = _logService.SaveLog(caseLog, 0, out errors);
                     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-                    // send emails
-                    // Todo - check if emails should be sent
-                    _caseService.SendCaseEmail(caseToUpdate.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser);
                     
+                    if(!inputData.DontSendMailToNotifyer)
+                    {
+                        _caseService.SendCaseEmail(caseToUpdate.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser);
+                    }
 
                     var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, caseToUpdate, oldCase);
                     if (actions.Any())
@@ -3848,6 +3846,7 @@ namespace DH.Helpdesk.Web.Controllers
                 if (m.CaseMailSetting.DontSendMailToNotifier == false) m.CaseMailSetting.DontSendMailToNotifier = true;
                 else m.CaseMailSetting.DontSendMailToNotifier = false;
 
+
                 var moduleCaseInvoice = GetCustomerSettings(customerId).ModuleCaseInvoice;
                 if (moduleCaseInvoice == 1)
                 {
@@ -3857,6 +3856,7 @@ namespace DH.Helpdesk.Web.Controllers
                     m.InvoiceModel = new CaseInvoiceModel(customerId, m.case_.Id, invoiceArticles, "", m.CaseKey, m.LogKey);
 #pragma warning restore 0618
                 }
+                
                 m.Performer_Id = 0;
                 return m;
             }
