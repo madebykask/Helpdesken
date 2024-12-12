@@ -1520,11 +1520,8 @@ namespace DH.Helpdesk.Web.Controllers
                     
                     var logId = _logService.SaveLog(caseLog, 0, out errors);
                     var userTimeZone = TimeZoneInfo.FindSystemTimeZoneById(SessionFacade.CurrentUser.TimeZoneId);
-                    
-                    if(!inputData.DontSendMailToNotifyer)
-                    {
-                        _caseService.SendCaseEmail(caseToUpdate.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser);
-                    }
+
+                    _caseService.SendCaseEmail(caseToUpdate.Id, caseMailSetting, caseHistoryId, basePath, userTimeZone, oldCase, caseLog, null, currentLoggedInUser, null, inputData.DontSendMailToNotifyer);
 
                     var actions = _caseService.CheckBusinessRules(BREventType.OnSaveCase, caseToUpdate, oldCase);
                     if (actions.Any())

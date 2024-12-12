@@ -389,7 +389,7 @@
     let $totalNumSelectedCases = $('#totalNumSelectedCases');
     let selectedCases = [];
     let processedCases = 0;
-    let dontSendMailToNotifier = $('#dontSendMailToNotifier');
+    let $dontSendMailToNotifier = $('#dontSendMailToNotifier');
 
     $(document).ready(function () {
 
@@ -608,7 +608,7 @@
             FinishDescription: $finishDescription.val(),
             FinishTypeId: $finishTypeId.val(),
             FinishDate: $finishDate.val(),
-            DontSendMailToNotifyer: dontSendMailToNotifier.val()
+            DontSendMailToNotifyer: $dontSendMailToNotifier.prop('checked')
         };
     }
 
