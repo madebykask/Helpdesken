@@ -539,6 +539,7 @@ Module DH_Helpdesk_Mail
                                 iFinishingCause_Id = 0
                                 sBodyText = ""
                                 iLog_Id = 0
+                                sExternalCaseNumber = ""
 
 
                                 Dim objCase As CCase = Nothing
