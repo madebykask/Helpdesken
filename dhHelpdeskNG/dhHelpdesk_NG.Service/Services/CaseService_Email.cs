@@ -33,7 +33,8 @@ namespace DH.Helpdesk.Services.Services
             CaseLog log = null,
             List<CaseLogFileDto> logFiles = null,
             User currentLoggedInUser = null,
-            string extraFollowersEmails = null)
+            string extraFollowersEmails = null,
+            bool dontSendClosingMail = false)
         {
             //get sender email adress
             var helpdeskMailFromAdress = string.Empty;
@@ -282,7 +283,7 @@ namespace DH.Helpdesk.Services.Services
 
             #region Case closed email
 
-            if (newCase.FinishingDate.HasValue && newCase.Customer != null)
+            if (newCase.FinishingDate.HasValue && newCase.Customer != null && !dontSendClosingMail)
             {
                 SendCaseClosedEmail(newCase, cms, caseHistoryId, userTimeZone, log, files, customerSetting, false, dontSendMailToNotfier, helpdeskMailFromAdress);
             }

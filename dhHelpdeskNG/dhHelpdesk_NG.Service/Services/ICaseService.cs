@@ -94,7 +94,7 @@ namespace DH.Helpdesk.Services.Services
 
         void SendCaseEmail(int caseId, CaseMailSetting cms, int caseHistoryId, string basePath, TimeZoneInfo userTimeZone,
                            Case oldCase = null, CaseLog log = null, List<CaseLogFileDto> logFiles = null, User currentLoggedInUser = null,
-                            string extraFollowersEmails = null);
+                            string extraFollowersEmails = null, bool dontSendClosingMail = false);
 
         List<BusinessRuleActionModel> CheckBusinessRules(BREventType occurredEvent, Case currentCase, Case oldCase = null);
 

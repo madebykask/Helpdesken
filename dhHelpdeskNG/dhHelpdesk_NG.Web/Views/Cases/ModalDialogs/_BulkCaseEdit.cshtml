@@ -33,7 +33,7 @@
                     </tr>
                 </thead>
                 <tr id="tr_WorkingGroup" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.WorkingGroup_Id, CaseSolutionFields.WorkingGroup)">
-                    <td>
+                    <td style="width:260px;">
                         @Translation.GetCoreTextTranslation("Driftgrupp")
                     </td>
                     <td>
@@ -111,6 +111,28 @@
                     <a href="#" id="performerSearch" data-field="administrator" style="" title="" class="btn disabled"><i class="icon-search"></i></a>
                 </td>
             }*@
+                </tr>
+                <tr id="trCaseTypes" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType)">
+                    <td>
+                        @Translation.GetCoreTextTranslation("Ärendetyp")
+                    </td>
+                    <td>
+                        <div id="divCaseType" class="btn-group">
+                            @{
+                                string disabledCaseType = Model.GetDisabledString(GlobalEnums.TranslationCaseFields.CaseType_Id, CaseSolutionFields.CaseType);
+                            }
+                            <div class="btn @disabledCaseType" id="divBreadcrumbs_CaseType"> @(string.IsNullOrEmpty(Model.case_.CaseType_Id.supressZero()) ? Translation.Get("--") : Model.FinishingCause)</div>
+                            <button class="btn dropdown-toggle" data-toggle="dropdown" @disabledCaseType>
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li><a href="#">@Translation.GetCoreTextTranslation("--")</a></li>
+                                @Html.CaseTypeDropdownButtonString(Model.caseTypes)
+                            </ul>
+
+                            <input type="hidden" id="case__CaseType_Id" name="case_.CaseType_Id" value="@Model.case_.CaseType_Id.supressZero()" />
+                        </div>
+                    </td>
                 </tr>
                 @*<tr class="displaytr" style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Priority_Id, CaseSolutionFields.Priority)">
             <td>
@@ -305,9 +327,18 @@
                             }
                         </td>
                     </tr>
-                }
+                    <tr style="@Model.GetFieldStyle(GlobalEnums.TranslationCaseFields.Persons_EMail, CaseSolutionFields.PersonsEmail)">
+                        <td>
+                            @Translation.GetCoreTextTranslation("Skicka inte avslutsmail till anmälare")  <span title="" class="icon-info-sign tooltipType" data-original-title="<div align='left'>@Translation.Get("Om kryssrutan markeras, skickas inget avslutsmail till anmälaren.") </div> <br />" data-html="true" rel="tooltip"></span>
+                        </td>
+                        <td>
+                            @Html.CheckBoxFor(model => model.CaseMailSetting.DontSendMailToNotifier, new { id = "dontSendMailToNotifier" })
+                            @Html.HiddenFor(model => Model.CaseMailSetting.DontSendMailToNotifier)
+                        </td>
+                    </tr>
+                    }
 
-            </table>
+                </table>
         </div>
     </div>
     <input type="hidden" id="case__Customer_Id" value="@Model.CustomerId" />
@@ -339,6 +370,8 @@
     let $finishTypeId = $("#CaseLog_FinishingType");
     let $finishDate = $('#CaseLog_FinishingDate');
     let $caseWorkingGroupId = $('#case__WorkingGroup_Id');
+    let $caseTypeId = $('#case__CaseType_Id');
+    let $caseTypeBreadcrubs = $("#divBreadcrumbs_CaseType");
     let $casePerformer_Id = $('#Performer_Id');
     //let $casePriorityId= $('#case__Priority_Id');
     let $caseStateSecondaryId = $('#case__StateSecondary_Id');
@@ -356,8 +389,19 @@
     let $totalNumSelectedCases = $('#totalNumSelectedCases');
     let selectedCases = [];
     let processedCases = 0;
+    let $dontSendMailToNotifier = $('#dontSendMailToNotifier');
 
     $(document).ready(function () {
+
+        var dontSendMailToNotifier = $('#dontSendMailToNotifier');
+        dontSendMailToNotifier.prop('checked', false);
+
+        $('#divCaseType ul.dropdown-menu li a').click(function (e) {
+            e.preventDefault();
+            var val = $(this).attr('value');
+            $("#divBreadcrumbs_CaseType").text(getBreadcrumbs(this));
+            $("#case__CaseType_Id").val(val).trigger('change');
+        });
 
         resetBulkEditModal();
 
@@ -391,7 +435,7 @@
 
             let inputData = getInputData();
             validateBulkCaseEditData(inputData, selectedCases).then(valid => {
-                
+
                 inputData.CasesToBeUpdated = selectedCases.map(e => e.id);
 
                 if (valid) {
@@ -505,6 +549,27 @@
                 }
             });
         });
+        $caseTypeId.change(function (d, source) {
+
+            $.post('/Cases/ChangeCaseType', { 'id': $(this).val() }, function (data) {
+                // set workinggroup id for CaseType if exists
+                var exists = $('#case__WorkingGroup_Id option[value=' + data.WorkingGroupId + ']').length;
+                if (exists > 0 && data.WorkingGroupId > 0 && source !== 'case__WorkingGroup_Id') {
+                    console.log(">>> Casetype Workinggroup_Id: " + data.WorkingGroupId);
+                    $caseWorkingGroupId
+                        .val(data.WorkingGroupId)
+                        .trigger('change', 'case__CaseType_Id');
+                }
+
+                //Set administrator for CaseType if exists
+                if (exists > 0 && data.UserId > 0 && source !== 'case__WorkingGroup_Id') {
+                    console.log(">>> Casetype Performer_Id: " + data.UserId);
+                    $casePerformer_Id
+                        .val(data.UserId)
+                        .trigger('change', 'case__CaseType_Id');
+                }
+            });
+        });
 
         $finishTypeContainer.find('ul.dropdown-menu li a').click(function (e) {
             e.preventDefault();
@@ -538,15 +603,18 @@
             Performer_User_Id: $($casePerformer_Id.selector + ' option:selected').val(),
             WorkingGroup_Id: $($caseWorkingGroupId.selector + ' option:selected').val(),
             StateSecondary_Id: $($caseStateSecondaryId.selector + ' option:selected').val(),
+            CaseType_Id: $caseTypeId.val(),
             Problem_Id: $($caseProblemId.selector + ' option:selected').val(),
             FinishDescription: $finishDescription.val(),
             FinishTypeId: $finishTypeId.val(),
-            FinishDate: $finishDate.val()
+            FinishDate: $finishDate.val(),
+            DontSendMailToNotifyer: $dontSendMailToNotifier.prop('checked')
         };
     }
 
     function disableBulkCaseEditInputFields() {
         $caseWorkingGroupId.attr('disabled', true);
+        $caseTypeId.attr('disabled', true);
         $casePerformer_Id.attr('disabled', true);
         $caseStateSecondaryId.attr('disabled', true);
         $caseProblemId.attr('disabled', true);
@@ -569,6 +637,7 @@
         $finishTypeBreadcrubs.attr('disabled', false);
         $btnFinishingTypeLst.attr('disabled', false);
         $finishDate.attr('disabled', false);
+        $caseTypeId.attr('disabled', false);
     }
 
 
@@ -578,6 +647,7 @@
         //$casePriorityId.val('');
         $caseStateSecondaryId.val('');
         $caseProblemId.val('');
+        $caseTypeId.val('');
         $btnBulkCaseEdit.show();
         $bulkCaseEditProgressListBody.html('');
         $bulkCaseEditProgressDiv.css("display", "none");
@@ -585,6 +655,7 @@
         $finishTypeId.val('');
         $finishDate.val('');
         $finishTypeBreadcrubs.text('@Html.Raw(Translation.Get("--"))');
+        $caseTypeBreadcrubs.text('@Html.Raw(Translation.Get("--"))');
         enableBulkCaseEditInputFields();
         $processedNumCases.text('0');
         $finishTypeContainer.removeClass("error");
@@ -605,11 +676,11 @@
         else {
             $casePerformer_Id.attr('disabled', true);
             $casePerformer_Id.val('');
-        }       
+        }
     }
 
     function nothingToUpdate(data) {
-        return data.Problem_Id == '' && data.Performer_User_Id == '' && data.WorkingGroup_Id == '' && data.StateSecondary_Id == '' && data.FinishDescription == '' && data.FinishTypeId == '' && data.FinishDate == '';
+        return data.Problem_Id == '' && data.Performer_User_Id == '' && data.WorkingGroup_Id == '' && data.StateSecondary_Id == '' && data.FinishDescription == '' && data.FinishTypeId == '' && data.FinishDate == '' && data.CaseType_Id == '';
     }
 
     function validateBulkCaseEditData(data, selectedCases) {
@@ -622,7 +693,7 @@
                     $(".toast-container").addClass("case-followers-toastmessage");
                 }
                 else {
-                    
+
                     if (finishingTypeValid == false) {
                         $finishTypeContainer.addClass("error");
 

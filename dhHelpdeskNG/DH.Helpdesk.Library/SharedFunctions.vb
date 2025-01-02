@@ -535,7 +535,6 @@ Imports System.Text.RegularExpressions
 
     Public Shared Function isLastWeekDay() As Boolean
         Dim iDaysPerMonth As Integer
-
         iDaysPerMonth = System.DateTime.DaysInMonth(Today.Year, Today.Month)
 
         If iDaysPerMonth - Today.Day < 7 Then
