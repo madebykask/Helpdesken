@@ -7,6 +7,11 @@
 	<!-- If SecureConnectionString = true you have to generate and comment on For Secure connectionstring below-->
 	<appSettings>
 		<add key="SecureConnectionString" value="false" />
+		<add key="DelaySeconds" value="10,20,30"/>
+		<add key="SMTPServer" value="relay2.hostnet.se" />
+		<add key="SMTPPort" value="25" />
+		<add key="ErrorEmailRecipient" value="support@dhsolutions.se" />
+		<add key="ErrorEmailSender" value="noreply@dhsolutions.se" />
 	</appSettings>
   <connectionStrings>
       <add name="Helpdesk" connectionString="Data Source=#{DatabaseServer}; Initial Catalog=#{DatabaseName}; User Id=#{DatabaseUser}; Password=#{DatabasePassword};Network Library=dbmssocn" />
