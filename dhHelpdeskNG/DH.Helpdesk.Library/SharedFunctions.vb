@@ -559,6 +559,32 @@ Imports System.Text.RegularExpressions
             Return 5
         End If
     End Function
+    Public Shared Function isLastWeekDayForDate(ByVal dateAndTime As DateTime) As Boolean
+        Dim iDaysPerMonth As Integer
+        iDaysPerMonth = System.DateTime.DaysInMonth(dateAndTime.Year, dateAndTime.Month)
+
+        If iDaysPerMonth - dateAndTime.Day < 7 Then
+            Return True
+        Else
+            Return False
+        End If
+    End Function
+
+    Public Shared Function getWeekDayOrderForDate(ByVal dateAndTime As DateTime) As Integer
+        Dim iDay As Integer = dateAndTime.Day
+
+        If iDay >= 1 And iDay <= 7 Then
+            Return 1
+        ElseIf iDay >= 8 And iDay <= 14 Then
+            Return 2
+        ElseIf iDay >= 15 And iDay <= 21 Then
+            Return 3
+        ElseIf iDay >= 22 And iDay <= 28 Then
+            Return 4
+        Else
+            Return 5
+        End If
+    End Function
 
     Public Shared Function getDBStringPrefix() As String
         If giDBType = 0 Then

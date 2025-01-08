@@ -1296,7 +1296,471 @@ Public Class CaseData
             Throw ex
         End Try
     End Function
+    Public Function getCaseSolutionSchedule(ByVal dateAndTime As DateTime) As Collection
+        Dim colCase As New Collection
+        Dim sSQL As String
+        Dim dr As DataRow
+        Dim iTime As Integer = dateAndTime.Hour
+        Dim flag As Boolean = False
+        Dim c As CCase
+        Dim iDay As Integer = 0
+        Dim iMonth As Integer = 0
+        Dim sScheduleday As String = ""
+        Dim sScheduleMonth As String = ""
+        Dim iOrder As String = ""
+        Dim iWeekday As Integer = 0
+        Dim objComputerUserData As New ComputerUserData
+        Dim logAdded As Boolean = False
 
+        Try
+            sSQL = "SELECT tblCaseSolution.*, tblCaseSolutionSchedule.ScheduleType, tblCaseSolutionSchedule.ScheduleDay, tblCaseSolutionSchedule.ScheduleWatchDate, " &
+                        "tblCustomer.Language_Id, tblDepartment.Region_Id, tblCaseSolution_ExtendedCaseForms.ExtendedCaseForms_Id " &
+                      "FROM tblCaseSolution " &
+                       "INNER JOIN tblCaseSolutionSchedule ON tblCaseSolution.Id = tblCaseSolutionSchedule.CaseSolution_Id " &
+                       "INNER JOIN tblCustomer ON tblCaseSolution.Customer_Id=tblCustomer.Id " &
+                        "LEFT JOIN tblDepartment ON tblCaseSolution.Department_Id=tblDepartment.Id " &
+                        "LEFT JOIN tblCaseSolution_ExtendedCaseForms ON tblCaseSolution.Id=tblCaseSolution_ExtendedCaseForms.CaseSolution_Id " &
+                      "WHERE ScheduleTime=" & iTime & " AND tblCaseSolution.Status = 1"
+
+            If giLoglevel > 0 Then
+                objLogFile.WriteLine(Now() & ", getCaseSolutionSchedule " & sSQL)
+            End If
+
+            Dim dt As DataTable
+
+            dt = getDataTable(gsConnectionString, sSQL)
+
+            If giLoglevel > 0 Then
+                objLogFile.WriteLine(Now() & ", getCaseSolutionSchedule rows " & dt.Rows.Count.ToString)
+            End If
+
+            For Each dr In dt.Rows
+                flag = False
+                sScheduleMonth = ""
+                iOrder = 0
+                iWeekday = 0
+
+                Select Case dr("ScheduleType")
+                    Case "1"
+                        flag = True
+                    Case "2"
+                        iDay = DatePart(DateInterval.Weekday, dateAndTime, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays)
+
+                        If IsDBNull(dr("ScheduleDay")) Then
+                            sScheduleday = ""
+                        Else
+                            sScheduleday = dr("ScheduleDay")
+                        End If
+
+                        If sScheduleday <> "" Then
+                            If InStr(1, sScheduleday, "," & iDay & ",", 1) > 0 Then
+                                flag = True
+                            End If
+                        End If
+                    Case "3"
+
+                        iDay = DatePart(DateInterval.Day, dateAndTime.Date, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays)
+
+                        iMonth = DatePart(DateInterval.Month, dateAndTime.Date, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays)
+
+                        If IsDBNull(dr("ScheduleDay")) Then
+                            sScheduleday = ""
+                        Else
+                            sScheduleday = dr("ScheduleDay")
+                        End If
+
+                        Dim iPos As Integer = InStr(1, sScheduleday, ";", 1)
+
+                        If iPos > 0 Then
+                            sScheduleMonth = Mid(sScheduleday, iPos + 1)
+                            sScheduleday = Left(sScheduleday, iPos - 1)
+                        End If
+
+                        iPos = InStr(1, sScheduleday, ":", 1)
+
+                        If iPos > 0 Then
+                            iOrder = Left(sScheduleday, iPos - 1)
+                            iWeekday = Mid(sScheduleday, iPos + 1)
+                        End If
+
+                        ' Kontrollera om rätt månad
+                        If InStr(1, sScheduleMonth, "," & iMonth & ",", 1) > 0 Then
+                            If iOrder = 0 Then
+                                If StrComp(iDay, sScheduleday, 1) = 0 Then
+                                    flag = True
+                                End If
+                            ElseIf iOrder = 5 Then
+                                If iWeekday = DatePart(DateInterval.Weekday, dateAndTime, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays) Then
+                                    If isLastWeekDayForDate(dateAndTime) Then
+                                        flag = True
+                                    End If
+                                End If
+                            Else
+                                If iWeekday = DatePart(DateInterval.Weekday, dateAndTime, FirstDayOfWeek.Monday, FirstWeekOfYear.FirstFourDays) Then
+
+                                    If iOrder = getWeekDayOrderForDate(dateAndTime) Then
+                                        flag = True
+                                    End If
+                                End If
+                            End If
+                        End If
+
+                End Select
+
+                If giLoglevel > 0 Then
+                    objLogFile.WriteLine(Now() & ", getCaseSolutionSchedule, ScheduleType:" & dr("ScheduleType").ToString & ", Scheduleday:" & sScheduleday & ", ScheduleMonth:" & sScheduleMonth & ", Order:" & iOrder.ToString & ", Day:" & iDay.ToString)
+                End If
+
+                If flag = True Then
+                    c = New CCase
+                    c.CaseSolution_Id = dr("Id")
+                    c.RegistrationSource = 4
+                    c.RegLanguage_Id = dr("Language_Id")
+
+                    If dr("ScheduleWatchDate") > 0 Then
+                        c.WatchDate = DateAdd(DateInterval.Day, dr("ScheduleWatchDate"), dateAndTime)
+                    End If
+
+                    If Not IsDBNull(dr("Department_Id")) Then
+                        c.Department_Id = dr("Department_Id")
+                    End If
+
+                    ' Kontrollera om användaruppgifter ska hämtas
+                    ' Commented: helpdesk don't do this
+                    'If Not IsDBNull(dr("ReportedBy")) AndAlso Not String.IsNullOrEmpty(DirectCast(dr("ReportedBy"), String)) Then
+                    '    Dim objComputerUser As ComputerUser = objComputerUserData.getComputerUserByUserId(dr("ReportedBy"), dr("Customer_Id"))
+
+                    '    If Not objComputerUser Is Nothing Then
+                    '        c.ReportedBy = objComputerUser.UserId
+                    '        c.Persons_Name = objComputerUser.FirstName & " " & objComputerUser.SurName
+                    '        c.Persons_EMail = objComputerUser.EMail
+                    '        c.Persons_Phone = objComputerUser.Phone
+
+                    '        If c.Department_Id = 0 Then
+                    '            If objComputerUser.Department_Id <> 0 Then
+                    '                c.Department_Id = objComputerUser.Department_Id
+                    '            End If
+                    '        End If
+                    '    End If
+
+                    'End If
+
+                    If Not IsDBNull(dr("ReportedBy")) Then
+                        c.ReportedBy = dr("ReportedBy")
+                    End If
+
+                    'Dim setCurrentUsersWorkingGroup As Integer = 0
+                    'If Not IsDBNull(dr("SetCurrentUsersWorkingGroup")) Then
+                    '    setCurrentUsersWorkingGroup = dr("SetCurrentUsersWorkingGroup")
+                    'End If
+
+                    'If setCurrentUsersWorkingGroup = 1 Then
+                    '    '        var userDefaultWGId = _userService.GetUserDefaultWorkingGroupId(SessionFacade.CurrentUser.Id, Customer.Id);
+                    '    '    m.case_.WorkingGroup_Id = userDefaultWGId;
+                    'Else
+                    If Not IsDBNull(dr("CaseWorkingGroup_Id")) Then
+                        c.WorkingGroup_Id = dr("CaseWorkingGroup_Id")
+                    End If
+                    'End If
+
+                    If Not IsDBNull(dr("Project_Id")) Then
+                        c.Project_Id = dr("Project_Id")
+                    End If
+
+                    'If Not IsDBNull(dr("NoMailToNotifier")) Then
+                    '    c.NoMailToNotifier = dr("NoMailToNotifier")
+                    'End If
+
+                    If Not IsDBNull(dr("PersonsName")) Then
+                        c.Persons_Name = dr("PersonsName")
+                    End If
+
+                    If Not IsDBNull(dr("PersonsPhone")) Then
+                        c.Persons_Phone = dr("PersonsPhone")
+                    End If
+
+                    If Not IsDBNull(dr("PersonsCellPhone")) Then
+                        c.Persons_CellPhone = dr("PersonsCellPhone")
+                    End If
+
+                    If Not IsDBNull(dr("OU_Id")) Then
+                        c.OU_Id = dr("OU_Id")
+                    End If
+
+                    If Not IsDBNull(dr("Place")) Then
+                        c.Place = dr("Place")
+                    End If
+
+                    If Not IsDBNull(dr("UserCode")) Then
+                        c.UserCode = dr("UserCode")
+                    End If
+
+                    If Not IsDBNull(dr("System_Id")) Then
+                        c.System_Id = dr("System_Id")
+                    End If
+
+                    If Not IsDBNull(dr("Urgency_Id")) Then
+                        c.Urgency_Id = dr("Urgency_Id")
+                    End If
+
+                    If Not IsDBNull(dr("Impact_Id")) Then
+                        c.Impact_Id = dr("Impact_Id")
+                    End If
+
+                    If Not IsDBNull(dr("InvoiceNumber")) Then
+                        c.InvoiceNumber = dr("InvoiceNumber")
+                    End If
+
+                    If Not IsDBNull(dr("ReferenceNumber")) Then
+                        c.ReferenceNumber = dr("ReferenceNumber")
+                        'Else
+                        '    c.ReferenceNumber = DBNull.Value
+                    End If
+
+                    If Not IsDBNull(dr("Status_Id")) Then
+                        c.Status_Id = dr("Status_Id")
+                    End If
+
+                    If Not IsDBNull(dr("StateSecondary_Id")) Then
+                        c.StateSecondary_Id = dr("StateSecondary_Id")
+                    End If
+
+                    If Not IsDBNull(dr("Verified")) Then
+                        c.Verified = dr("Verified")
+                    End If
+
+                    If Not IsDBNull(dr("VerifiedDescription")) Then
+                        c.VerifiedDescription = dr("VerifiedDescription")
+                    End If
+
+                    If Not IsDBNull(dr("SolutionRate")) Then
+                        c.SolutionRate = dr("SolutionRate")
+                    End If
+
+                    If Not IsDBNull(dr("InventoryNumber")) Then
+                        c.InventoryNumber = dr("InventoryNumber")
+                    End If
+
+                    If Not IsDBNull(dr("InventoryType")) Then
+                        c.InventoryType = dr("InventoryType")
+                    End If
+
+                    If Not IsDBNull(dr("InventoryLocation")) Then
+                        c.InventoryLocation = dr("InventoryLocation")
+                    End If
+
+                    If Not IsDBNull(dr("Supplier_Id")) Then
+                        c.Supplier_Id = dr("Supplier_Id")
+                    End If
+
+                    If Not IsDBNull(dr("SMS")) Then
+                        c.Sms = dr("SMS")
+                    End If
+
+                    If Not IsDBNull(dr("Available")) Then
+                        c.Available = dr("Available")
+                    End If
+
+                    If Not IsDBNull(dr("Cost")) Then
+                        c.Cost = dr("Cost")
+                    End If
+
+                    If Not IsDBNull(dr("OtherCost")) Then
+                        c.OtherCost = dr("OtherCost")
+                    End If
+
+                    If Not IsDBNull(dr("Currency")) Then
+                        c.Currency = dr("Currency")
+                    End If
+
+                    If Not IsDBNull(dr("ContactBeforeAction")) Then
+                        c.ContactBeforeAction = dr("ContactBeforeAction")
+                    End If
+
+                    If Not IsDBNull(dr("Problem_Id")) Then
+                        c.Problem_Id = dr("Problem_Id")
+                    End If
+
+                    If Not IsDBNull(dr("Change_Id")) Then
+                        c.Change_Id = dr("Change_Id")
+                    End If
+
+                    If Not IsDBNull(dr("FinishingDate")) Then
+                        c.FinishingDate = dr("FinishingDate")
+                    End If
+
+                    If Not IsDBNull(dr("FinishingDescription")) Then
+                        c.FinishingDescription = dr("FinishingDescription")
+                    End If
+
+                    If Not IsDBNull(dr("PlanDate")) Then
+                        c.PlanDate = dr("PlanDate")
+                    End If
+
+                    If Not IsDBNull(dr("AgreedDate")) Then
+                        c.AgreedDate = dr("AgreedDate")
+                    End If
+
+                    If Not IsDBNull(dr("CausingPartId")) Then
+                        c.CausingPartId = dr("CausingPartId")
+                    End If
+
+                    If Not IsDBNull(dr("RegistrationSource")) Then
+                        c.RegistrationSourceCustomer_Id = dr("RegistrationSource")
+                    End If
+
+                    If Not IsDBNull(dr("PersonsEmail")) Then
+                        c.Persons_EMail = dr("PersonsEmail")
+                    End If
+
+                    If Not IsDBNull(dr("CostCentre")) Then
+                        c.CostCentre = dr("CostCentre")
+                    End If
+
+                    If Not IsDBNull(dr("Region_Id")) Then
+                        c.Region_Id = dr("Region_Id")
+                    End If
+
+                    If Not IsDBNull(dr("Category_Id")) Then
+                        c.Category_Id = dr("Category_Id")
+                    End If
+
+                    c.Customer_Id = dr("Customer_Id")
+                    c.Caption = dr("Caption")
+
+                    If Not IsDBNull(dr("Description")) Then
+                        c.Description = dr("Description")
+                    End If
+
+                    If Not IsDBNull(dr("Miscellaneous")) Then
+                        c.Miscellaneous = dr("Miscellaneous")
+                    End If
+
+                    If Not IsDBNull(dr("Priority_Id")) Then
+                        c.Priority_Id = dr("Priority_Id")
+                    End If
+
+                    If Not IsDBNull(dr("PerformerUser_Id")) Then
+                        c.Performer_User_Id = dr("PerformerUser_Id")
+                    End If
+
+                    logAdded = False
+                    Dim l As New Log
+
+                    If Not IsDBNull(dr("Text_Internal")) Then
+                        If dr("Text_Internal") <> "" Then
+                            l.Text_Internal = dr("Text_Internal")
+
+                            logAdded = True
+
+                        End If
+
+                    End If
+
+                    If Not IsDBNull(dr("Text_External")) Then
+                        If dr("Text_External") <> "" Then
+                            l.Text_External = dr("Text_External")
+
+                            logAdded = True
+
+                        End If
+
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_ReportedBy")) Then
+                        c.IsAbout_ReportedBy = dr("IsAbout_ReportedBy")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_PersonsName")) Then
+                        c.IsAbout_PersonsName = dr("IsAbout_PersonsName")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_PersonsEmail")) Then
+                        c.IsAbout_PersonsEMail = dr("IsAbout_PersonsEmail")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_PersonsPhone")) Then
+                        c.IsAbout_PersonsPhone = dr("IsAbout_PersonsPhone")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_PersonsCellPhone")) Then
+                        c.IsAbout_PersonsCellPhone = dr("IsAbout_PersonsCellPhone")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_Region_Id")) Then
+                        c.IsAbout_Region_Id = dr("IsAbout_Region_Id")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_Department_Id")) Then
+                        c.IsAbout_Department_Id = dr("IsAbout_Department_Id")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_OU_Id")) Then
+                        c.IsAbout_OU_Id = dr("IsAbout_OU_Id")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_Place")) Then
+                        c.IsAbout_Place = dr("IsAbout_Place")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_CostCentre")) Then
+                        c.IsAbout_CostCentre = dr("IsAbout_CostCentre")
+                    End If
+
+                    If Not IsDBNull(dr("IsAbout_UserCode")) Then
+                        c.IsAbout_UserCode = dr("IsAbout_UserCode")
+                    End If
+
+                    If Not IsDBNull(dr("ExtendedCaseForms_Id")) Then
+                        c.ExtendedCaseFormId = dr("ExtendedCaseForms_Id")
+                    End If
+
+                    If Not IsDBNull(dr("CaseType_Id")) Then
+                        c.CaseType_Id = dr("CaseType_Id")
+                        If (Not c.CaseType_Id = 0) Then
+                            Dim caseTypeData As New CaseTypeData()
+                            Dim caseType As CaseType = caseTypeData.getCaseTypeById(c.CaseType_Id)
+                            If (c.WorkingGroup_Id = 0 And Not caseType.WorkingGroup_Id = 0) Then
+                                c.WorkingGroup_Id = caseType.WorkingGroup_Id
+                            End If
+                            If (c.Performer_User_Id = 0 And Not caseType.User_Id = 0) Then
+                                c.Performer_User_Id = caseType.User_Id
+                            End If
+                        End If
+                    End If
+
+                    If Not IsDBNull(dr("ProductArea_Id")) Then
+                        c.ProductArea_Id = dr("ProductArea_Id")
+                        If (Not c.ProductArea_Id = 0) Then
+                            Dim productAreaData As New ProductAreaData()
+                            Dim productArea As ProductArea = productAreaData.GetProductArea(c.ProductArea_Id)
+                            If (c.WorkingGroup_Id = 0 And Not productArea.WorkingGroup_Id = 0) Then
+                                c.WorkingGroup_Id = productArea.WorkingGroup_Id
+                            End If
+                            If (c.Priority_Id = 0 And Not productArea.Priority_Id = 0) Then
+                                c.Priority_Id = productArea.Priority_Id
+                            End If
+                        End If
+                    End If
+
+                    If logAdded = True Then
+                        c.Log.Add(l)
+                    End If
+
+                    colCase.Add(c)
+                End If
+
+            Next
+
+            Return colCase
+        Catch ex As Exception
+            If giLoglevel > 0 Then
+                objLogFile.WriteLine(Now() & ", ERROR getCaseSolutionSchedule " & ex.Message.ToString)
+            End If
+
+            Throw ex
+        End Try
+    End Function
     Public Function getCaseSolutionSchedule() As Collection
         Dim colCase As New Collection
         Dim sSQL As String

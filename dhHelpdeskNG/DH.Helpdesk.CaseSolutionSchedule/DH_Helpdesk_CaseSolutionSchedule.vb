@@ -12,6 +12,29 @@ Module DH_Helpdesk_CaseSolutionSchedule
 
     Public Sub Main()
 
+        Dim args As String() = Environment.GetCommandLineArgs()
+
+        ' Första argumentet är vanligtvis exe-filen, så börja från index 1
+        ' Default values for the optional arguments
+
+        Dim defaultDateAndTime As DateTime = DateTime.Now
+        Dim defaultWorkMode As Integer = 0
+
+        Dim dateAndTime As DateTime
+        Dim workMode As Integer
+
+        If args.Length > 1 AndAlso DateTime.TryParse(args(1), dateAndTime) Then
+            ' Use the provided dateAndTime argument
+        Else
+            dateAndTime = defaultDateAndTime
+        End If
+
+        If args.Length > 2 AndAlso Integer.TryParse(args(2), workMode) Then
+            ' Use the provided workMode argument
+        Else
+            workMode = defaultWorkMode
+        End If
+
         ' encrypt connection string if exists
         Dim secureConnectionString = ConfigurationManager.AppSettings("SecureConnectionString")
         If (Not String.IsNullOrEmpty(secureConnectionString) AndAlso Boolean.Parse(secureConnectionString)) Then
@@ -24,9 +47,9 @@ Module DH_Helpdesk_CaseSolutionSchedule
         Try
             giLoglevel = 0
             createLogFile()
-            LogToFile(Now() & " Starting CaseSolutionSchedule")
-            caseSolutionSchedule(sConnectionstring)
-            LogToFile(Now() & " End of CaseSolutionSchedule")
+            LogToFile(dateAndTime & " Starting CaseSolutionSchedule")
+            caseSolutionSchedule(sConnectionstring, dateAndTime, workMode)
+            LogToFile(dateAndTime & " End of CaseSolutionSchedule")
             closeLogFile()
         Catch ex As Exception
             LogError(ex.ToString())
@@ -36,14 +59,6 @@ Module DH_Helpdesk_CaseSolutionSchedule
         End Try
 
     End Sub
-    Private Function GetCmdArgSafe(args As String(), index As Int32) As String
-        If index < args.Length Then
-            Dim val = args(index)
-            val = IIf(val Is Nothing, val, val.Trim()) 'trim
-            Return val
-        End If
-        Return Nothing
-    End Function
 
     Private Function GetConnectionString() As String
         Return ConfigurationManager.ConnectionStrings(ConnectionStringName)?.ConnectionString
@@ -88,7 +103,7 @@ Module DH_Helpdesk_CaseSolutionSchedule
         End If
     End Sub
 
-    Private Sub caseSolutionSchedule(ByVal sConnectionString As String)
+    Private Sub caseSolutionSchedule(ByVal sConnectionString As String, ByVal dateAndTime As DateTime, ByVal workMode As Integer)
         Dim objGlobalSettingsData As New GlobalSettingsData
         Dim objGlobalSettings As GlobalSettings
         Dim objCaseData As New CaseData
@@ -109,18 +124,22 @@ Module DH_Helpdesk_CaseSolutionSchedule
 
         objGlobalSettings = objGlobalSettingsData.getGlobalSettings()
         giDBType = objGlobalSettings.DBType
-        Dim colCase As Collection = objCaseData.getCaseSolutionSchedule
+        Dim colCase As Collection = objCaseData.getCaseSolutionSchedule(dateAndTime)
 
-        LogToFile(Now() & " Number of CaseSolutions found at this time and date:" & colCase.Count)
+        LogToFile(dateAndTime & " Number of CaseSolutions found at this time and date:" & colCase.Count)
         For i As Integer = 1 To colCase.Count
             Try
-
                 objCaseSolution = colCase(i)
                 Dim cslId = objCaseSolution.CaseSolution_Id
-                objCase = objCaseData.createCaseFromCaseSolutionScedule(objCaseSolution)
-                LogToFile(Now() & " " & objCaseSolution.Caption & ": CaseSolution_Id: " & cslId & " - Created CaseNumber:" & objCase.Casenumber & ", Case_Id: " & objCase.Id)
+                If (workMode = 1) Then
+                    LogToFile(dateAndTime & " " & objCaseSolution.Caption & ": CaseSolution_Id: " & cslId)
+                    Continue For
+                End If
 
-                Dim isAboutObj As ComputerUser = GetIsAboutData(objCaseSolution)
+                objCase = objCaseData.createCaseFromCaseSolutionScedule(objCaseSolution)
+                LogToFile(dateAndTime & " " & objCaseSolution.Caption & ": CaseSolution_Id: " & cslId & " - Created CaseNumber:" & objCase.Casenumber & ", Case_Id: " & objCase.Id)
+
+                Dim isAboutObj As ComputerUser = getIsAboutData(objCaseSolution)
                 objCaseData.saveCaseIsAbout(objCase.Id, isAboutObj)
 
                 Dim iCaseHistory_Id As Integer = objCaseData.saveCaseHistory(objCase.Id, "DH Helpdesk")
@@ -161,8 +180,6 @@ Module DH_Helpdesk_CaseSolutionSchedule
             Catch ex As Exception
                 LogError(ex.ToString())
             End Try
-
-
 
         Next
         'End If
