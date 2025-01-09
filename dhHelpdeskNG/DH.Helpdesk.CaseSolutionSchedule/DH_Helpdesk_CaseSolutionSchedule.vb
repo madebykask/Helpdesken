@@ -18,8 +18,11 @@ Module DH_Helpdesk_CaseSolutionSchedule
         Dim delaySecondsSetting As String = ConfigurationManager.AppSettings("DelaySeconds")
         Dim delaySequence As List(Of Integer) = delaySecondsSetting.Split(","c).Select(Function(s) Integer.Parse(s.Trim())).ToList()
 
-        ' Första argumentet är vanligtvis exe-filen, så börja från index 1
-        ' Default values for the optional arguments
+        ' You can send in two arguments.
+        ' First argument should be a date like "2025-01-01 07:05:00" or the specific time you want to run the CaseSolutionSchedule.
+        ' Second argument should be a workmode. If workmode is 1, the CaseSolutionSchedule will only list the CaseSolutions that would have been created.
+        ' If workmode is 0, the CaseSolutions will be created.
+        ' If you don't send in any arguments, the CaseSolutionSchedule will run with the current date and time and workmode 0.
 
         Dim defaultDateAndTime As DateTime = DateTime.Now
         Dim defaultWorkMode As Integer = 0
@@ -198,24 +201,22 @@ Module DH_Helpdesk_CaseSolutionSchedule
 
         Dim attempt As Integer = 0
 
-        Do While attempt < delaySequence.Count
+        Do While attempt <= delaySequence.Count
             Try
                 ' Attempt the database operation
                 Return operation()
             Catch ex As Exception
                 attempt += 1
-                LogError($"[{operationName}] failed on attempt {attempt}. Error: {ex.Message}")
-
                 ' If maximum retries reached, send an error email and rethrow the exception
-                If attempt >= delaySequence.Count Then
+                If attempt > delaySequence.Count Then
                     LogError($"[{operationName}] Max retry attempts reached. Sending error email.")
-                    SendErrorEmail($"Error in caseSolutionSchedule: {operationName}", $"Operation: {operationName} failed after {attempt} attempts. Error: {ex.Message}")
+                    SendErrorEmail($"Error in caseSolutionSchedule: {operationName}", $"Operation: {operationName} failed after {delaySequence.Count} attempts. Error: {ex.Message}")
                     Throw
                 End If
-
+                LogError($"[{operationName}] failed on attempt {attempt}. Error: {ex.Message}")
                 ' Wait for the specified delay for this attempt
                 Dim delayMs As Integer = delaySequence(attempt - 1) * 1000 ' Convert seconds to milliseconds
-                LogError($"Error in [{operationName}] Retrying after {delayMs / 1000} seconds...")
+                LogError($"[{operationName}] Retrying after {delayMs / 1000} seconds...")
                 Threading.Thread.Sleep(delayMs)
             End Try
         Loop
@@ -280,9 +281,8 @@ Module DH_Helpdesk_CaseSolutionSchedule
             ' Send the email anonymously
             smtpClient.Send(mailMessage)
 
-            'Console.WriteLine("Error email sent successfully.")
         Catch ex As Exception
-            'Console.WriteLine($"Failed to send error email. Exception: {ex.Message}")
+            LogError(Now() & "Error sending Error mail from caseSolutionSchedule." & ex.Message)
         End Try
     End Sub
 
