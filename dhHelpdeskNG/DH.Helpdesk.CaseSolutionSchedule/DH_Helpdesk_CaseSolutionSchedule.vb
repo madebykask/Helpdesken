@@ -4,6 +4,8 @@ Imports DH.Helpdesk.Library
 Imports System.IO
 Imports DH.Helpdesk.Library.SharedFunctions
 Imports DH.Helpdesk.Common.Constants
+Imports System.Threading.Tasks
+Imports System.Net.Mail
 
 Module DH_Helpdesk_CaseSolutionSchedule
     'Private objLogFile As StreamWriter
@@ -11,6 +13,34 @@ Module DH_Helpdesk_CaseSolutionSchedule
     Public Const ConnectionStringName As String = "Helpdesk"
 
     Public Sub Main()
+
+        Dim args As String() = Environment.GetCommandLineArgs()
+        Dim delaySecondsSetting As String = ConfigurationManager.AppSettings("DelaySeconds")
+        Dim delaySequence As List(Of Integer) = delaySecondsSetting.Split(","c).Select(Function(s) Integer.Parse(s.Trim())).ToList()
+
+        ' You can send in two arguments.
+        ' First argument should be a date like "2025-01-01 07:05:00" or the specific time you want to run the CaseSolutionSchedule.
+        ' Second argument should be a workmode. If workmode is 1, the CaseSolutionSchedule will only list the CaseSolutions that would have been created.
+        ' If workmode is 0, the CaseSolutions will be created.
+        ' If you don't send in any arguments, the CaseSolutionSchedule will run with the current date and time and workmode 0.
+
+        Dim defaultDateAndTime As DateTime = DateTime.Now
+        Dim defaultWorkMode As Integer = 0
+
+        Dim dateAndTime As DateTime
+        Dim workMode As Integer
+
+        If args.Length > 1 AndAlso DateTime.TryParse(args(1), dateAndTime) Then
+            ' Use the provided dateAndTime argument
+        Else
+            dateAndTime = defaultDateAndTime
+        End If
+
+        If args.Length > 2 AndAlso Integer.TryParse(args(2), workMode) Then
+            ' Use the provided workMode argument
+        Else
+            workMode = defaultWorkMode
+        End If
 
         ' encrypt connection string if exists
         Dim secureConnectionString = ConfigurationManager.AppSettings("SecureConnectionString")
@@ -24,9 +54,9 @@ Module DH_Helpdesk_CaseSolutionSchedule
         Try
             giLoglevel = 0
             createLogFile()
-            LogToFile(Now() & " Starting CaseSolutionSchedule")
-            caseSolutionSchedule(sConnectionstring)
-            LogToFile(Now() & " End of CaseSolutionSchedule")
+            LogToFile(dateAndTime & " Starting CaseSolutionSchedule")
+            caseSolutionSchedule(sConnectionstring, dateAndTime, workMode, delaySequence)
+            LogToFile(dateAndTime & " End of CaseSolutionSchedule")
             closeLogFile()
         Catch ex As Exception
             LogError(ex.ToString())
@@ -36,14 +66,6 @@ Module DH_Helpdesk_CaseSolutionSchedule
         End Try
 
     End Sub
-    Private Function GetCmdArgSafe(args As String(), index As Int32) As String
-        If index < args.Length Then
-            Dim val = args(index)
-            val = IIf(val Is Nothing, val, val.Trim()) 'trim
-            Return val
-        End If
-        Return Nothing
-    End Function
 
     Private Function GetConnectionString() As String
         Return ConfigurationManager.ConnectionStrings(ConnectionStringName)?.ConnectionString
@@ -88,7 +110,7 @@ Module DH_Helpdesk_CaseSolutionSchedule
         End If
     End Sub
 
-    Private Sub caseSolutionSchedule(ByVal sConnectionString As String)
+    Private Sub caseSolutionSchedule(ByVal sConnectionString As String, ByVal dateAndTime As DateTime, ByVal workMode As Integer, ByVal delaySequence As List(Of Integer))
         Dim objGlobalSettingsData As New GlobalSettingsData
         Dim objGlobalSettings As GlobalSettings
         Dim objCaseData As New CaseData
@@ -107,67 +129,163 @@ Module DH_Helpdesk_CaseSolutionSchedule
 
         gsConnectionString = sConnectionString
 
-        objGlobalSettings = objGlobalSettingsData.getGlobalSettings()
+        objGlobalSettings = RetryDatabaseOperationWithDelays(Function() objGlobalSettingsData.getGlobalSettings(), delaySequence, "getGlobalSettings")
         giDBType = objGlobalSettings.DBType
-        Dim colCase As Collection = objCaseData.getCaseSolutionSchedule
 
-        LogToFile(Now() & " Number of CaseSolutions found at this time and date:" & colCase.Count)
+        Dim colCase As Collection = RetryDatabaseOperationWithDelays(Function() objCaseData.getCaseSolutionSchedule(dateAndTime), delaySequence, "getCaseSolutionSchedule")
+
+
+        LogToFile(dateAndTime & " Number of CaseSolutions found at this time and date:" & colCase.Count)
         For i As Integer = 1 To colCase.Count
             Try
-
                 objCaseSolution = colCase(i)
                 Dim cslId = objCaseSolution.CaseSolution_Id
-                objCase = objCaseData.createCaseFromCaseSolutionScedule(objCaseSolution)
-                LogToFile(Now() & " " & objCaseSolution.Caption & ": CaseSolution_Id: " & cslId & " - Created CaseNumber:" & objCase.Casenumber & ", Case_Id: " & objCase.Id)
+                If (workMode = 1) Then
+                    LogToFile(dateAndTime & " " & objCaseSolution.Caption & ": CaseSolution_Id: " & cslId)
+                    Continue For
+                End If
 
-                Dim isAboutObj As ComputerUser = GetIsAboutData(objCaseSolution)
+                objCase = RetryDatabaseOperationWithDelays(Function() objCaseData.createCaseFromCaseSolutionScedule(objCaseSolution), delaySequence, "createCaseFromCaseSolutionScedule")
+
+                LogToFile(dateAndTime & " " & objCaseSolution.Caption & ": CaseSolution_Id: " & cslId & " - Created CaseNumber:" & objCase.Casenumber & ", Case_Id: " & objCase.Id)
+
+                Dim isAboutObj As ComputerUser = RetryDatabaseOperationWithDelays(Function() getIsAboutData(objCaseSolution), delaySequence, "getIsAboutData")
                 objCaseData.saveCaseIsAbout(objCase.Id, isAboutObj)
 
-                Dim iCaseHistory_Id As Integer = objCaseData.saveCaseHistory(objCase.Id, "DH Helpdesk")
+                Dim iCaseHistory_Id As Integer = RetryDatabaseOperationWithDelays(Function() objCaseData.saveCaseHistory(objCase.Id, "DH Helpdesk"), delaySequence, "saveCaseHistory")
 
-                objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
+                objCustomer = RetryDatabaseOperationWithDelays(Function() objCustomerData.getCustomerById(objCase.Customer_Id), delaySequence, "getCustomerById")
 
-                objUser = objUserData.getUserById(objCase.Performer_User_Id)
+                objUser = RetryDatabaseOperationWithDelays(Function() objUserData.getUserById(objCase.Performer_User_Id), delaySequence, "getUserById")
 
                 If objCaseSolution.Log.Count > 0 Then
                     If objCaseSolution.Log(0).Text_Internal <> "" Or objCaseSolution.Log(0).Text_External <> "" Then
-                        objLogData.createLog(objCase.Id, objCase.Persons_EMail, objCaseSolution.Log(0).Text_Internal, objCaseSolution.Log(0).Text_External, 0, "DH Helpdesk", iCaseHistory_Id, 0)
+                        RetryDatabaseOperationWithDelays(Function() objLogData.createLog(objCase.Id, objCase.Persons_EMail, objCaseSolution.Log(0).Text_Internal, objCaseSolution.Log(0).Text_External, 0, "DH Helpdesk", iCaseHistory_Id, 0), delaySequence, "createLog")
                         objLog.Text_External = objCaseSolution.Log(0).Text_External
                         objLog.Text_Internal = objCaseSolution.Log(0).Text_Internal
                     End If
                 End If
 
                 If objCase.Performer_User_Id <> 0 And objCase.PerformerEMail <> "" Then
-                    objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailAssignCasePerformer, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
+                    objMailTemplate = RetryDatabaseOperationWithDelays(Function() objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailAssignCasePerformer, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion), delaySequence, "getMailTemplateById")
 
                     If objMailTemplate IsNot Nothing Then
-                        sMessageId = createMessageId(objCustomer.HelpdeskEMail)
+                        sMessageId = RetryDatabaseOperationWithDelays(Function() createMessageId(objCustomer.HelpdeskEMail), delaySequence, "createMessageId")
 
                         Dim sSendTime As DateTime = Date.Now()
                         Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                         Dim objMail As New Mail
                         Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objUser.EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
-
-                        objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, SharedFunctions.EMailType.EMailAssignCasePerformer, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                        RetryDatabaseOperationWithDelays(Sub() objLogData.createEMailLog(iCaseHistory_Id, objUser.EMail, SharedFunctions.EMailType.EMailAssignCasePerformer, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail), delaySequence, "createEMailLog")
                     End If
                 End If
 
                 If objCaseSolution.ExtendedCaseFormId IsNot Nothing Then
                     If objCaseSolution.ExtendedCaseFormId.HasValue And objCaseSolution.ExtendedCaseFormId.Value > 0 Then
-                        Dim extendedCaseDataId = objExtendedCaseService.CreateExtendedCaseData(objCaseSolution.ExtendedCaseFormId.Value)
-                        objCaseData.CreateExtendedCaseConnection(objCase.Id, objCaseSolution.ExtendedCaseFormId.Value, extendedCaseDataId)
+                        Dim extendedCaseDataId = RetryDatabaseOperationWithDelays(Function() objExtendedCaseService.CreateExtendedCaseData(objCaseSolution.ExtendedCaseFormId.Value), delaySequence, "CreateExtendedCaseData")
+                        RetryDatabaseOperationWithDelays(Sub() objCaseData.CreateExtendedCaseConnection(objCase.Id, objCaseSolution.ExtendedCaseFormId.Value, extendedCaseDataId), delaySequence, "CreateExtendedCaseConnection")
                     End If
                 End If
             Catch ex As Exception
                 LogError(ex.ToString())
             End Try
 
-
-
         Next
         'End If
 
     End Sub
+    Public Function RetryDatabaseOperationWithDelays(Of T)(
+    operation As Func(Of T),
+    delaySequence As List(Of Integer),
+    operationName As String) As T
+
+        Dim attempt As Integer = 0
+
+        Do While attempt <= delaySequence.Count
+            Try
+                ' Attempt the database operation
+                Return operation()
+            Catch ex As Exception
+                attempt += 1
+                ' If maximum retries reached, send an error email and rethrow the exception
+                If attempt > delaySequence.Count Then
+                    LogError($"[{operationName}] Max retry attempts reached. Sending error email.")
+                    SendErrorEmail($"Error in caseSolutionSchedule: {operationName}", $"Operation: {operationName} failed after {delaySequence.Count} attempts. Error: {ex.Message}")
+                    Throw
+                End If
+                LogError($"[{operationName}] failed on attempt {attempt}. Error: {ex.Message}")
+                ' Wait for the specified delay for this attempt
+                Dim delayMs As Integer = delaySequence(attempt - 1) * 1000 ' Convert seconds to milliseconds
+                LogError($"[{operationName}] Retrying after {delayMs / 1000} seconds...")
+                Threading.Thread.Sleep(delayMs)
+            End Try
+        Loop
+
+        ' This line should never be reached
+        Throw New InvalidOperationException("Retry logic failed unexpectedly.")
+    End Function
+
+    Public Sub RetryDatabaseOperationWithDelays(
+    operation As Action,
+    delaySequence As List(Of Integer),
+    operationName As String)
+
+        Dim attempt As Integer = 0
+
+        Do While attempt < delaySequence.Count
+            Try
+                ' Attempt the database operation
+                operation()
+                Return ' Exit after successful execution
+            Catch ex As Exception
+                attempt += 1
+                LogError($"[{operationName}] failed on attempt {attempt}. Error: {ex.Message}")
+
+                ' If maximum retries reached, send an error email and rethrow the exception
+                If attempt >= delaySequence.Count Then
+                    LogError($"[{operationName}] Max retry attempts reached. Sending error email.")
+                    SendErrorEmail($"Error in caseSolutionSchedule: {operationName}", $"Operation: {operationName} failed after {attempt} attempts. Error: {ex.Message}")
+                    Throw
+                End If
+
+                ' Wait for the specified delay for this attempt
+                Dim delayMs As Integer = delaySequence(attempt - 1) * 1000 ' Convert seconds to milliseconds
+                LogError($"[{operationName}] Retrying after {delayMs / 1000} seconds...")
+                Threading.Thread.Sleep(delayMs)
+            End Try
+        Loop
+
+        ' This line should never be reached
+        Throw New InvalidOperationException("Retry logic failed unexpectedly.")
+    End Sub
+
+    Public Sub SendErrorEmail(subject As String, body As String)
+        Try
+            ' Get email configuration from app.config
+            Dim smtpServer As String = ConfigurationManager.AppSettings("SMTPServer")
+            Dim smtpPort As Integer = Integer.Parse(ConfigurationManager.AppSettings("SMTPPort"))
+            Dim emailRecipient As String = ConfigurationManager.AppSettings("ErrorEmailRecipient")
+            Dim emailSender As String = ConfigurationManager.AppSettings("ErrorEmailSender")
+
+            ' Configure the SMTP client
+            Dim smtpClient As New SmtpClient(smtpServer, smtpPort) With {
+            .EnableSsl = False ' Disable SSL if required for anonymous sending
+        }
+
+            ' Create the email message
+            Dim mailMessage As New MailMessage(emailSender, emailRecipient) With {
+            .Subject = subject,
+            .Body = body
+        }
+
+            ' Send the email anonymously
+            smtpClient.Send(mailMessage)
+
+        Catch ex As Exception
+            LogError(Now() & "Error sending Error mail from caseSolutionSchedule." & ex.Message)
+        End Try
+    End Sub
+
 
     Private Function getIsAboutData(objCaseSolution As CCase) As ComputerUser
         Dim isAboutData As ComputerUser = New ComputerUser()

@@ -7,6 +7,13 @@
 	<!-- If SecureConnectionString = true you have to generate and comment on For Secure connectionstring below-->
 	<appSettings>
 		<add key="SecureConnectionString" value="false" />
+		<!-- Add values in seconds for each retry you want if a database operation fails. Separate Delay-seconds for each retry with comma, eg 60,180,300 (1 minute, 3 minutes, 5 minutes -->
+		<add key="DelaySeconds" value="60,180,300"/>
+		<add key="SMTPServer" value="relay2.hostnet.se" />
+		<add key="SMTPPort" value="25" />
+		<!-- add the reciepents email-address for error messages below-->
+		<add key="ErrorEmailRecipient" value="support@dhsolutions.se" />
+		<add key="ErrorEmailSender" value="noreply@dhsolutions.se" />
 	</appSettings>
   <connectionStrings>
       <add name="Helpdesk" connectionString="Data Source=#{DatabaseServer}; Initial Catalog=#{DatabaseName}; User Id=#{DatabaseUser}; Password=#{DatabasePassword};Network Library=dbmssocn" />
