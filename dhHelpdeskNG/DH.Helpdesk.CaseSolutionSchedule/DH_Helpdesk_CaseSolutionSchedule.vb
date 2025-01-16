@@ -54,8 +54,16 @@ Module DH_Helpdesk_CaseSolutionSchedule
         Try
             giLoglevel = 0
             createLogFile()
-            LogToFile(dateAndTime & " Starting CaseSolutionSchedule")
+            If workMode = 1 Then
+                SendErrorEmail("Testmail", "Testmail")
+                Console.WriteLine(dateAndTime & " Starting CaseSolutionSchedule - Logging only")
+                LogToFile(dateAndTime & " Starting CaseSolutionSchedule - Logging only")
+            Else
+                Console.WriteLine(dateAndTime & " Starting CaseSolutionSchedule")
+                LogToFile(dateAndTime & " Starting CaseSolutionSchedule")
+            End If
             caseSolutionSchedule(sConnectionstring, dateAndTime, workMode, delaySequence)
+            Console.WriteLine(dateAndTime & " End of CaseSolutionSchedule")
             LogToFile(dateAndTime & " End of CaseSolutionSchedule")
             closeLogFile()
         Catch ex As Exception
@@ -141,6 +149,7 @@ Module DH_Helpdesk_CaseSolutionSchedule
                 objCaseSolution = colCase(i)
                 Dim cslId = objCaseSolution.CaseSolution_Id
                 If (workMode = 1) Then
+                    Console.WriteLine(dateAndTime & " " & objCaseSolution.Caption & ": CaseSolution_Id: " & cslId)
                     LogToFile(dateAndTime & " " & objCaseSolution.Caption & ": CaseSolution_Id: " & cslId)
                     Continue For
                 End If
@@ -347,7 +356,9 @@ Module DH_Helpdesk_CaseSolutionSchedule
     End Sub
 
     Private Sub closeLogFile()
-        objLogFile.Close()
+        If objLogFile IsNot Nothing Then
+            objLogFile.Close()
+        End If
     End Sub
 
     Private Sub closeErrorLogFile()
