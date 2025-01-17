@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Net.Mail;
 using System.Net.Mime;
 using System.Text;
@@ -11,6 +12,7 @@ using System.Text.RegularExpressions;
 using DH.Helpdesk.Dal.DbContext;
 using DH.Helpdesk.Domain;
 using log4net;
+using Newtonsoft.Json;
 
 namespace DH.Helpdesk.EmailEngine.Library
 {
@@ -43,11 +45,169 @@ namespace DH.Helpdesk.EmailEngine.Library
             foreach (var email in emails)
             {
                 _logger.Debug($"Processing email: Id={email.e.Id}, Subject={email.e.Subject}.");
-                SendEmail(email.e, email.historyCustomer ?? email.logCustomer);
+                //SendEmail(email.e, email.historyCustomer ?? email.logCustomer);
+                SendEmailOAuth(email.e, email.historyCustomer ?? email.logCustomer);
             }
 
             _logger.Info($"Emails sent: {emails.Count}");
             _context.Commit();
+        }
+
+
+        private void SendEmailOAuth(EmailLog email, int? customerId)
+        {
+            var sendTime = DateTime.Now;
+            var attempt = new EmailLogAttempt { Date = sendTime };
+            email.Attempts = email.Attempts.HasValue ? email.Attempts + 1 : 1;
+            email.LastAttempt = sendTime;
+            email.EmailLogAttempts.Add(attempt);
+
+            try
+            {
+                if (!customerId.HasValue)
+                    throw new Exception($"Cannot find CustomerId. EmailLog Id: {email.Id}");
+
+                var setting = GetCustomerSetting(customerId.Value);
+                if (setting == null)
+                    throw new Exception($"Cannot find customer settings. EmailLog Id: {email.Id}, CustomerId: {customerId}");
+
+                var blockedEmails = setting.BlockedEmailRecipients;
+                var smtpServer = setting.SMTPServer;
+                var smtpPort = setting.SMTPPort;
+                var clientId = setting.EwsApplicationId;
+                var clientSecret = setting.EwsClientSecret;
+                var tenantId = setting.EwsTenantId;
+                var smtpSsl = setting.IsSMTPSecured;
+
+                if (string.IsNullOrEmpty(smtpServer) || smtpPort <= 0 || string.IsNullOrEmpty(clientId) || string.IsNullOrEmpty(clientSecret))
+                {
+                    smtpServer = ConfigurationManager.AppSettings["DefaultSmtpServer"];
+                    smtpPort = int.Parse(ConfigurationManager.AppSettings["DefaultSmtpPort"]);
+                    clientId = ConfigurationManager.AppSettings["DefaultClientId"];
+                    clientSecret = ConfigurationManager.AppSettings["DefaultClientSecret"];
+                    tenantId = ConfigurationManager.AppSettings["DefaultTenantId"];
+                    smtpSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["smtpSsl"]);
+                }
+
+                var accessToken = GetOAuthAccessToken(clientId, clientSecret, tenantId);
+
+                using (var smtpClient = new SmtpClient(smtpServer, smtpPort))
+                {
+                    smtpClient.EnableSsl = smtpSsl;
+                    smtpClient.UseDefaultCredentials = false;
+                    smtpClient.Credentials = new NetworkCredential("oauth2", accessToken);
+
+                    var mailMessage = new MailMessage
+                    {
+                        Subject = email.Subject,
+                        Body = email.Body,
+                        IsBodyHtml = true,
+                        BodyEncoding = Encoding.UTF8,
+                        From = new MailAddress(email.From)
+                    };
+
+                    AlternateView alterView = ContentToAlternateView(mailMessage.Body);
+                    mailMessage.AlternateViews.Add(alterView);
+
+                    if (!string.IsNullOrWhiteSpace(email.Cc))
+                    {
+                        var addresses = email.Cc.Split(',');
+                        foreach (var address in addresses)
+                        {
+                            if (!IsBlockedRecipient(address, blockedEmails))
+                            {
+                                mailMessage.CC.Add(new MailAddress(address));
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(email.Bcc))
+                    {
+                        var addresses = email.Bcc.Split(',');
+                        foreach (var address in addresses)
+                        {
+                            if (!IsBlockedRecipient(address, blockedEmails))
+                            {
+                                mailMessage.Bcc.Add(new MailAddress(address));
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(email.EmailAddress))
+                    {
+                        var addresses = email.EmailAddress.Split(',');
+                        foreach (var address in addresses)
+                        {
+                            if (IsValidEmail(address) && !IsBlockedRecipient(address, blockedEmails))
+                            {
+                                mailMessage.To.Add(new MailAddress(address));
+                            }
+                            else
+                            {
+                                _logger.Debug("Email address: " + address + " is not valid");
+                            }
+                        }
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(email.MessageId))
+                        mailMessage.Headers.Add("Message-ID", email.MessageId);
+
+                    if (email.HighPriority)
+                        mailMessage.Priority = MailPriority.High;
+
+                    if (!string.IsNullOrWhiteSpace(email.Files))
+                    {
+                        AttachFiles(mailMessage, email.Files);
+                    }
+
+                    if (!string.IsNullOrWhiteSpace(email.FilesInternal))
+                    {
+                        AttachFiles(mailMessage, email.FilesInternal);
+                    }
+
+                    smtpClient.Send(mailMessage);
+
+                    _logger.Debug("Email has been sent successfully!");
+                    email.SendTime = sendTime;
+                    email.SendStatus = EmailSendStatus.Sent;
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Error($"Error sending email. EmailLog Id: {email.Id}. ", ex);
+                var errorMsg = new StringBuilder(ex.Message);
+                var inner = ex.InnerException;
+                while (inner != null)
+                {
+                    errorMsg.AppendLine(inner.Message);
+                    inner = inner.InnerException;
+                }
+                attempt.Message = errorMsg.ToString();
+            }
+        }
+
+        private string GetOAuthAccessToken(string clientId, string clientSecret, string tenantId)
+        {
+            var oauthUrl = $"https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token";
+            var client = new HttpClient();
+            var requestBody = new FormUrlEncodedContent(new Dictionary<string, string>
+            {
+                { "client_id", clientId },
+                { "client_secret", clientSecret },
+                { "scope", "https://outlook.office365.com/.default" },
+                { "grant_type", "client_credentials" }
+            });
+
+            var response = client.PostAsync(oauthUrl, requestBody).Result;
+            if (!response.IsSuccessStatusCode)
+            {
+                throw new Exception($"Failed to retrieve OAuth token: {response.ReasonPhrase}");
+            }
+
+            var responseData = response.Content.ReadAsStringAsync().Result;
+            var tokenData = JsonConvert.DeserializeObject<Dictionary<string, string>>(responseData);
+
+            return tokenData["access_token"];
         }
 
         private void SendEmail(EmailLog email, int? customerId)
@@ -79,7 +239,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                     smtpPort = int.Parse(ConfigurationManager.AppSettings["DefaultSmtpPort"]);
                     smtpUser = "";
                     smtpPassword = "";
-                    smtpSsl = Convert.ToBoolean (ConfigurationManager.AppSettings["smtpSsl"]);// false;
+                    smtpSsl = Convert.ToBoolean(ConfigurationManager.AppSettings["smtpSsl"]);// false;
                 }
 
                 using (var smtpClient = new SmtpClient(smtpServer, smtpPort))
@@ -108,7 +268,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                         var addresses = email.Cc.Split(',');
                         foreach (var address in addresses)
                         {
-                            if(!IsBlockedRecipient(address, blockedEmails))
+                            if (!IsBlockedRecipient(address, blockedEmails))
                             {
                                 mailMessage.CC.Add(new MailAddress(address));
                             }
