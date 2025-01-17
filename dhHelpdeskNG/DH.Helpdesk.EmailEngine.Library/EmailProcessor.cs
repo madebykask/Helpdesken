@@ -9,10 +9,17 @@ using System.Net.Mail;
 using System.Net.Mime;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using DH.Helpdesk.Dal.DbContext;
 using DH.Helpdesk.Domain;
 using log4net;
+using Microsoft.Graph;
+using Microsoft.Identity.Client;
 using Newtonsoft.Json;
+
+using System.Net.Http.Headers;
+using Microsoft.Graph.Models;
+
 
 namespace DH.Helpdesk.EmailEngine.Library
 {
@@ -47,10 +54,76 @@ namespace DH.Helpdesk.EmailEngine.Library
                 _logger.Debug($"Processing email: Id={email.e.Id}, Subject={email.e.Subject}.");
                 //SendEmail(email.e, email.historyCustomer ?? email.logCustomer);
                 SendEmailOAuth(email.e, email.historyCustomer ?? email.logCustomer);
+                //var t = GetAccessTokenAsync("","","");
+                var t = GetOAuthAccessToken("3013786a-7138-4da7-83d5-5f51dcfba318", "H9z-lncEmkLk83lp60B4ggOidQ_~G.oLkp", "4a1e41ed-d531-4001-9d5d-680f3587abb6");
+                SendEmailAsync(t.ToString());
             }
 
             _logger.Info($"Emails sent: {emails.Count}");
             _context.Commit();
+        }
+
+        private static async Task<string> GetAccessTokenAsync(string clientId, string tenantId, string clientSecret)
+        {
+            var confidentialClientApplication = ConfidentialClientApplicationBuilder
+                .Create("3013786a-7138-4da7-83d5-5f51dcfba318")
+                .WithTenantId("4a1e41ed-d531-4001-9d5d-680f3587abb6")
+                .WithClientSecret("H9z-lncEmkLk83lp60B4ggOidQ_~G.oLkp")
+                .Build();
+
+            var authResult = await confidentialClientApplication
+                .AcquireTokenForClient(new[] { "https://graph.microsoft.com/.default" })
+                .ExecuteAsync();
+
+            return authResult.AccessToken;
+        }
+
+        private static async Task SendEmailAsync(string accessToken)
+        {
+            var emailPayload = new
+            {
+                message = new
+                {
+                    subject = "Test Email from Microsoft Graph",
+                    body = new
+                    {
+                        contentType = "Text",
+                        content = "Hello! This is a test email sent using Microsoft Graph."
+                    },
+                    toRecipients = new[]
+                    {
+                        new
+                        {
+                            emailAddress = new
+                            {
+                                address = "kc@dhsolutions.se"
+                            }
+                        }
+                    }
+                },
+                saveToSentItems = "true"
+            };
+
+            using (var httpClient = new HttpClient())
+            {
+                httpClient.DefaultRequestHeaders.Authorization =
+                    new AuthenticationHeaderValue("Bearer", accessToken);
+
+                var content = new StringContent(JsonConvert.SerializeObject(emailPayload), Encoding.UTF8, "application/json");
+
+                var response = await httpClient.PostAsync("https://graph.microsoft.com/v1.0/me/sendMail", content);
+
+                if (response.IsSuccessStatusCode)
+                {
+                    Console.WriteLine("Email sent successfully.");
+                }
+                else
+                {
+                    var error = await response.Content.ReadAsStringAsync();
+                    Console.WriteLine($"Failed to send email: {response.StatusCode}");
+                    Console.WriteLine($"Error: {error}");
+                }
+            }
         }
 
 
@@ -398,7 +471,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                 foreach (var file in files)
                 {
                     if (System.IO.File.Exists(file))
-                        mailMessage.Attachments.Add(new Attachment(file));
+                        mailMessage.Attachments.Add(new System.Net.Mail.Attachment(file));
                 }
             }
         }
@@ -423,7 +496,7 @@ namespace DH.Helpdesk.EmailEngine.Library
             }
 
             var imgCount = 0;
-            List<LinkedResource> resourceCollection = new List<LinkedResource>();
+            List<System.Net.Mail.LinkedResource> resourceCollection = new List<System.Net.Mail.LinkedResource>();
             foreach (Match m in Regex.Matches(content, @"<img([\s\S]+?)src\s?=\s?['""](?<srcAttr>[^'""]+?)['""]([\s\S]+?)\/?>"))
             {
                 imgCount++;
@@ -436,7 +509,7 @@ namespace DH.Helpdesk.EmailEngine.Library
 
                 content = content.Replace(srcAttribute, "cid:" + imgCount);
 
-                var tempResource = new LinkedResource(Base64ToImageStream(base64), new ContentType(type))
+                var tempResource = new System.Net.Mail.LinkedResource(Base64ToImageStream(base64), new System.Net.Mime.ContentType(type))
                 {
                     ContentId = imgCount.ToString()
                 };
