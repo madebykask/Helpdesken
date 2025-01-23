@@ -1835,6 +1835,46 @@ GO
 -- 5.8.0 
 -- Changes for 5.8.0 goes here
 
+RAISERROR ('Add Column UseGraphSendingEmail to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','UseGraphSendingEmail') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD UseGraphSendingEmail bit not null default 0
+	End
+Go
+
+RAISERROR ('Add Column GraphClientId to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','GraphClientId') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD GraphClientId nvarchar(200) null
+	End
+GO
+
+RAISERROR ('Add Column GraphTenantId to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','GraphTenantId') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD GraphTenantId nvarchar(200) null
+	End
+Go
+
+RAISERROR ('Add Column GraphClientSecret to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','GraphClientSecret') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD GraphClientSecret nvarchar(200) null
+	End
+Go
+
+RAISERROR ('Add Column GraphClientSecretExpireDate to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','GraphClientSecretExpireDate') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD GraphClientSecretExpireDate datetime null
+	End
+Go
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.8.0'
 GO
