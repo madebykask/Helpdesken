@@ -1875,6 +1875,14 @@ IF COL_LENGTH('dbo.tblSettings','GraphClientSecretExpireDate') IS NULL
 	End
 Go
 
+RAISERROR ('Add Column GraphUserName to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','GraphUserName') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD GraphUserName nvarchar(200) null
+	End
+Go
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.8.0'
 GO
