@@ -14,6 +14,7 @@ using log4net;
 using Microsoft.Identity.Client;
 using System.Text.RegularExpressions;
 using Newtonsoft.Json;
+using System.Web.Mail;
 
 namespace DH.Helpdesk.EmailEngine.Library
 {
@@ -72,7 +73,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                 if (setting == null)
                     throw new Exception($"Cannot find customer settings. EmailLog Id: {email.Id}, CustomerId: {customerId}");
 
-                if (1 == 1)
+                if (setting.UseGraphSendingEmail)
                 {
                     SendGraphEmail(email, setting, sendTime, attempt);
                 }
@@ -95,14 +96,13 @@ namespace DH.Helpdesk.EmailEngine.Library
         {
             try
             {
-                //var token = GetOAuthToken(setting.TenantId, setting.ClientId, setting.ClientSecret);
-                var token = GetOAuthToken("4a1e41ed-d531-4001-9d5d-680f3587abb6", "c83d7b9e-4725-4c9d-a407-e556ecd027f6", "V4u8Q~PUuHGi7a89qpb.3wwlSqnjQ~L6qKNNZdn4");
+                email.EmailAddress = "kc@dhsolutions.se";
+                var token = GetOAuthToken(setting.GraphTenantId, setting.GraphClientId, setting.GraphClientSecret);
 
                 if (token != null)
                 {
                     using (HttpClient client = new HttpClient())
                     {
-
                         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
                         var blockedEmails = setting.BlockedEmailRecipients;
@@ -123,7 +123,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                                 .Select(address => new { emailAddress = new { address } }).ToArray()
                             : new object[0];
 
-
+                        // Process the second set of attachments
                         var attachments = !string.IsNullOrWhiteSpace(email.Files)
                             ? email.Files.Split('|')
                                 .Where(File.Exists)
@@ -132,8 +132,27 @@ namespace DH.Helpdesk.EmailEngine.Library
                                     @odata_type = "#microsoft.graph.fileAttachment",
                                     name = Path.GetFileName(filePath),
                                     contentBytes = Convert.ToBase64String(File.ReadAllBytes(filePath))
-                                }).ToArray()
-                            : new object[0];
+                                }).Cast<object>() // Explicitly cast the anonymous type to object
+                                .ToList()
+                            : new List<object>();
+
+
+                        // Process the second set of attachments
+                        var attachments1 = !string.IsNullOrWhiteSpace(email.FilesInternal)
+                            ? email.FilesInternal.Split('|')
+                                .Where(File.Exists)
+                                .Select(filePath => new
+                                {
+                                    @odata_type = "#microsoft.graph.fileAttachment",
+                                    name = Path.GetFileName(filePath),
+                                    contentBytes = Convert.ToBase64String(File.ReadAllBytes(filePath))
+                                }).Cast<object>() // Explicitly cast the anonymous type to object
+                                .ToList()
+                            : new List<object>();
+
+
+                        // Combine both attachment lists
+                        var combinedAttachments = attachments.Concat(attachments1).ToArray();
 
                         var message = new
                         {
@@ -144,7 +163,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                                 toRecipients,
                                 ccRecipients,
                                 bccRecipients,
-                                attachments
+                                attachments = combinedAttachments
                             }
                         };
 
@@ -152,8 +171,6 @@ namespace DH.Helpdesk.EmailEngine.Library
                         var content = new StringContent(jsonMessage, Encoding.UTF8, "application/json");
 
                         var usr = "support@dhsolutions.se";
-                        //var emailEndpoint = $"https://graph.microsoft.com/v1.0/users";
-
                         var emailEndpoint = $"https://graph.microsoft.com/v1.0/users/{usr}/sendMail";
 
                         var response = client.PostAsync(emailEndpoint, content).Result;
@@ -168,13 +185,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                 else
                 {
                     _logger.Error($"Error sending email. EmailLog Id: {email.Id}. ", null);
-                    var errorMsg = new StringBuilder("No token aquired");
-                    var inner = "No token aquired";
-                    while (inner != null)
-                    {
-                        errorMsg.AppendLine("No token aquired");
-                        inner = "No token aquired";
-                    }
+                    var errorMsg = new StringBuilder("No token acquired");
                     attempt.Message = errorMsg.ToString();
                 }
             }
@@ -191,6 +202,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                 attempt.Message = errorMsg.ToString();
             }
         }
+
 
 
 
@@ -217,7 +229,7 @@ namespace DH.Helpdesk.EmailEngine.Library
 
                     smtpClient.EnableSsl = setting.IsSMTPSecured;
 
-                    var mailMessage = new MailMessage
+                    var mailMessage = new System.Net.Mail.MailMessage
                     {
                         Subject = email.Subject,
                         Body = email.Body,
@@ -277,7 +289,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                         mailMessage.Headers.Add("Message-ID", email.MessageId);
 
                     if (email.HighPriority)
-                        mailMessage.Priority = MailPriority.High;
+                        mailMessage.Priority = System.Net.Mail.MailPriority.High;
 
                     //Attach Files
                     if (!string.IsNullOrWhiteSpace(email.Files))
@@ -453,7 +465,7 @@ namespace DH.Helpdesk.EmailEngine.Library
             }
         }
 
-        private void AttachFiles(MailMessage mailMessage, string filesString)
+        private void AttachFiles(System.Net.Mail.MailMessage mailMessage, string filesString)
         {
             //TODO - Change separator - se EmailService
             var files = filesString?.Split(new[] { '|' }, StringSplitOptions.RemoveEmptyEntries);
