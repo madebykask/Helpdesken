@@ -105,23 +105,31 @@ namespace DH.Helpdesk.EmailEngine.Library
                     {
                         client.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", token);
 
+                        
                         var blockedEmails = setting.BlockedEmailRecipients;
 
-                        var toRecipients = email.EmailAddress.Split(',')
+                        var toRecipients = email.EmailAddress
+                            .Split(',')
+                            .Select(address => address.Trim()) // Trim whitespace
                             .Where(address => IsValidEmail(address) && !IsBlockedRecipient(address, blockedEmails))
-                            .Select(address => new { emailAddress = new { address } }).ToArray();
+                            .Select(address => new { emailAddress = new { address } })
+                            .ToArray();
 
-                        var ccRecipients = !string.IsNullOrWhiteSpace(email.Cc)
-                            ? email.Cc.Split(',')
-                                .Where(address => IsValidEmail(address) && !IsBlockedRecipient(address, blockedEmails))
-                                .Select(address => new { emailAddress = new { address } }).ToArray()
-                            : new object[0];
 
-                        var bccRecipients = !string.IsNullOrWhiteSpace(email.Bcc)
-                            ? email.Bcc.Split(',')
-                                .Where(address => IsValidEmail(address) && !IsBlockedRecipient(address, blockedEmails))
-                                .Select(address => new { emailAddress = new { address } }).ToArray()
-                            : new object[0];
+                        var ccRecipients = email.Cc
+                            .Split(',')
+                            .Select(address => address.Trim()) // Trim whitespace
+                            .Where(address => IsValidEmail(address) && !IsBlockedRecipient(address, blockedEmails))
+                            .Select(address => new { emailAddress = new { address } })
+                            .ToArray();
+
+                        var bccRecipients = email.Bcc
+                            .Split(',')
+                            .Select(address => address.Trim()) // Trim whitespace
+                            .Where(address => IsValidEmail(address) && !IsBlockedRecipient(address, blockedEmails))
+                            .Select(address => new { emailAddress = new { address } })
+                            .ToArray();
+
 
                         // Process the second set of attachments
                         var attachments = !string.IsNullOrWhiteSpace(email.Files)
@@ -448,13 +456,11 @@ namespace DH.Helpdesk.EmailEngine.Library
 
         private bool IsBlockedRecipient(string sEmail, string sBlockedEmailRecipients)
         {
-            // Return false if sEmail or sBlockedEmailRecipients are empty or contain invalid characters
             if (string.IsNullOrWhiteSpace(sEmail) || string.IsNullOrWhiteSpace(sBlockedEmailRecipients))
             {
                 return false;
             }
 
-            // Split sBlockedEmailRecipients into an array of strings using the semicolon as a delimiter
             string[] emails = sBlockedEmailRecipients.Split(';');
             if (emails.Length == 0)
             {
@@ -465,7 +471,6 @@ namespace DH.Helpdesk.EmailEngine.Library
             {
                 if (!string.IsNullOrWhiteSpace(pattern))
                 {
-                    // Check if sEmail contains the pattern using a case-insensitive comparison
                     if (sEmail.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) >= 0)
                     {
                         return true;
@@ -478,6 +483,11 @@ namespace DH.Helpdesk.EmailEngine.Library
 
         bool IsValidEmail(string email)
         {
+            if (string.IsNullOrWhiteSpace(email))
+            {
+                return false; // Immediately return false if the email is null, empty, or whitespace
+            }
+
             try
             {
                 var addr = new System.Net.Mail.MailAddress(email);
@@ -485,9 +495,10 @@ namespace DH.Helpdesk.EmailEngine.Library
             }
             catch
             {
-                return false;
+                return false; // Return false for any exceptions (invalid email format)
             }
         }
+
 
         private void AttachFiles(System.Net.Mail.MailMessage mailMessage, string filesString)
         {
