@@ -96,7 +96,7 @@ namespace DH.Helpdesk.EmailEngine.Library
         {
             try
             {
-                email.EmailAddress = "kc@dhsolutions.se";
+                //email.EmailAddress = e "kc@dhsolutions.se";
                 var token = GetOAuthToken(setting.GraphTenantId, setting.GraphClientId, setting.GraphClientSecret);
 
                 if (token != null)
@@ -125,30 +125,31 @@ namespace DH.Helpdesk.EmailEngine.Library
 
                         // Process the second set of attachments
                         var attachments = !string.IsNullOrWhiteSpace(email.Files)
-                            ? email.Files.Split('|')
-                                .Where(File.Exists)
-                                .Select(filePath => new
-                                {
-                                    @odata_type = "#microsoft.graph.fileAttachment",
-                                    name = Path.GetFileName(filePath),
-                                    contentBytes = Convert.ToBase64String(File.ReadAllBytes(filePath))
-                                }).Cast<object>() // Explicitly cast the anonymous type to object
-                                .ToList()
-                            : new List<object>();
+                        ? email.Files.Split('|')
+                            .Where(File.Exists)
+                            .Select(filePath => new Dictionary<string, object>
+                            {
+                                { "@odata.type", "#microsoft.graph.fileAttachment" },
+                                { "name", Path.GetFileName(filePath) },
+                                { "contentBytes", Convert.ToBase64String(File.ReadAllBytes(filePath)) }
+                            })
+                            .Cast<object>() // Ensure compatibility with List<object>
+                            .ToList()
+                        : new List<object>();
 
 
-                        // Process the second set of attachments
                         var attachments1 = !string.IsNullOrWhiteSpace(email.FilesInternal)
-                            ? email.FilesInternal.Split('|')
-                                .Where(File.Exists)
-                                .Select(filePath => new
-                                {
-                                    @odata_type = "#microsoft.graph.fileAttachment",
-                                    name = Path.GetFileName(filePath),
-                                    contentBytes = Convert.ToBase64String(File.ReadAllBytes(filePath))
-                                }).Cast<object>() // Explicitly cast the anonymous type to object
-                                .ToList()
-                            : new List<object>();
+                        ? email.FilesInternal.Split('|')
+                            .Where(File.Exists)
+                            .Select(filePath => new Dictionary<string, object>
+                            {
+                                { "@odata.type", "#microsoft.graph.fileAttachment" },
+                                { "name", Path.GetFileName(filePath) },
+                                { "contentBytes", Convert.ToBase64String(File.ReadAllBytes(filePath)) }
+                            })
+                            .Cast<object>() // Ensure compatibility with List<object>
+                            .ToList()
+                        : new List<object>();
 
 
                         // Combine both attachment lists
@@ -170,7 +171,7 @@ namespace DH.Helpdesk.EmailEngine.Library
                         var jsonMessage = JsonConvert.SerializeObject(message);
                         var content = new StringContent(jsonMessage, Encoding.UTF8, "application/json");
 
-                        var usr = "support@dhsolutions.se";
+                        var usr = setting.GraphUserName;// "support@dhsolutions.se";
                         var emailEndpoint = $"https://graph.microsoft.com/v1.0/users/{usr}/sendMail";
 
                         var response = client.PostAsync(emailEndpoint, content).Result;
