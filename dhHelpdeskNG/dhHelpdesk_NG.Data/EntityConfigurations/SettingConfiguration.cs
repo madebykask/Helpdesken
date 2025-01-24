@@ -143,6 +143,7 @@
             this.Property(x => x.SMTPPassWord).IsOptional();
             this.Property(x => x.UseGraphSendingEmail).IsRequired();
             this.Property(x => x.GraphClientId).IsOptional();
+            this.Property(x => x.GraphUserName).IsOptional();
             this.Property(x => x.GraphClientSecret).IsOptional();
             this.Property(x => x.GraphTenantId).IsOptional();
             this.Property(x => x.IsSMTPSecured).IsRequired();
