@@ -175,11 +175,14 @@ namespace DH.Helpdesk.EmailEngine.Library
                             customHeaders.Add(new { name = "x-message-id", value = email.MessageId });
                         }
 
-
                         var message = new
                         {
                             message = new
                             {
+                                replyTo = new[]
+                                {
+                                    new { emailAddress = new { address = email.From } } // Replace with the actual reply-to address field
+                                },
                                 subject = email.Subject,
                                 body = new { contentType = "HTML", content = email.Body },
                                 toRecipients,
@@ -190,6 +193,22 @@ namespace DH.Helpdesk.EmailEngine.Library
                                 internetMessageHeaders = customHeaders.Any() ? customHeaders : null // Only include headers if any exist
                             }
                         };
+
+                        //var message = new
+                        //{
+                        //    message = new
+                        //    {
+                        //        replyto=email.From,
+                        //        subject = email.Subject,
+                        //        body = new { contentType = "HTML", content = email.Body },
+                        //        toRecipients,
+                        //        ccRecipients,
+                        //        bccRecipients,
+                        //        attachments = combinedAttachments,
+                        //        importance = importance,
+                        //        internetMessageHeaders = customHeaders.Any() ? customHeaders : null // Only include headers if any exist
+                        //    }
+                        //};
 
 
 
