@@ -155,6 +155,19 @@ namespace DH.Helpdesk.EmailEngine.Library
                         // Combine both attachment lists
                         var combinedAttachments = attachments.Concat(attachments1).ToArray();
 
+                        // Set the importance based on HighPriority variable
+                        string importance = email.HighPriority ? "high" : "normal";
+
+
+                        
+                        // Conditionally add custom headers
+                        var customHeaders = new List<object>();
+                        if (!string.IsNullOrWhiteSpace(email.MessageId))
+                        {
+                            customHeaders.Add(new { name = "x-message-id", value = email.MessageId });
+                        }
+
+
                         var message = new
                         {
                             message = new
@@ -164,9 +177,15 @@ namespace DH.Helpdesk.EmailEngine.Library
                                 toRecipients,
                                 ccRecipients,
                                 bccRecipients,
-                                attachments = combinedAttachments
+                                attachments = combinedAttachments,
+                                importance = importance,
+                                internetMessageHeaders = customHeaders.Any() ? customHeaders : null // Only include headers if any exist
                             }
                         };
+
+
+
+
 
                         var jsonMessage = JsonConvert.SerializeObject(message);
                         var content = new StringContent(jsonMessage, Encoding.UTF8, "application/json");
@@ -181,6 +200,10 @@ namespace DH.Helpdesk.EmailEngine.Library
                             string error = response.Content.ReadAsStringAsync().Result;
                             throw new Exception($"Failed to send email via Graph: {error}");
                         }
+
+                        email.SendTime = sendTime;
+                        email.SendStatus = EmailSendStatus.Sent;
+
                     }
                 }
                 else
