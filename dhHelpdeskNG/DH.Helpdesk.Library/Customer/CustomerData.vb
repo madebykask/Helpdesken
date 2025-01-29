@@ -20,9 +20,9 @@ Public Class CustomerData
         Dim dt As DataTable
 
         Try
-
+            
             If gsURL = "" Then
-                sSQL = "SELECT tblCustomer.Id, tblCustomer.CustomerNumber, tblCustomer.Name, tblCustomer.HelpdeskEMail, CaseWorkingGroupSource, Language_Id, " &
+                sSQL = "SELECT tblCustomer.Id, tblCustomer.CustomerNumber, tblCustomer.Name, tblCustomer.HelpdeskEMail, CaseWorkingGroupSource, Language_Id, " & _
                            "POP3Server, POP3Port, POP3DebugLevel, POP3EMailPrefix, WorkingDayStart, WorkingDayEnd, TimeZone_offset, LDAPCreateOrganization, "
 
                 If iWorkingGroup = 1 Then
@@ -40,37 +40,35 @@ Public Class CustomerData
                            "tblSettings.LDAPSyncType, tblCustomer.Days2WaitBeforeDelete, tblSettings.LDAPAuthenticationType, 0 AS WorkingGroup_Id, " &
                            "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " &
                            "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, tblCustomer.CaseStatisticsEMailList, tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, " &
-                           "tblSettings.DefaultAdministratorExternal, tblCustomer.NewCaseEMailList, tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo, " &
-                           "tblSettings.UseGraphSendingEmail, tblSettings.GraphClientId, tblSettings.GraphTenantId, tblSettings.GraphClientSecret, tblSettings.GraphClientSecretExpireDate, tblSettings.GraphUserName "
-
+                           "tblSettings.DefaultAdministratorExternal, tblCustomer.NewCaseEMailList, tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo "
 
                 If Id <> 0 Then
-                    sSQL = sSQL & ", tblSettings.XMLFileFolder, tblCustomer.NDSPath AS LDAPServerName, tblSettings.LDAPUserName, tblSettings.LDAPPassword " &
+                    sSQL = sSQL & ", tblSettings.XMLFileFolder, tblCustomer.NDSPath AS LDAPServerName, tblSettings.LDAPUserName, tblSettings.LDAPPassword " & _
                                     ", tblSettings.LDAPBase, tblSettings.LDAPFilter "
                 ElseIf Domain_Id <> 0 Then
-                    sSQL = sSQL & ", tblDomain.XMLFileFolder, tblDomain.LDAPServerName, tblDomain.LDAPUserName, tblDomain.LDAPPassword " &
+                    sSQL = sSQL & ", tblDomain.XMLFileFolder, tblDomain.LDAPServerName, tblDomain.LDAPUserName, tblDomain.LDAPPassword " & _
                                     ", tblDomain.LDAPBase, tblDomain.LDAPFilter "
                 End If
 
                 sSQL = sSQL & ", tblSettings.M2TNewCaseMailTo, tblCustomer.Status "
-                sSQL = sSQL & "FROM tblCustomer " &
-                                "INNER JOIN tblSettings ON tblCustomer.Id = tblSettings.Customer_Id " &
-                                "LEFT JOIN tblCaseType ON tblCustomer.Id = tblCaseType.Customer_Id AND tblCaseType.isEMailDefault=1 " &
-                                "LEFT JOIN tblCategory ON tblCustomer.Id = tblCategory.Customer_Id AND tblCategory.isEMailDefault=1 " &
-                                "LEFT JOIN tblProductArea ON tblCustomer.Id = tblProductArea.Customer_Id AND tblProductArea.isEMailDefault=1 " &
-                                "LEFT JOIN tblPriority ON tblCustomer.Id = tblPriority.Customer_Id AND tblPriority.isEMailDefault=1 " &
-                                "LEFT JOIN tblStatus ON tblCustomer.Id = tblStatus.Customer_Id AND tblStatus.isDefault=1 " &
-                                "LEFT JOIN tblStateSecondary ON tblCustomer.Id = tblStateSecondary.Customer_Id AND tblStateSecondary.isDefault=1 " &
-                                "LEFT JOIN tblStateSecondary tblStateSecondary2 ON tblStatus.StateSecondary_Id = tblStateSecondary2.Id " &
+                sSQL = sSQL & "FROM tblCustomer " & _
+                                "INNER JOIN tblSettings ON tblCustomer.Id = tblSettings.Customer_Id " & _
+                                "LEFT JOIN tblCaseType ON tblCustomer.Id = tblCaseType.Customer_Id AND tblCaseType.isEMailDefault=1 " & _
+                                "LEFT JOIN tblCategory ON tblCustomer.Id = tblCategory.Customer_Id AND tblCategory.isEMailDefault=1 " & _
+                                "LEFT JOIN tblProductArea ON tblCustomer.Id = tblProductArea.Customer_Id AND tblProductArea.isEMailDefault=1 " & _
+                                "LEFT JOIN tblPriority ON tblCustomer.Id = tblPriority.Customer_Id AND tblPriority.isEMailDefault=1 " & _
+                                "LEFT JOIN tblStatus ON tblCustomer.Id = tblStatus.Customer_Id AND tblStatus.isDefault=1 " & _
+                                "LEFT JOIN tblStateSecondary ON tblCustomer.Id = tblStateSecondary.Customer_Id AND tblStateSecondary.isDefault=1 " & _
+                                "LEFT JOIN tblStateSecondary tblStateSecondary2 ON tblStatus.StateSecondary_Id = tblStateSecondary2.Id " & _
                                 "LEFT JOIN tblRegistrationSourceCustomer ON tblCustomer.Id = tblRegistrationSourceCustomer.Customer_Id AND tblRegistrationSourceCustomer.SystemCode=3 "
 
                 If Id <> 0 Then
                     sSQL = sSQL & "WHERE tblCustomer.Id = " & Id
                 ElseIf Domain_Id <> 0 Then
-                    sSQL = sSQL & "INNER JOIN tblDomain on tblCustomer.Id=tblDomain.Customer_Id " &
+                    sSQL = sSQL & "INNER JOIN tblDomain on tblCustomer.Id=tblDomain.Customer_Id " & _
                                     "WHERE tblDomain.Id = " & Domain_Id
                 ElseIf iWorkingGroup = 1 Then
-                    sSQL = sSQL & "INNER JOIN tblWorkingGroup ON tblCustomer.Id = tblWorkingGroup.Customer_Id " &
+                    sSQL = sSQL & "INNER JOIN tblWorkingGroup ON tblCustomer.Id = tblWorkingGroup.Customer_Id " & _
                                   "WHERE tblWorkingGroup.POP3Username IS NOT NULL "
                 End If
 
@@ -118,7 +116,7 @@ Public Class CustomerData
 
             sXML = objStream.ReadToEnd()
 
-            response.Close()
+            response.close()
 
             Dim xmlDocument As New System.Xml.XmlDocument
             xmlDocument.LoadXml(sXML)
@@ -312,21 +310,20 @@ Public Class CustomerData
                         "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " &
                         "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, Null AS WorkingGroupEMail, tblCustomer.CaseStatisticsEMailList, " &
                         "tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.DefaultAdministratorExternal, Null AS WorkingGroupDefaultCaseType_Id, tblCustomer.NewCaseEMailList, " &
-                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization,  tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo, tblCustomer.Status, " &
-                        "tblSettings.UseGraphSendingEmail, tblSettings.GraphClientId, tblSettings.GraphTenantId, tblSettings.GraphClientSecret, tblSettings.GraphClientSecretExpireDate, tblSettings.GraphUserName "
+                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization,  tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo, tblCustomer.Status "
 
             sSQL = sSQL & ", tblSettings.M2TNewCaseMailTo "
 
-            sSQL = sSQL & "FROM tblCustomer " &
-                        "INNER JOIN tblSettings ON tblCustomer.Id = tblSettings.Customer_Id " &
-                        "LEFT JOIN tblCaseType ON tblCustomer.Id = tblCaseType.Customer_Id AND tblCaseType.isEMailDefault=1 " &
-                        "LEFT JOIN tblCategory ON tblCustomer.Id = tblCategory.Customer_Id AND tblCategory.isEMailDefault=1 " &
-                        "LEFT JOIN tblProductArea ON tblCustomer.Id = tblProductArea.Customer_Id AND tblProductArea.isEMailDefault=1 " &
-                        "LEFT JOIN tblPriority ON tblCustomer.Id = tblPriority.Customer_Id AND tblPriority.isEMailDefault=1 " &
-                        "LEFT JOIN tblStatus ON tblCustomer.Id = tblStatus.Customer_Id AND tblStatus.isDefault=1 " &
-                        "LEFT JOIN tblStateSecondary ON tblCustomer.Id = tblStateSecondary.Customer_Id AND tblStateSecondary.isDefault=1 " &
-                        "LEFT JOIN tblStateSecondary tblStateSecondary2 ON tblStatus.StateSecondary_Id = tblStateSecondary2.Id " &
-                        "LEFT JOIN tblDepartment ON tblCustomer.Id = tblDepartment.Customer_Id AND tblDepartment.isEMailDefault=1 " &
+            sSQL = sSQL & "FROM tblCustomer " & _
+                        "INNER JOIN tblSettings ON tblCustomer.Id = tblSettings.Customer_Id " & _
+                        "LEFT JOIN tblCaseType ON tblCustomer.Id = tblCaseType.Customer_Id AND tblCaseType.isEMailDefault=1 " & _
+                        "LEFT JOIN tblCategory ON tblCustomer.Id = tblCategory.Customer_Id AND tblCategory.isEMailDefault=1 " & _
+                        "LEFT JOIN tblProductArea ON tblCustomer.Id = tblProductArea.Customer_Id AND tblProductArea.isEMailDefault=1 " & _
+                        "LEFT JOIN tblPriority ON tblCustomer.Id = tblPriority.Customer_Id AND tblPriority.isEMailDefault=1 " & _
+                        "LEFT JOIN tblStatus ON tblCustomer.Id = tblStatus.Customer_Id AND tblStatus.isDefault=1 " & _
+                        "LEFT JOIN tblStateSecondary ON tblCustomer.Id = tblStateSecondary.Customer_Id AND tblStateSecondary.isDefault=1 " & _
+                        "LEFT JOIN tblStateSecondary tblStateSecondary2 ON tblStatus.StateSecondary_Id = tblStateSecondary2.Id " & _
+                        "LEFT JOIN tblDepartment ON tblCustomer.Id = tblDepartment.Customer_Id AND tblDepartment.isEMailDefault=1 " & _
                         "LEFT JOIN tblRegistrationSourceCustomer ON tblCustomer.Id = tblRegistrationSourceCustomer.Customer_Id AND tblRegistrationSourceCustomer.SystemCode=3 "
 
 
@@ -341,7 +338,7 @@ Public Class CustomerData
 
             Return colCustomer
         Catch ex As Exception
-            Throw
+            Throw 
         End Try
     End Function
 
@@ -366,22 +363,21 @@ Public Class CustomerData
                         "tblSettings.InventoryDays2WaitBeforeDelete, tblSettings.LDAPAllUsers, tblSettings.EMailAnswerDestination, tblSettings.EMailImportType, tblSettings.ModuleOrder, tblSettings.ModuleAccount, tblSettings.PhysicalFilePath, " &
                         "tblSettings.InventoryCreate, tblSettings.AllowedEMailRecipients, tblWorkingGroup.WorkingGroupEMail, tblCustomer.CaseStatisticsEMailList, " &
                         "tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.DefaultAdministratorExternal, tblWorkingGroup.EMailCaseType_Id AS WorkingGroupDefaultCaseType_Id, tblCustomer.NewCaseEMailList, " &
-                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization, tblSettings.M2TNewCaseMailTo, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo, tblCustomer.Status, " &
-                        "tblSettings.UseGraphSendingEmail, tblSettings.GraphClientId, tblSettings.GraphTenantId, tblSettings.GraphClientSecret, tblSettings.GraphClientSecretExpireDate, tblSettings.GraphUserName "
+                        "tblRegistrationSourceCustomer.Id AS RegistrationSourceCustomer_Id, tblSettings.DefaultEmailLogDestination, TimeZone_offset, LDAPCreateOrganization, tblSettings.M2TNewCaseMailTo, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId, tblSettings.UseEws, tblSettings.BlockedEmailRecipients, tblSettings.ErrorMailTo, tblCustomer.Status "
 
-            sSQL = sSQL & "FROM tblCustomer " &
-                            "INNER JOIN tblSettings ON tblCustomer.Id = tblSettings.Customer_Id " &
-                            "LEFT JOIN tblCaseType ON tblCustomer.Id = tblCaseType.Customer_Id AND tblCaseType.isEMailDefault=1 " &
-                            "LEFT JOIN tblCategory ON tblCustomer.Id = tblCategory.Customer_Id AND tblCategory.isEMailDefault=1 " &
-                            "LEFT JOIN tblProductArea ON tblCustomer.Id = tblProductArea.Customer_Id AND tblProductArea.isEMailDefault=1 " &
-                            "LEFT JOIN tblPriority ON tblCustomer.Id = tblPriority.Customer_Id AND tblPriority.isEMailDefault=1 " &
-                            "LEFT JOIN tblStatus ON tblCustomer.Id = tblStatus.Customer_Id AND tblStatus.isDefault=1 " &
-                            "LEFT JOIN tblStateSecondary ON tblCustomer.Id = tblStateSecondary.Customer_Id AND tblStateSecondary.isDefault=1 " &
-                            "LEFT JOIN tblStateSecondary tblStateSecondary2 ON tblStatus.StateSecondary_Id = tblStateSecondary2.Id " &
-                            "LEFT JOIN tblDepartment ON tblCustomer.Id = tblDepartment.Customer_Id AND tblDepartment.isEMailDefault=1 " &
-                            "LEFT JOIN tblRegistrationSourceCustomer ON tblCustomer.Id = tblRegistrationSourceCustomer.Customer_Id AND tblRegistrationSourceCustomer.SystemCode=3 " &
-                            "INNER JOIN tblWorkingGroup ON tblCustomer.Id=tblWorkingGroup.Customer_Id " &
-                        "WHERE tblWorkingGroup.POP3UserName IS NOT NULL " &
+            sSQL = sSQL & "FROM tblCustomer " & _
+                            "INNER JOIN tblSettings ON tblCustomer.Id = tblSettings.Customer_Id " & _
+                            "LEFT JOIN tblCaseType ON tblCustomer.Id = tblCaseType.Customer_Id AND tblCaseType.isEMailDefault=1 " & _
+                            "LEFT JOIN tblCategory ON tblCustomer.Id = tblCategory.Customer_Id AND tblCategory.isEMailDefault=1 " & _
+                            "LEFT JOIN tblProductArea ON tblCustomer.Id = tblProductArea.Customer_Id AND tblProductArea.isEMailDefault=1 " & _
+                            "LEFT JOIN tblPriority ON tblCustomer.Id = tblPriority.Customer_Id AND tblPriority.isEMailDefault=1 " & _
+                            "LEFT JOIN tblStatus ON tblCustomer.Id = tblStatus.Customer_Id AND tblStatus.isDefault=1 " & _
+                            "LEFT JOIN tblStateSecondary ON tblCustomer.Id = tblStateSecondary.Customer_Id AND tblStateSecondary.isDefault=1 " & _
+                            "LEFT JOIN tblStateSecondary tblStateSecondary2 ON tblStatus.StateSecondary_Id = tblStateSecondary2.Id " & _
+                            "LEFT JOIN tblDepartment ON tblCustomer.Id = tblDepartment.Customer_Id AND tblDepartment.isEMailDefault=1 " & _
+                            "LEFT JOIN tblRegistrationSourceCustomer ON tblCustomer.Id = tblRegistrationSourceCustomer.Customer_Id AND tblRegistrationSourceCustomer.SystemCode=3 " & _
+                            "INNER JOIN tblWorkingGroup ON tblCustomer.Id=tblWorkingGroup.Customer_Id " & _
+                        "WHERE tblWorkingGroup.POP3UserName IS NOT NULL " & _
                         "ORDER BY tblCustomer.Name "
 
             dt = getDataTable(gsConnectionString, sSQL)
