@@ -3655,6 +3655,7 @@
     <Content Include="Content\css\font\summernote.woff2" />
     <Content Include="Areas\Admin\Views\CustomerSettings\_ChangePasswordPop3.cshtml" />
     <Content Include="Areas\Admin\Views\CustomerSettings\_ChangeEwsClientSecret.cshtml" />
+    <Content Include="Areas\Admin\Views\CustomerSettings\_ChangeGraphClientSecret.cshtml" />
     <None Include="Scripts\jquery-1.8.3.intellisense.js" />
     <Content Include="Scripts\i18n\ar.js" />
     <Content Include="Scripts\i18n\az.js" />

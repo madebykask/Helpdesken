@@ -111,36 +111,23 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             vmodel.Setting.Customer_Id = setting.Customer_Id;
             vmodel.Setting.LDAPPassword = setting.LDAPPassword.ToString();
             vmodel.Setting.POP3Password = setting.POP3Password.ToString();
-            vmodel.Setting.EwsClientSecret = setting.EwsClientSecret ?? string.Empty; 
+            vmodel.Setting.EwsClientSecret = setting.EwsClientSecret ?? string.Empty;
+            vmodel.Setting.GraphClientSecret = setting.GraphClientSecret ?? string.Empty;
             vmodel.Setting.ComputerUserInfoListLocation = setting.ComputerUserInfoListLocation;
             vmodel.Setting.ModuleCase = setting.ModuleCase;
 
-            //Now these settings exists in the UI, therefore disable these resetters
-            //vmodel.Setting.POP3Server = setting.POP3Server.ToString();
-            //vmodel.Setting.POP3Port = setting.POP3Port;
-            //vmodel.Setting.POP3UserName = setting.POP3UserName.ToString();
-            //vmodel.Setting.POP3Password = setting.POP3Password.ToString();
-            //vmodel.Setting.POP3DebugLevel = setting.POP3DebugLevel;
-            //vmodel.Setting.PhysicalFilePath = setting.PhysicalFilePath;
-            //vmodel.Setting.MailServerProtocol = setting.MailServerProtocol;
-
-
-
-            //vmodel.Setting.EMailAnswerSeparator = setting.EMailAnswerSeparator.ToString();
-            //vmodel.Setting.EMailSubjectPattern = setting.EMailSubjectPattern.ToString();
             vmodel.Setting.LDAPSyncType = setting.LDAPSyncType;
             vmodel.Setting.LDAPCreateOrganization = setting.LDAPCreateOrganization;
-           // vmodel.Setting.IntegrationType = setting.IntegrationType;
+
             
             vmodel.Setting.VirtualFilePath = setting.VirtualFilePath;
             vmodel.Setting.CaseComplaintDays = setting.CaseComplaintDays;
-            //vmodel.Setting.FileIndexingServerName = setting.FileIndexingServerName;
-            //vmodel.Setting.FileIndexingCatalogName = setting.FileIndexingCatalogName;
+
             vmodel.Setting.SMSEMailDomain = setting.SMSEMailDomain;
             vmodel.Setting.SMSEMailDomainPassword = setting.SMSEMailDomainPassword;
             vmodel.Setting.SMSEMailDomainUserId = setting.SMSEMailDomainUserId;
             vmodel.Setting.SMSEMailDomainUserName = setting.SMSEMailDomainUserName;
-            //vmodel.Setting.EMailRegistrationMailID = setting.EMailRegistrationMailID;
+
             vmodel.Setting.DefaultEmailLogDestination = setting.DefaultEmailLogDestination;
             vmodel.Setting.TimeZone_offset = setting.TimeZone_offset;
             vmodel.Setting.CalcSolvedInTimeByLatestSLADate = setting.CalcSolvedInTimeByLatestSLADate;
@@ -320,6 +307,7 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
             model.Setting.LDAPPassword = WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString();
             model.Setting.POP3Password = WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString();
             model.Setting.EwsClientSecret = WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString();
+            model.Setting.GraphClientSecret = WebConfigurationManager.AppSettings["dh_maskedpassword"].ToString();
             #endregion
             return model;
         }
@@ -416,6 +404,33 @@ namespace DH.Helpdesk.Web.Areas.Admin.Controllers
                 errors.Add("Setting.EwsClientSecret", @Translation.Get("Angivna ord stämmer ej överens", Enums.TranslationSource.TextTranslation));
             }
                
+        }
+        [CustomAuthorize(Roles = "3,4")]
+        [HttpPost]
+        public void SaveGraphClientSecret(int id, string newPassword, string confirmPassword)
+        {
+            var setting = this._settingService.GetCustomerSetting(id);
+
+            if (setting == null)
+            {
+                setting = new DHDomain.Setting() { Customer_Id = id };
+                setting.CaseFiles = 6;
+                setting.ComputerUserInfoListLocation = 1;
+                setting.ModuleCase = 1;
+            }
+
+            IDictionary<string, string> errors = new Dictionary<string, string>();
+
+            if (newPassword == confirmPassword)
+            {
+                setting.GraphClientSecret = newPassword;
+                this._settingService.SaveSetting(setting, out errors);
+            }
+            else
+            {
+                errors.Add("Setting.GraphClientSecret", @Translation.Get("Angivna ord stämmer ej överens", Enums.TranslationSource.TextTranslation));
+            }
+
         }
 
 

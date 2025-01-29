@@ -771,9 +771,11 @@
                                         </tr>
 
                                     </tbody>
+
                                     @Html.HiddenFor(model => model.Setting.POP3Password)
                                     @Html.HiddenFor(model => model.Setting.EwsClientSecret)
                                     @Html.HiddenFor(model => model.Setting.POP3EMailPrefix)
+
                                 }
                                 else
                                 {
@@ -795,6 +797,86 @@
 
                                 }
 
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <h4>Microsoft Graph</h4>
+                <div class="container">
+                    <div class="row">
+                        <div class="span12">
+                            <table id="">
+                                @if (SessionFacade.CurrentUser.IsSystemAdministrator())
+                                {
+                                    <tbody id="GraphFields">
+                                        <tr>
+                                            <td class="span3">
+                                                @Translation.GetCoreTextTranslation("Använd Graph för att skicka epost")
+
+                                            </td>
+                                            <td class="span9">
+                                                @Html.CheckBoxFor(model => model.Setting.UseGraphSendingEmail)
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Graph Application Id
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.Setting.GraphClientId, new { maxlength = "200", style = "width: 400px;" })
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Graph Tenant Id
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.Setting.GraphTenantId, new { maxlength = "200", style = "width: 400px;" })
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Graph Client Secret
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.Setting.GraphClientSecret, new { maxlength = "200", disabled = "disable" }) <input type="button" style="width:97px;" value="@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)" name="changeGraphClientSecret" class="changePassword btn"
+                                                                                                                                                                   onclick="ChangeGraphClientSecret()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Graph User Name
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.Setting.GraphUserName, new { maxlength = "200", style = "width: 400px;" })
+
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                Graph Secret Expiration Date
+                                            </td>
+                                            <td>
+                                                @Html.EditorFor(model => model.Setting.GraphClientSecretExpireDate, "DatePicker", new { id = "GraphClientSecretExpireDate" })
+
+                                            </td>
+                                        </tr>
+
+                                    </tbody>
+                                    @Html.HiddenFor(model => model.Setting.GraphClientSecret)
+                                }
+                                else
+                                {
+                                    @Html.HiddenFor(model => model.Setting.GraphClientId)
+                                    @Html.HiddenFor(model => model.Setting.GraphClientSecret)
+                                    @Html.HiddenFor(model => model.Setting.GraphTenantId)
+                                    @Html.HiddenFor(model => model.Setting.GraphUserName)
+                                    @Html.HiddenFor(model => model.Setting.GraphClientSecretExpireDate)
+                                    @Html.HiddenFor(model => model.Setting.UseGraphSendingEmail)
+                                }
                             </table>
                         </div>
                     </div>
@@ -1002,6 +1084,19 @@
         @Html.Partial("_ChangeEwsClientSecret", Model)
     </div>
 </div>
+<div id="divChangeGraphClientSecret"
+     class="modal hide fade"
+     role="dialog"
+     aria-labelledby="modalTitle"
+     aria-hidden="true">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">&times;</button>
+        <h3 id="modalTitle">@Translation.GetCoreTextTranslation("Ändra") Graph Client Secret</h3>
+    </div>
+    <div class="modal-body">
+        @Html.Partial("_ChangeGraphClientSecret", Model)
+    </div>
+</div>
 <script type="text/javascript">
     disablePasswordLength();
     function ChangePassword() {
@@ -1095,6 +1190,49 @@
             $("#divChangeEwsClientSecret #btnCloseEwsClientSecret").off("click");
         });
     }
+function ChangeGraphClientSecret() {
+
+    var mod = $('#divChangeGraphClientSecret').modal('show');
+
+    mod.on('shown.bs.modal', function () {
+        $(this).removeAttr('aria-hidden');
+        $(this).find('#NewGraphClientSecret').focus();
+    });
+
+    mod.on('hidden.bs.modal', function () {
+        $(this).attr('aria-hidden', 'true');
+    });
+
+
+    mod.find("#btnCloseGraphClientSecret").off("click").on("click", function () {
+        mod.modal('hide');
+    });
+
+    mod.find("#btnSaveGraphClientSecret").off("click").on("click", function () {
+
+        if ($('#NewGraphClientSecret').val() !== $('#ConfirmNewGraphClientSecret').val()) {
+            var e = '@passChangeError';
+            ShowToastMessage(e, "Error");
+        } else {
+
+            $.post('/customersettings/SaveGraphClientSecret/', {
+                id: $('#id_customerG').val(),
+                newPassword: $('#NewGraphClientSecret').val(),
+                confirmPassword: $('#ConfirmNewGraphClientSecret').val()
+            }).done(function (data) {
+                var e = '@passChangeText';
+                ShowToastMessage(e, "Alert");
+
+                $('#NewGraphClientSecret').val('');
+                $('#ConfirmNewGraphClientSecret').val('');
+
+
+                mod.modal('hide');
+            });
+        }
+    });
+}
+
 
     function ShowToastMessage(message, msgType) {
         $().toastmessage('showToast', {
@@ -1178,15 +1316,6 @@
 
         function togglePop3Fields() {
 
-            //if ($("#Customer_Setting_MailServerProtocol1[value='1']").is(":checked")) {
-            //    // Show the tbody containing fields
-            //    $("#ImapFields").show();
-            //} else {
-            //    // Hide the tbody containing fields
-            //    $("#ImapFields").hide();
-
-            //}
-
             if ($("#Customer_Setting_MailServerProtocol2[value='2']").is(":checked")) {
                 // Show the tbody containing fields
                 $("#EwsFields").show();
@@ -1196,7 +1325,6 @@
             }
 
         }
-
 
         $('#emailRegCheckbox').change(function () {
             var isChecked = $(this).prop('checked');

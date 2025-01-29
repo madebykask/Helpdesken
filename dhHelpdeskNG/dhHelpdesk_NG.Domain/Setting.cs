@@ -1,4 +1,6 @@
 ﻿
+using System;
+
 namespace DH.Helpdesk.Domain
 {
     public class Setting : Entity
@@ -170,6 +172,7 @@ namespace DH.Helpdesk.Domain
         public string GraphUserName { get; set; }
         public string GraphTenantId { get; set; }
         public string GraphClientSecret { get; set; }
+        public DateTime? GraphClientSecretExpireDate { get; set; }
         public string SharePointSiteId { get; set; }
         public string SharePointUserName { get; set; }
         public string SharePointPassword { get; set; }

@@ -146,6 +146,7 @@
             this.Property(x => x.GraphUserName).IsOptional();
             this.Property(x => x.GraphClientSecret).IsOptional();
             this.Property(x => x.GraphTenantId).IsOptional();
+            this.Property(x => x.GraphClientSecretExpireDate).IsOptional();
             this.Property(x => x.IsSMTPSecured).IsRequired();
             this.Property(x => x.BulletinBoardWGRestriction).IsRequired();
             this.Property(x => x.CalendarWGRestriction).IsRequired();
