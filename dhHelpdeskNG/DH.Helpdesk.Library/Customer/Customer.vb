@@ -86,13 +86,6 @@
 
     Private miStatus As Integer
 
-    Private mbUseGraphSendingEmail As Boolean
-    Private msGraphClientId As String
-    Private msGraphTenantId As String
-    Private msGraphClientSecret As String
-    Private msGraphClientSecretExpireDate As String
-    Private msGraphUserName As String
-
 
 #End Region
 
@@ -335,25 +328,6 @@
             End If
             If Not IsDBNull(dr("Status")) Then
                 miStatus = dr("Status")
-            End If
-
-            If Not IsDBNull(dr("UseGraphSendingEmail")) Then
-                mbUseGraphSendingEmail = Convert.ToBoolean(dr("UseGraphSendingEmail"))
-            End If
-            If Not IsDBNull(dr("GraphClientId")) Then
-                msGraphClientId = dr("GraphClientId")
-            End If
-            If Not IsDBNull(dr("GraphTenantId")) Then
-                msGraphTenantId = dr("GraphTenantId")
-            End If
-            If Not IsDBNull(dr("GraphClientSecret")) Then
-                msGraphClientSecret = dr("GraphClientSecret")
-            End If
-            If Not IsDBNull(dr("GraphClientSecretExpireDate")) Then
-                msGraphClientSecretExpireDate = dr("GraphClientSecretExpireDate")
-            End If
-            If Not IsDBNull(dr("GraphUserName")) Then
-                msGraphUserName = dr("GraphUserName")
             End If
 
 
@@ -974,60 +948,6 @@
         End Get
         Set(ByVal Value As Integer)
             miStatus = Value
-        End Set
-    End Property
-
-    Public Property UseGraphSendingEmail() As Boolean
-        Get
-            Return mbUseGraphSendingEmail
-        End Get
-        Set(ByVal Value As Boolean)
-            mbUseGraphSendingEmail = Value
-        End Set
-    End Property
-
-    Public Property GraphClientId() As String
-        Get
-            Return msGraphClientId
-        End Get
-        Set(ByVal Value As String)
-            msGraphClientId = Value
-        End Set
-    End Property
-
-    Public Property GraphTenantId() As String
-        Get
-            Return msGraphTenantId
-        End Get
-        Set(ByVal Value As String)
-            msGraphTenantId = Value
-        End Set
-    End Property
-
-    Public Property GraphClientSecret() As String
-        Get
-            Return msGraphClientSecret
-        End Get
-        Set(ByVal Value As String)
-            msGraphClientSecret = Value
-        End Set
-    End Property
-
-    Public Property GraphClientSecretExpireDate() As String
-        Get
-            Return msGraphClientSecretExpireDate
-        End Get
-        Set(ByVal Value As String)
-            msGraphClientSecretExpireDate = Value
-        End Set
-    End Property
-
-    Public Property GraphUserName() As String
-        Get
-            Return msGraphUserName
-        End Get
-        Set(ByVal Value As String)
-            msGraphUserName = Value
         End Set
     End Property
 
