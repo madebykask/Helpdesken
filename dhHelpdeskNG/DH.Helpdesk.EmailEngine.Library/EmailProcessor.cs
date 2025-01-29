@@ -95,8 +95,7 @@ namespace DH.Helpdesk.EmailEngine.Library
         private void SendGraphEmail(EmailLog email, Setting setting, DateTime sendTime, EmailLogAttempt attempt)
         {
             try
-            {
-                //email.EmailAddress = e "kc@dhsolutions.se";
+            {               
                 var token = GetOAuthToken(setting.GraphTenantId, setting.GraphClientId, setting.GraphClientSecret);
 
                 if (token != null)
@@ -194,30 +193,11 @@ namespace DH.Helpdesk.EmailEngine.Library
                             }
                         };
 
-                        //var message = new
-                        //{
-                        //    message = new
-                        //    {
-                        //        replyto=email.From,
-                        //        subject = email.Subject,
-                        //        body = new { contentType = "HTML", content = email.Body },
-                        //        toRecipients,
-                        //        ccRecipients,
-                        //        bccRecipients,
-                        //        attachments = combinedAttachments,
-                        //        importance = importance,
-                        //        internetMessageHeaders = customHeaders.Any() ? customHeaders : null // Only include headers if any exist
-                        //    }
-                        //};
-
-
-
-
 
                         var jsonMessage = JsonConvert.SerializeObject(message);
                         var content = new StringContent(jsonMessage, Encoding.UTF8, "application/json");
 
-                        var usr = setting.GraphUserName;// "support@dhsolutions.se";
+                        var usr = setting.GraphUserName;
                         var emailEndpoint = $"https://graph.microsoft.com/v1.0/users/{usr}/sendMail";
 
                         var response = client.PostAsync(emailEndpoint, content).Result;
