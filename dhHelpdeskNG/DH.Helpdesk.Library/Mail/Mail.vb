@@ -559,7 +559,7 @@ Public Class Mail
                     Dim message As Object
                     Dim customHeaders As New List(Of Object)()
                     If Not String.IsNullOrWhiteSpace(email.MessageId) Then
-                        Dim replyToAddress As String = email.EmailAddress.Split(","c).FirstOrDefault(Function(addr) IsValidEmail(addr.Trim()))
+                        Dim replyToAddress As String = objCustomer.HelpdeskEMail.Split(","c).FirstOrDefault(Function(addr) IsValidEmail(addr.Trim()))
 
                         customHeaders.Add(New With {.name = "x-message-id", .value = email.MessageId})
                         message = New With {
@@ -579,7 +579,7 @@ Public Class Mail
                     }
                     Else
 
-                        Dim replyToAddress As String = email.EmailAddress.Split(","c).FirstOrDefault(Function(addr) IsValidEmail(addr.Trim()))
+                        Dim replyToAddress As String = objCustomer.HelpdeskEMail.Split(","c).FirstOrDefault(Function(addr) IsValidEmail(addr.Trim()))
 
 
 
