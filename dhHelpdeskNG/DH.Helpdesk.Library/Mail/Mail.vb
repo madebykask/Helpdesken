@@ -1,12 +1,21 @@
+Imports System.IO
 Imports System.Linq
+Imports System.Net.Http
+Imports System.Net.Http.Headers
 Imports System.Net.Mail
+Imports System.Text
 Imports DH.Helpdesk.Common.Constants
 Imports DH.Helpdesk.Dal.Infrastructure
 Imports DH.Helpdesk.Dal.Repositories
 Imports DH.Helpdesk.Domain
 Imports DH.Helpdesk.Library.SharedFunctions
+Imports iTextSharp.text.log
+Imports Newtonsoft.Json
 
 Public Class Mail
+    Private _logger As ILogger ' Assuming ILogger is defined elsewhere
+
+
     Public Function sendMail(objCase As CCase,
                              objLog As Log,
                              objCustomer As Customer,
@@ -27,6 +36,7 @@ Public Class Mail
         Dim sRet As String = ""
 
         Try
+
             sSubject = objmailTemplate.Subject
             sBody = objmailTemplate.Body
 
@@ -282,27 +292,56 @@ Public Class Mail
 
             sBody = sBody.Replace(vbCrLf, "<br>")
 
-            Dim filesToAttach As List(Of String) = New List(Of String)
 
-            'Prepare files to attach. Check internal/external flag
-            If files IsNot Nothing AndAlso files.Any() AndAlso (bAttachExternalFiles OrElse bAttachInternalFiles) Then
 
-                For Each attachedFile As String In files.Where(Function(f) bAttachExternalFiles AndAlso f.IsInternal = False OrElse bAttachInternalFiles AndAlso f.IsInternal = True).Select(Function(f) f.FilePath).ToList()
-                    filesToAttach.Add(attachedFile)
-                Next
-            End If
+            If objCustomer.UseGraphSendingEmail = True Then
+                Dim filesToAttach As String
+                If files IsNot Nothing AndAlso files.Any() AndAlso (bAttachExternalFiles OrElse bAttachInternalFiles) Then
 
-            If giLoglevel > 0 Then
-                objLogFile.WriteLine(Now() & ", sendMail, From:" & objCustomer.HelpdeskEMail & ", To: " & sEmailTo & ". Attached files: " & If(filesToAttach IsNot Nothing, String.Join(";", filesToAttach) & "", "None"))
-                'objLogFile.WriteLine(Now() & ", sendMail, Body:" & sBody)
-            End If
+                    For Each attachedFile As String In files.Where(Function(f) bAttachExternalFiles AndAlso f.IsInternal = False OrElse bAttachInternalFiles AndAlso f.IsInternal = True).Select(Function(f) f.FilePath).ToList()
 
-            If Not IsNullOrEmpty(setting.SMTPServer) Then
-                sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, setting.SMTPServer, setting.SMTPPort, setting.IsSMTPSecured, setting.SMTPUserName, setting.SMTPPassWord, sMessageId, filesToAttach)
+                        If filesToAttach = String.Empty Then
+                            filesToAttach = attachedFile
+                        Else
+                            filesToAttach = filesToAttach & ", " & attachedFile
+                        End If
+                    Next
+                End If
+                Dim email As New EmailLog
+                email = SetEmailLog(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, "Enqueued", EmailSendStatus.Pending, DateTime.Now,
+                                    Nothing, String.Empty, String.Empty, 0, Nothing, Nothing, filesToAttach,
+                                    String.Empty, False, 0, Nothing, 0, 0, sMessageId)
+
+
+
+                SendGraphMail(email, objCustomer)
+
+
+
             Else
-                sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId, filesToAttach)
-            End If
 
+                Dim filesToAttach As List(Of String) = New List(Of String)
+                'Prepare files to attach. Check internal/external flag
+                If files IsNot Nothing AndAlso files.Any() AndAlso (bAttachExternalFiles OrElse bAttachInternalFiles) Then
+
+                    For Each attachedFile As String In files.Where(Function(f) bAttachExternalFiles AndAlso f.IsInternal = False OrElse bAttachInternalFiles AndAlso f.IsInternal = True).Select(Function(f) f.FilePath).ToList()
+                        filesToAttach.Add(attachedFile)
+                    Next
+                End If
+
+                If giLoglevel > 0 Then
+                    objLogFile.WriteLine(Now() & ", sendMail, From:" & objCustomer.HelpdeskEMail & ", To: " & sEmailTo & ". Attached files: " & If(filesToAttach IsNot Nothing, String.Join(";", filesToAttach) & "", "None"))
+                    'objLogFile.WriteLine(Now() & ", sendMail, Body:" & sBody)
+                End If
+
+
+                If Not IsNullOrEmpty(setting.SMTPServer) Then
+                    sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, setting.SMTPServer, setting.SMTPPort, setting.IsSMTPSecured, setting.SMTPUserName, setting.SMTPPassWord, sMessageId, filesToAttach)
+                Else
+                    sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId, filesToAttach)
+                End If
+
+            End If
             ' Log sRet result!
 
         Catch ex As Exception
@@ -408,6 +447,192 @@ Public Class Mail
         Return Send(sFrom, sTo, sSubject, sBody, sEMailBodyEncoding, smtpServer, smtpPort, smtpSecure, smtpUsername, smtpPassword, sMessageId, filesToAttach)
     End Function
 
+    Private Function IsValidEmail(email As String) As Boolean
+        If String.IsNullOrWhiteSpace(email) Then
+            Return False
+        End If
+
+        Try
+            Dim addr As New System.Net.Mail.MailAddress(email)
+            Return addr.Address = email
+        Catch
+            Return False
+        End Try
+    End Function
+
+    Private Function IsBlockedRecipient(sEmail As String, sBlockedEmailRecipients As String) As Boolean
+        If String.IsNullOrWhiteSpace(sEmail) OrElse String.IsNullOrWhiteSpace(sBlockedEmailRecipients) Then
+            Return False
+        End If
+
+        Dim emails() As String = sBlockedEmailRecipients.Split(";"c)
+        If emails.Length = 0 Then
+            Return False
+        End If
+
+        For Each pattern As String In emails
+            If Not String.IsNullOrWhiteSpace(pattern) Then
+                If sEmail.IndexOf(pattern, StringComparison.OrdinalIgnoreCase) >= 0 Then
+                    Return True
+                End If
+            End If
+        Next
+
+        Return False
+    End Function
+
+    Private Function GetOAuthToken(tenantId As String, clientId As String, clientSecret As String) As String
+        Using client As New HttpClient()
+            Dim tokenEndpoint As String = $"https://login.microsoftonline.com/{tenantId}/oauth2/v2.0/token"
+            Dim content As New FormUrlEncodedContent(New Dictionary(Of String, String) From {
+                {"client_id", clientId},
+                {"scope", "https://graph.microsoft.com/.default"},
+                {"client_secret", clientSecret},
+                {"grant_type", "client_credentials"}
+            })
+
+            Dim response As HttpResponseMessage = client.PostAsync(tokenEndpoint, content).Result
+            Dim responseString As String = response.Content.ReadAsStringAsync().Result
+
+            If Not response.IsSuccessStatusCode Then
+                ' Throw New Exception($"Failed to get access token: {responseString}")
+                Return Nothing
+            End If
+
+            Dim responseObject As Object = JsonConvert.DeserializeObject(Of Object)(responseString)
+            Return responseObject("access_token").ToString()
+        End Using
+    End Function
+
+    Public Function SendGraphMail(email As EmailLog, objCustomer As Customer
+                         ) As String
+
+        Try
+            Dim token As String = GetOAuthToken(objCustomer.GraphTenantId, objCustomer.GraphClientId, objCustomer.GraphClientSecret)
+
+            If token IsNot Nothing Then
+                Using client As New HttpClient()
+                    client.DefaultRequestHeaders.Authorization = New AuthenticationHeaderValue("Bearer", token)
+
+                    Dim blockedEmails As String = objCustomer.BlockedEmailRecipients
+
+                    Dim toRecipients = email.EmailAddress.Split(","c) _
+                        .Select(Function(address) address.Trim()) _
+                        .Where(Function(address) IsValidEmail(address) AndAlso Not IsBlockedRecipient(address, blockedEmails)) _
+                        .Select(Function(address) New With {.emailAddress = New With {.address = address}}) _
+                        .ToArray()
+
+                    Dim ccRecipients = email.Cc.Split(","c) _
+                        .Select(Function(address) address.Trim()) _
+                        .Where(Function(address) IsValidEmail(address) AndAlso Not IsBlockedRecipient(address, blockedEmails)) _
+                        .Select(Function(address) New With {.emailAddress = New With {.address = address}}) _
+                        .ToArray()
+
+                    Dim bccRecipients = email.Bcc.Split(","c) _
+                        .Select(Function(address) address.Trim()) _
+                        .Where(Function(address) IsValidEmail(address) AndAlso Not IsBlockedRecipient(address, blockedEmails)) _
+                        .Select(Function(address) New With {.emailAddress = New With {.address = address}}) _
+                        .ToArray()
+
+                    Dim attachments As List(Of Object) = If(Not String.IsNullOrWhiteSpace(email.Files),
+                        email.Files.Split("|"c) _
+                        .Where(Function(filePath) File.Exists(filePath)) _
+                        .Select(Function(filePath) New Dictionary(Of String, Object) From {
+                            {"@odata.type", "#microsoft.graph.fileAttachment"},
+                            {"name", Path.GetFileName(filePath)},
+                            {"contentBytes", Convert.ToBase64String(File.ReadAllBytes(filePath))}
+                        }).Cast(Of Object)().ToList(), New List(Of Object)())
+
+                    Dim attachments1 As List(Of Object) = If(Not String.IsNullOrWhiteSpace(email.FilesInternal),
+                        email.FilesInternal.Split("|"c) _
+                        .Where(Function(filePath) File.Exists(filePath)) _
+                        .Select(Function(filePath) New Dictionary(Of String, Object) From {
+                            {"@odata.type", "#microsoft.graph.fileAttachment"},
+                            {"name", Path.GetFileName(filePath)},
+                            {"contentBytes", Convert.ToBase64String(File.ReadAllBytes(filePath))}
+                        }).Cast(Of Object)().ToList(), New List(Of Object)())
+
+                    Dim combinedAttachments = attachments.Concat(attachments1).ToArray()
+
+                    Dim importance As String = If(email.HighPriority, "high", "normal")
+
+                    Dim message As Object
+                    Dim customHeaders As New List(Of Object)()
+                    If Not String.IsNullOrWhiteSpace(email.MessageId) Then
+                        Dim replyToAddress As String = email.EmailAddress.Split(","c).FirstOrDefault(Function(addr) IsValidEmail(addr.Trim()))
+
+                        customHeaders.Add(New With {.name = "x-message-id", .value = email.MessageId})
+                        message = New With {
+                        .message = New With {
+                            .replyTo = If(Not String.IsNullOrWhiteSpace(replyToAddress),
+                            New Object() {New With {.emailAddress = New With {.address = replyToAddress}}},
+                            Nothing),
+                            .subject = email.Subject,
+                            .body = New With {.contentType = "HTML", .content = email.Body},
+                            .toRecipients = toRecipients,
+                            .ccRecipients = ccRecipients,
+                            .bccRecipients = bccRecipients,
+                            .attachments = combinedAttachments,
+                            .importance = importance,
+                            .internetMessageHeaders = If(customHeaders.Any(), customHeaders, Nothing) ' Only include headers if any exist
+                        }
+                    }
+                    Else
+
+                        Dim replyToAddress As String = email.EmailAddress.Split(","c).FirstOrDefault(Function(addr) IsValidEmail(addr.Trim()))
+
+
+
+                        message = New With {
+                        .message = New With {
+                            .replyTo = If(Not String.IsNullOrWhiteSpace(replyToAddress),
+                            New Object() {New With {.emailAddress = New With {.address = replyToAddress}}},
+                            Nothing),
+                            .subject = email.Subject,
+                            .body = New With {.contentType = "HTML", .content = email.Body},
+                            .toRecipients = toRecipients,
+                            .ccRecipients = ccRecipients,
+                            .bccRecipients = bccRecipients,
+                            .attachments = combinedAttachments,
+                            .importance = importance
+                        }
+                        }
+                    End If
+
+
+
+
+                    Dim jsonMessage As String = JsonConvert.SerializeObject(message)
+                    Dim content As New StringContent(jsonMessage, Encoding.UTF8, "application/json")
+
+                    Dim usr As String = objCustomer.GraphUserName
+                    Dim emailEndpoint As String = $"https://graph.microsoft.com/v1.0/users/{usr}/sendMail"
+
+                    Dim response As HttpResponseMessage = client.PostAsync(emailEndpoint, content).Result
+
+                    If Not response.IsSuccessStatusCode Then
+                        Dim errorMsg As String = response.Content.ReadAsStringAsync().Result
+                        Throw New Exception($"Failed to send email via Graph: {errorMsg}")
+                    End If
+
+                    'email.SendTime = sendTime
+                    'email.SendStatus = EmailSendStatus.Sent
+                End Using
+            Else
+                _logger.Error($"Error sending email. EmailLog Id: {email.MessageId}. ", Nothing)
+                'attempt.Message = "No token acquired"
+            End If
+        Catch ex As Exception
+            _logger.Error($"Error sending email. EmailLog Id: {email.MessageId}. ", ex)
+            Dim errorMsg As New StringBuilder(ex.Message)
+            Dim inner As Exception = ex.InnerException
+            While inner IsNot Nothing
+                errorMsg.AppendLine(inner.Message)
+                inner = inner.InnerException
+            End While
+            'attempt.Message = errorMsg.ToString()
+        End Try
+    End Function
     Public Function Send(sFrom As String,
                          sTo As String,
                          sSubject As String,
@@ -478,12 +703,49 @@ Public Class Mail
 
         Return sRet
     End Function
+
+    Public Function SetEmailLog(sFrom As String, sEmailAddress As String, sSubject As String, sBody As String,
+                                sResponseMessage As String, SendStatus As EmailSendStatus, SendTime As DateTime, Attempts As Integer,
+                                sCC As String, sBCC As String, CaseHistory_Id As Integer, ChangedDate As DateTime, CreatedDate As DateTime,
+                                sFiles As String, sFilesInternal As String, HighPriority As Boolean, Id As Integer, LastAttempt As DateTime,
+                                LogId As Integer, MailId As Integer, MessageId As String) As EmailLog
+
+        Dim el As New EmailLog
+
+        el.From = sFrom
+        el.EmailAddress = sEmailAddress
+        el.Subject = sSubject
+        el.Body = sBody
+        el.ResponseMessage = "Enqueued"
+        el.SendStatus = SendStatus
+        el.SendTime = SendTime
+        el.Attempts = Attempts
+        el.Bcc = sBCC
+        el.Cc = sBCC
+        el.CaseHistory_Id = CaseHistory_Id
+        el.ChangedDate = ChangedDate
+        el.CreatedDate = CreatedDate
+        el.Files = sFiles
+        el.FilesInternal = sFilesInternal
+        el.HighPriority = HighPriority
+        el.Id = Id
+        el.LastAttempt = LastAttempt
+        el.Log_Id = LogId
+        el.MailId = MailId
+        el.MessageId = MessageId
+
+
+
+        Return el
+
+    End Function
+
     Public Function SendErrorMail(sFrom As String,
                          sTo As String,
                          sSubject As String,
                          sBody As String,
                          connectionString As String,
-                         smtpServer As String)
+                         smtpServer As String, objCustomer As Customer)
         ' Create Mail
         'Dim setting As Setting
         'Using factory As DatabaseFactory = New DatabaseFactory(connectionString)
@@ -492,43 +754,45 @@ Public Class Mail
         '    setting = settingsRepository.Get(Function(x) x.Customer_Id = objCustomer.Id)
 
         'End Using
-        Dim msg As New MailMessage()
-        Dim sRet As String = ""
+        If objCustomer.UseGraphSendingEmail = True Then
+            Dim email As New EmailLog
+            email = SetEmailLog(sFrom, sTo, sSubject, sBody, "Enqueued", EmailSendStatus.Pending, DateTime.Now,
+                                Nothing, String.Empty, String.Empty, 0, Nothing, Nothing, String.Empty,
+                                String.Empty, False, 0, Nothing, 0, 0, String.Empty)
 
-        With msg
-            .From = New MailAddress(sFrom)
 
-            sTo = sTo.Replace(";", ",")
 
-            .To.Add(sTo)
-            .IsBodyHtml = True
-            .Subject = sSubject
-            .Body = sBody
+            SendGraphMail(email, objCustomer)
+        Else
+            Dim msg As New MailMessage()
+            Dim sRet As String = ""
 
-        End With
+            With msg
+                .From = New MailAddress(sFrom)
 
-        Dim smtp As New SmtpClient()
+                sTo = sTo.Replace(";", ",")
 
-        smtp.Host = smtpServer
+                .To.Add(sTo)
+                .IsBodyHtml = True
+                .Subject = sSubject
+                .Body = sBody
 
-        'If Not IsNullOrEmpty(setting.SMTPUserName) Then
-        '    Dim credentials = New Net.NetworkCredential(setting.SMTPUserName, setting.SMTPPassWord)
-        '    smtp.Credentials = credentials
-        'End If
+            End With
 
-        'If setting.SMTPPort > 0 Then
-        '    smtp.Port = setting.SMTPPort
-        'End If
+            Dim smtp As New SmtpClient()
 
-        'smtp.EnableSsl = setting.IsSMTPSecured
+            smtp.Host = smtpServer
 
-        Try
-            smtp.Send(msg)
-        Catch ex As Exception
-            sRet = ex.Message.ToString()
-            objLogFile.WriteLine("Smtp error: {0}, Send message. EmailTo: {1}, Message-ID: {2}", sRet, msg.To)
-        End Try
 
-        Return sRet
+            Try
+                smtp.Send(msg)
+            Catch ex As Exception
+                sRet = ex.Message.ToString()
+                objLogFile.WriteLine("Smtp error: {0}, Send message. EmailTo: {1}, Message-ID: {2}", sRet, msg.To)
+            End Try
+
+            Return sRet
+        End If
+
     End Function
 End Class
