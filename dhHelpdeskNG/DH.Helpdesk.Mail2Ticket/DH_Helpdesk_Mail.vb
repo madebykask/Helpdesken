@@ -2703,7 +2703,7 @@ Module DH_Helpdesk_Mail
 
                 Try
                     Dim objMail As New Mail
-                    objMail.SendErrorMail(fromAddress, toAddress, "Error in M2T", msg, sConnectionstring, objGlobalSettings.SMTPServer)
+                    objMail.SendErrorMail(fromAddress, toAddress, "Error in M2T", msg, sConnectionstring, objGlobalSettings.SMTPServer, objCustomer)
 
                 Catch ex As Exception
                     If objErrorLogFile IsNot Nothing Then
