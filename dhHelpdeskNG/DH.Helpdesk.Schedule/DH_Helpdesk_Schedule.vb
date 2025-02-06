@@ -47,6 +47,7 @@ Module DH_Helpdesk_Schedule
             ' parse command line args
             Dim workMode = GetWorkMode(aArguments)
             Dim sConnectionstring = GetConnectionString(aArguments)
+            'Console.WriteLine("Connectionstring from args:" & sConnectionstring)
             giSendMail = GetSendEmail(aArguments, giSendMail) 'used in 12 mode
 
             'Log cmd line args
@@ -498,6 +499,7 @@ Module DH_Helpdesk_Schedule
 
         ' Hämta ärenden
         Dim colCase As Collection = objCaseData.getCaseAutoClose
+        objLogFile.WriteLine(Now() & ", running caseAutoClose, found " & colCase.Count & " cases to autoclose")
 
         'For debug only - remove
         'Dim debugCase As CCase = objCaseData.getCase(39360)
@@ -516,7 +518,7 @@ Module DH_Helpdesk_Schedule
                 ' Save Logs (Logga händelsen)
                 Dim iLog_Id As Integer = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", "", 0, "DH Helpdesk", iCaseHistory_Id, objCase.StateSecondary_FinishingCause_Id)
                 objCaseData.closeCase(objCase)
-
+                objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Closed case")
                 objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailCaseClosed, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
 
@@ -526,10 +528,12 @@ Module DH_Helpdesk_Schedule
                     Dim caseService As New DH.Helpdesk.VBCSharpBridge.CaseExposure
                     Dim bodyWithSurvey As String = caseService.GetSurveyBodyString(objCase.Id, objMailTemplate.Id, objCase.Persons_EMail, objCustomer.HelpdeskEMail, objGlobalSettings.ServerPort, objGlobalSettings.ServerName, objMailTemplate.Body)
                     'Replace surveyfields and add it to body
+                    objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Got mailtemplate with survey fields")
                     objMailTemplate.Body = bodyWithSurvey
                     Dim caseEmailer As New DH.Helpdesk.VBCSharpBridge.CaseEmailExposure
                     If objMailTemplate.IncludeLogExternal Then
                         Dim extraBody As String = caseEmailer.GetExternalLogTextHistory(objCase.Id, iLog_Id, objCustomer.HelpdeskEMail)
+                        objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Got external case history")
                         objMailTemplate.Body += extraBody
                     End If
 
@@ -545,6 +549,7 @@ Module DH_Helpdesk_Schedule
                             Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
                             objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                            objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Created emailLog alt 1")
 
                         End If
 
@@ -571,6 +576,7 @@ Module DH_Helpdesk_Schedule
                                 Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, follower, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
                                 objLogData.createEMailLog(iCaseHistory_Id, follower, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Created emailLog alt 2")
 
                             End If
                         Next
@@ -586,6 +592,7 @@ Module DH_Helpdesk_Schedule
                         Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, sEmailList, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
 
                         objLogData.createEMailLog(iCaseHistory_Id, sEmailList, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                        objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Created emailLog alt 3")
 
                     End If
 
