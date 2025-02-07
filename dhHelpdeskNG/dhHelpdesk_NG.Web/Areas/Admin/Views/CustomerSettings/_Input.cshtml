@@ -818,6 +818,15 @@
                                                 @Html.CheckBoxFor(model => model.Setting.UseGraphSendingEmail)
                                             </td>
                                         </tr>
+                                       <tr>
+                                           <td>
+                                               @Translation.GetCoreTextTranslation("Användarnamn")
+                                           </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.Setting.GraphUserName, new { maxlength = "200", style = "width: 400px;" })
+
+                                            </td>
+                                        </tr>
                                         <tr>
                                             <td>
                                                 Graph Application Id
@@ -848,16 +857,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                Graph User Name
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.GraphUserName, new { maxlength = "200", style = "width: 400px;" })
-
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Graph Secret Expiration Date
+                                                Graph Secret @Translation.GetCoreTextTranslation("Utgångsdatum")
                                             </td>
                                             <td>
                                                 @Html.EditorFor(model => model.Setting.GraphClientSecretExpireDate, "DatePicker", new { id = "GraphClientSecretExpireDate" })

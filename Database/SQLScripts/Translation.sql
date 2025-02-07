@@ -8706,6 +8706,13 @@ If not exists (select * from tblTextTranslation where text_id = 2185 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2185, 2, 'If the checkbox is selected, no closure email will be sent to the initiator.')
 GO
 
+If not exists (select * from tbltext where id = 2186)
+	insert into tbltext (id, TextString) VALUES (2186, 'Utgångsdatum')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2186 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2186, 2, 'Expiration Date')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
