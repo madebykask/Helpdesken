@@ -268,6 +268,7 @@ Module DH_Helpdesk_Mail
         Dim objCustomerData As New CustomerData
         Dim objPriorityData As New PriorityData
         Dim objCustomer As Customer
+        Dim objMovedFromCustomer As Customer
         Dim objCaseData As New CaseData
         Dim objUserData As New UserData
         Dim objUserWGData As New WorkingGroupUserData
@@ -620,6 +621,8 @@ Module DH_Helpdesk_Mail
                                             iMailID = objCaseData.getMailIDByMessageID(messageId)
                                             If objCase.Customer_Id <> objCustomer.Id AndAlso objCase.MovedFromCustomer_Id = objCustomer.Id Then
                                                 'This case has been moved from this customer
+                                                'Keep the old customer
+                                                objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                 'Get the new correct customer
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
                                             End If
@@ -649,6 +652,8 @@ Module DH_Helpdesk_Mail
                                             If objCase IsNot Nothing Then
                                                 ' Check if the case was moved from the current customer
                                                 If objCase.Customer_Id <> objCustomer.Id AndAlso objCase.MovedFromCustomer_Id = objCustomer.Id Then
+                                                    'Keep the old customer
+                                                    objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                     ' Update to the new correct customer if the case was moved
                                                     objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
                                                 End If
@@ -660,6 +665,8 @@ Module DH_Helpdesk_Mail
                                             ' Case found by getCaseByMessageID, check for customer transfer
                                             If objCase.Customer_Id <> objCustomer.Id AndAlso objCase.MovedFromCustomer_Id = objCustomer.Id Then
                                                 ' Update to the new correct customer if the case was moved
+                                                'Keep the old customer
+                                                objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
                                             End If
                                             LogToFile("Found case by getCaseByMessageID: " & replyToId & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
@@ -702,6 +709,8 @@ Module DH_Helpdesk_Mail
                                         If objCase IsNot Nothing AndAlso objCase.Customer_Id <> objCustomer.Id Then
                                             If objCase.MovedFromCustomer_Id = objCustomer.Id Then
                                                 'This case has been moved from this customer
+                                                'Keep the old customer
+                                                objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                 'Get the new correct customer
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
                                                 LogToFile("Found existing moved case with EmailSubjectPattern and CaseNumber:: " & iCaseNumber & " MovedFromCustomer: " & objCustomer.Id, iPop3DebugLevel)
@@ -1102,6 +1111,8 @@ Module DH_Helpdesk_Mail
                                     ' Check if it has been moved to another customer
                                     If (objCase.MovedFromCustomer_Id <> 0 AndAlso objCase.Customer_Id <> objCustomer.Id) Then
                                         LogToFile("Case has been moved to another customer", iPop3DebugLevel)
+                                        'Keep the old customer
+                                        objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                         'Get the new customer
                                         objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
                                     End If
@@ -1288,6 +1299,12 @@ Module DH_Helpdesk_Mail
                                     objMailTicket.Save(objCase.Id, iLog_Id, "bcc", message.Bcc.ToString(), Nothing, messageId)
                                 End If
 
+                                'Move message to atchive folder
+                                'If Case has been moved from a customer, the message must move from the origin customer
+                                If objMovedFromCustomer IsNot Nothing Then
+                                    objCustomer = objMovedFromCustomer
+                                End If
+
                                 If eMailConnectionType = MailConnectionType.Pop3 Then
                                     ' Inget stöd för POP3 längre
                                 ElseIf eMailConnectionType = MailConnectionType.Imap Then
@@ -1303,6 +1320,7 @@ Module DH_Helpdesk_Mail
                                     ' Purge to apply message delete otherwise the message will stay in Inbox
                                     IMAPclient.Purge()
                                 ElseIf eMailConnectionType = MailConnectionType.Ews Then
+
                                     ' Copy mail if archieve, ' delete mail
                                     DeleteEwsMail(message, objCustomer,
                                           objCustomer.POP3Server,
