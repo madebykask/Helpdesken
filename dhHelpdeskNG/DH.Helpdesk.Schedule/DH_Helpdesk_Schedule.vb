@@ -505,9 +505,7 @@ Module DH_Helpdesk_Schedule
         'Dim debugCase As CCase = objCaseData.getCase(39360)
         'colCase.Add(debugCase)
 
-        For i As Integer = 1 To colCase.Count
-            objCase = colCase(i)
-
+        For Each objCase In colCase
             If objCase.StateSecondary_FinishingCause_Id IsNot Nothing Then
 
                 objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber)
@@ -547,7 +545,7 @@ Module DH_Helpdesk_Schedule
                             Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                             Dim objMail As New Mail
                             Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
-
+                            objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Sent AutoClose email to " & objCase.Persons_EMail)
                             objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                             objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Created emailLog alt 1")
 
@@ -574,7 +572,7 @@ Module DH_Helpdesk_Schedule
                                 Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                                 Dim objMail As New Mail
                                 Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, follower, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
-
+                                objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Sent AutoClose email to follower " & follower)
                                 objLogData.createEMailLog(iCaseHistory_Id, follower, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                                 objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Created emailLog alt 2")
 
@@ -590,7 +588,7 @@ Module DH_Helpdesk_Schedule
                         Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                         Dim objMail As New Mail
                         Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, sEmailList, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
-
+                        objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Sent AutoClose email to " & sEmailList)
                         objLogData.createEMailLog(iCaseHistory_Id, sEmailList, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
                         objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Created emailLog alt 3")
 

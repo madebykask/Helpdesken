@@ -961,11 +961,12 @@ Public Class CaseData
             For Each c As CCase In tempcol
                 ' Check when StateSecondary First Set
                 Dim dt As DateTime? = getStateSecondarySetDate(c.StateSecondary_Id, c.Id)
-
+                'How many days passed since the state secondary was set
                 Dim numberOfDays As Integer = (DateTime.Now - dt.Value).TotalDays
-
+                'if the number of days is greater than 0 
                 If numberOfDays > 0 Then
-                    If numberOfDays = c.AutoCloseDays Then
+                    'if the number of days is equal to or greater than auto close days
+                    If numberOfDays >= c.AutoCloseDays Then
                         col.Add(c)
                     End If
                 End If
