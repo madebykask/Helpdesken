@@ -1717,12 +1717,12 @@ Module DH_Helpdesk_Mail
 
 
     Private Function ProcessMessageAttachments(message As MailMessage,
-                                               iHtmlFile As Integer,
-                                               objCustomer As Customer,
-                                               objectId As String,  'Case.Id or Log.Id
-                                               prefix As String, '"<CaseNumber>" for Case file, "L<LogId>" for Log file
-                                               iPop3DebugLevel As Integer,
-                                               globalSettings As GlobalSettings) As List(Of String)
+                                           iHtmlFile As Integer,
+                                           objCustomer As Customer,
+                                           objectId As String,  'Case.Id or Log.Id
+                                           prefix As String, '"<CaseNumber>" for Case file, "L<LogId>" for Log file
+                                           iPop3DebugLevel As Integer,
+                                           globalSettings As GlobalSettings) As List(Of String)
 
         Dim files As List(Of String) = New List(Of String)
         Dim deniedFiles As List(Of String) = New List(Of String)
@@ -1734,104 +1734,93 @@ Module DH_Helpdesk_Mail
 
         If message.Attachments.Count > 6 - iHtmlFile Then
 
-            ' Kontrollera om folder existerar
-            If Directory.Exists(tempDirPath) = False Then
-                Directory.CreateDirectory(tempDirPath)
-            End If
+            ' Ensure temp and save directories exist
+            If Not Directory.Exists(tempDirPath) Then Directory.CreateDirectory(tempDirPath)
+            If Not Directory.Exists(saveDirPath) Then Directory.CreateDirectory(saveDirPath)
 
-            If Directory.Exists(saveDirPath) = False Then
-                Directory.CreateDirectory(saveDirPath)
-            End If
             Dim i As Integer = 1
-            'Save to temp dir
+            ' Save to temp dir
             For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
                 Dim sFileNameTemp As String = msgAttachment.FileName
                 sFileNameTemp = sFileNameTemp.Replace(":", "")
                 sFileNameTemp = URLDecode(sFileNameTemp)
 
                 Dim extension As String = Path.GetExtension(sFileNameTemp).Replace(".", "").ToLower()
-                If (IsExtensionInWhiteList(extension, whiteList)) Then
-                    ' save temp file
-
+                If IsExtensionInWhiteList(extension, whiteList) Then
+                    ' Save temp file
                     Dim sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
-                    If File.Exists(sTempFilePath) = True Then
-                        sFileNameTemp = Path.GetFileNameWithoutExtension(sTempFilePath) + "_" + Convert.ToString(i) + "." + extension
+                    If File.Exists(sTempFilePath) Then
+                        sFileNameTemp = Path.GetFileNameWithoutExtension(sTempFilePath) & "_" & i.ToString() & "." & extension
                         sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
                         i += 1
                     End If
+
                     msgAttachment.Save(sTempFilePath)
+
+                    ' Explicitly open and close file to ensure it's not locked
+                    Using fs As FileStream = File.Open(sTempFilePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)
+                    End Using
                 Else
                     deniedFiles.Add(sFileNameTemp)
                     LogToFile("Blocked file: " & sFileNameTemp, iPop3DebugLevel)
                 End If
-
             Next
 
-            'zip files 
+            ' Zip files
             Dim sFilePath As String = Path.Combine(saveDirPath, objectId & ".zip")
             createZipFile(tempDirPath, sFilePath)
             LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
 
             If Not IsNullOrEmpty(sFilePath) Then
-                'Ta bort tempkatalogen / delete temp dir
-                If Directory.Exists(tempDirPath) = True Then
-                    Directory.Delete(tempDirPath, True)
-                    ' Get the parent directory info
-                    Dim di As New DirectoryInfo(tempDirPath)
-                    If di.Parent IsNot Nothing Then
-                        ' Check if the parent directory exists
-                        If di.Parent.Exists Then
-                            ' Delete the parent directory and all its contents
-                            di.Parent.Delete(True)
-                        End If
-                    End If
-                End If
+                ' Delete temp directory safely
+                DeleteFilesInsideFolder(tempDirPath, True)
                 files.Add(sFilePath)
             End If
+
         ElseIf message.Attachments.Count > 0 Then
 
-            ' Kontrollera om folder existerar
-            If Directory.Exists(saveDirPath) = False Then
-                Directory.CreateDirectory(saveDirPath)
-            End If
+            ' Ensure save directory exists
+            If Not Directory.Exists(saveDirPath) Then Directory.CreateDirectory(saveDirPath)
 
             Dim i As Integer = 1
-            'Save to temp dir
+            ' Save directly to save dir
             For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
                 Dim sFileName As String = msgAttachment.FileName
-
                 sFileName = sFileName.Replace(":", "")
                 sFileName = URLDecode(sFileName)
 
                 Dim extension As String = Path.GetExtension(sFileName).Replace(".", "").ToLower()
-                If (IsExtensionInWhiteList(extension, whiteList)) Then
-
+                If IsExtensionInWhiteList(extension, whiteList) Then
                     Dim sFilePath = Path.Combine(saveDirPath, sFileName)
-                    If File.Exists(sFilePath) = True Then
-                        sFileName = Path.GetFileNameWithoutExtension(sFilePath) + "_" + Convert.ToString(i) + "." + extension
+                    If File.Exists(sFilePath) Then
+                        sFileName = Path.GetFileNameWithoutExtension(sFilePath) & "_" & i.ToString() & "." & extension
                         sFilePath = Path.Combine(saveDirPath, sFileName)
                         i += 1
                     End If
+
                     LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
                     msgAttachment.Save(sFilePath)
+
+                    ' Ensure file is closed after saving
+                    Using fs As FileStream = File.Open(sFilePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)
+                    End Using
 
                     files.Add(sFilePath)
                 Else
                     deniedFiles.Add(sFileName)
                     LogToFile("Blocked file: " & sFileName, iPop3DebugLevel)
                 End If
-
             Next
         End If
-        If (deniedFiles.Any()) Then
-            Dim deniedFilesContent As String = deniedFiles.Aggregate(Function(o As String, p As String) o & Environment.NewLine & p)
+
+        ' Save blocked files log if necessary
+        If deniedFiles.Any() Then
+            Dim deniedFilesContent As String = String.Join(Environment.NewLine, deniedFiles)
             Dim filePath As String = Path.Combine(saveDirPath, "blocked files.txt")
             File.WriteAllText(filePath, deniedFilesContent)
-
             files.Add(filePath)
-
-            ' TODO: Save blocked files.txt
         End If
+
         Return files
     End Function
 
@@ -2276,44 +2265,70 @@ Module DH_Helpdesk_Mail
 
         Return pdfFileName
     End Function
-    Sub DeleteFilesInsideFolder(ByVal target_folder_path As String, ByVal also_delete_sub_folders As Boolean)
+    Sub DeleteFilesInsideFolder(ByVal target_folder_path As String, ByVal also_delete_sub_folders As Boolean, Optional ByVal max_retries As Integer = 3, Optional ByVal retry_delay As Integer = 1000)
 
-        ' loop through each file in the target directory
+        ' Check if the target folder exists before proceeding
+        If Not Directory.Exists(target_folder_path) Then Exit Sub
+        ' Delete each file inside the target folder with retries
         For Each file_path As String In Directory.GetFiles(target_folder_path)
+            Dim success As Boolean = False
 
-            ' delete the file if possible...otherwise skip it
-            Try
-                File.Delete(file_path)
-            Catch ex As Exception
-                'LogError("Delete file error" & ex.Message.ToString(), Nothing)
-            End Try
-
+            For attempt As Integer = 1 To max_retries
+                Try
+                    If File.Exists(file_path) Then
+                        File.SetAttributes(file_path, FileAttributes.Normal) ' Remove read-only flag if set
+                        File.Delete(file_path)
+                    End If
+                    success = True
+                    Exit For
+                Catch ex As IOException
+                    Thread.Sleep(retry_delay)
+                End Try
+            Next
         Next
 
-
-        ' if sub-folders should be deleted
+        ' If sub-folders should be deleted
         If also_delete_sub_folders Then
 
-            ' loop through each file in the target directory
+            ' Delete each sub-folder recursively with retries
             For Each sub_folder_path As String In Directory.GetDirectories(target_folder_path)
+                Dim folderSuccess As Boolean = False
 
-                ' delete the sub-folder if possible...otherwise skip it
-                Try
-                    Directory.Delete(sub_folder_path, also_delete_sub_folders)
-                Catch ex As Exception
-                    'LogError(ex.Message.ToString(), Nothing)
-                End Try
-
+                For attempt As Integer = 1 To max_retries
+                    Try
+                        If Directory.Exists(sub_folder_path) Then
+                            Directory.Delete(sub_folder_path, True)
+                        End If
+                        folderSuccess = True
+                        Exit For
+                    Catch ex As IOException
+                        Thread.Sleep(retry_delay)
+                    End Try
+                Next
             Next
-            ' delete the Target-folder if possible...otherwise skip it
-            Try
-                Directory.Delete(target_folder_path, also_delete_sub_folders)
-            Catch ex As Exception
-                'LogError(ex.Message.ToString(), Nothing)
-            End Try
+
+            ' Garbage collect to release any lingering file handles before deleting the target folder
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+
+            ' Delete the target folder itself with retries
+            Dim finalSuccess As Boolean = False
+            For attempt As Integer = 1 To max_retries
+                Try
+                    If Directory.Exists(target_folder_path) Then
+                        Directory.Delete(target_folder_path, True)
+                    End If
+                    finalSuccess = True
+                    Exit For
+                Catch ex As IOException
+                    Thread.Sleep(retry_delay)
+                End Try
+            Next
+
         End If
 
     End Sub
+
     Private Sub openLogFile()
 
         If objLogFile IsNot Nothing Then
