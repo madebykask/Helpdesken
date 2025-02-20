@@ -954,7 +954,7 @@ Module DH_Helpdesk_Schedule
 
                     sMessageId = createMessageId(objCustomer.HelpdeskEMail)
 
-                    objMailData.Send(objCustomer.HelpdeskEMail, objUser.EMail, sSubject, sMessage, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
+                    objMailData.Send(objCustomer, objCustomer.HelpdeskEMail, objUser.EMail, sSubject, sMessage, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
 
                 End If
             End If
@@ -986,7 +986,7 @@ Module DH_Helpdesk_Schedule
             sMessageId = createMessageId(objCustomer.HelpdeskEMail)
 
             Dim objMail As New Mail
-            objMail.Send(objCustomer.HelpdeskEMail, cl.Recipients, "Checklista: " & cl.ChecklistName, cl.ChecklistMailBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
+            objMail.Send(objCustomer, objCustomer.HelpdeskEMail, cl.Recipients, "Checklista: " & cl.ChecklistName, cl.ChecklistMailBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
         Next
 
 
@@ -1237,7 +1237,7 @@ Module DH_Helpdesk_Schedule
 
                         Dim sMessageId As String = createMessageId(objCustomer.HelpdeskEMail)
 
-                        Dim sRet_SendMail As String = objMail.Send(objCustomer.HelpdeskEMail, Replace(objCustomer.CaseStatisticsEMailList, vbCrLf, ""), "Ärendestatistik - " & objCustomer.Name & " - " & DateTime.Now.Year & "-" & DateTime.Now.Month & "-" & DateTime.Now.Day, "<FONT face=""MS Sans Serif"" size=2>" & sStatistics & "</FONT>", objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
+                        Dim sRet_SendMail As String = objMail.Send(objCustomer, objCustomer.HelpdeskEMail, Replace(objCustomer.CaseStatisticsEMailList, vbCrLf, ""), "Ärendestatistik - " & objCustomer.Name & " - " & DateTime.Now.Year & "-" & DateTime.Now.Month & "-" & DateTime.Now.Day, "<FONT face=""MS Sans Serif"" size=2>" & sStatistics & "</FONT>", objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
                     End If
                 End If
 
