@@ -409,7 +409,7 @@ Public Class Mail
 
     End Function
 
-    Public Function Send(sFrom As String,
+    Public Function Send(objCustomer As Customer, sFrom As String,
                          sTo As String,
                          sSubject As String,
                          sBody As String,
@@ -633,7 +633,7 @@ Public Class Mail
             'attempt.Message = errorMsg.ToString()
         End Try
     End Function
-    Public Function Send(sFrom As String,
+    Public Function Send(objCustomer As Customer, sFrom As String,
                          sTo As String,
                          sSubject As String,
                          sBody As String,
