@@ -212,6 +212,7 @@
     <Compile Include="GDPR\GDPROperationsAudit.cs" />
     <Compile Include="GDPR\GDPRTask.cs" />
     <Compile Include="GDPR\Enums\GDPRTaskStatus.cs" />
+    <Compile Include="Helpers\CaseWithStatistic.cs" />
     <Compile Include="ICaseEntity.cs" />
     <Compile Include="Inventory\InventoryTypeStandardSettings.cs" />
     <Compile Include="Invoice\InvoiceArticleProductAreaEntity.cs" />
