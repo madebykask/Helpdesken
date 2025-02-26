@@ -1386,6 +1386,13 @@ namespace DH.Helpdesk.Web.Controllers
                     throw new Exception(errorMsg);
                 }
 
+                //Check if the case already has been finished
+                if (inputData.FinishDate.HasValue && oldCase.FinishingDate.HasValue)
+                {
+                    string errorMsg = Translation.Get("Ärendet är redan avslutat");
+                    throw new Exception(errorMsg);
+                }
+
                 var userId = SessionFacade.CurrentUser.Id;
 
                 caseLockViewModel = GetCaseLockModel(inputData.Id, userId, true);
