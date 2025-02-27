@@ -1302,7 +1302,9 @@ Module DH_Helpdesk_Mail
                                 'Move message to atchive folder
                                 'If Case has been moved from a customer, the message must move from the origin customer
                                 If objMovedFromCustomer IsNot Nothing Then
-                                    objCustomer = objMovedFromCustomer
+                                    objCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
+
+                                    LogToFile("If Case has been moved from a customer, the message must move from the origin customer, set to customer: " & objCustomer.Id, iPop3DebugLevel)
                                 End If
 
                                 If eMailConnectionType = MailConnectionType.Pop3 Then
@@ -1629,34 +1631,50 @@ Module DH_Helpdesk_Mail
 
     Private Function FindEwsFolder(objCustomer As Customer, emailFolder As String, service As ExchangeService) As Folder
         Dim emailFolders As String()
-        If emailFolder.IndexOf("/"c) >= 0 Then
+        If emailFolder.Contains("/") Then
             emailFolders = emailFolder.Split("/"c)
         Else
             emailFolders = New String() {emailFolder}
         End If
 
-        Dim folders As FindFoldersResults
         Dim folder As Folder = Nothing
+        LogToFile("Starting folder search for: " & emailFolder & " (Customer: " & objCustomer.Id & ")", 1)
+
         For Each currentFolderName As String In emailFolders
+            Dim folders As FindFoldersResults
+
             If folder Is Nothing Then
+                LogToFile("Searching for root folder: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
                 folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
-            Else
+            ElseIf folder.Id IsNot Nothing Then
+                LogToFile("Searching for subfolder: " & currentFolderName & " under parent " & folder.DisplayName & " (Customer: " & objCustomer.Id & ")", 1)
                 folders = service.FindFolders(folder.Id, New FolderView(100))
+            Else
+                LogToFile("Invalid folder ID for: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
+                Return Nothing ' Stop processing if folder ID is invalid
             End If
+
+            If folders IsNot Nothing AndAlso folders.Folders.Count > 0 Then
+                LogToFile("Found " & folders.Folders.Count & " folders under " & If(folder?.DisplayName, "Root") & " (Customer: " & objCustomer.Id & ")", 1)
+            Else
+                LogToFile("No folders found under " & If(folder?.DisplayName, "Root") & " (Customer: " & objCustomer.Id & ")", 1)
+            End If
+
             folder = folders.FirstOrDefault(Function(f) f.DisplayName.Equals(currentFolderName, StringComparison.InvariantCultureIgnoreCase))
+
             If folder Is Nothing Then
-                LogError("Can't find folder: " & currentFolderName, objCustomer)
-                Exit For
+                LogToFile("Can't find folder: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
+                Return Nothing ' Exit immediately
+            Else
+                LogToFile("Folder found: " & folder.DisplayName & " (Customer: " & objCustomer.Id & ")", 1)
             End If
         Next
 
-        If folder Is Nothing Then
-            LogError("Can't find folder: " & emailFolder, objCustomer)
-            Return Nothing
-        End If
-
+        LogToFile("Folder search completed successfully for: " & emailFolder & " (Customer: " & objCustomer.Id & ")", 1)
         Return folder
     End Function
+
+
 
     Private Function CheckIfTwoAttachmentsModeEnabled(objCaseData As CaseData, iCustomerID As Integer) As Boolean
         Dim sFieldName = "tblLog.FileName_Internal"
