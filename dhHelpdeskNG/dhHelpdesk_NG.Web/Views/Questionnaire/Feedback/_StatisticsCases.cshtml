@@ -11,7 +11,7 @@
         var pageSettings = @Html.Raw(jsSerializer.Serialize(Model.FeedbackStatisticsCases.PageSettings));
         pageSettings.perPageText = '@perPageText';
         pageSettings.perShowingText = '@perShowingText';
-        pageSettings.curUserId = '@(SessionFacade.CurrentUser != null ? SessionFacade.CurrentUser.UserId.ToLower(): string.Empty)';
+        pageSettings.curUserId = '@(SessionFacade.CurrentUser != null ? System.Web.HttpUtility.JavaScriptStringEncode(SessionFacade.CurrentUser.UserId.ToLower()): string.Empty)';
 
         $(".feedbackPopupCls").on("click", function () {
             var $src = $(this);

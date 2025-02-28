@@ -11,7 +11,7 @@
         var pageSettings = @Html.Raw(jsSerializer.Serialize(Model.PageSettings));
         pageSettings.perPageText = '@perPageText';
         pageSettings.perShowingText = '@perShowingText';
-        pageSettings.curUserId = '@(SessionFacade.CurrentUser != null ? SessionFacade.CurrentUser.UserId.ToLower(): string.Empty)';
+        pageSettings.curUserId = '@(SessionFacade.CurrentUser != null ? System.Web.HttpUtility.JavaScriptStringEncode(SessionFacade.CurrentUser.UserId.ToLower()): string.Empty)';
 
 
         $("#case_connect_to_parent_single_btn").on("click", function () {
