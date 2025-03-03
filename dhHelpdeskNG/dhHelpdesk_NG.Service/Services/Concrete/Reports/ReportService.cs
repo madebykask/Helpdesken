@@ -39,7 +39,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 	using DH.Helpdesk.BusinessData.Enums.Case.Fields;
 	using DH.Helpdesk.BusinessData.Models.Case.CaseOverview;
 	using BusinessData.Models.Case.CaseSettingsOverview;
-	using BusinessData.Models.Case;
+    using BusinessData.Models.Case;
 
 	public sealed class ReportService : IReportService
     {
@@ -54,8 +54,9 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
         private readonly ICaseTypeRepository _caseTypeRepository;
 		private readonly IFeatureToggleService _featureToggleService;
 		private readonly IExtendedCaseService _extendedCaseService;
+        private readonly IOUService _oUService;
 
-		public ReportService(
+        public ReportService(
                 IUnitOfWorkFactory unitOfWorkFactory,
                 ISurveyService sureyService,
                 IReportRepository reportRepository,
@@ -66,7 +67,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 IProductAreaRepository productAreaRepository,
                 ICaseTypeRepository caseTypeRepository,
 				IFeatureToggleService featureToggleService,
-				IExtendedCaseService extendedCaseService)
+				IExtendedCaseService extendedCaseService,
+                IOUService oUService)
         {
             this.unitOfWorkFactory = unitOfWorkFactory;
             this.sureyService = sureyService;
@@ -79,6 +81,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             _caseTypeRepository = caseTypeRepository;
 			_featureToggleService = featureToggleService;
 			_extendedCaseService = extendedCaseService;
+            _oUService = oUService;
 
 		}
 
@@ -374,6 +377,27 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
         {
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
+
+                List<Tuple<int, int>> departmentAndOuis = new List<Tuple<int, int>>();
+
+                //Populate the departments
+                foreach (var department in departmentIds)
+                {
+                    departmentAndOuis.Add(new Tuple<int, int>(department, 0));
+                }
+
+
+                //Populate the departments + OUs
+                foreach (var ou in ouIds)
+                {
+                    var ouEntity = _oUService.GetOU(ou);
+
+                    if (ouEntity.Department_Id.HasValue)
+                    {
+                        departmentAndOuis.Add(new Tuple<int, int>(ouEntity.Department_Id.Value, ou));
+                    }
+                }
+
                 uow.AutoDetectChangesEnabled = false;
                 var categoryRep = uow.GetRepository<Category>();
                 var ouRep = uow.GetRepository<OU>();
@@ -427,7 +451,7 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 var finishingCauses = finishingCauseRep.GetAll().GetByCustomer(customerId);
 
                 //Ensure filters
-                departmentIds = EnsureDepartments(departmentIds,ouIds, userId, customerId);
+                departmentAndOuis = EnsureDepartments(departmentAndOuis, userId, customerId);
                 workingGroupIds = EnsureWorkingGroups(workingGroupIds, userId, customerId);
 
 				var usePreviousSearchToggle = _featureToggleService.Get(Common.Constants.FeatureToggleTypes.REPORTS_REPORTGENERATOR_USE_PREVIOUS_SEARCH);
@@ -437,9 +461,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 				{
 					caseData = _reportRepository.GetCaseList_FeatureTooglePreviousSearch(
 												   customerId,
-												   departmentIds,
-												   ouIds,
-												   workingGroupIds,
+                                                   departmentAndOuis,
+                                                   workingGroupIds,
 												   productAreaChainIds,
 												   administratorIds,
 												   caseStatusIds,
@@ -453,9 +476,8 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
 				{
 					caseData = _reportRepository.GetCaseList(
 												   customerId,
-												   departmentIds,
-												   ouIds,
-												   workingGroupIds,
+                                                   departmentAndOuis,
+                                                   workingGroupIds,
 												   productAreaChainIds,
 												   administratorIds,
 												   caseStatusIds,
@@ -545,6 +567,30 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
         {
             using (var uow = this.unitOfWorkFactory.CreateWithDisabledLazyLoading())
             {
+
+
+                List<Tuple<int, int>> departmentAndOuis = new List<Tuple<int, int>>();
+
+                //Populate the departments
+                foreach (var department in departmentIds)
+                {
+                    departmentAndOuis.Add(new Tuple<int, int>(department, 0));
+                }
+
+
+                //Populate the departments + OUs
+                foreach (var ou in ouIds)
+                {
+                    var ouEntity = _oUService.GetOU(ou);
+
+                    if (ouEntity.Department_Id.HasValue)
+                    {
+                        departmentAndOuis.Add(new Tuple<int, int>(ouEntity.Department_Id.Value, ou));
+                    }
+                }
+
+
+
                 var caseTypeChainIds = new List<int>();
                 foreach (var caseTypeId in caseTypeIds)
                 {
@@ -558,13 +604,12 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
                 }
 
                 //Ensure filters
-                departmentIds = EnsureDepartments(departmentIds, ouIds, userId, customerId);
+                departmentAndOuis = EnsureDepartments(departmentAndOuis, userId, customerId);
                 workingGroupIds = EnsureWorkingGroups(workingGroupIds, userId, customerId);
 
                 var caseData = _reportRepository.GetCaseAggregation(
                                                 customerId,
-                                                departmentIds,
-                                                ouIds,
+                                                departmentAndOuis,
                                                 workingGroupIds,
                                                 productAreaChainIds,
                                                 administratorIds,
@@ -1689,14 +1734,25 @@ namespace DH.Helpdesk.Services.Services.Concrete.Reports
             }
         }
 
-        private List<int> EnsureDepartments(List<int> departments,List<int> ous, int userId, int customerId)
-        {            
-            if (departments.Any() || ous.Any())
-                return departments;
+        private List<Tuple<int, int>> EnsureDepartments(List<Tuple<int, int>> departmentsAndOUs, int userId, int customerId)
+        {
+            if (departmentsAndOUs.Any())
+            {
+                return departmentsAndOUs;
+            }
             else
             {
+
+                List<Tuple<int, int>> ret = new List<Tuple<int, int>>();
+
                 var allowedDepartmentIds = _departmentService.GetDepartmentsByUserPermissions(userId, customerId, false).Select(x => x.Id).ToList();
-                return allowedDepartmentIds;
+
+                foreach (var department in allowedDepartmentIds)
+                {
+                    ret.Add(new Tuple<int, int>(department, 0));
+                }
+
+                return ret;
             }
         }
 

@@ -2098,7 +2098,7 @@ namespace DH.Helpdesk.Web.Controllers
             //Run business rules on load
             bool dontShowClosingWorksteps = false;
             (m.DisableCaseFields, dontShowClosingWorksteps) = _caseService.ExecuteBusinessActionsDisable(c);
-            if(dontShowClosingWorksteps)
+            if(dontShowClosingWorksteps && m.WorkflowSteps != null)
             {
                 var customerCaseSolutions =
                 _caseSolutionService.GetCustomerCaseSolutionsOverview(SessionFacade.CurrentCustomer.Id, SessionFacade.CurrentUser.Id)
@@ -2109,6 +2109,7 @@ namespace DH.Helpdesk.Web.Controllers
 
                 var customerCaseSolutionsIds = customerCaseSolutions.Select(x => x.CaseSolutionId).ToList();
 
+                //Warför smäller det här?
                 m.WorkflowSteps = m.WorkflowSteps.Where(x => customerCaseSolutionsIds.Contains(x.CaseTemplateId)).ToList();
 
                 //We have to remove all casesolutions from  CaseTemplateTreeButton that has finishingcauseid = true

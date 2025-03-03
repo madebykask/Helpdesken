@@ -268,6 +268,7 @@ Module DH_Helpdesk_Mail
         Dim objCustomerData As New CustomerData
         Dim objPriorityData As New PriorityData
         Dim objCustomer As Customer
+        Dim objMovedFromCustomer As Customer
         Dim objCaseData As New CaseData
         Dim objUserData As New UserData
         Dim objUserWGData As New WorkingGroupUserData
@@ -620,6 +621,8 @@ Module DH_Helpdesk_Mail
                                             iMailID = objCaseData.getMailIDByMessageID(messageId)
                                             If objCase.Customer_Id <> objCustomer.Id AndAlso objCase.MovedFromCustomer_Id = objCustomer.Id Then
                                                 'This case has been moved from this customer
+                                                'Keep the old customer
+                                                objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                 'Get the new correct customer
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
                                             End If
@@ -649,6 +652,8 @@ Module DH_Helpdesk_Mail
                                             If objCase IsNot Nothing Then
                                                 ' Check if the case was moved from the current customer
                                                 If objCase.Customer_Id <> objCustomer.Id AndAlso objCase.MovedFromCustomer_Id = objCustomer.Id Then
+                                                    'Keep the old customer
+                                                    objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                     ' Update to the new correct customer if the case was moved
                                                     objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
                                                 End If
@@ -660,6 +665,8 @@ Module DH_Helpdesk_Mail
                                             ' Case found by getCaseByMessageID, check for customer transfer
                                             If objCase.Customer_Id <> objCustomer.Id AndAlso objCase.MovedFromCustomer_Id = objCustomer.Id Then
                                                 ' Update to the new correct customer if the case was moved
+                                                'Keep the old customer
+                                                objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
                                             End If
                                             LogToFile("Found case by getCaseByMessageID: " & replyToId & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
@@ -702,6 +709,8 @@ Module DH_Helpdesk_Mail
                                         If objCase IsNot Nothing AndAlso objCase.Customer_Id <> objCustomer.Id Then
                                             If objCase.MovedFromCustomer_Id = objCustomer.Id Then
                                                 'This case has been moved from this customer
+                                                'Keep the old customer
+                                                objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                 'Get the new correct customer
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
                                                 LogToFile("Found existing moved case with EmailSubjectPattern and CaseNumber:: " & iCaseNumber & " MovedFromCustomer: " & objCustomer.Id, iPop3DebugLevel)
@@ -1102,6 +1111,8 @@ Module DH_Helpdesk_Mail
                                     ' Check if it has been moved to another customer
                                     If (objCase.MovedFromCustomer_Id <> 0 AndAlso objCase.Customer_Id <> objCustomer.Id) Then
                                         LogToFile("Case has been moved to another customer", iPop3DebugLevel)
+                                        'Keep the old customer
+                                        objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                         'Get the new customer
                                         objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
                                     End If
@@ -1288,6 +1299,14 @@ Module DH_Helpdesk_Mail
                                     objMailTicket.Save(objCase.Id, iLog_Id, "bcc", message.Bcc.ToString(), Nothing, messageId)
                                 End If
 
+                                'Move message to atchive folder
+                                'If Case has been moved from a customer, the message must move from the origin customer
+                                If objMovedFromCustomer IsNot Nothing Then
+                                    objCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
+
+                                    LogToFile("If Case has been moved from a customer, the message must move from the origin customer, set to customer: " & objCustomer.Id, iPop3DebugLevel)
+                                End If
+
                                 If eMailConnectionType = MailConnectionType.Pop3 Then
                                     ' Inget stöd för POP3 längre
                                 ElseIf eMailConnectionType = MailConnectionType.Imap Then
@@ -1303,6 +1322,7 @@ Module DH_Helpdesk_Mail
                                     ' Purge to apply message delete otherwise the message will stay in Inbox
                                     IMAPclient.Purge()
                                 ElseIf eMailConnectionType = MailConnectionType.Ews Then
+
                                     ' Copy mail if archieve, ' delete mail
                                     DeleteEwsMail(message, objCustomer,
                                           objCustomer.POP3Server,
@@ -1611,34 +1631,50 @@ Module DH_Helpdesk_Mail
 
     Private Function FindEwsFolder(objCustomer As Customer, emailFolder As String, service As ExchangeService) As Folder
         Dim emailFolders As String()
-        If emailFolder.IndexOf("/"c) >= 0 Then
+        If emailFolder.Contains("/") Then
             emailFolders = emailFolder.Split("/"c)
         Else
             emailFolders = New String() {emailFolder}
         End If
 
-        Dim folders As FindFoldersResults
         Dim folder As Folder = Nothing
+        LogToFile("Starting folder search for: " & emailFolder & " (Customer: " & objCustomer.Id & ")", 1)
+
         For Each currentFolderName As String In emailFolders
+            Dim folders As FindFoldersResults
+
             If folder Is Nothing Then
+                LogToFile("Searching for root folder: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
                 folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
-            Else
+            ElseIf folder.Id IsNot Nothing Then
+                LogToFile("Searching for subfolder: " & currentFolderName & " under parent " & folder.DisplayName & " (Customer: " & objCustomer.Id & ")", 1)
                 folders = service.FindFolders(folder.Id, New FolderView(100))
+            Else
+                LogToFile("Invalid folder ID for: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
+                Return Nothing ' Stop processing if folder ID is invalid
             End If
+
+            If folders IsNot Nothing AndAlso folders.Folders.Count > 0 Then
+                LogToFile("Found " & folders.Folders.Count & " folders under " & If(folder?.DisplayName, "Root") & " (Customer: " & objCustomer.Id & ")", 1)
+            Else
+                LogToFile("No folders found under " & If(folder?.DisplayName, "Root") & " (Customer: " & objCustomer.Id & ")", 1)
+            End If
+
             folder = folders.FirstOrDefault(Function(f) f.DisplayName.Equals(currentFolderName, StringComparison.InvariantCultureIgnoreCase))
+
             If folder Is Nothing Then
-                LogError("Can't find folder: " & currentFolderName, objCustomer)
-                Exit For
+                LogToFile("Can't find folder: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
+                Return Nothing ' Exit immediately
+            Else
+                LogToFile("Folder found: " & folder.DisplayName & " (Customer: " & objCustomer.Id & ")", 1)
             End If
         Next
 
-        If folder Is Nothing Then
-            LogError("Can't find folder: " & emailFolder, objCustomer)
-            Return Nothing
-        End If
-
+        LogToFile("Folder search completed successfully for: " & emailFolder & " (Customer: " & objCustomer.Id & ")", 1)
         Return folder
     End Function
+
+
 
     Private Function CheckIfTwoAttachmentsModeEnabled(objCaseData As CaseData, iCustomerID As Integer) As Boolean
         Dim sFieldName = "tblLog.FileName_Internal"
@@ -1699,12 +1735,12 @@ Module DH_Helpdesk_Mail
 
 
     Private Function ProcessMessageAttachments(message As MailMessage,
-                                               iHtmlFile As Integer,
-                                               objCustomer As Customer,
-                                               objectId As String,  'Case.Id or Log.Id
-                                               prefix As String, '"<CaseNumber>" for Case file, "L<LogId>" for Log file
-                                               iPop3DebugLevel As Integer,
-                                               globalSettings As GlobalSettings) As List(Of String)
+                                           iHtmlFile As Integer,
+                                           objCustomer As Customer,
+                                           objectId As String,  'Case.Id or Log.Id
+                                           prefix As String, '"<CaseNumber>" for Case file, "L<LogId>" for Log file
+                                           iPop3DebugLevel As Integer,
+                                           globalSettings As GlobalSettings) As List(Of String)
 
         Dim files As List(Of String) = New List(Of String)
         Dim deniedFiles As List(Of String) = New List(Of String)
@@ -1716,104 +1752,93 @@ Module DH_Helpdesk_Mail
 
         If message.Attachments.Count > 6 - iHtmlFile Then
 
-            ' Kontrollera om folder existerar
-            If Directory.Exists(tempDirPath) = False Then
-                Directory.CreateDirectory(tempDirPath)
-            End If
+            ' Ensure temp and save directories exist
+            If Not Directory.Exists(tempDirPath) Then Directory.CreateDirectory(tempDirPath)
+            If Not Directory.Exists(saveDirPath) Then Directory.CreateDirectory(saveDirPath)
 
-            If Directory.Exists(saveDirPath) = False Then
-                Directory.CreateDirectory(saveDirPath)
-            End If
             Dim i As Integer = 1
-            'Save to temp dir
+            ' Save to temp dir
             For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
                 Dim sFileNameTemp As String = msgAttachment.FileName
                 sFileNameTemp = sFileNameTemp.Replace(":", "")
                 sFileNameTemp = URLDecode(sFileNameTemp)
 
                 Dim extension As String = Path.GetExtension(sFileNameTemp).Replace(".", "").ToLower()
-                If (IsExtensionInWhiteList(extension, whiteList)) Then
-                    ' save temp file
-
+                If IsExtensionInWhiteList(extension, whiteList) Then
+                    ' Save temp file
                     Dim sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
-                    If File.Exists(sTempFilePath) = True Then
-                        sFileNameTemp = Path.GetFileNameWithoutExtension(sTempFilePath) + "_" + Convert.ToString(i) + "." + extension
+                    If File.Exists(sTempFilePath) Then
+                        sFileNameTemp = Path.GetFileNameWithoutExtension(sTempFilePath) & "_" & i.ToString() & "." & extension
                         sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
                         i += 1
                     End If
+
                     msgAttachment.Save(sTempFilePath)
+
+                    ' Explicitly open and close file to ensure it's not locked
+                    Using fs As FileStream = File.Open(sTempFilePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)
+                    End Using
                 Else
                     deniedFiles.Add(sFileNameTemp)
                     LogToFile("Blocked file: " & sFileNameTemp, iPop3DebugLevel)
                 End If
-
             Next
 
-            'zip files 
+            ' Zip files
             Dim sFilePath As String = Path.Combine(saveDirPath, objectId & ".zip")
             createZipFile(tempDirPath, sFilePath)
             LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
 
             If Not IsNullOrEmpty(sFilePath) Then
-                'Ta bort tempkatalogen / delete temp dir
-                If Directory.Exists(tempDirPath) = True Then
-                    Directory.Delete(tempDirPath, True)
-                    ' Get the parent directory info
-                    Dim di As New DirectoryInfo(tempDirPath)
-                    If di.Parent IsNot Nothing Then
-                        ' Check if the parent directory exists
-                        If di.Parent.Exists Then
-                            ' Delete the parent directory and all its contents
-                            di.Parent.Delete(True)
-                        End If
-                    End If
-                End If
+                ' Delete temp directory safely
+                DeleteFilesInsideFolder(tempDirPath, True)
                 files.Add(sFilePath)
             End If
+
         ElseIf message.Attachments.Count > 0 Then
 
-            ' Kontrollera om folder existerar
-            If Directory.Exists(saveDirPath) = False Then
-                Directory.CreateDirectory(saveDirPath)
-            End If
+            ' Ensure save directory exists
+            If Not Directory.Exists(saveDirPath) Then Directory.CreateDirectory(saveDirPath)
 
             Dim i As Integer = 1
-            'Save to temp dir
+            ' Save directly to save dir
             For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
                 Dim sFileName As String = msgAttachment.FileName
-
                 sFileName = sFileName.Replace(":", "")
                 sFileName = URLDecode(sFileName)
 
                 Dim extension As String = Path.GetExtension(sFileName).Replace(".", "").ToLower()
-                If (IsExtensionInWhiteList(extension, whiteList)) Then
-
+                If IsExtensionInWhiteList(extension, whiteList) Then
                     Dim sFilePath = Path.Combine(saveDirPath, sFileName)
-                    If File.Exists(sFilePath) = True Then
-                        sFileName = Path.GetFileNameWithoutExtension(sFilePath) + "_" + Convert.ToString(i) + "." + extension
+                    If File.Exists(sFilePath) Then
+                        sFileName = Path.GetFileNameWithoutExtension(sFilePath) & "_" & i.ToString() & "." & extension
                         sFilePath = Path.Combine(saveDirPath, sFileName)
                         i += 1
                     End If
+
                     LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
                     msgAttachment.Save(sFilePath)
+
+                    ' Ensure file is closed after saving
+                    Using fs As FileStream = File.Open(sFilePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)
+                    End Using
 
                     files.Add(sFilePath)
                 Else
                     deniedFiles.Add(sFileName)
                     LogToFile("Blocked file: " & sFileName, iPop3DebugLevel)
                 End If
-
             Next
         End If
-        If (deniedFiles.Any()) Then
-            Dim deniedFilesContent As String = deniedFiles.Aggregate(Function(o As String, p As String) o & Environment.NewLine & p)
+
+        ' Save blocked files log if necessary
+        If deniedFiles.Any() Then
+            Dim deniedFilesContent As String = String.Join(Environment.NewLine, deniedFiles)
             Dim filePath As String = Path.Combine(saveDirPath, "blocked files.txt")
             File.WriteAllText(filePath, deniedFilesContent)
-
             files.Add(filePath)
-
-            ' TODO: Save blocked files.txt
         End If
+
         Return files
     End Function
 
@@ -2258,44 +2283,70 @@ Module DH_Helpdesk_Mail
 
         Return pdfFileName
     End Function
-    Sub DeleteFilesInsideFolder(ByVal target_folder_path As String, ByVal also_delete_sub_folders As Boolean)
+    Sub DeleteFilesInsideFolder(ByVal target_folder_path As String, ByVal also_delete_sub_folders As Boolean, Optional ByVal max_retries As Integer = 3, Optional ByVal retry_delay As Integer = 1000)
 
-        ' loop through each file in the target directory
+        ' Check if the target folder exists before proceeding
+        If Not Directory.Exists(target_folder_path) Then Exit Sub
+        ' Delete each file inside the target folder with retries
         For Each file_path As String In Directory.GetFiles(target_folder_path)
+            Dim success As Boolean = False
 
-            ' delete the file if possible...otherwise skip it
-            Try
-                File.Delete(file_path)
-            Catch ex As Exception
-                'LogError("Delete file error" & ex.Message.ToString(), Nothing)
-            End Try
-
+            For attempt As Integer = 1 To max_retries
+                Try
+                    If File.Exists(file_path) Then
+                        File.SetAttributes(file_path, FileAttributes.Normal) ' Remove read-only flag if set
+                        File.Delete(file_path)
+                    End If
+                    success = True
+                    Exit For
+                Catch ex As IOException
+                    Thread.Sleep(retry_delay)
+                End Try
+            Next
         Next
 
-
-        ' if sub-folders should be deleted
+        ' If sub-folders should be deleted
         If also_delete_sub_folders Then
 
-            ' loop through each file in the target directory
+            ' Delete each sub-folder recursively with retries
             For Each sub_folder_path As String In Directory.GetDirectories(target_folder_path)
+                Dim folderSuccess As Boolean = False
 
-                ' delete the sub-folder if possible...otherwise skip it
-                Try
-                    Directory.Delete(sub_folder_path, also_delete_sub_folders)
-                Catch ex As Exception
-                    'LogError(ex.Message.ToString(), Nothing)
-                End Try
-
+                For attempt As Integer = 1 To max_retries
+                    Try
+                        If Directory.Exists(sub_folder_path) Then
+                            Directory.Delete(sub_folder_path, True)
+                        End If
+                        folderSuccess = True
+                        Exit For
+                    Catch ex As IOException
+                        Thread.Sleep(retry_delay)
+                    End Try
+                Next
             Next
-            ' delete the Target-folder if possible...otherwise skip it
-            Try
-                Directory.Delete(target_folder_path, also_delete_sub_folders)
-            Catch ex As Exception
-                'LogError(ex.Message.ToString(), Nothing)
-            End Try
+
+            ' Garbage collect to release any lingering file handles before deleting the target folder
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+
+            ' Delete the target folder itself with retries
+            Dim finalSuccess As Boolean = False
+            For attempt As Integer = 1 To max_retries
+                Try
+                    If Directory.Exists(target_folder_path) Then
+                        Directory.Delete(target_folder_path, True)
+                    End If
+                    finalSuccess = True
+                    Exit For
+                Catch ex As IOException
+                    Thread.Sleep(retry_delay)
+                End Try
+            Next
+
         End If
 
     End Sub
+
     Private Sub openLogFile()
 
         If objLogFile IsNot Nothing Then
