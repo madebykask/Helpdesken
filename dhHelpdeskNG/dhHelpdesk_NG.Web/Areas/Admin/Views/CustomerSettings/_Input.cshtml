@@ -754,19 +754,19 @@
                                         </tr>
                                         <tr>
                                             <td>
+                                                Ews Tenant Id
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.Setting.EwsTenantId, new { maxlength = "200", style = "width: 400px;" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
                                                 Ews Client Secret
                                             </td>
                                             <td>
                                                 @Html.TextBoxFor(model => model.Setting.EwsClientSecret, new { maxlength = "200", disabled = "disable" }) <input type="button" style="width:97px;" value="@Translation.Get("Ändra", Enums.TranslationSource.TextTranslation)" name="changePasswordEws" class="changePassword btn"
                                                                                                                                                                  onclick="ChangeClientSecretEws()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Ews Tenant Id
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.EwsTenantId, new { maxlength = "200", style = "width: 400px;" })
                                             </td>
                                         </tr>
 
