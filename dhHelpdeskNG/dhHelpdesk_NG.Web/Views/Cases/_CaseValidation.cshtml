@@ -77,7 +77,7 @@
         extendedCaseInvalidMessage: '@Translation.GetForJS("Utökat ärende är inte giltigt")',
         computerUserCategories: @Html.Raw(Json.Encode(Model.ComputerUserCategories != null ? Model.ComputerUserCategories.Select(o => new { o.Name, o.IsReadOnly, o.Id }).ToDictionary(o => o.Id.ToString(), o => o) : null)),
         fileExistError: '@Translation.GetForJS("Bifogad fil är borttagen från ärendet")',
-        currentUserName: '@Model.CurrentUserName',
+        currentUserName: '@System.Web.HttpUtility.JavaScriptStringEncode(Model.CurrentUserName)',
         applicationType: '@ApplicationTypes.Helpdesk',
         caseLockedByLabel: '@Translation.GetForJS("Låsningen av ärendet bröts. Användare <name> har låst ärendet. Dina ändringar kan inte sparas. Stäng ärendet och försök att öppna det igen senare.")',
         caseCanNotCloseDueToBusinessRules: '@Translation.GetForJS("Ärendet uppfyller inte villkoren i business rules.")',
