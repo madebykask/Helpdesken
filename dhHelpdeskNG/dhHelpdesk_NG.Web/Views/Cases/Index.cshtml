@@ -15,7 +15,7 @@
     window.pageSettings = @Html.Raw(jsSerializer.Serialize(Model.PageSettings));
     window.pageSettings.perPageText = '@perPageText';
     window.pageSettings.perShowingText = '@perShowingText';
-    window.pageSettings.curUserId = '@(SessionFacade.CurrentUser != null ? SessionFacade.CurrentUser.UserId.ToLower().Replace("\\","\\\\"): string.Empty)';
+    window.pageSettings.curUserId = '@(SessionFacade.CurrentUser != null ? System.Web.HttpUtility.JavaScriptStringEncode(SessionFacade.CurrentUser.UserId.ToLower().Replace("\\","\\\\")): string.Empty)';
     window.pageSettings.isParentText = '@caseRelationTypeParent';
     window.pageSettings.isChildText = '@caseRelationTypeChild';
 </script>
