@@ -8720,6 +8720,13 @@ If not exists (select * from tblTextTranslation where text_id = 2187 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2187, 2, 'Use Graph to send email')
 GO
 
+If not exists (select * from tbltext where id = 2188)
+	insert into tbltext (id, TextString) VALUES (2188, 'Ärendet är redan avslutat')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2188 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2188, 2, 'The case is already closed')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
