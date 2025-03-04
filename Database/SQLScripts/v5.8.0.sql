@@ -1883,6 +1883,14 @@ IF COL_LENGTH('dbo.tblSettings','GraphUserName') IS NULL
 	End
 Go
 
+RAISERROR ('Add Column EwsClientSecretExpireDate to tblSettings', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblSettings','EwsClientSecretExpireDate') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblSettings]
+		ADD EwsClientSecretExpireDate datetime null
+	End
+Go
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.8.0'
 GO
