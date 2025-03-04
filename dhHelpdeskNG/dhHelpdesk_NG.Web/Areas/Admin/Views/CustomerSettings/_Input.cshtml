@@ -769,6 +769,15 @@
                                                                                                                                                                  onclick="ChangeClientSecretEws()" onmouseover="javascript:this.style.cursor='hand'; javascript:this.style.cursor='pointer';" />
                                             </td>
                                         </tr>
+                                        <tr>
+                                            <td>
+                                                Ews Secret @Translation.GetCoreTextTranslation("Utgångsdatum")
+                                            </td>
+                                            <td>
+                                                @Html.EditorFor(model => model.Setting.EwsClientSecretExpireDate, "DatePicker", new { id = "EwsClientSecretExpireDate" })
+
+                                            </td>
+                                        </tr>
 
                                     </tbody>
 
@@ -789,6 +798,7 @@
                                     @Html.HiddenFor(model => model.Setting.POP3EMailPrefix)
                                     @Html.HiddenFor(model => model.Setting.EwsApplicationId)
                                     @Html.HiddenFor(model => model.Setting.EwsClientSecret)
+                                    @Html.HiddenFor(model => model.Setting.EwsClientSecretExpireDate)
                                     @Html.HiddenFor(model => model.Setting.EwsTenantId)
                                     @Html.HiddenFor(model => model.Setting.EMailFolder)
                                     @Html.HiddenFor(model => model.Setting.EMailFolderArchive)
