@@ -33,7 +33,7 @@ namespace DH.Helpdesk.EmailEngine.Library
 
         public void ProcessEmails()
         {
-            _logger.Debug("ProcessEmails has been started.");
+            _logger.Debug("ProcessEmails has been started successfully");
 
             var maxAttempts = int.Parse(ConfigurationManager.AppSettings["MaxAttempts"]);
             var query = from e in _context.EmailLogs
