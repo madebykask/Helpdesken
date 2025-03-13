@@ -318,7 +318,7 @@ Module DH_Helpdesk_Mail
             Dim customers As List(Of Customer)
 
             If iSyncType = SyncType.SyncByWorkingGroup Then
-                customers = objCustomerData.getCustomersByWorkingGroup().Where(Function(x) x.Status = 1).ToList()
+                customers = objCustomerData.getCustomersByWorkingGroup()
             Else
                 customers = objCustomerData.getCustomers().Where(Function(x) x.Status = 1).ToList()
             End If
@@ -1647,12 +1647,11 @@ Module DH_Helpdesk_Mail
             If folder Is Nothing Then
                 LogToFile("Searching for root folder: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
                 Try
-                    folders = service.FindFolders(WellKnownFolderName.Inbox, New FolderView(100))
+                    folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
                 Catch ex As Exception
                     LogError("Exception in FindFolders: " & ex.Message & " - " & ex.StackTrace & " - Customer id:  " & objCustomer.Id & " - Service url: " & service.Url.ToString(), objCustomer)
                     Return Nothing ' Är detta rätt tro?
                 End Try
-                folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
             ElseIf folder.Id IsNot Nothing Then
                 LogToFile("Searching for subfolder: " & currentFolderName & " under parent " & folder.DisplayName & " (Customer: " & objCustomer.Id & ")", 1)
                 folders = service.FindFolders(folder.Id, New FolderView(100))
