@@ -1304,7 +1304,7 @@ Module DH_Helpdesk_Mail
                                 If objMovedFromCustomer IsNot Nothing Then
                                     objCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
 
-                                    LogToFile("If Case has been moved from a customer, the message must move from the origin customer, set to customer: " & objCustomer.Id, iPop3DebugLevel)
+                                    LogToFile($"Case has been moved from customer {objCase.MovedFromCustomer_Id}, new customer id {objCase.Customer_Id}", iPop3DebugLevel)
                                 End If
 
                                 If eMailConnectionType = MailConnectionType.Pop3 Then
@@ -1322,7 +1322,7 @@ Module DH_Helpdesk_Mail
                                     ' Purge to apply message delete otherwise the message will stay in Inbox
                                     IMAPclient.Purge()
                                 ElseIf eMailConnectionType = MailConnectionType.Ews Then
-
+                                    LogToFile("Trying to delete " & message.Subject & " from Inbox for customer id: " & objCustomer.Id, iPop3DebugLevel)
                                     ' Copy mail if archieve, ' delete mail
                                     DeleteEwsMail(message, objCustomer,
                                           objCustomer.POP3Server,
@@ -1389,12 +1389,13 @@ Module DH_Helpdesk_Mail
         service.ImpersonatedUserId = New ImpersonatedUserId(ConnectingIdType.SmtpAddress, userName)
         service.HttpHeaders.Add("X-AnchorMailbox", userName)
 
+        LogToFile($"Trying to delete message for customer: {objCustomer.Id} with server: {server}, ImpersonatedUserId {service.ImpersonatedUserId.Id}, token {result.AccessToken}, username {userName} ", objCustomer.POP3DebugLevel)
         If (Not String.IsNullOrWhiteSpace(emailArchiveFolder)) Then
-
+            LogToFile($"Trying to find emailArchiveFolder", objCustomer.POP3DebugLevel)
             Dim archive As Folder = FindEwsFolder(objCustomer, emailArchiveFolder, service)
-
+            LogToFile($"emailArchiveFolder found {archive}", objCustomer.POP3DebugLevel)
             If (archive Is Nothing) Then
-                LogError("Error coping to archive folder. Archive folder not found: " & emailArchiveFolder, objCustomer)
+                LogError("Error copying to archive folder. Archive folder Not found:  " & emailArchiveFolder, objCustomer)
             Else
                 Dim ids = New List(Of ItemId)
                 ids.Add(message.EwsID)
@@ -1645,7 +1646,12 @@ Module DH_Helpdesk_Mail
 
             If folder Is Nothing Then
                 LogToFile("Searching for root folder: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
-                folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
+                Try
+                    folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
+                Catch ex As Exception
+                    LogError("Exception in FindFolders: " & ex.Message & " - " & ex.StackTrace & " - Customer id:  " & objCustomer.Id & " - Service url: " & service.Url.ToString(), objCustomer)
+                    Return Nothing ' Är detta rätt tro?
+                End Try
             ElseIf folder.Id IsNot Nothing Then
                 LogToFile("Searching for subfolder: " & currentFolderName & " under parent " & folder.DisplayName & " (Customer: " & objCustomer.Id & ")", 1)
                 folders = service.FindFolders(folder.Id, New FolderView(100))
