@@ -635,10 +635,10 @@ Imports System.Data
         Else
             miMovedFromCustomer_Id = dr("MovedFromCustomer_Id")
         End If
-        If IsDBNull(dr("OriginWorkingGroupId")) Then
+        If IsDBNull(dr("OriginWorkingGroup_Id")) Then
             miOriginWorkingGroup_Id = 0
         Else
-            miOriginWorkingGroup_Id = dr("OriginWorkingGroupId")
+            miOriginWorkingGroup_Id = dr("OriginWorkingGroup_Id")
         End If
     End Sub
 
