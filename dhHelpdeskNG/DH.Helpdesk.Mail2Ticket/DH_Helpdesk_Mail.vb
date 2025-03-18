@@ -1302,7 +1302,7 @@ Module DH_Helpdesk_Mail
                                 End If
 
                                 'Move message to archive folder
-                                'If Case has been moved from a customer, the message must move from the origin customer
+                                'If Case has been moved from a customer, the message must move from the origin customers inbox
                                 If objMovedFromCustomer IsNot Nothing Then
                                     objCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                     If Not IsNullOrEmpty(objCase.OriginWorkingGroup_Id) AndAlso objCase.OriginWorkingGroup_Id <> objCase.WorkingGroup_Id Then
@@ -1413,6 +1413,8 @@ Module DH_Helpdesk_Mail
                 ids.Add(message.EwsID)
                 service.CopyItems(ids, archive.Id, False)
             End If
+        Else
+            LogToFile($"Could not find emailArchiveFolder {emailArchiveFolder}", objCustomer.POP3DebugLevel)
         End If
 
         Dim deleteIds As List(Of ItemId) = New List(Of ItemId)()
