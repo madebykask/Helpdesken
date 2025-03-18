@@ -1835,6 +1835,17 @@ GO
 -- 5.7.2 
 -- Changes for 5.7.2 goes here
 
+-- 5.7.3
+-- Changes for 5.7.3 goes here
+
+RAISERROR ('Add Column OriginWorkingGroup_Id to tblCase', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCase','OriginWorkingGroup_Id') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblCase]
+		ADD OriginWorkingGroup_Id int null
+	End
+Go
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.7.2'
 GO
