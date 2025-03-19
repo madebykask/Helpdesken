@@ -393,14 +393,15 @@ Public Class CustomerData
             Throw
         End Try
     End Function
-    Public Function GetOriginWorkingGroupEmail(iWorkingGroupId As Integer) As Customer
+    Public Function GetOriginCustomerByWorkingGroupId(iWorkingGroupId As Integer) As Customer
         Dim cCustomer As New Customer()
         Dim sSQL As String
 
         ' Use parameterized query to prevent SQL injection
-        sSQL = "SELECT POP3UserName " &
-           "FROM tblWorkingGroup " &
-           "WHERE Id = @WorkingGroupId"
+        sSQL = "  select tblSettings.Customer_Id, tblSettings.POP3Server, tblSettings.POP3Port, tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId," &
+        " tblWorkingGroup.Pop3UserName from tblSettings " &
+        " inner join tblWorkingGroup on tblWorkingGroup.Customer_Id = tblSettings.Customer_Id " &
+        " WHERE tblWorkingGroup.Id = @WorkingGroupId "
 
         ' Log if needed
         If giLoglevel > 0 Then
@@ -417,6 +418,14 @@ Public Class CustomerData
                     Using reader As SqlDataReader = cmd.ExecuteReader()
                         If reader.Read() Then
                             cCustomer.POP3UserName = reader("POP3UserName").ToString()
+                            cCustomer.POP3Port = reader("POP3Port").ToString()
+                            cCustomer.POP3Server = reader("POP3Server").ToString()
+                            cCustomer.EMailFolder = reader("EMailFolder").ToString()
+                            cCustomer.EMailFolderArchive = reader("EMailFolderArchive").ToString()
+                            cCustomer.EwsApplicationId = reader("EwsApplicationId").ToString()
+                            cCustomer.EwsClientSecret = reader("EwsClientSecret").ToString()
+                            cCustomer.EwsTenantId = reader("EwsTenantId").ToString()
+                            cCustomer.Id = reader("Customer_Id").ToString()
                         End If
                     End Using
                 Catch ex As Exception
