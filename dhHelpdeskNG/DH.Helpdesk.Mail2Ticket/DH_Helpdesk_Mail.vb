@@ -1305,15 +1305,12 @@ Module DH_Helpdesk_Mail
                                 'If Case has been moved from a customer, the message must move from the origin customers inbox
                                 If objMovedFromCustomer IsNot Nothing Then
                                     objCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
-                                    If Not IsNullOrEmpty(objCase.OriginWorkingGroup_Id) AndAlso objCase.OriginWorkingGroup_Id <> objCase.WorkingGroup_Id Then
-                                        Dim originCustomerWorkingGroup As Customer = objCustomerData.GetOriginWorkingGroupEmail(objCase.OriginWorkingGroup_Id)
-                                        If originCustomerWorkingGroup IsNot Nothing Then
-                                            objCustomer.POP3UserName = originCustomerWorkingGroup.POP3UserName
-                                        End If
-                                        LogToFile($"Case has been moved from origin workingGroupId {objCase.OriginWorkingGroup_Id}, new workingGroupId id {objCase.WorkingGroup_Id}", iPop3DebugLevel)
-                                    End If
-
                                     LogToFile($"Case has been moved from customer {objCase.MovedFromCustomer_Id}, new customer id {objCase.Customer_Id}", iPop3DebugLevel)
+                                End If
+                                'Get the correct customer based on the origin workingGroup in order to delete the email
+                                If Not IsNullOrEmpty(objCase.OriginWorkingGroup_Id) AndAlso objCase.OriginWorkingGroup_Id <> objCase.WorkingGroup_Id Then
+                                    objCustomer = objCustomerData.GetOriginCustomerByWorkingGroupId(objCase.OriginWorkingGroup_Id)
+                                    LogToFile($"Case has been moved from origin workingGroupId {objCase.OriginWorkingGroup_Id}, new workingGroupId id {objCase.WorkingGroup_Id}", iPop3DebugLevel)
                                 End If
 
                                 If eMailConnectionType = MailConnectionType.Pop3 Then
