@@ -502,7 +502,7 @@ Module DH_Helpdesk_Mail
                                     emailFolder = objCustomer.EMailFolder
                                 End If
                             End If
-
+                            '
                             If Not IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
                                 If Not CheckEmailFolderExists(IMAPclient, objCustomer.EMailFolderArchive) Then
                                     LogError($"EmailFolderArchive '{objCustomer.EMailFolderArchive}' doesn't exist.", objCustomer)
@@ -1390,17 +1390,16 @@ Module DH_Helpdesk_Mail
         service.HttpHeaders.Add("X-AnchorMailbox", userName)
 
         LogToFile($"Trying to delete message for customer: {objCustomer.Id} with server: {server}, ImpersonatedUserId {service.ImpersonatedUserId.Id}, token {result.AccessToken}, username {userName} ", objCustomer.POP3DebugLevel)
+
         If (Not String.IsNullOrWhiteSpace(emailArchiveFolder)) Then
-            LogToFile($"Trying to find emailArchiveFolder", objCustomer.POP3DebugLevel)
             Dim archive As Folder = FindEwsFolder(objCustomer, emailArchiveFolder, service)
-            LogToFile($"emailArchiveFolder found {archive}", objCustomer.POP3DebugLevel)
-            If (archive Is Nothing) Then
-                LogError("Error copying to archive folder. Archive folder Not found:  " & emailArchiveFolder, objCustomer)
-            Else
-                Dim ids = New List(Of ItemId)
-                ids.Add(message.EwsID)
-                service.CopyItems(ids, archive.Id, False)
+            If Not archive Is Nothing Then
+                Dim copyIds = New List(Of ItemId)
+                copyIds.Add(message.EwsID)
+                service.CopyItems(copyIds, archive.Id, False)
+                LogToFile($"EmailArchiveFolder found Coying email to: {emailArchiveFolder}.", objCustomer.POP3DebugLevel)
             End If
+
         End If
 
         Dim deleteIds As List(Of ItemId) = New List(Of ItemId)()
@@ -1410,7 +1409,6 @@ Module DH_Helpdesk_Mail
                             SendCancellationsMode.SendToNone,
                             AffectedTaskOccurrence.AllOccurrences)
 
-        'service.CopyItems()
     End Function
 
 
@@ -1453,12 +1451,13 @@ Module DH_Helpdesk_Mail
             Return Nothing
         End If
 
-        If Not String.IsNullOrWhiteSpace(emailArchiveFolder) Then
-            If FindEwsFolder(objCustomer, emailArchiveFolder, service) Is Nothing Then
-                LogError($"EmailFolderArchive '{emailArchiveFolder}' doesn't exist.", objCustomer)
-                Return Nothing
-            End If
-        End If
+        ' Här smäller det eftersom arkivmapp tydligen inte är obligatorisk
+        'If Not String.IsNullOrWhiteSpace(emailArchiveFolder) Then
+        '    If FindEwsFolder(objCustomer, emailArchiveFolder, service) Is Nothing Then
+        '        LogError($"EmailFolderArchive '{emailArchiveFolder}' doesn't exist.", objCustomer)
+        '        'Return Nothing
+        '    End If
+        'End If
 
         Dim items As FindItemsResults(Of Item) = inbox.FindItems(New ItemView(10000))
         Dim messages As List(Of MailMessage) = New List(Of MailMessage)()
@@ -1644,37 +1643,41 @@ Module DH_Helpdesk_Mail
         For Each currentFolderName As String In emailFolders
             Dim folders As FindFoldersResults
 
-            If folder Is Nothing Then
-                LogToFile("Searching for root folder: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
-                Try
+            Try
+                If folder Is Nothing Then
+                    LogToFile($"Searching for root folder: {currentFolderName} (Customer: {objCustomer.Id})", 1)
                     folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
-                Catch ex As Exception
-                    LogError("Exception in FindFolders: " & ex.Message & " - " & ex.StackTrace & " - Customer id:  " & objCustomer.Id & " - Service url: " & service.Url.ToString(), objCustomer)
-                    Return Nothing ' Är detta rätt tro?
-                End Try
-            ElseIf folder.Id IsNot Nothing Then
-                LogToFile("Searching for subfolder: " & currentFolderName & " under parent " & folder.DisplayName & " (Customer: " & objCustomer.Id & ")", 1)
-                folders = service.FindFolders(folder.Id, New FolderView(100))
+                ElseIf folder.Id IsNot Nothing Then
+                    LogToFile($"Searching for subfolder: {currentFolderName} under parent {folder.DisplayName} (Customer: {objCustomer.Id})", 1)
+                    folders = service.FindFolders(folder.Id, New FolderView(100))
+                Else
+                    LogToFile($"Invalid folder ID for: {currentFolderName} (Customer: {objCustomer.Id})", 1)
+                    Return Nothing ' Stop processing if folder ID is invalid
+                End If
+            Catch ex As Exception
+                LogError($"Exception in FindFolders: {ex.Message} - {ex.StackTrace} - Customer ID: {objCustomer.Id} - Service URL: {service.Url}", objCustomer)
+                Return Nothing ' Exit if a critical error occurs
+            End Try
+
+            ' Log results of the folder search
+            If folders IsNot Nothing AndAlso folders.Folders.Any() Then
+                LogToFile($"Found {folders.Folders.Count} folders under {If(folder?.DisplayName, "Root")} (Customer: {objCustomer.Id})", 1)
             Else
-                LogToFile("Invalid folder ID for: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
-                Return Nothing ' Stop processing if folder ID is invalid
+                LogToFile($"No folders found under {If(folder?.DisplayName, "Root")} (Customer: {objCustomer.Id})", 1)
+                Return Nothing ' Exit if no folders found
             End If
 
-            If folders IsNot Nothing AndAlso folders.Folders.Count > 0 Then
-                LogToFile("Found " & folders.Folders.Count & " folders under " & If(folder?.DisplayName, "Root") & " (Customer: " & objCustomer.Id & ")", 1)
-            Else
-                LogToFile("No folders found under " & If(folder?.DisplayName, "Root") & " (Customer: " & objCustomer.Id & ")", 1)
-            End If
-
+            ' Find the folder by name
             folder = folders.FirstOrDefault(Function(f) f.DisplayName.Equals(currentFolderName, StringComparison.InvariantCultureIgnoreCase))
 
             If folder Is Nothing Then
-                LogToFile("Can't find folder: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
+                LogToFile($"Can't find folder: {currentFolderName} (Customer: {objCustomer.Id})", 1)
                 Return Nothing ' Exit immediately
             Else
-                LogToFile("Folder found: " & folder.DisplayName & " (Customer: " & objCustomer.Id & ")", 1)
+                LogToFile($"Folder found: {folder.DisplayName} (Customer: {objCustomer.Id})", 1)
             End If
         Next
+
 
         LogToFile("Folder search completed successfully for: " & emailFolder & " (Customer: " & objCustomer.Id & ")", 1)
         Return folder
