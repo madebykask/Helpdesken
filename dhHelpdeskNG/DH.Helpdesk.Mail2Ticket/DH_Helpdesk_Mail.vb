@@ -186,6 +186,7 @@ Module DH_Helpdesk_Mail
                     If objCustomer.PhysicalFilePath = "" Then
                         objCustomer.PhysicalFilePath = objGlobalSettings.AttachedFileFolder
                     End If
+
                     'Make sure to delete old temp folders (if any error occurred in session) 
                     Try
                         Dim tempFolders As String() = Directory.GetDirectories(objCustomer.PhysicalFilePath, workingModeNumber.ToString() & "_temp_" & processId)
@@ -780,6 +781,7 @@ Module DH_Helpdesk_Mail
                                         .StateSecondary_Id = objCustomer.DefaultStateSecondary_Id,
                                         .Customer_Id = objCustomer.Id,
                                         .WorkingGroup_Id = objCustomer.DefaultWorkingGroup_Id,
+                                        .OriginWorkingGroup_Id = objCustomer.DefaultWorkingGroup_Id,
                                         .RegLanguage_Id = objCustomer.Language_Id,
                                         .RegistrationSourceCustomer_Id = objCustomer.RegistrationSourceCustomer_Id,
                                         .Performer_User_Id = objCustomer.DefaultAdministratorExternalUser_Id,
@@ -1299,10 +1301,17 @@ Module DH_Helpdesk_Mail
                                     objMailTicket.Save(objCase.Id, iLog_Id, "bcc", message.Bcc.ToString(), Nothing, messageId)
                                 End If
 
-                                'Move message to atchive folder
-                                'If Case has been moved from a customer, the message must move from the origin customer
+                                'Move message to archive folder
+                                'If Case has been moved from a customer, the message must move from the origin customers inbox
                                 If objMovedFromCustomer IsNot Nothing Then
                                     objCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
+                                    If Not IsNullOrEmpty(objCase.OriginWorkingGroup_Id) AndAlso objCase.OriginWorkingGroup_Id <> objCase.WorkingGroup_Id Then
+                                        Dim originCustomerWorkingGroup As Customer = objCustomerData.GetOriginWorkingGroupEmail(objCase.OriginWorkingGroup_Id)
+                                        If originCustomerWorkingGroup IsNot Nothing Then
+                                            objCustomer.POP3UserName = originCustomerWorkingGroup.POP3UserName
+                                        End If
+                                        LogToFile($"Case has been moved from origin workingGroupId {objCase.OriginWorkingGroup_Id}, new workingGroupId id {objCase.WorkingGroup_Id}", iPop3DebugLevel)
+                                    End If
 
                                     LogToFile($"Case has been moved from customer {objCase.MovedFromCustomer_Id}, new customer id {objCase.Customer_Id}", iPop3DebugLevel)
                                 End If
@@ -1389,7 +1398,9 @@ Module DH_Helpdesk_Mail
         service.ImpersonatedUserId = New ImpersonatedUserId(ConnectingIdType.SmtpAddress, userName)
         service.HttpHeaders.Add("X-AnchorMailbox", userName)
 
-        LogToFile($"Trying to delete message for customer: {objCustomer.Id} with server: {server}, ImpersonatedUserId {service.ImpersonatedUserId.Id}, token {result.AccessToken}, username {userName} ", objCustomer.POP3DebugLevel)
+        Dim tokenStatus As String = If(String.IsNullOrEmpty(result.AccessToken), "No token", "Token present")
+
+        LogToFile($"Trying to delete message for customer: {objCustomer.Id} with server: {server}, ImpersonatedUserId {service.ImpersonatedUserId.Id}, token status: {tokenStatus}, username {userName} ", objCustomer.POP3DebugLevel)
 
         If (Not String.IsNullOrWhiteSpace(emailArchiveFolder)) Then
             Dim archive As Folder = FindEwsFolder(objCustomer, emailArchiveFolder, service)
@@ -1399,7 +1410,6 @@ Module DH_Helpdesk_Mail
                 service.CopyItems(copyIds, archive.Id, False)
                 LogToFile($"EmailArchiveFolder found Coying email to: {emailArchiveFolder}.", objCustomer.POP3DebugLevel)
             End If
-
         End If
 
         Dim deleteIds As List(Of ItemId) = New List(Of ItemId)()

@@ -400,7 +400,7 @@ Public Class CaseData
                             "InventoryType, InventoryLocation, Currency, ContactBeforeAction, FinishingDescription, " &
                             "Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone, Place, UserCode, CostCentre, InventoryNumber, InvoiceNumber, " &
                             "Caption, Description, Miscellaneous, Available, ReferenceNumber, Priority_Id, WorkingGroup_Id, Performer_User_Id, Status_Id, StateSecondary_Id, " &
-                            "WatchDate, PlanDate, AgreedDate, FinishingDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id, RegUserName, CaseSolution_Id, RegTime, ChangeTime) " &
+                            "WatchDate, PlanDate, AgreedDate, FinishingDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id, RegUserName, CaseSolution_Id, OriginWorkingGroup_Id, RegTime, ChangeTime) " &
                         "VALUES(" &
                             getDBStringPrefix() & "'" & objCase.CaseGUID & "', " &
                             getDBStringPrefix() & "'" & objCase.ExternalCasenumber & "', " &
@@ -606,6 +606,12 @@ Public Class CaseData
                 sSQL = sSQL & "Null, "
             Else
                 sSQL = sSQL & objCase.CaseSolution_Id & ", "
+            End If
+
+            If objCase.OriginWorkingGroup_Id = 0 Then
+                sSQL = sSQL & "Null, "
+            Else
+                sSQL = sSQL & objCase.OriginWorkingGroup_Id & ", "
             End If
 
             sSQL = sSQL & "getutcdate(), getutcdate())"
@@ -996,7 +1002,7 @@ Public Class CaseData
                        "tblCase.CaseSolution_Id,tblCase.FinishingDate, tblCase.FinishingDescription, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
                        "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.WatchDate, tblCase.RegistrationSource, tblCase.RegistrationSourceCustomer_Id, " &
                        "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, tblCase.Available, tblCase.ReferenceNumber, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, " &
-                       "tblStateSecondary.FinishingCause_Id AS StateSecondary_FinishingCause_Id, tblStateSecondary.ReminderDays AS StateSecondary_ReminderDays, tblStateSecondary.AutoCloseDays AS StateSecondary_AutoCloseDays, tblCase.ExternalTime, tblCase.LeadTime, tblCase.Status, tblCase.MovedFromCustomer_Id " &
+                       "tblStateSecondary.FinishingCause_Id AS StateSecondary_FinishingCause_Id, tblStateSecondary.ReminderDays AS StateSecondary_ReminderDays, tblStateSecondary.AutoCloseDays AS StateSecondary_AutoCloseDays, tblCase.ExternalTime, tblCase.LeadTime, tblCase.Status, tblCase.MovedFromCustomer_Id, tblCase.OriginWorkingGroup_Id " &
                    "FROM tblCase " &
                        "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
                        "LEFT OUTER JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &
