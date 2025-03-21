@@ -1,4 +1,4 @@
-﻿--update DB from 5.3.58.0 to 5.7.2 version
+﻿--update DB from 5.3.58.0 to 5.7.3 version
 
 -- 5.3.58.0 --
 
@@ -1847,6 +1847,6 @@ IF COL_LENGTH('dbo.tblCase','OriginWorkingGroup_Id') IS NULL
 Go
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.7.2'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.7.3'
 GO
 
