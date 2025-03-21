@@ -329,7 +329,7 @@ Module DH_Helpdesk_Mail
             For Each objCustomer In customers
 
                 iCustomerCount += 1
-
+                objMovedFromCustomer = Nothing
                 ' Filter customers based on diagnostic param
                 If (customersFilter.Any() AndAlso Not customersFilter.Contains(objCustomer.Id)) Then
                     Continue For
@@ -626,6 +626,7 @@ Module DH_Helpdesk_Mail
                                                 objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                 'Get the new correct customer
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
+                                                LogToFile("Found existing moved case with bEnableNewEmailProcessing. Old Customer: " & messageId & " MovedFromCustomer: " & objCase.MovedFromCustomer_Id & " new customer:" & objCase.Customer_Id, iPop3DebugLevel)
                                             End If
                                             LogToFile("EnableNewEmailProcessing Found case by getMailIDByMessageID: " & iMailID.ToString() & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
                                             Exit For
@@ -657,6 +658,7 @@ Module DH_Helpdesk_Mail
                                                     objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                     ' Update to the new correct customer if the case was moved
                                                     objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
+                                                    LogToFile("Found existing moved case with orderMessageId. Old Customer: " & objCase.MovedFromCustomer_Id & " new customer:" & objCase.Customer_Id, iPop3DebugLevel)
                                                 End If
                                                 LogToFile("Found case by getCaseByOrderMessageID: " & replyToId & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
                                             Else
@@ -669,6 +671,7 @@ Module DH_Helpdesk_Mail
                                                 'Keep the old customer
                                                 objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
+                                                LogToFile("Found existing moved case with getCaseByOrderMessageID. Old Customer: " & objCase.MovedFromCustomer_Id & " new customer:" & objCase.Customer_Id, iPop3DebugLevel)
                                             End If
                                             LogToFile("Found case by getCaseByMessageID: " & replyToId & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
                                         End If
@@ -714,7 +717,7 @@ Module DH_Helpdesk_Mail
                                                 objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                 'Get the new correct customer
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
-                                                LogToFile("Found existing moved case with EmailSubjectPattern and CaseNumber:: " & iCaseNumber & " MovedFromCustomer: " & objCustomer.Id, iPop3DebugLevel)
+                                                LogToFile("Found existing moved case with EmailSubjectPattern and CaseNumber. Old Customer: " & objCase.MovedFromCustomer_Id & " CaseNumber " & iCaseNumber & " MovedFromCustomer: " & objCustomer.Id, iPop3DebugLevel)
                                             Else
                                                 objCase = Nothing
                                                 LogToFile("Did not find existing moved case with EmailSubjectPattern and CaseNumber: " & iCaseNumber, iPop3DebugLevel)
@@ -1117,6 +1120,7 @@ Module DH_Helpdesk_Mail
                                         objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                         'Get the new customer
                                         objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
+                                        LogToFile("Found existing moved case MovedFromCustomer: " & objCase.MovedFromCustomer_Id & " new customer:" & objCase.Customer_Id, iPop3DebugLevel)
                                     End If
                                     ' Save answer as a log post 
                                     ' Only answer 
@@ -1303,7 +1307,7 @@ Module DH_Helpdesk_Mail
 
                                 'Move message to archive folder
                                 'If Case has been moved from a customer, the message must move from the origin customers inbox
-                                If objMovedFromCustomer IsNot Nothing Then
+                                If objMovedFromCustomer IsNot Nothing AndAlso objMovedFromCustomer.Id <> 0 Then
                                     objCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                     LogToFile($"Case has been moved from customer {objCase.MovedFromCustomer_Id}, new customer id {objCase.Customer_Id}", iPop3DebugLevel)
                                 End If
