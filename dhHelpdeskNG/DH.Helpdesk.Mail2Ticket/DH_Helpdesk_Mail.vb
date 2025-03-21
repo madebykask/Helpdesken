@@ -1308,7 +1308,7 @@ Module DH_Helpdesk_Mail
                                     LogToFile($"Case has been moved from customer {objCase.MovedFromCustomer_Id}, new customer id {objCase.Customer_Id}", iPop3DebugLevel)
                                 End If
                                 'Get the correct customer based on the origin workingGroup in order to delete the email
-                                If Not IsNullOrEmpty(objCase.OriginWorkingGroup_Id) AndAlso objCase.OriginWorkingGroup_Id <> objCase.WorkingGroup_Id Then
+                                If Not IsNullOrEmpty(objCase.OriginWorkingGroup_Id) AndAlso objCase.OriginWorkingGroup_Id <> objCase.WorkingGroup_Id AndAlso objCase.OriginWorkingGroup_Id <> 0 Then
                                     objCustomer = objCustomerData.GetOriginCustomerByWorkingGroupId(objCase.OriginWorkingGroup_Id)
                                     LogToFile($"Case has been moved from origin workingGroupId {objCase.OriginWorkingGroup_Id}, new workingGroupId id {objCase.WorkingGroup_Id}", iPop3DebugLevel)
                                 End If
