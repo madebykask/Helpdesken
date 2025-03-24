@@ -20,7 +20,6 @@ Imports DH.Helpdesk.Library
 Imports DH.Helpdesk.Library.SharedFunctions
 Imports DH.Helpdesk.VBCSharpBridge.Models
 Imports HtmlAgilityPack
-Imports ICSharpCode.SharpZipLib.Zip
 Imports Microsoft.Exchange.WebServices.Data
 Imports Microsoft.Identity.Client
 Imports Rebex
@@ -29,6 +28,8 @@ Imports Rebex.Mime
 Imports Rebex.Mime.Headers
 Imports Rebex.Net
 Imports Winnovative
+Imports System.IO.Compression
+Imports System.IO.Compression.FileSystem
 Imports AttachmentCollection = Microsoft.Exchange.WebServices.Data.AttachmentCollection
 
 
@@ -1782,19 +1783,22 @@ Module DH_Helpdesk_Mail
             EnsureDirectoryExists(saveDirPath)
 
             For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
-                ' Lägg INTE till i files-listan, bara spara till temp
                 ProcessSingleAttachment(msgAttachment, tempDirPath, whiteList, deniedFiles, files, iPop3DebugLevel, addToSavedFilesList:=False)
             Next
 
-            ' Zip och spara endast zip-filen i 'files'
+            ' Skapa zip-fil
             Dim zipFilePath As String = Path.Combine(saveDirPath, objectId & ".zip")
             createZipFile(tempDirPath, zipFilePath)
             LogToFile("Attached file path: " & zipFilePath, iPop3DebugLevel)
 
-            If Not IsNullOrEmpty(zipFilePath) Then
-                DeleteFilesInsideFolder(tempDirPath, True)
-                files.Add(zipFilePath)
-            End If
+            ' Vänta för säkerhets skull
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            Threading.Thread.Sleep(250)
+
+            SafeDeleteDirectory(tempDirPath)
+            files.Add(zipFilePath)
+
         ElseIf message.Attachments.Count > 0 Then
             EnsureDirectoryExists(saveDirPath)
 
@@ -1803,7 +1807,7 @@ Module DH_Helpdesk_Mail
             Next
         End If
 
-        ' Spara loggfil för blockerade bilagor
+        ' Spara blockerade filer
         If deniedFiles.Any() Then
             Dim deniedFilesContent As String = String.Join(Environment.NewLine, deniedFiles)
             Dim filePath As String = Path.Combine(saveDirPath, "blocked files.txt")
@@ -1813,6 +1817,7 @@ Module DH_Helpdesk_Mail
 
         Return files
     End Function
+
     Private Sub EnsureDirectoryExists(path As String)
         If Not Directory.Exists(path) Then
             Directory.CreateDirectory(path)
@@ -1832,8 +1837,8 @@ Module DH_Helpdesk_Mail
 
         If IsExtensionInWhiteList(extension, whiteList) Then
             Dim targetPath As String = Path.Combine(targetDirectory, sanitizedFileName)
-
             Dim i As Integer = 1
+
             While File.Exists(targetPath)
                 Dim nameWithoutExt = Path.GetFileNameWithoutExtension(sanitizedFileName)
                 sanitizedFileName = $"{nameWithoutExt}_{i}.{extension}"
@@ -1843,19 +1848,35 @@ Module DH_Helpdesk_Mail
 
             msgAttachment.Save(targetPath)
 
-            ' Säkerställ att filen går att öppna
             Using fs As FileStream = File.Open(targetPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)
             End Using
 
             LogToFile("Saved file: " & targetPath, debugLevel)
-
-            If addToSavedFilesList Then
-                savedFiles.Add(targetPath)
-            End If
+            If addToSavedFilesList Then savedFiles.Add(targetPath)
         Else
             deniedFiles.Add(sanitizedFileName)
             LogToFile("Blocked file: " & sanitizedFileName, debugLevel)
         End If
+    End Sub
+
+    Private Sub SafeDeleteDirectory(path As String)
+        Const maxAttempts As Integer = 5
+        Const delayMs As Integer = 500
+
+        For attempt As Integer = 1 To maxAttempts
+            Try
+                If Directory.Exists(path) Then
+                    Directory.Delete(path, True)
+                End If
+                Exit For
+            Catch ex As IOException
+                If attempt = maxAttempts Then
+                    LogToFile("Failed to delete temp folder after retries: " & path, 1)
+                    Throw
+                End If
+                Threading.Thread.Sleep(delayMs)
+            End Try
+        Next
     End Sub
 
 
@@ -2473,10 +2494,19 @@ Module DH_Helpdesk_Mail
         End If
     End Sub
 
-    Private Sub createZipFile(ByVal sSourceDir As String, ByVal sFileName As String)
-        Dim fz As New FastZip
-        fz.CreateZip(sFileName, sSourceDir, True, "", "")
-        fz = Nothing
+    Private Sub createZipFile(sourceDir As String, zipFilePath As String)
+        Try
+            ' Ta bort tidigare zip om den finns
+            If File.Exists(zipFilePath) Then
+                File.Delete(zipFilePath)
+            End If
+
+            ' Skapa zip från mappen
+            ZipFile.CreateFromDirectory(sourceDir, zipFilePath, CompressionLevel.Optimal, includeBaseDirectory:=False)
+        Catch ex As Exception
+            LogToFile("Zip creation failed: " & ex.Message, 1)
+            Throw
+        End Try
     End Sub
 
     Private Function convertHTMLtoText(ByVal sHTML As String) As String
