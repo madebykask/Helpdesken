@@ -330,6 +330,7 @@ Module DH_Helpdesk_Mail
 
                 iCustomerCount += 1
                 objMovedFromCustomer = Nothing
+
                 ' Filter customers based on diagnostic param
                 If (customersFilter.Any() AndAlso Not customersFilter.Contains(objCustomer.Id)) Then
                     Continue For
@@ -1313,8 +1314,16 @@ Module DH_Helpdesk_Mail
                                 End If
                                 'Get the correct customer based on the origin workingGroup in order to delete the email
                                 If Not IsNullOrEmpty(objCase.OriginWorkingGroup_Id) AndAlso objCase.OriginWorkingGroup_Id <> objCase.WorkingGroup_Id AndAlso objCase.OriginWorkingGroup_Id <> 0 Then
-                                    objCustomer = objCustomerData.GetOriginCustomerByWorkingGroupId(objCase.OriginWorkingGroup_Id)
+                                    Dim originWorkingGroupCustomer = objCustomerData.GetOriginCustomerByWorkingGroupId(objCase.OriginWorkingGroup_Id)
                                     LogToFile($"Case has been moved from origin workingGroupId {objCase.OriginWorkingGroup_Id}, new workingGroupId id {objCase.WorkingGroup_Id}", iPop3DebugLevel)
+                                    objCustomer.POP3Server = originWorkingGroupCustomer.Pop3Server
+                                    objCustomer.POP3Port = originWorkingGroupCustomer.POP3Port
+                                    objCustomer.POP3UserName = originWorkingGroupCustomer.PoP3UserName
+                                    objCustomer.EMailFolder = originWorkingGroupCustomer.EMailFolder
+                                    objCustomer.EMailFolderArchive = originWorkingGroupCustomer.EMailFolderArchive
+                                    objCustomer.EwsApplicationId = originWorkingGroupCustomer.EwsApplicationId
+                                    objCustomer.EwsClientSecret = originWorkingGroupCustomer.EwsClientSecret
+                                    objCustomer.EwsTenantId = originWorkingGroupCustomer.EwsTenantId
                                 End If
 
                                 If eMailConnectionType = MailConnectionType.Pop3 Then
