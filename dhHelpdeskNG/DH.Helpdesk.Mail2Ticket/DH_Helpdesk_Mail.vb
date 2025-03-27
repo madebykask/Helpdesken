@@ -1778,7 +1778,7 @@ Module DH_Helpdesk_Mail
         Dim tempDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, tempFolder, objectId)
         Dim saveDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, If(IsNullOrEmpty(prefix), objectId, prefix & objectId))
 
-        If message.Attachments.Count >= 6 - iHtmlFile Then
+        If message.Attachments.Count > 6 - iHtmlFile Then
             EnsureDirectoryExists(tempDirPath)
             EnsureDirectoryExists(saveDirPath)
 
