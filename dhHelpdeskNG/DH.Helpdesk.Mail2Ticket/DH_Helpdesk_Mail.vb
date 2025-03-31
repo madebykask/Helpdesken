@@ -186,6 +186,7 @@ Module DH_Helpdesk_Mail
                     If objCustomer.PhysicalFilePath = "" Then
                         objCustomer.PhysicalFilePath = objGlobalSettings.AttachedFileFolder
                     End If
+
                     'Make sure to delete old temp folders (if any error occurred in session) 
                     Try
                         Dim tempFolders As String() = Directory.GetDirectories(objCustomer.PhysicalFilePath, workingModeNumber.ToString() & "_temp_" & processId)
@@ -328,6 +329,7 @@ Module DH_Helpdesk_Mail
             For Each objCustomer In customers
 
                 iCustomerCount += 1
+                objMovedFromCustomer = Nothing
 
                 ' Filter customers based on diagnostic param
                 If (customersFilter.Any() AndAlso Not customersFilter.Contains(objCustomer.Id)) Then
@@ -502,7 +504,7 @@ Module DH_Helpdesk_Mail
                                     emailFolder = objCustomer.EMailFolder
                                 End If
                             End If
-
+                            '
                             If Not IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
                                 If Not CheckEmailFolderExists(IMAPclient, objCustomer.EMailFolderArchive) Then
                                     LogError($"EmailFolderArchive '{objCustomer.EMailFolderArchive}' doesn't exist.", objCustomer)
@@ -625,6 +627,7 @@ Module DH_Helpdesk_Mail
                                                 objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                 'Get the new correct customer
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
+                                                LogToFile("Found existing moved case with bEnableNewEmailProcessing. Old Customer: " & messageId & " MovedFromCustomer: " & objCase.MovedFromCustomer_Id & " new customer:" & objCase.Customer_Id, iPop3DebugLevel)
                                             End If
                                             LogToFile("EnableNewEmailProcessing Found case by getMailIDByMessageID: " & iMailID.ToString() & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
                                             Exit For
@@ -656,6 +659,7 @@ Module DH_Helpdesk_Mail
                                                     objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                     ' Update to the new correct customer if the case was moved
                                                     objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
+                                                    LogToFile("Found existing moved case with orderMessageId. Old Customer: " & objCase.MovedFromCustomer_Id & " new customer:" & objCase.Customer_Id, iPop3DebugLevel)
                                                 End If
                                                 LogToFile("Found case by getCaseByOrderMessageID: " & replyToId & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
                                             Else
@@ -668,6 +672,7 @@ Module DH_Helpdesk_Mail
                                                 'Keep the old customer
                                                 objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
+                                                LogToFile("Found existing moved case with getCaseByOrderMessageID. Old Customer: " & objCase.MovedFromCustomer_Id & " new customer:" & objCase.Customer_Id, iPop3DebugLevel)
                                             End If
                                             LogToFile("Found case by getCaseByMessageID: " & replyToId & " CaseNumber: " & objCase.Casenumber, iPop3DebugLevel)
                                         End If
@@ -713,7 +718,7 @@ Module DH_Helpdesk_Mail
                                                 objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                                 'Get the new correct customer
                                                 objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
-                                                LogToFile("Found existing moved case with EmailSubjectPattern and CaseNumber:: " & iCaseNumber & " MovedFromCustomer: " & objCustomer.Id, iPop3DebugLevel)
+                                                LogToFile("Found existing moved case with EmailSubjectPattern and CaseNumber. Old Customer: " & objCase.MovedFromCustomer_Id & " CaseNumber " & iCaseNumber & " MovedFromCustomer: " & objCustomer.Id, iPop3DebugLevel)
                                             Else
                                                 objCase = Nothing
                                                 LogToFile("Did not find existing moved case with EmailSubjectPattern and CaseNumber: " & iCaseNumber, iPop3DebugLevel)
@@ -780,6 +785,7 @@ Module DH_Helpdesk_Mail
                                         .StateSecondary_Id = objCustomer.DefaultStateSecondary_Id,
                                         .Customer_Id = objCustomer.Id,
                                         .WorkingGroup_Id = objCustomer.DefaultWorkingGroup_Id,
+                                        .OriginWorkingGroup_Id = objCustomer.DefaultWorkingGroup_Id,
                                         .RegLanguage_Id = objCustomer.Language_Id,
                                         .RegistrationSourceCustomer_Id = objCustomer.RegistrationSourceCustomer_Id,
                                         .Performer_User_Id = objCustomer.DefaultAdministratorExternalUser_Id,
@@ -1115,6 +1121,7 @@ Module DH_Helpdesk_Mail
                                         objMovedFromCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
                                         'Get the new customer
                                         objCustomer = objCustomerData.getCustomerById(objCase.Customer_Id)
+                                        LogToFile("Found existing moved case MovedFromCustomer: " & objCase.MovedFromCustomer_Id & " new customer:" & objCase.Customer_Id, iPop3DebugLevel)
                                     End If
                                     ' Save answer as a log post 
                                     ' Only answer 
@@ -1299,12 +1306,24 @@ Module DH_Helpdesk_Mail
                                     objMailTicket.Save(objCase.Id, iLog_Id, "bcc", message.Bcc.ToString(), Nothing, messageId)
                                 End If
 
-                                'Move message to atchive folder
-                                'If Case has been moved from a customer, the message must move from the origin customer
-                                If objMovedFromCustomer IsNot Nothing Then
+                                'Move message to archive folder
+                                'If Case has been moved from a customer, the message must move from the origin customers inbox
+                                If objMovedFromCustomer IsNot Nothing AndAlso objMovedFromCustomer.Id <> 0 Then
                                     objCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
-
-                                    LogToFile("If Case has been moved from a customer, the message must move from the origin customer, set to customer: " & objCustomer.Id, iPop3DebugLevel)
+                                    LogToFile($"Case has been moved from customer {objCase.MovedFromCustomer_Id}, new customer id {objCase.Customer_Id}", iPop3DebugLevel)
+                                End If
+                                'Get the correct customer based on the origin workingGroup in order to delete the email
+                                If Not IsNullOrEmpty(objCase.OriginWorkingGroup_Id) AndAlso objCase.OriginWorkingGroup_Id <> objCase.WorkingGroup_Id AndAlso objCase.OriginWorkingGroup_Id <> 0 Then
+                                    Dim originWorkingGroupCustomer = objCustomerData.GetOriginCustomerByWorkingGroupId(objCase.OriginWorkingGroup_Id)
+                                    LogToFile($"Case has been moved from origin workingGroupId {objCase.OriginWorkingGroup_Id}, new workingGroupId id {objCase.WorkingGroup_Id}", iPop3DebugLevel)
+                                    objCustomer.POP3Server = originWorkingGroupCustomer.Pop3Server
+                                    objCustomer.POP3Port = originWorkingGroupCustomer.POP3Port
+                                    objCustomer.POP3UserName = originWorkingGroupCustomer.PoP3UserName
+                                    objCustomer.EMailFolder = originWorkingGroupCustomer.EMailFolder
+                                    objCustomer.EMailFolderArchive = originWorkingGroupCustomer.EMailFolderArchive
+                                    objCustomer.EwsApplicationId = originWorkingGroupCustomer.EwsApplicationId
+                                    objCustomer.EwsClientSecret = originWorkingGroupCustomer.EwsClientSecret
+                                    objCustomer.EwsTenantId = originWorkingGroupCustomer.EwsTenantId
                                 End If
 
                                 If eMailConnectionType = MailConnectionType.Pop3 Then
@@ -1322,7 +1341,7 @@ Module DH_Helpdesk_Mail
                                     ' Purge to apply message delete otherwise the message will stay in Inbox
                                     IMAPclient.Purge()
                                 ElseIf eMailConnectionType = MailConnectionType.Ews Then
-
+                                    LogToFile("Trying to delete " & message.Subject & " from Inbox for customer id: " & objCustomer.Id, iPop3DebugLevel)
                                     ' Copy mail if archieve, ' delete mail
                                     DeleteEwsMail(message, objCustomer,
                                           objCustomer.POP3Server,
@@ -1389,16 +1408,17 @@ Module DH_Helpdesk_Mail
         service.ImpersonatedUserId = New ImpersonatedUserId(ConnectingIdType.SmtpAddress, userName)
         service.HttpHeaders.Add("X-AnchorMailbox", userName)
 
+        Dim tokenStatus As String = If(String.IsNullOrEmpty(result.AccessToken), "No token", "Token present")
+
+        LogToFile($"Trying to delete message for customer: {objCustomer.Id} with server: {server}, ImpersonatedUserId {service.ImpersonatedUserId.Id}, token status: {tokenStatus}, username {userName} ", objCustomer.POP3DebugLevel)
+
         If (Not String.IsNullOrWhiteSpace(emailArchiveFolder)) Then
-
             Dim archive As Folder = FindEwsFolder(objCustomer, emailArchiveFolder, service)
-
-            If (archive Is Nothing) Then
-                LogError("Error coping to archive folder. Archive folder not found: " & emailArchiveFolder, objCustomer)
-            Else
-                Dim ids = New List(Of ItemId)
-                ids.Add(message.EwsID)
-                service.CopyItems(ids, archive.Id, False)
+            If Not archive Is Nothing Then
+                Dim copyIds = New List(Of ItemId)
+                copyIds.Add(message.EwsID)
+                service.CopyItems(copyIds, archive.Id, False)
+                LogToFile($"EmailArchiveFolder found Coying email to: {emailArchiveFolder}.", objCustomer.POP3DebugLevel)
             End If
         End If
 
@@ -1409,7 +1429,6 @@ Module DH_Helpdesk_Mail
                             SendCancellationsMode.SendToNone,
                             AffectedTaskOccurrence.AllOccurrences)
 
-        'service.CopyItems()
     End Function
 
 
@@ -1452,12 +1471,13 @@ Module DH_Helpdesk_Mail
             Return Nothing
         End If
 
-        If Not String.IsNullOrWhiteSpace(emailArchiveFolder) Then
-            If FindEwsFolder(objCustomer, emailArchiveFolder, service) Is Nothing Then
-                LogError($"EmailFolderArchive '{emailArchiveFolder}' doesn't exist.", objCustomer)
-                Return Nothing
-            End If
-        End If
+        ' Här smäller det eftersom arkivmapp tydligen inte är obligatorisk
+        'If Not String.IsNullOrWhiteSpace(emailArchiveFolder) Then
+        '    If FindEwsFolder(objCustomer, emailArchiveFolder, service) Is Nothing Then
+        '        LogError($"EmailFolderArchive '{emailArchiveFolder}' doesn't exist.", objCustomer)
+        '        'Return Nothing
+        '    End If
+        'End If
 
         Dim items As FindItemsResults(Of Item) = inbox.FindItems(New ItemView(10000))
         Dim messages As List(Of MailMessage) = New List(Of MailMessage)()
@@ -1643,32 +1663,41 @@ Module DH_Helpdesk_Mail
         For Each currentFolderName As String In emailFolders
             Dim folders As FindFoldersResults
 
-            If folder Is Nothing Then
-                LogToFile("Searching for root folder: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
-                folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
-            ElseIf folder.Id IsNot Nothing Then
-                LogToFile("Searching for subfolder: " & currentFolderName & " under parent " & folder.DisplayName & " (Customer: " & objCustomer.Id & ")", 1)
-                folders = service.FindFolders(folder.Id, New FolderView(100))
+            Try
+                If folder Is Nothing Then
+                    LogToFile($"Searching for root folder: {currentFolderName} (Customer: {objCustomer.Id})", 1)
+                    folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
+                ElseIf folder.Id IsNot Nothing Then
+                    LogToFile($"Searching for subfolder: {currentFolderName} under parent {folder.DisplayName} (Customer: {objCustomer.Id})", 1)
+                    folders = service.FindFolders(folder.Id, New FolderView(100))
+                Else
+                    LogToFile($"Invalid folder ID for: {currentFolderName} (Customer: {objCustomer.Id})", 1)
+                    Return Nothing ' Stop processing if folder ID is invalid
+                End If
+            Catch ex As Exception
+                LogError($"Exception in FindFolders: {ex.Message} - {ex.StackTrace} - Customer ID: {objCustomer.Id} - Service URL: {service.Url}", objCustomer)
+                Return Nothing ' Exit if a critical error occurs
+            End Try
+
+            ' Log results of the folder search
+            If folders IsNot Nothing AndAlso folders.Folders.Any() Then
+                LogToFile($"Found {folders.Folders.Count} folders under {If(folder?.DisplayName, "Root")} (Customer: {objCustomer.Id})", 1)
             Else
-                LogToFile("Invalid folder ID for: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
-                Return Nothing ' Stop processing if folder ID is invalid
+                LogToFile($"No folders found under {If(folder?.DisplayName, "Root")} (Customer: {objCustomer.Id})", 1)
+                Return Nothing ' Exit if no folders found
             End If
 
-            If folders IsNot Nothing AndAlso folders.Folders.Count > 0 Then
-                LogToFile("Found " & folders.Folders.Count & " folders under " & If(folder?.DisplayName, "Root") & " (Customer: " & objCustomer.Id & ")", 1)
-            Else
-                LogToFile("No folders found under " & If(folder?.DisplayName, "Root") & " (Customer: " & objCustomer.Id & ")", 1)
-            End If
-
+            ' Find the folder by name
             folder = folders.FirstOrDefault(Function(f) f.DisplayName.Equals(currentFolderName, StringComparison.InvariantCultureIgnoreCase))
 
             If folder Is Nothing Then
-                LogToFile("Can't find folder: " & currentFolderName & " (Customer: " & objCustomer.Id & ")", 1)
+                LogToFile($"Can't find folder: {currentFolderName} (Customer: {objCustomer.Id})", 1)
                 Return Nothing ' Exit immediately
             Else
-                LogToFile("Folder found: " & folder.DisplayName & " (Customer: " & objCustomer.Id & ")", 1)
+                LogToFile($"Folder found: {folder.DisplayName} (Customer: {objCustomer.Id})", 1)
             End If
         Next
+
 
         LogToFile("Folder search completed successfully for: " & emailFolder & " (Customer: " & objCustomer.Id & ")", 1)
         Return folder
