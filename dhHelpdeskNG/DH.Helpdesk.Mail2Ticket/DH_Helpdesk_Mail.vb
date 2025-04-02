@@ -306,6 +306,7 @@ Module DH_Helpdesk_Mail
         Dim sSendTime As DateTime
         Dim sPriorityEMailList As String = ""
         Dim isHtml As Boolean = False
+        Dim emailBox As String = ""
 
         Try
 
@@ -358,7 +359,9 @@ Module DH_Helpdesk_Mail
 
                 If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) Then
 
-                    LogToFile("M2T for " & objCustomer.Name & ", Nr: " & iCustomerCount & "(" & customers.Count & "), appVersion: " & CurrentAssemblyInfo.Version, iPop3DebugLevel)
+                    emailBox = objCustomer.POP3UserName
+
+                    LogToFile($"M2T for mailbox: {emailBox}, " & objCustomer.Name & ", Nr: " & iCustomerCount & "(" & customers.Count & "), appVersion: " & CurrentAssemblyInfo.Version, iPop3DebugLevel)
 
                     Dim mails As List(Of MailMessage) = Nothing
                     ' Denna try fångar exception
@@ -1299,7 +1302,6 @@ Module DH_Helpdesk_Mail
                                     End If
                                 End If
 #End Region
-                                'here tit
                                 ' spara e-post adresser
                                 If message IsNot Nothing AndAlso objCase IsNot Nothing Then
                                     Dim messageId As String = message.MessageId.ToString()
@@ -1307,25 +1309,24 @@ Module DH_Helpdesk_Mail
                                     objMailTicket.Save(objCase.Id, iLog_Id, "cc", message.CC.ToString(), Nothing, messageId)
                                     objMailTicket.Save(objCase.Id, iLog_Id, "bcc", message.Bcc.ToString(), Nothing, messageId)
                                 End If
-
-                                'Move message to archive folder
-                                'If Case has been moved from a customer, the message must move from the origin customers inbox
-                                If objMovedFromCustomer IsNot Nothing AndAlso objMovedFromCustomer.Id <> 0 Then
-                                    objCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
-                                    LogToFile($"Case has been moved from customer {objCase.MovedFromCustomer_Id}, new customer id {objCase.Customer_Id}", iPop3DebugLevel)
-                                End If
-                                'Get the correct customer based on the origin workingGroup in order to delete the email
-                                If Not IsNullOrEmpty(objCase.OriginWorkingGroup_Id) AndAlso objCase.OriginWorkingGroup_Id <> objCase.WorkingGroup_Id AndAlso objCase.OriginWorkingGroup_Id <> 0 Then
-                                    Dim originWorkingGroupCustomer = objCustomerData.GetOriginCustomerByWorkingGroupId(objCase.OriginWorkingGroup_Id)
-                                    LogToFile($"Case has been moved from origin workingGroupId {objCase.OriginWorkingGroup_Id}, new workingGroupId id {objCase.WorkingGroup_Id}", iPop3DebugLevel)
-                                    objCustomer.POP3Server = originWorkingGroupCustomer.Pop3Server
-                                    objCustomer.POP3Port = originWorkingGroupCustomer.POP3Port
-                                    objCustomer.POP3UserName = originWorkingGroupCustomer.PoP3UserName
-                                    objCustomer.EMailFolder = originWorkingGroupCustomer.EMailFolder
-                                    objCustomer.EMailFolderArchive = originWorkingGroupCustomer.EMailFolderArchive
-                                    objCustomer.EwsApplicationId = originWorkingGroupCustomer.EwsApplicationId
-                                    objCustomer.EwsClientSecret = originWorkingGroupCustomer.EwsClientSecret
-                                    objCustomer.EwsTenantId = originWorkingGroupCustomer.EwsTenantId
+                                'Be sure we use the right emailbox to delete messages
+                                If (objCustomer.POP3UserName <> emailBox) Then
+                                    'Get properties for deletion of email
+                                    Dim originalCustomer As Customer = objCustomer
+                                    LogToFile($"Reading {emailBox} thats not the same as current customers Pop3UserName: {objCustomer.POP3UserName} in the loop. Fetching the right properties for deleting emails ", iPop3DebugLevel)
+                                    If (iSyncType = SyncType.SyncByWorkingGroup) Then
+                                        originalCustomer = objCustomerData.GetCustomerDataFromEmailBoxInUse(emailBox, 5)
+                                    Else
+                                        originalCustomer = objCustomerData.GetCustomerDataFromEmailBoxInUse(emailBox, 0)
+                                    End If
+                                    objCustomer.POP3Server = originalCustomer.POP3Server
+                                    objCustomer.POP3Port = originalCustomer.POP3Port
+                                    objCustomer.POP3UserName = originalCustomer.POP3UserName
+                                    objCustomer.EMailFolder = originalCustomer.EMailFolder
+                                    objCustomer.EMailFolderArchive = originalCustomer.EMailFolderArchive
+                                    objCustomer.EwsApplicationId = originalCustomer.EwsApplicationId
+                                    objCustomer.EwsClientSecret = originalCustomer.EwsClientSecret
+                                    objCustomer.EwsTenantId = originalCustomer.EwsTenantId
                                 End If
 
                                 If eMailConnectionType = MailConnectionType.Pop3 Then
@@ -1333,7 +1334,7 @@ Module DH_Helpdesk_Mail
                                 ElseIf eMailConnectionType = MailConnectionType.Imap Then
 
                                     If Not IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
-                                        LogToFile("Move Message to: " & objCustomer.EMailFolderArchive, iPop3DebugLevel)
+                                        LogToFile("Move Message To: " & objCustomer.EMailFolderArchive, iPop3DebugLevel)
                                         IMAPclient.CopyMessage(sUniqueID, objCustomer.EMailFolderArchive)
                                     End If
 
