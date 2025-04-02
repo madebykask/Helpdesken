@@ -331,7 +331,7 @@ Module DH_Helpdesk_Mail
 
                 iCustomerCount += 1
                 objMovedFromCustomer = Nothing
-                emailBox = objCustomer.POP3UserName
+
                 ' Filter customers based on diagnostic param
                 If (customersFilter.Any() AndAlso Not customersFilter.Contains(objCustomer.Id)) Then
                     Continue For
@@ -356,6 +356,8 @@ Module DH_Helpdesk_Mail
                 End If
 
                 If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) Then
+
+                    emailBox = objCustomer.POP3UserName
 
                     LogToFile($"M2T for mailbox: {emailBox}, " & objCustomer.Name & ", Nr: " & iCustomerCount & "(" & customers.Count & "), appVersion: " & CurrentAssemblyInfo.Version, iPop3DebugLevel)
 
