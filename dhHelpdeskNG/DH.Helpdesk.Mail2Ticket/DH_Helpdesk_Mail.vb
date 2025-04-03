@@ -1319,6 +1319,7 @@ Module DH_Helpdesk_Mail
                                     Else
                                         originalCustomer = objCustomerData.GetCustomerDataFromEmailBoxInUse(emailBox, 0)
                                     End If
+                                    objCustomer.Id = originalCustomer.Id
                                     objCustomer.POP3Server = originalCustomer.POP3Server
                                     objCustomer.POP3Port = originalCustomer.POP3Port
                                     objCustomer.POP3UserName = originalCustomer.POP3UserName
@@ -1346,7 +1347,7 @@ Module DH_Helpdesk_Mail
                                 ElseIf eMailConnectionType = MailConnectionType.Ews Then
                                     LogToFile("Trying to delete " & message.Subject & " from Inbox for customer id: " & objCustomer.Id, iPop3DebugLevel)
                                     ' Copy mail if archieve, ' delete mail
-                                    DeleteEwsMail(message, objCustomer,
+                                    DeleteEwsMail(message, objCustomer.Id,
                                           objCustomer.POP3Server,
                                           objCustomer.POP3Port,
                                           objCustomer.POP3UserName,
@@ -1394,7 +1395,7 @@ Module DH_Helpdesk_Mail
     End Function
 
 
-    Private Async Function DeleteEwsMail(message As EwsMailMessage, objCustomer As Customer, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String, applicationId As String, clientSecret As String, tenantId As String) As System.Threading.Tasks.Task
+    Private Async Function DeleteEwsMail(message As EwsMailMessage, iCustomerId As Integer, server As String, port As Integer, userName As String, emailFolder As String, emailArchiveFolder As String, applicationId As String, clientSecret As String, tenantId As String) As System.Threading.Tasks.Task
         'emailFolder = "Inbox"
         'emailArchiveFolder = "Archive/M2T_test"
         Dim ewsScopes As String() = New String() {"https://outlook.office.com/.default"}
@@ -1413,15 +1414,15 @@ Module DH_Helpdesk_Mail
 
         Dim tokenStatus As String = If(String.IsNullOrEmpty(result.AccessToken), "No token", "Token present")
 
-        LogToFile($"Trying to delete message for customer: {objCustomer.Id} with server: {server}, ImpersonatedUserId {service.ImpersonatedUserId.Id}, token status: {tokenStatus}, username {userName} ", objCustomer.POP3DebugLevel)
+        LogToFile($"Trying to delete message for customer: {iCustomerId} with server: {server}, ImpersonatedUserId {service.ImpersonatedUserId.Id}, token status: {tokenStatus}, username {userName} ", 1)
 
         If (Not String.IsNullOrWhiteSpace(emailArchiveFolder)) Then
-            Dim archive As Folder = FindEwsFolder(objCustomer, emailArchiveFolder, service)
+            Dim archive As Folder = FindEwsFolder(iCustomerId, emailArchiveFolder, service)
             If Not archive Is Nothing Then
                 Dim copyIds = New List(Of ItemId)
                 copyIds.Add(message.EwsID)
                 service.CopyItems(copyIds, archive.Id, False)
-                LogToFile($"EmailArchiveFolder found Coying email to: {emailArchiveFolder}.", objCustomer.POP3DebugLevel)
+                LogToFile($"EmailArchiveFolder found Coying email to: {emailArchiveFolder}.", iCustomerId)
             End If
         End If
 
@@ -1466,7 +1467,7 @@ Module DH_Helpdesk_Mail
             'Dim folderId As FolderId = New FolderId(WellKnownFolderName.MsgFolderRoot, userName)
             inbox = Folder.Bind(service, WellKnownFolderName.Inbox)
         Else
-            inbox = FindEwsFolder(objCustomer, emailFolder, service)
+            inbox = FindEwsFolder(objCustomer.Id, emailFolder, service)
         End If
 
         If inbox Is Nothing Then
@@ -1651,15 +1652,13 @@ Module DH_Helpdesk_Mail
 
             Return sanitizedFileName
         Catch ex As Exception
-            If (fileName.Length > 50) Then
-                fileName = fileName.Substring(0, 50)
-            End If
-            Return $"UnknownFile_{fileName}_{DateTime.Now:HHmmssfff}"
+            LogToFile("Could not sanitize filename: " & fileName, 1)
+            Return $"UnknownFile_{DateTime.Now:HHmmssfff}"
         End Try
 
     End Function
 
-    Private Function FindEwsFolder(objCustomer As Customer, emailFolder As String, service As ExchangeService) As Folder
+    Private Function FindEwsFolder(iCustomerId As Integer, emailFolder As String, service As ExchangeService) As Folder
         Dim emailFolders As String()
         If emailFolder.Contains("/") Then
             emailFolders = emailFolder.Split("/"c)
@@ -1668,32 +1667,32 @@ Module DH_Helpdesk_Mail
         End If
 
         Dim folder As Folder = Nothing
-        LogToFile("Starting folder search for: " & emailFolder & " (Customer: " & objCustomer.Id & ")", 1)
+        LogToFile("Starting folder search for: " & emailFolder & " (Customer: " & iCustomerId & ")", 1)
 
         For Each currentFolderName As String In emailFolders
             Dim folders As FindFoldersResults
 
             Try
                 If folder Is Nothing Then
-                    LogToFile($"Searching for root folder: {currentFolderName} (Customer: {objCustomer.Id})", 1)
+                    LogToFile($"Searching for root folder: {currentFolderName} (Customer: {iCustomerId})", 1)
                     folders = service.FindFolders(WellKnownFolderName.MsgFolderRoot, New FolderView(100))
                 ElseIf folder.Id IsNot Nothing Then
-                    LogToFile($"Searching for subfolder: {currentFolderName} under parent {folder.DisplayName} (Customer: {objCustomer.Id})", 1)
+                    LogToFile($"Searching for subfolder: {currentFolderName} under parent {folder.DisplayName} (Customer: {iCustomerId})", 1)
                     folders = service.FindFolders(folder.Id, New FolderView(100))
                 Else
-                    LogToFile($"Invalid folder ID for: {currentFolderName} (Customer: {objCustomer.Id})", 1)
+                    LogToFile($"Invalid folder ID for: {currentFolderName} (Customer: {iCustomerId})", 1)
                     Return Nothing ' Stop processing if folder ID is invalid
                 End If
             Catch ex As Exception
-                LogError($"Exception in FindFolders: {ex.Message} - {ex.StackTrace} - Customer ID: {objCustomer.Id} - Service URL: {service.Url}", objCustomer)
+                LogToFile($"Exception in FindFolders: {ex.Message} - {ex.StackTrace} - Customer ID: {iCustomerId} - Service URL: {service.Url}", 1)
                 Return Nothing ' Exit if a critical error occurs
             End Try
 
             ' Log results of the folder search
             If folders IsNot Nothing AndAlso folders.Folders.Any() Then
-                LogToFile($"Found {folders.Folders.Count} folders under {If(folder?.DisplayName, "Root")} (Customer: {objCustomer.Id})", 1)
+                LogToFile($"Found {folders.Folders.Count} folders under {If(folder?.DisplayName, "Root")} (Customer: {iCustomerId})", 1)
             Else
-                LogToFile($"No folders found under {If(folder?.DisplayName, "Root")} (Customer: {objCustomer.Id})", 1)
+                LogToFile($"No folders found under {If(folder?.DisplayName, "Root")} (Customer: {iCustomerId})", 1)
                 Return Nothing ' Exit if no folders found
             End If
 
@@ -1701,15 +1700,15 @@ Module DH_Helpdesk_Mail
             folder = folders.FirstOrDefault(Function(f) f.DisplayName.Equals(currentFolderName, StringComparison.InvariantCultureIgnoreCase))
 
             If folder Is Nothing Then
-                LogToFile($"Can't find folder: {currentFolderName} (Customer: {objCustomer.Id})", 1)
+                LogToFile($"Can't find folder: {currentFolderName} (Customer: {iCustomerId})", 1)
                 Return Nothing ' Exit immediately
             Else
-                LogToFile($"Folder found: {folder.DisplayName} (Customer: {objCustomer.Id})", 1)
+                LogToFile($"Folder found: {folder.DisplayName} (Customer: {iCustomerId})", 1)
             End If
         Next
 
 
-        LogToFile("Folder search completed successfully for: " & emailFolder & " (Customer: " & objCustomer.Id & ")", 1)
+        LogToFile("Folder search completed successfully for: " & emailFolder & " (Customer: " & iCustomerId & ")", 1)
         Return folder
     End Function
 
