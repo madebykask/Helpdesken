@@ -1652,8 +1652,9 @@ Module DH_Helpdesk_Mail
 
             Return sanitizedFileName
         Catch ex As Exception
+            Dim extension As String = System.IO.Path.GetExtension(fileName)
             LogToFile("Could not sanitize filename: " & fileName, 1)
-            Return $"UnknownFile_{DateTime.Now:HHmmssfff}"
+            Return $"UnknownFile_{DateTime.Now:HHmmssfff}{extension}"
         End Try
 
     End Function
