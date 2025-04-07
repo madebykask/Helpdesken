@@ -1,5 +1,6 @@
 ﻿Imports System.Configuration
 Imports System.Data.SqlClient
+Imports System.Data.SqlTypes
 Imports System.Drawing
 Imports System.Drawing.Drawing2D
 Imports System.IO
@@ -19,7 +20,6 @@ Imports DH.Helpdesk.Library
 Imports DH.Helpdesk.Library.SharedFunctions
 Imports DH.Helpdesk.VBCSharpBridge.Models
 Imports HtmlAgilityPack
-Imports ICSharpCode.SharpZipLib.Zip
 Imports Microsoft.Exchange.WebServices.Data
 Imports Microsoft.Identity.Client
 Imports Rebex
@@ -28,6 +28,8 @@ Imports Rebex.Mime
 Imports Rebex.Mime.Headers
 Imports Rebex.Net
 Imports Winnovative
+Imports System.IO.Compression
+Imports System.IO.Compression.FileSystem
 Imports AttachmentCollection = Microsoft.Exchange.WebServices.Data.AttachmentCollection
 
 
@@ -304,6 +306,7 @@ Module DH_Helpdesk_Mail
         Dim sSendTime As DateTime
         Dim sPriorityEMailList As String = ""
         Dim isHtml As Boolean = False
+        Dim emailBox As String = ""
 
         Try
 
@@ -356,7 +359,9 @@ Module DH_Helpdesk_Mail
 
                 If Not IsNullOrEmpty(objCustomer.POP3Server) AndAlso Not IsNullOrEmpty(objCustomer.POP3UserName) Then
 
-                    LogToFile("M2T for " & objCustomer.Name & ", Nr: " & iCustomerCount & "(" & customers.Count & "), appVersion: " & CurrentAssemblyInfo.Version, iPop3DebugLevel)
+                    emailBox = objCustomer.POP3UserName
+
+                    LogToFile($"M2T for mailbox: {emailBox}, " & objCustomer.Name & ", Nr: " & iCustomerCount & "(" & customers.Count & "), appVersion: " & CurrentAssemblyInfo.Version, iPop3DebugLevel)
 
                     Dim mails As List(Of MailMessage) = Nothing
                     ' Denna try fångar exception
@@ -1297,7 +1302,6 @@ Module DH_Helpdesk_Mail
                                     End If
                                 End If
 #End Region
-                                'here tit
                                 ' spara e-post adresser
                                 If message IsNot Nothing AndAlso objCase IsNot Nothing Then
                                     Dim messageId As String = message.MessageId.ToString()
@@ -1305,25 +1309,24 @@ Module DH_Helpdesk_Mail
                                     objMailTicket.Save(objCase.Id, iLog_Id, "cc", message.CC.ToString(), Nothing, messageId)
                                     objMailTicket.Save(objCase.Id, iLog_Id, "bcc", message.Bcc.ToString(), Nothing, messageId)
                                 End If
-
-                                'Move message to archive folder
-                                'If Case has been moved from a customer, the message must move from the origin customers inbox
-                                If objMovedFromCustomer IsNot Nothing AndAlso objMovedFromCustomer.Id <> 0 Then
-                                    objCustomer = objCustomerData.getCustomerById(objCase.MovedFromCustomer_Id)
-                                    LogToFile($"Case has been moved from customer {objCase.MovedFromCustomer_Id}, new customer id {objCase.Customer_Id}", iPop3DebugLevel)
-                                End If
-                                'Get the correct customer based on the origin workingGroup in order to delete the email
-                                If Not IsNullOrEmpty(objCase.OriginWorkingGroup_Id) AndAlso objCase.OriginWorkingGroup_Id <> objCase.WorkingGroup_Id AndAlso objCase.OriginWorkingGroup_Id <> 0 Then
-                                    Dim originWorkingGroupCustomer = objCustomerData.GetOriginCustomerByWorkingGroupId(objCase.OriginWorkingGroup_Id)
-                                    LogToFile($"Case has been moved from origin workingGroupId {objCase.OriginWorkingGroup_Id}, new workingGroupId id {objCase.WorkingGroup_Id}", iPop3DebugLevel)
-                                    objCustomer.POP3Server = originWorkingGroupCustomer.Pop3Server
-                                    objCustomer.POP3Port = originWorkingGroupCustomer.POP3Port
-                                    objCustomer.POP3UserName = originWorkingGroupCustomer.PoP3UserName
-                                    objCustomer.EMailFolder = originWorkingGroupCustomer.EMailFolder
-                                    objCustomer.EMailFolderArchive = originWorkingGroupCustomer.EMailFolderArchive
-                                    objCustomer.EwsApplicationId = originWorkingGroupCustomer.EwsApplicationId
-                                    objCustomer.EwsClientSecret = originWorkingGroupCustomer.EwsClientSecret
-                                    objCustomer.EwsTenantId = originWorkingGroupCustomer.EwsTenantId
+                                'Be sure we use the right emailbox to delete messages
+                                If (objCustomer.POP3UserName <> emailBox) Then
+                                    'Get properties for deletion of email
+                                    Dim originalCustomer As Customer = objCustomer
+                                    LogToFile($"Reading {emailBox} thats not the same as current customers Pop3UserName: {objCustomer.POP3UserName} in the loop. Fetching the right properties for deleting emails ", iPop3DebugLevel)
+                                    If (iSyncType = SyncType.SyncByWorkingGroup) Then
+                                        originalCustomer = objCustomerData.GetCustomerDataFromEmailBoxInUse(emailBox, 5)
+                                    Else
+                                        originalCustomer = objCustomerData.GetCustomerDataFromEmailBoxInUse(emailBox, 0)
+                                    End If
+                                    objCustomer.POP3Server = originalCustomer.POP3Server
+                                    objCustomer.POP3Port = originalCustomer.POP3Port
+                                    objCustomer.POP3UserName = originalCustomer.POP3UserName
+                                    objCustomer.EMailFolder = originalCustomer.EMailFolder
+                                    objCustomer.EMailFolderArchive = originalCustomer.EMailFolderArchive
+                                    objCustomer.EwsApplicationId = originalCustomer.EwsApplicationId
+                                    objCustomer.EwsClientSecret = originalCustomer.EwsClientSecret
+                                    objCustomer.EwsTenantId = originalCustomer.EwsTenantId
                                 End If
 
                                 If eMailConnectionType = MailConnectionType.Pop3 Then
@@ -1331,7 +1334,7 @@ Module DH_Helpdesk_Mail
                                 ElseIf eMailConnectionType = MailConnectionType.Imap Then
 
                                     If Not IsNullOrEmpty(objCustomer.EMailFolderArchive) Then
-                                        LogToFile("Move Message to: " & objCustomer.EMailFolderArchive, iPop3DebugLevel)
+                                        LogToFile("Move Message To: " & objCustomer.EMailFolderArchive, iPop3DebugLevel)
                                         IMAPclient.CopyMessage(sUniqueID, objCustomer.EMailFolderArchive)
                                     End If
 
@@ -1628,26 +1631,33 @@ Module DH_Helpdesk_Mail
     End Function
     ' Helper method to sanitize file names
     Private Function SanitizeFileName(fileName As String) As String
-        ' Replace invalid characters with an underscore
-        Dim invalidChars As Char() = System.IO.Path.GetInvalidFileNameChars().Concat(System.IO.Path.GetInvalidPathChars()).ToArray()
-        Dim sanitizedFileName As String = New String(fileName.Select(Function(c) If(invalidChars.Contains(c), "_"c, c)).ToArray())
+        Try
+            ' Replace invalid characters with an underscore
+            Dim invalidChars As Char() = System.IO.Path.GetInvalidFileNameChars().Concat(System.IO.Path.GetInvalidPathChars()).ToArray()
+            Dim sanitizedFileName As String = New String(fileName.Select(Function(c) If(invalidChars.Contains(c), "_"c, c)).ToArray())
 
-        ' Extract file extension if it exists
-        Dim extension As String = System.IO.Path.GetExtension(fileName)
+            ' Extract file extension if it exists
+            Dim extension As String = System.IO.Path.GetExtension(fileName)
 
-        Dim fileNameWithoutExtension As String = System.IO.Path.GetFileNameWithoutExtension(sanitizedFileName)
+            Dim fileNameWithoutExtension As String = System.IO.Path.GetFileNameWithoutExtension(sanitizedFileName)
 
-        ' Extract file extension and remove it from the sanitized file name
-        If fileNameWithoutExtension.Length > 100 - extension.Length Then
-            fileNameWithoutExtension = fileNameWithoutExtension.Substring(0, 100 - extension.Length)
-        End If
+            ' Extract file extension and remove it from the sanitized file name
+            If fileNameWithoutExtension.Length > 100 - extension.Length Then
+                fileNameWithoutExtension = fileNameWithoutExtension.Substring(0, 100 - extension.Length)
+            End If
 
-        ' Append timestamp in HHmmssfff format and combine with the extension
-        sanitizedFileName = $"{fileNameWithoutExtension}_{DateTime.Now:HHmmssfff}{extension}"
+            ' Append timestamp in HHmmssfff format and combine with the extension
+            sanitizedFileName = $"{fileNameWithoutExtension}_{DateTime.Now:HHmmssfff}{extension}"
 
-        Return sanitizedFileName
+            Return sanitizedFileName
+        Catch ex As Exception
+            If (fileName.Length > 50) Then
+                fileName = fileName.Substring(0, 50)
+            End If
+            Return $"UnknownFile_{fileName}_{DateTime.Now:HHmmssfff}"
+        End Try
+
     End Function
-
 
     Private Function FindEwsFolder(objCustomer As Customer, emailFolder As String, service As ExchangeService) As Folder
         Dim emailFolders As String()
@@ -1766,101 +1776,48 @@ Module DH_Helpdesk_Mail
     Private Function ProcessMessageAttachments(message As MailMessage,
                                            iHtmlFile As Integer,
                                            objCustomer As Customer,
-                                           objectId As String,  'Case.Id or Log.Id
-                                           prefix As String, '"<CaseNumber>" for Case file, "L<LogId>" for Log file
+                                           objectId As String,
+                                           prefix As String,
                                            iPop3DebugLevel As Integer,
                                            globalSettings As GlobalSettings) As List(Of String)
 
-        Dim files As List(Of String) = New List(Of String)
-        Dim deniedFiles As List(Of String) = New List(Of String)
-
+        Dim files As New List(Of String)
+        Dim deniedFiles As New List(Of String)
         Dim whiteList As List(Of String) = GetFileUploadWhiteList(globalSettings)
 
         Dim tempDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, tempFolder, objectId)
         Dim saveDirPath As String = BuildFilePath(objCustomer.PhysicalFilePath, If(IsNullOrEmpty(prefix), objectId, prefix & objectId))
 
         If message.Attachments.Count > 6 - iHtmlFile Then
+            EnsureDirectoryExists(tempDirPath)
+            EnsureDirectoryExists(saveDirPath)
 
-            ' Ensure temp and save directories exist
-            If Not Directory.Exists(tempDirPath) Then Directory.CreateDirectory(tempDirPath)
-            If Not Directory.Exists(saveDirPath) Then Directory.CreateDirectory(saveDirPath)
-
-            Dim i As Integer = 1
-            ' Save to temp dir
             For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
-                Dim sFileNameTemp As String = msgAttachment.FileName
-                sFileNameTemp = sFileNameTemp.Replace(":", "")
-                sFileNameTemp = URLDecode(sFileNameTemp)
-
-                Dim extension As String = Path.GetExtension(sFileNameTemp).Replace(".", "").ToLower()
-                If IsExtensionInWhiteList(extension, whiteList) Then
-                    ' Save temp file
-                    Dim sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
-                    If File.Exists(sTempFilePath) Then
-                        sFileNameTemp = Path.GetFileNameWithoutExtension(sTempFilePath) & "_" & i.ToString() & "." & extension
-                        sTempFilePath = Path.Combine(tempDirPath, sFileNameTemp)
-                        i += 1
-                    End If
-
-                    msgAttachment.Save(sTempFilePath)
-
-                    ' Explicitly open and close file to ensure it's not locked
-                    Using fs As FileStream = File.Open(sTempFilePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)
-                    End Using
-                Else
-                    deniedFiles.Add(sFileNameTemp)
-                    LogToFile("Blocked file: " & sFileNameTemp, iPop3DebugLevel)
-                End If
+                ProcessSingleAttachment(msgAttachment, tempDirPath, whiteList, deniedFiles, files, iPop3DebugLevel, addToSavedFilesList:=False)
             Next
 
-            ' Zip files
-            Dim sFilePath As String = Path.Combine(saveDirPath, objectId & ".zip")
-            createZipFile(tempDirPath, sFilePath)
-            LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
+            ' Skapa zip-fil
+            Dim zipFilePath As String = Path.Combine(saveDirPath, objectId & ".zip")
+            createZipFile(tempDirPath, zipFilePath)
+            LogToFile("Attached file path: " & zipFilePath, iPop3DebugLevel)
 
-            If Not IsNullOrEmpty(sFilePath) Then
-                ' Delete temp directory safely
-                DeleteFilesInsideFolder(tempDirPath, True)
-                files.Add(sFilePath)
-            End If
+            ' Vänta för säkerhets skull
+            GC.Collect()
+            GC.WaitForPendingFinalizers()
+            Threading.Thread.Sleep(250)
+
+            SafeDeleteDirectory(tempDirPath)
+            files.Add(zipFilePath)
 
         ElseIf message.Attachments.Count > 0 Then
+            EnsureDirectoryExists(saveDirPath)
 
-            ' Ensure save directory exists
-            If Not Directory.Exists(saveDirPath) Then Directory.CreateDirectory(saveDirPath)
-
-            Dim i As Integer = 1
-            ' Save directly to save dir
             For Each msgAttachment As Rebex.Mail.Attachment In message.Attachments
-                Dim sFileName As String = msgAttachment.FileName
-                sFileName = sFileName.Replace(":", "")
-                sFileName = URLDecode(sFileName)
-
-                Dim extension As String = Path.GetExtension(sFileName).Replace(".", "").ToLower()
-                If IsExtensionInWhiteList(extension, whiteList) Then
-                    Dim sFilePath = Path.Combine(saveDirPath, sFileName)
-                    If File.Exists(sFilePath) Then
-                        sFileName = Path.GetFileNameWithoutExtension(sFilePath) & "_" & i.ToString() & "." & extension
-                        sFilePath = Path.Combine(saveDirPath, sFileName)
-                        i += 1
-                    End If
-
-                    LogToFile("Attached file path: " & sFilePath, iPop3DebugLevel)
-                    msgAttachment.Save(sFilePath)
-
-                    ' Ensure file is closed after saving
-                    Using fs As FileStream = File.Open(sFilePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)
-                    End Using
-
-                    files.Add(sFilePath)
-                Else
-                    deniedFiles.Add(sFileName)
-                    LogToFile("Blocked file: " & sFileName, iPop3DebugLevel)
-                End If
+                ProcessSingleAttachment(msgAttachment, saveDirPath, whiteList, deniedFiles, files, iPop3DebugLevel)
             Next
         End If
 
-        ' Save blocked files log if necessary
+        ' Spara blockerade filer
         If deniedFiles.Any() Then
             Dim deniedFilesContent As String = String.Join(Environment.NewLine, deniedFiles)
             Dim filePath As String = Path.Combine(saveDirPath, "blocked files.txt")
@@ -1870,6 +1827,68 @@ Module DH_Helpdesk_Mail
 
         Return files
     End Function
+
+    Private Sub EnsureDirectoryExists(path As String)
+        If Not Directory.Exists(path) Then
+            Directory.CreateDirectory(path)
+        End If
+    End Sub
+
+    Private Sub ProcessSingleAttachment(msgAttachment As Rebex.Mail.Attachment,
+                                    targetDirectory As String,
+                                    whiteList As List(Of String),
+                                    deniedFiles As List(Of String),
+                                    savedFiles As List(Of String),
+                                    debugLevel As Integer,
+                                    Optional addToSavedFilesList As Boolean = True)
+
+        Dim sanitizedFileName As String = SanitizeFileName(msgAttachment.FileName)
+        Dim extension As String = Path.GetExtension(sanitizedFileName).Replace(".", "").ToLower()
+
+        If IsExtensionInWhiteList(extension, whiteList) Then
+            Dim targetPath As String = Path.Combine(targetDirectory, sanitizedFileName)
+            Dim i As Integer = 1
+
+            While File.Exists(targetPath)
+                Dim nameWithoutExt = Path.GetFileNameWithoutExtension(sanitizedFileName)
+                sanitizedFileName = $"{nameWithoutExt}_{i}.{extension}"
+                targetPath = Path.Combine(targetDirectory, sanitizedFileName)
+                i += 1
+            End While
+
+            msgAttachment.Save(targetPath)
+
+            Using fs As FileStream = File.Open(targetPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)
+            End Using
+
+            LogToFile("Saved file: " & targetPath, debugLevel)
+            If addToSavedFilesList Then savedFiles.Add(targetPath)
+        Else
+            deniedFiles.Add(sanitizedFileName)
+            LogToFile("Blocked file: " & sanitizedFileName, debugLevel)
+        End If
+    End Sub
+
+    Private Sub SafeDeleteDirectory(path As String)
+        Const maxAttempts As Integer = 5
+        Const delayMs As Integer = 500
+
+        For attempt As Integer = 1 To maxAttempts
+            Try
+                If Directory.Exists(path) Then
+                    Directory.Delete(path, True)
+                End If
+                Exit For
+            Catch ex As IOException
+                If attempt = maxAttempts Then
+                    LogToFile("Failed to delete temp folder after retries: " & path, 1)
+                    Throw
+                End If
+                Threading.Thread.Sleep(delayMs)
+            End Try
+        Next
+    End Sub
+
 
     Private Function CheckEmailFolderExists(imapClient As Imap, emailFolder As String) As Boolean
         Dim isFolderExists As Boolean = False
@@ -2485,10 +2504,19 @@ Module DH_Helpdesk_Mail
         End If
     End Sub
 
-    Private Sub createZipFile(ByVal sSourceDir As String, ByVal sFileName As String)
-        Dim fz As New FastZip
-        fz.CreateZip(sFileName, sSourceDir, True, "", "")
-        fz = Nothing
+    Private Sub createZipFile(sourceDir As String, zipFilePath As String)
+        Try
+            ' Ta bort tidigare zip om den finns
+            If File.Exists(zipFilePath) Then
+                File.Delete(zipFilePath)
+            End If
+
+            ' Skapa zip från mappen
+            ZipFile.CreateFromDirectory(sourceDir, zipFilePath, CompressionLevel.Optimal, includeBaseDirectory:=False)
+        Catch ex As Exception
+            LogToFile("Zip creation failed: " & ex.Message, 1)
+            Throw
+        End Try
     End Sub
 
     Private Function convertHTMLtoText(ByVal sHTML As String) As String

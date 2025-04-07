@@ -397,25 +397,30 @@ Public Class CustomerData
             Throw
         End Try
     End Function
-    Public Function GetOriginCustomerByWorkingGroupId(iWorkingGroupId As Integer) As Customer
+    Public Function GetCustomerDataFromEmailBoxInUse(sPop3UserName As String, syncType As SyncType) As Customer
         Dim cCustomer As New Customer()
         Dim sSQL As String
-
-        ' Use parameterized query to prevent SQL injection
-        sSQL = "  select tblSettings.Customer_Id, tblSettings.POP3Server, tblSettings.POP3Port, tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId," &
-        " tblWorkingGroup.Pop3UserName from tblSettings " &
-        " inner join tblWorkingGroup on tblWorkingGroup.Customer_Id = tblSettings.Customer_Id " &
-        " WHERE tblWorkingGroup.Id = @WorkingGroupId "
+        If (syncType = SyncType.SyncByWorkingGroup) Then
+            ' Use parameterized query to prevent SQL injection
+            sSQL = "  select tblSettings.Customer_Id, tblSettings.POP3Server, tblSettings.POP3Port, tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId," &
+            " tblWorkingGroup.Pop3UserName from tblSettings " &
+            " inner join tblWorkingGroup on tblWorkingGroup.Customer_Id = tblSettings.Customer_Id " &
+            " WHERE tblWorkingGroup.Pop3UserName = @Pop3UserName "
+        Else
+            sSQL = "  select tblSettings.Customer_Id, tblSettings.POP3Server, tblSettings.POP3Port, tblSettings.EMailFolder, tblSettings.EMailFolderArchive, tblSettings.EwsApplicationId, tblSettings.EwsClientSecret, tblSettings.EwsTenantId," &
+            " tblSettings.Pop3UserName from tblSettings " &
+            " WHERE tblSettings.Pop3UserName = @Pop3UserName "
+        End If
 
         ' Log if needed
         If giLoglevel > 0 Then
-            objLogFile.WriteLine(Now() & ", GetOriginWorkingGroupEmail, SQL query for ID: " & iWorkingGroupId)
+            objLogFile.WriteLine(Now() & ", GetCustomerDataFromEmailBoxInUse, SQL query for ID: " & sPop3UserName)
         End If
 
         Using connection As New SqlConnection(gsConnectionString)
             Using cmd As New SqlCommand(sSQL, connection)
                 ' Add parameter
-                cmd.Parameters.AddWithValue("@WorkingGroupId", iWorkingGroupId)
+                cmd.Parameters.AddWithValue("@Pop3UserName", sPop3UserName)
 
                 Try
                     connection.Open()
