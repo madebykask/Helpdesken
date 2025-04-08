@@ -88,6 +88,7 @@ Module DH_Helpdesk_Schedule
                 Case 6
                     giLoglevel = 1
                     openLogFile()
+                    objLogFile.WriteLine(Now() & ", watchDate")
                     watchDate(sConnectionstring)
                     closeLogFile()
                 Case 7
@@ -1293,6 +1294,9 @@ Module DH_Helpdesk_Schedule
     End Sub
 
     Private Sub closeLogFile()
+        If objLogFile Is Nothing Then
+            Return
+        End If
         objLogFile.Close()
     End Sub
 
