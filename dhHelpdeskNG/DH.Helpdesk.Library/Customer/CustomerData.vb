@@ -440,7 +440,7 @@ Public Class CustomerData
                 Catch ex As Exception
                     ' Log the exception details
                     If giLoglevel > 0 Then
-                        objLogFile.WriteLine(Now() & ", GetOriginWorkingGroupEmail, Error: " & ex.Message)
+                        objLogFile.WriteLine(Now() & ", GetCustomerDataFromEmailBoxInUse, Error: " & ex.Message)
                     End If
                     Throw New Exception("Error retrieving working group email data: " & ex.Message, ex)
                 End Try

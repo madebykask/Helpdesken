@@ -1832,14 +1832,6 @@ GO
 -- 5.7.3
 -- Changes for 5.7.3 goes here
 
-RAISERROR ('Add Column OriginWorkingGroup_Id to tblCase', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblCase','OriginWorkingGroup_Id') IS NULL
-	BEGIN	 
-		ALTER TABLE [dbo].[tblCase]
-		ADD OriginWorkingGroup_Id int null
-	End
-Go
-
 -- 5.8.0 
 -- Changes for 5.8.0 goes here
 
@@ -1898,6 +1890,16 @@ IF COL_LENGTH('dbo.tblSettings','EwsClientSecretExpireDate') IS NULL
 		ADD EwsClientSecretExpireDate datetime null
 	End
 Go
+
+RAISERROR ('Dropping column OriginWorkingGroup_Id from tblCase if it exists', 10, 1) WITH NOWAIT;
+
+IF COL_LENGTH('dbo.tblCase', 'OriginWorkingGroup_Id') IS NOT NULL
+BEGIN
+    ALTER TABLE [dbo].[tblCase]
+    DROP COLUMN OriginWorkingGroup_Id;
+	Print 'Removed column OriginWorkingGroup_Id'
+END
+GO
 
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.8.0'
