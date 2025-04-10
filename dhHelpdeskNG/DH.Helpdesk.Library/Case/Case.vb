@@ -113,7 +113,6 @@ Imports System.Data
     Private msExtendedCaseFormId As Nullable(Of Integer)
     Private miStatus As Integer
     Private miMovedFromCustomer_Id As Integer
-    Private miOriginWorkingGroup_Id As Integer
 
 
 #End Region
@@ -635,11 +634,7 @@ Imports System.Data
         Else
             miMovedFromCustomer_Id = dr("MovedFromCustomer_Id")
         End If
-        If IsDBNull(dr("OriginWorkingGroup_Id")) Then
-            miOriginWorkingGroup_Id = 0
-        Else
-            miOriginWorkingGroup_Id = dr("OriginWorkingGroup_Id")
-        End If
+
     End Sub
 
 #End Region
@@ -1611,14 +1606,6 @@ Imports System.Data
         End Set
     End Property
 
-    Public Property OriginWorkingGroup_Id() As Integer
-        Get
-            Return miOriginWorkingGroup_Id
-        End Get
-        Set(ByVal Value As Integer)
-            miOriginWorkingGroup_Id = Value
-        End Set
-    End Property
 #End Region
 
 End Class
