@@ -1858,8 +1858,8 @@ Module DH_Helpdesk_Mail
 
             msgAttachment.Save(targetPath)
 
-            Using fs As FileStream = File.Open(targetPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)
-            End Using
+            'Using fs As FileStream = File.Open(targetPath, FileMode.Open, FileAccess.ReadWrite, FileShare.None)
+            'End Using
 
             LogToFile("Saved file: " & targetPath, debugLevel)
             If addToSavedFilesList Then savedFiles.Add(targetPath)
