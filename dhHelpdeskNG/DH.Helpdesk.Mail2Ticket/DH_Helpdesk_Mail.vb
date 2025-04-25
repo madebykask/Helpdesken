@@ -790,7 +790,6 @@ Module DH_Helpdesk_Mail
                                         .StateSecondary_Id = objCustomer.DefaultStateSecondary_Id,
                                         .Customer_Id = objCustomer.Id,
                                         .WorkingGroup_Id = objCustomer.DefaultWorkingGroup_Id,
-                                        .OriginWorkingGroup_Id = objCustomer.DefaultWorkingGroup_Id,
                                         .RegLanguage_Id = objCustomer.Language_Id,
                                         .RegistrationSourceCustomer_Id = objCustomer.RegistrationSourceCustomer_Id,
                                         .Performer_User_Id = objCustomer.DefaultAdministratorExternalUser_Id,
