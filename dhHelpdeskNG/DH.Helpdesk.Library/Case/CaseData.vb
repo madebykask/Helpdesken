@@ -979,6 +979,9 @@ Public Class CaseData
     End Function
 
     Private Function getCaseById(Optional iCaseId As Integer = 0, Optional ByVal sCaseGUID As String = "", Optional ByVal sMessageId As String = "", Optional ByVal iCaseNumber As Integer = 0, Optional ByVal sOrderMessageId As String = "", Optional ByVal sExternalCaseNumber As String = "") As CCase
+
+        sMessageId = sMessageId.Replace("'", "''")
+
         Dim sSQL As String = ""
         Dim dt As DataTable
 
@@ -1048,6 +1051,9 @@ Public Class CaseData
     End Function
 
     Public Function getMailIDByMessageID(ByVal sMessageId As String) As Integer
+
+        sMessageId = sMessageId.Replace("'", "''")
+
         Dim sSQL As String = ""
         Dim dt As DataTable
 
