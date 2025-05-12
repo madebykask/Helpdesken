@@ -78,7 +78,9 @@ Public Class LogData
                     cmd.Parameters.AddWithValue("@mailId", iMailId)
                     cmd.Parameters.AddWithValue("@messageId", sMessageId)
                     cmd.Parameters.AddWithValue("@sendTime", dtSendTime)
-                    cmd.Parameters.AddWithValue("@responseMessage", getDBStringPrefix() & sResponseMessage)
+                    'I gamla versionen fanns det med getDbPrefix innan sResponseMessage men vet inte vad den gör för nytta
+                    'cmd.Parameters.AddWithValue("@responseMessage", getDBStringPrefix() & sResponseMessage)
+                    cmd.Parameters.AddWithValue("@responseMessage", sResponseMessage)
 
                     conn.Open()
                     cmd.ExecuteNonQuery()
