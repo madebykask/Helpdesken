@@ -66,31 +66,32 @@ Public Class LogData
         End Try
     End Function
 
-    Public Sub createEMailLog(ByVal iCaseHistory_Id As Integer, ByVal sEMail As String, ByVal iMailId As Integer, ByVal sMessageId As String, ByVal dtSendTime As DateTime, ByVal sEMailLogGUID As String, ByVal sResponseMessage As String)
-        Dim sSQL As String = ""
-
+    Public Sub createEMailLog(iCaseHistory_Id As Integer, sEMail As String, iMailId As Integer, sMessageId As String, dtSendTime As DateTime, sEMailLogGUID As String, sResponseMessage As String)
+        Dim sSQL As String = "INSERT INTO tblEMailLog (EMailLogGUID, CaseHistory_Id, EMailAddress, MailID, MessageId, SendTime, ResponseMessage) " &
+                         "VALUES (@guid, @caseHistoryId, @email, @mailId, @messageId, @sendTime, @responseMessage)"
         Try
-            sSQL = "INSERT INTO tblEMailLog (EMailLogGUID, CaseHistory_Id, EMailAddress, MailID, MessageId, SendTime, ResponseMessage) " & _
-                     "VALUES('" & _
-                      sEMailLogGUID & "', " & _
-                      iCaseHistory_Id & ", '" & _
-                      Replace(sEMail, "'", "''") & "', " & _
-                      iMailId & ", '" & _
-                      sMessageId & "', '" & _
-                      dtSendTime.ToString("yyyy-MM-dd HH:mm:ss") & "', " & _
-                      getDBStringPrefix() & "'" & sResponseMessage & "')"
+            Using conn As New SqlConnection(gsConnectionString)
+                Using cmd As New SqlCommand(sSQL, conn)
+                    cmd.Parameters.AddWithValue("@guid", sEMailLogGUID)
+                    cmd.Parameters.AddWithValue("@caseHistoryId", iCaseHistory_Id)
+                    cmd.Parameters.AddWithValue("@email", sEMail)
+                    cmd.Parameters.AddWithValue("@mailId", iMailId)
+                    cmd.Parameters.AddWithValue("@messageId", sMessageId)
+                    cmd.Parameters.AddWithValue("@sendTime", dtSendTime)
+                    cmd.Parameters.AddWithValue("@responseMessage", getDBStringPrefix() & sResponseMessage)
 
-            executeSQL(gsConnectionString, sSQL)
-
+                    conn.Open()
+                    cmd.ExecuteNonQuery()
+                End Using
+            End Using
         Catch ex As Exception
+            ' Logga eller kasta vidare felet
             If giLoglevel > 0 Then
-                objLogFile.WriteLine(Now() & ", ERROR createEMailLog " & ex.Message.ToString)
+                objLogFile.WriteLine(Now() & ", ERROR createEMailLog " & ex.Message.ToString & " Sql: " & sSQL)
             End If
-
             Throw ex
         End Try
     End Sub
-
     Public Sub saveFileInfo(ByVal iLog_Id As Integer, ByVal sFileName As String, ByVal bIsInternal As Boolean)
         Dim sSQL As String
 
