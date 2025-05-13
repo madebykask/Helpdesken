@@ -429,6 +429,10 @@ namespace DH.Helpdesk.EmailEngine.Library
                 return _settings[customerId];
 
             var setting = _context.Settings.FirstOrDefault(x => x.Customer_Id == customerId);
+
+            if (setting != null)
+                _context.Entry(setting).State = System.Data.Entity.EntityState.Detached;
+
             _settings[customerId] = setting;
 
             return setting;

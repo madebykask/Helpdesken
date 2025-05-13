@@ -48,4 +48,5 @@ dhHelpdeskMobile/.vs/
 /ExtendedCase/ExtendedCase.Database/ExtendedCase.Database.dbmdl
 /dhHelpdeskNG/UpgradeLog2.htm
 /dhHelpdeskNG/DH.Helpdesk.WebApi/Properties/PublishProfiles/FolderProfile1.pubxml
-/dhHelpdeskNG/DH.Helpdesk.TaskScheduler.Console/.vs
+# Ignore all .vs folders (recommended for Visual Studio)
+**/.vs/
