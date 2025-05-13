@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
+using System.Windows.Media;
 using DH.Helpdesk.BusinessData.Enums.MailTemplates;
 using DH.Helpdesk.BusinessData.Models.Feedback;
 using DH.Helpdesk.BusinessData.Models.Questionnaire.Read;
@@ -19,8 +20,9 @@ namespace DH.Helpdesk.Services.Services.Feedback
         private readonly ICircularService _circularService;
 
         private const string MainTemplate = @"<BR>{question}<BR><table><tbody><tr>{optionTemplate}</tr></tbody></table>";
-        private const string OptionTemplate = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}Content/img/{iconId}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
-        private const string OptionTemplateLoaded = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}FeedbackAnswer/GetFeedbackImg/{id}' style='width: 27px; height: 27px' alt={icontext}></a></td>";
+        private const string OptionTemplate = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}Content/img/{iconId}' style='width: 27px; height: 27px' alt={icontext} title={icontext}></a></td>";
+        private const string OptionTemplateLoaded = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src = '{baseurl}FeedbackAnswer/GetFeedbackImg/{id}' style='width: 27px; height: 27px' alt={icontext} title={icontext}></a></td>";
+        private const string OptionTemplateBase64 = @"<td ><a href='{baseurl}FeedbackAnswer/Answer?guid={guid}&optionId={id}&languageId={languageid}&customerId={customerId}' style='padding: 0px 10px'><img src='{base64Img}' style='width: 27px; height: 27px' alt={icontext} title={icontext}></a></td>";
 
         private class Templates
         {
@@ -33,6 +35,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
             public const string LanguageId = "{languageid}";
             public const string IconText = "{icontext}";
             public const string CustomerId = "{customerId}";
+            public const string Base64Img = "{base64Img}";
         }
 
         public FeedbackTemplateService(IFeedbackService feedbackService, ICircularService circularService)
@@ -88,7 +91,8 @@ namespace DH.Helpdesk.Services.Services.Feedback
                 Key = $"[{FeedbackTemplate.FeedbackIdentifierPredicate}{feedback.Info.Identifier}]",
                 FeedbackId = feedback.Info.Id,
                 StringValue = string.Empty,
-                ExcludeAdministrators = feedback.Info.ExcludeAdministrators
+                ExcludeAdministrators = feedback.Info.ExcludeAdministrators,
+                UseBase64Images = feedback.Info.UseBase64Images
             };
 
             var dbCircular = _circularService.GetSingleOrDefaultByQuestionnaireId(feedback.Info.Id);
@@ -135,36 +139,89 @@ namespace DH.Helpdesk.Services.Services.Feedback
             template.Replace(Templates.Question, feedback.Question.Question);
 
             var optionsTemplate = new StringBuilder();
-            foreach (var option in feedback.Options.OrderBy(o => o.Position))
+            if (!feedback.Info.UseBase64Images)
             {
-                if (!string.IsNullOrEmpty(option.IconSrc))
+                foreach (var option in feedback.Options.OrderBy(o => o.Position))
                 {
-                    var optionTemplate = OptionTemplateLoaded
-                        .Replace(Templates.BaseUrl, absoluterUrl)
-                        .Replace(Templates.OptionId, option.Id.ToString())
-                        .Replace(Templates.LanguageId, languageId.ToString())
-                        .Replace(Templates.IconText, option.Text)
-                        .Replace(Templates.Guid, guid.ToString())
-                        .Replace(Templates.CustomerId, customerId.ToString());
-                    optionsTemplate.Append(optionTemplate);
-                }
-                else
-                {
-                    var optionTemplate = OptionTemplate
-                        .Replace(Templates.IconId, option.IconId)
-                        .Replace(Templates.BaseUrl, absoluterUrl)
-                        .Replace(Templates.OptionId, option.Id.ToString())
-                        .Replace(Templates.LanguageId, languageId.ToString())
-                        .Replace(Templates.IconText, option.Text)
-                        .Replace(Templates.Guid, guid.ToString())
-                        .Replace(Templates.CustomerId, customerId.ToString());
-                    optionsTemplate.Append(optionTemplate);
+                    if (!string.IsNullOrEmpty(option.IconSrc))
+                    {
+                        var optionTemplate = OptionTemplateLoaded
+                            .Replace(Templates.BaseUrl, absoluterUrl)
+                            .Replace(Templates.OptionId, option.Id.ToString())
+                            .Replace(Templates.LanguageId, languageId.ToString())
+                            .Replace(Templates.IconText, option.Text)
+                            .Replace(Templates.Guid, guid.ToString())
+                            .Replace(Templates.CustomerId, customerId.ToString());
+                        optionsTemplate.Append(optionTemplate);
+                    }
+                    else
+                    {
+                        var optionTemplate = OptionTemplate
+                            .Replace(Templates.IconId, option.IconId)
+                            .Replace(Templates.BaseUrl, absoluterUrl)
+                            .Replace(Templates.OptionId, option.Id.ToString())
+                            .Replace(Templates.LanguageId, languageId.ToString())
+                            .Replace(Templates.IconText, option.Text)
+                            .Replace(Templates.Guid, guid.ToString())
+                            .Replace(Templates.CustomerId, customerId.ToString());
+                        optionsTemplate.Append(optionTemplate);
+                    }
                 }
             }
+            else
+            {
 
+                foreach (var option in feedback.Options.OrderBy(o => o.Position))
+                {
+
+                    if(!String.IsNullOrEmpty(option.IconSrc))
+                    {
+                        var optionTemplate = OptionTemplateBase64
+                            .Replace(Templates.Base64Img, option.IconSrc)
+                            .Replace(Templates.BaseUrl, absoluterUrl)
+                            .Replace(Templates.OptionId, option.Id.ToString())
+                            .Replace(Templates.LanguageId, languageId.ToString())
+                            .Replace(Templates.IconText, option.Text)
+                            .Replace(Templates.Guid, guid.ToString())
+                            .Replace(Templates.CustomerId, customerId.ToString());
+                        optionsTemplate.Append(optionTemplate);
+                    }
+                    else
+                    {
+                        var source = $"{absoluterUrl}Content/img/{option.IconId}";
+                        var bytes = new System.Net.WebClient().DownloadData(source);
+                        var base64Img = Convert.ToBase64String(bytes);
+                        var imgSrc = "data:image/png;base64," + base64Img;
+                        var optionTemplate = OptionTemplateBase64
+                                .Replace(Templates.Base64Img, imgSrc)
+                                .Replace(Templates.BaseUrl, absoluterUrl)
+                                .Replace(Templates.OptionId, option.Id.ToString())
+                                .Replace(Templates.LanguageId, languageId.ToString())
+                                .Replace(Templates.IconText, option.Text)
+                                .Replace(Templates.Guid, guid.ToString())
+                                .Replace(Templates.CustomerId, customerId.ToString());
+                        optionsTemplate.Append(optionTemplate);
+                    }
+                        
+                }
+            }
             template.Replace(Templates.Option, optionsTemplate.ToString());
 
             return template.ToString();
+        }
+        static byte[] ConvertHexStringToBytes(string hex)
+        {
+            if (hex.Length % 2 != 0)
+                throw new ArgumentException("Hex-strängen måste ha jämnt antal tecken.");
+
+            int len = hex.Length / 2;
+            byte[] result = new byte[len];
+            for (int i = 0; i < len; i++)
+            {
+                string byteValue = hex.Substring(i * 2, 2);
+                result[i] = Convert.ToByte(byteValue, 16);
+            }
+            return result;
         }
     }
 

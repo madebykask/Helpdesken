@@ -98,6 +98,7 @@ namespace DH.Helpdesk.Web.Controllers
                 model.Description = feedback.Description;
                 model.Identifier = feedback.Identifier;
                 model.ExcludeAdministrators = feedback.ExcludeAdministrators;
+                model.UseBase64Images = feedback.UseBase64Images;
 
                 //Get Feeddback question
                 var feedbackQuestions =
@@ -228,6 +229,7 @@ namespace DH.Helpdesk.Web.Controllers
                 DateTime.Now);
             editFeedback.Identifier = model.Identifier;
             editFeedback.ExcludeAdministrators = model.ExcludeAdministrators;
+            editFeedback.UseBase64Images = model.UseBase64Images;
 
             _feedbackService.UpdateFeedback(editFeedback);
 

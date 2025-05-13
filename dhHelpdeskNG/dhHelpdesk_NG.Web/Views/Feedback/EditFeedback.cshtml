@@ -67,7 +67,7 @@
                                         {
                                             <td class="span3"></td>
                                             <td class="span9">
-                                                @Html.DropDownListFor(model => model.LanguageId, languages, new {id = "languageList", style = "display: none", disabled = ""})
+                                                @Html.DropDownListFor(model => model.LanguageId, languages, new { id = "languageList", style = "display: none", disabled = "" })
                                                 @Html.HiddenFor(m => m.LanguageId)
                                             </td>
                                         }
@@ -77,7 +77,7 @@
                                                 @Translation.GetCoreTextTranslation("Språk")
                                             </td>
                                             <td class="span9">
-                                                @Html.DropDownListFor(model => model.LanguageId, languages, new {id = "languageList"})
+                                                @Html.DropDownListFor(model => model.LanguageId, languages, new { id = "languageList" })
                                             </td>
                                         }
                                     </tr>
@@ -95,7 +95,7 @@
                                             @Translation.GetCoreTextTranslation("Beskrivning")
                                         </td>
                                         <td class="span9">
-                                            @Html.TextAreaFor(model => model.Description, new {maxlength = "2000", style = "height:100px;"})
+                                            @Html.TextAreaFor(model => model.Description, new { maxlength = "2000", style = "height:100px;" })
                                             @Html.ValidationMessageFor(model => model.Description)
                                         </td>
                                     </tr>
@@ -113,7 +113,7 @@
                                             @Translation.GetCoreTextTranslation("Fråga")
                                         </td>
                                         <td class="span9">
-                                            @Html.TextAreaFor(model => model.Question, new {maxlength = "1000", style = "height:100px;"})
+                                            @Html.TextAreaFor(model => model.Question, new { maxlength = "1000", style = "height:100px;" })
                                             @Html.ValidationMessageFor(model => model.Question)
                                         </td>
                                     </tr>
@@ -122,8 +122,8 @@
                                             @Translation.GetCoreTextTranslation("Visa kommentar")
                                         </td>
                                         <td class="checkbox" style="padding-left: 20px">
-                                            <input type="checkbox" name="ShowNote" @(Model.ShowNote == 1 ? "checked=checked" : "") @(Model.LanguageId != LanguageIds.Swedish ? "disabled" : "") value="1"/>
-                                            <input type="hidden" name="ShowNote" value="0"/>
+                                            <input type="checkbox" name="ShowNote" @(Model.ShowNote == 1 ? "checked=checked" : "") @(Model.LanguageId != LanguageIds.Swedish ? "disabled" : "") value="1" />
+                                            <input type="hidden" name="ShowNote" value="0" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -131,7 +131,7 @@
                                             @Translation.GetCoreTextTranslation("Text kommentar")
                                         </td>
                                         <td class="span9">
-                                            @Html.TextAreaFor(model => model.NoteText, new {maxlength = "1000", style = "height:100px;"})
+                                            @Html.TextAreaFor(model => model.NoteText, new { maxlength = "1000", style = "height:100px;" })
                                         </td>
                                     </tr>
                                     <tr>
@@ -140,8 +140,8 @@
                                         </td>
                                         <td class="span6">
                                             @Translation.GetCoreTextTranslation("Selektera ut")
-                                            @{ var percents = (List<SelectListItem>) ViewBag.Percents; }
-                                            @Html.DropDownListFor(model => model.SelectedPercent, percents, new {style = "width: 60px"})
+                                            @{ var percents = (List<SelectListItem>)ViewBag.Percents; }
+                                            @Html.DropDownListFor(model => model.SelectedPercent, percents, new { style = "width: 60px" })
                                             @Translation.GetCoreTextTranslation("procent av tillgängliga ärenden")
                                         </td>
                                     </tr>
@@ -153,18 +153,18 @@
                                             @Html.ListBoxFor(model => model.CaseFilter.SelectedCaseTypes, (IList<SelectListItem>)ViewBag.CaseTypes, new { multiple = "multiple", @class = "chosen-select" })
                                         </td>
                                         @*<td class="span6">
-                                            <div id="divCaseTypeSetting" class="btn-group">
-                                                <div class="btn" id="divBreadcrumbs_CaseTypeSetting"></div>
-                                                <button class="btn dropdown-toggle" data-toggle="dropdown">
-                                                    <span class="caret"></span>
-                                                </button>
-                                                <ul class="dropdown-menu">
-                                                    <li><a href="#">@Translation.Get("--")</a></li>
-                                                    @Html.CaseTypeDropdownButtonString((IList<CaseTypeOverview>)ViewBag.CaseTypes, true)
-                                                </ul>
-                                                @Html.HiddenFor(model => model.CaseTypeId)
-                                            </div>
-                                        </td>*@
+                <div id="divCaseTypeSetting" class="btn-group">
+                    <div class="btn" id="divBreadcrumbs_CaseTypeSetting"></div>
+                    <button class="btn dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">@Translation.Get("--")</a></li>
+                        @Html.CaseTypeDropdownButtonString((IList<CaseTypeOverview>)ViewBag.CaseTypes, true)
+                    </ul>
+                    @Html.HiddenFor(model => model.CaseTypeId)
+                </div>
+            </td>*@
                                     </tr>
                                     <tr>
                                         <td class="span3">
@@ -178,6 +178,21 @@
                                             else
                                             {
                                                 @Html.CheckBoxFor(m => m.ExcludeAdministrators, new { disabled = "disabled" })
+                                            }
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="span3">
+                                            @Translation.GetCoreTextTranslation("Använd Base64-bilder")
+                                        </td>
+                                        <td class="checkbox" style="padding-left: 20px">
+                                            @if (Model.LanguageId == LanguageIds.Swedish)
+                                            {
+                                                @Html.CheckBoxFor(m => m.UseBase64Images)
+                                            }
+                                            else
+                                            {
+                                                @Html.CheckBoxFor(m => m.UseBase64Images, new { disabled = "disabled" })
                                             }
                                         </td>
                                     </tr>

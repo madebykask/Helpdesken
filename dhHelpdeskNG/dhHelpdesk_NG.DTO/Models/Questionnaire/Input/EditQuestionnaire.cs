@@ -27,8 +27,9 @@
         public int LanguageId { get; private set; }
 		public string Identifier { get; set; }
 		public bool ExcludeAdministrators { get; set; }
+        public bool UseBase64Images { get; set; }
 
 
-		public DateTime ChangedDate { get; private set; }
+        public DateTime ChangedDate { get; private set; }
     }
 }

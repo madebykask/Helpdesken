@@ -17,6 +17,7 @@
 	        this.Property(q => q.Identifier).HasMaxLength(100);
             this.Property(q => q.Customer_Id).IsOptional();
             this.Property(q => q.ExcludeAdministrators).IsOptional();
+            this.Property(q => q.UseBase64Images).IsOptional();
 
             this.HasRequired(q => q.Customer)
                 .WithMany()

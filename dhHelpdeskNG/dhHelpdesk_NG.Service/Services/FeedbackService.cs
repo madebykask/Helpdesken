@@ -35,8 +35,10 @@ namespace DH.Helpdesk.Services.Services
 				Id = q.Id,
 				Identifier = q.Identifier,
 				Name = q.QuestionnaireName,
-				Description = q.QuestionnaireDescription
-			}).ToList();
+				Description = q.QuestionnaireDescription,
+                ExcludeAdministrators = q.ExcludeAdministrators,
+                UseBase64Images = q.UseBase64Images,
+            }).ToList();
 		}
 
 		public List<FeedbackFullItem> GetFeedbackFullItems(int customerId, int languageId, IEnumerable<string> identifiers)
@@ -99,7 +101,8 @@ namespace DH.Helpdesk.Services.Services
 			item.Info = new FeedbackOverview();
 			item.Info.Identifier = entity.Identifier;
 			item.Info.ExcludeAdministrators = entity.ExcludeAdministrators;
-			item.Info.Id = entity.Id;
+			item.Info.UseBase64Images = entity.UseBase64Images;
+            item.Info.Id = entity.Id;
 
 			var feedbackLangEntity = entity.QuestionnaireLanguageEntities != null && entity.QuestionnaireLanguageEntities.Any() ?
 				entity.QuestionnaireLanguageEntities.SingleOrDefault(le => le.Language_Id == languageId) :

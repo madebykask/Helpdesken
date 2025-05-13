@@ -43,7 +43,9 @@ namespace DH.Helpdesk.BusinessData.Models.Questionnaire.Input
 
 		public bool ExcludeAdministrators { get; set; }
 
-		public QuestionnaireType Type { get; set; }
+        public bool UseBase64Images { get; set; }
+
+        public QuestionnaireType Type { get; set; }
 
 		[IsId]
         public int Id { get; set; }

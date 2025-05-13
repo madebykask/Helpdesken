@@ -37,7 +37,8 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
                 Customer_Id = questionnaire.CustomerId,
                 CreatedDate = questionnaire.CreatedDate,
 				Identifier = questionnaire.Identifier,
-				ExcludeAdministrators = questionnaire.ExcludeAdministrators
+				ExcludeAdministrators = questionnaire.ExcludeAdministrators,
+                UseBase64Images = questionnaire.UseBase64Images,
             };
             this.DbContext.Questionnaires.Add(questionnaireEntity);
             this.InitializeAfterCommit(questionnaire, questionnaireEntity);
@@ -91,7 +92,8 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
 							Identifier = q.Identifier,
                             languageId = LanguageIds.Swedish,
                             CreateDate = q.CreatedDate,
-                            q.ExcludeAdministrators
+                            q.ExcludeAdministrators,
+                            q.UseBase64Images
                         }).FirstOrDefault();
 			// If Language = Swedish or there is no Questionnaire for this language_Id
 	        if (questionnaire != null)
@@ -103,7 +105,8 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
 		        }
 		        ret.Identifier = questionnaire.Identifier;
 		        ret.ExcludeAdministrators = questionnaire.ExcludeAdministrators;
-	        }
+                ret.UseBase64Images = questionnaire.UseBase64Images;
+            }
 
 	        return ret;
         }
@@ -154,6 +157,7 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
 			questionnaireEntity.ExcludeAdministrators = questionnaire.ExcludeAdministrators;
 			questionnaireEntity.QuestionnaireDescription = questionnaire.Description ?? string.Empty;
             questionnaireEntity.ChangedDate = questionnaire.ChangedDate;
+            questionnaireEntity.UseBase64Images = questionnaire.UseBase64Images;
         }
 
         public void UpdateOtherLanguageQuestionnaire(EditQuestionnaire questionnaire)
@@ -166,7 +170,8 @@ namespace DH.Helpdesk.Dal.Repositories.Questionnaire.Concrete
 			{
 				questionnaireEntity.Identifier = questionnaire.Identifier;
 				questionnaireEntity.ExcludeAdministrators = questionnaire.ExcludeAdministrators;
-			}
+                questionnaireEntity.UseBase64Images = questionnaire.UseBase64Images;
+            }
 
 			var questionnaireLanguageEntity =
                 this.DbContext.QuestionnaireLanguages.SingleOrDefault(
