@@ -191,16 +191,18 @@ namespace DH.Helpdesk.Services.Services.Feedback
                     {
                         var source = $"{absoluterUrl}Content/img/{option.IconId}";
                         var bytes = new System.Net.WebClient().DownloadData(source);
-                        var base64Img = Convert.ToBase64String(bytes);
-                        var imgSrc = "data:image/png;base64," + base64Img;
+                        var mimeType = GetMimeFromBytes(bytes);
+                        var base64 = Convert.ToBase64String(bytes);
+                        var imgSrc = $"data:{mimeType};base64,{base64}";
+
                         var optionTemplate = OptionTemplateBase64
-                                .Replace(Templates.Base64Img, imgSrc)
-                                .Replace(Templates.BaseUrl, absoluterUrl)
-                                .Replace(Templates.OptionId, option.Id.ToString())
-                                .Replace(Templates.LanguageId, languageId.ToString())
-                                .Replace(Templates.IconText, option.Text)
-                                .Replace(Templates.Guid, guid.ToString())
-                                .Replace(Templates.CustomerId, customerId.ToString());
+                            .Replace(Templates.Base64Img, imgSrc)
+                            .Replace(Templates.BaseUrl, absoluterUrl)
+                            .Replace(Templates.OptionId, option.Id.ToString())
+                            .Replace(Templates.LanguageId, languageId.ToString())
+                            .Replace(Templates.IconText, option.Text)
+                            .Replace(Templates.Guid, guid.ToString())
+                            .Replace(Templates.CustomerId, customerId.ToString());
                         optionsTemplate.Append(optionTemplate);
                     }
                         
@@ -210,19 +212,23 @@ namespace DH.Helpdesk.Services.Services.Feedback
 
             return template.ToString();
         }
-        static byte[] ConvertHexStringToBytes(string hex)
+        private static string GetMimeFromBytes(byte[] data)
         {
-            if (hex.Length % 2 != 0)
-                throw new ArgumentException("Hex-strängen måste ha jämnt antal tecken.");
+            if (data.Length >= 4 &&
+                data[0] == 0x89 && data[1] == 0x50 &&
+                data[2] == 0x4E && data[3] == 0x47)
+                return "image/png";
 
-            int len = hex.Length / 2;
-            byte[] result = new byte[len];
-            for (int i = 0; i < len; i++)
-            {
-                string byteValue = hex.Substring(i * 2, 2);
-                result[i] = Convert.ToByte(byteValue, 16);
-            }
-            return result;
+            if (data.Length >= 3 &&
+                data[0] == 0xFF && data[1] == 0xD8 && data[2] == 0xFF)
+                return "image/jpeg";
+
+            if (data.Length >= 4 &&
+                data[0] == 0x47 && data[1] == 0x49 &&
+                data[2] == 0x46 && data[3] == 0x38)
+                return "image/gif";
+
+            return "application/octet-stream";
         }
     }
 
