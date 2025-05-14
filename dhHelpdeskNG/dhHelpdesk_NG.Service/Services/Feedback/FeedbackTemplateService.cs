@@ -141,6 +141,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
             var optionsTemplate = new StringBuilder();
             if (!feedback.Info.UseBase64Images)
             {
+                //"Som vanligt"
                 foreach (var option in feedback.Options.OrderBy(o => o.Position))
                 {
                     if (!string.IsNullOrEmpty(option.IconSrc))
@@ -173,7 +174,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
 
                 foreach (var option in feedback.Options.OrderBy(o => o.Position))
                 {
-
+                    //Om det finns IconSource = uppladdad bild är den redan konverterad till base&4 när den kommer till denna metoden
                     if(!String.IsNullOrEmpty(option.IconSrc))
                     {
                         var optionTemplate = OptionTemplateBase64
@@ -186,7 +187,7 @@ namespace DH.Helpdesk.Services.Services.Feedback
                             .Replace(Templates.CustomerId, customerId.ToString());
                         optionsTemplate.Append(optionTemplate);
                     }
-                    else
+                    else //konvertera existerande systembild till base64
                     {
                         var source = $"{absoluterUrl}Content/img/{option.IconId}";
                         var bytes = new System.Net.WebClient().DownloadData(source);
