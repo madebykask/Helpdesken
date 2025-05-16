@@ -314,7 +314,7 @@ Public Class Mail
 
 
 
-                SendGraphMail(email, objCustomer)
+                sRet = SendGraphMail(email, objCustomer)
 
 
 
@@ -336,9 +336,9 @@ Public Class Mail
 
 
                 If Not IsNullOrEmpty(setting.SMTPServer) Then
-                    sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, setting.SMTPServer, setting.SMTPPort, setting.IsSMTPSecured, setting.SMTPUserName, setting.SMTPPassWord, sMessageId, filesToAttach)
+                    sRet = Send(objCustomer, objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, setting.SMTPServer, setting.SMTPPort, setting.IsSMTPSecured, setting.SMTPUserName, setting.SMTPPassWord, sMessageId, filesToAttach)
                 Else
-                    sRet = Send(objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId, filesToAttach)
+                    sRet = Send(objCustomer, objCustomer.HelpdeskEMail, sEmailTo, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId, filesToAttach)
                 End If
 
             End If
@@ -399,7 +399,7 @@ Public Class Mail
                 objLogFile.WriteLine(Now() & ", sendMail, From:" & objCustomer.HelpdeskEMail & ", To: " & qcp.Persons_EMail)
             End If
 
-            Send(objCustomer.HelpdeskEMail, qcp.Persons_EMail, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
+            Send(objCustomer, objCustomer.HelpdeskEMail, qcp.Persons_EMail, sSubject, sBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
 
         Catch ex As Exception
             If giLoglevel > 0 Then
@@ -409,7 +409,7 @@ Public Class Mail
 
     End Function
 
-    Public Function Send(sFrom As String,
+    Public Function Send(objCustomer As Customer, sFrom As String,
                          sTo As String,
                          sSubject As String,
                          sBody As String,
@@ -444,7 +444,7 @@ Public Class Mail
             End If
         End If
 
-        Return Send(sFrom, sTo, sSubject, sBody, sEMailBodyEncoding, smtpServer, smtpPort, smtpSecure, smtpUsername, smtpPassword, sMessageId, filesToAttach)
+        Return Send(objCustomer, sFrom, sTo, sSubject, sBody, sEMailBodyEncoding, smtpServer, smtpPort, smtpSecure, smtpUsername, smtpPassword, sMessageId, filesToAttach)
     End Function
 
     Private Function IsValidEmail(email As String) As Boolean
@@ -612,6 +612,7 @@ Public Class Mail
 
                     If Not response.IsSuccessStatusCode Then
                         Dim errorMsg As String = response.Content.ReadAsStringAsync().Result
+                        Return errorMsg
                         Throw New Exception($"Failed to send email via Graph: {errorMsg}")
                     End If
 
@@ -620,10 +621,12 @@ Public Class Mail
                 End Using
             Else
                 _logger.Error($"Error sending email. EmailLog Id: {email.MessageId}. ", Nothing)
+                Return "No token acquired"
                 'attempt.Message = "No token acquired"
             End If
         Catch ex As Exception
             _logger.Error($"Error sending email. EmailLog Id: {email.MessageId}. ", ex)
+            Return ex.Message
             Dim errorMsg As New StringBuilder(ex.Message)
             Dim inner As Exception = ex.InnerException
             While inner IsNot Nothing
@@ -632,8 +635,9 @@ Public Class Mail
             End While
             'attempt.Message = errorMsg.ToString()
         End Try
+        Return String.Empty
     End Function
-    Public Function Send(sFrom As String,
+    Public Function Send(objCustomer As Customer, sFrom As String,
                          sTo As String,
                          sSubject As String,
                          sBody As String,
@@ -646,61 +650,87 @@ Public Class Mail
                          sMessageId As String,
                          Optional filesToAttach As List(Of String) = Nothing) As String
         ' Create Mail
-        Dim msg As New MailMessage()
         Dim sRet As String = ""
 
-        With msg
-            .From = New MailAddress(sFrom)
+        If objCustomer.UseGraphSendingEmail = True Then
 
-            sTo = sTo.Replace(";", ",")
-
-            .To.Add(sTo)
-            .IsBodyHtml = True
-            .Subject = sSubject
-            .Body = sBody
-            .Headers.Add("Message-ID", sMessageId)
-
-            If sEMailBodyEncoding <> "" Then
-                .BodyEncoding = System.Text.Encoding.GetEncoding(sEMailBodyEncoding)
+            'Declare a new variable to hold the file paths as a string
+            Dim filesToAttachString As String = ""
+            'If the Then List Is Not empty, convert it To a comma-separated String
+            If filesToAttach IsNot Nothing AndAlso filesToAttach.Count > 0 Then
+                filesToAttachString = String.Join(",", filesToAttach)
             End If
-        End With
+            Dim email As New EmailLog
+            email.EmailAddress = sTo
+            email.Cc = "" 'sTo
+            email.Bcc = ""
+            email.Files = filesToAttachString
+            email.HighPriority = False
+            email.MessageId = sMessageId
+            email.Subject = sSubject
+            email.Body = sBody
 
-        Dim smtp As New SmtpClient()
+            sRet = SendGraphMail(email, objCustomer)
 
-        If smtpServer = "" Then
-            smtp.DeliveryMethod = SmtpDeliveryMethod.PickupDirectoryFromIis
         Else
-            smtp.Host = smtpServer
 
-            If Not IsNullOrEmpty(smtpUsername) Then
-                Dim credentials = New Net.NetworkCredential(smtpUsername, smtpPassword)
-                smtp.Credentials = credentials
-            End If
 
-            If smtpPort > 0 Then
-                smtp.Port = smtpPort
-            End If
+            Dim msg As New MailMessage()
 
-            smtp.EnableSsl = smtpSecure
-        End If
 
-        'Attach files to message if any
-        If (filesToAttach IsNot Nothing AndAlso filesToAttach.Any()) Then
+            With msg
+                .From = New MailAddress(sFrom)
 
-            For Each file As String In filesToAttach
-                If (IO.File.Exists(file)) Then
-                    msg.Attachments.Add(New Attachment(file))
+                sTo = sTo.Replace(";", ",")
+
+                .To.Add(sTo)
+                .IsBodyHtml = True
+                .Subject = sSubject
+                .Body = sBody
+                .Headers.Add("Message-ID", sMessageId)
+
+                If sEMailBodyEncoding <> "" Then
+                    .BodyEncoding = System.Text.Encoding.GetEncoding(sEMailBodyEncoding)
                 End If
-            Next
+            End With
+
+            Dim smtp As New SmtpClient()
+
+            If smtpServer = "" Then
+                smtp.DeliveryMethod = SmtpDeliveryMethod.PickupDirectoryFromIis
+            Else
+                smtp.Host = smtpServer
+
+                If Not IsNullOrEmpty(smtpUsername) Then
+                    Dim credentials = New Net.NetworkCredential(smtpUsername, smtpPassword)
+                    smtp.Credentials = credentials
+                End If
+
+                If smtpPort > 0 Then
+                    smtp.Port = smtpPort
+                End If
+
+                smtp.EnableSsl = smtpSecure
+            End If
+
+            'Attach files to message if any
+            If (filesToAttach IsNot Nothing AndAlso filesToAttach.Any()) Then
+
+                For Each file As String In filesToAttach
+                    If (IO.File.Exists(file)) Then
+                        msg.Attachments.Add(New Attachment(file))
+                    End If
+                Next
+            End If
+
+
+            Try
+                smtp.Send(msg)
+            Catch ex As Exception
+                sRet = ex.Message.ToString()
+                objLogFile.WriteLine("Smtp error: {0}, Send message. EmailTo: {1}, Message-ID: {2}", sRet, msg.To, sMessageId)
+            End Try
         End If
-
-        Try
-            smtp.Send(msg)
-        Catch ex As Exception
-            sRet = ex.Message.ToString()
-            objLogFile.WriteLine("Smtp error: {0}, Send message. EmailTo: {1}, Message-ID: {2}", sRet, msg.To, sMessageId)
-        End Try
-
         Return sRet
     End Function
 
@@ -754,6 +784,8 @@ Public Class Mail
         '    setting = settingsRepository.Get(Function(x) x.Customer_Id = objCustomer.Id)
 
         'End Using
+        Dim sRet As String = ""
+
         If objCustomer.UseGraphSendingEmail = True Then
             Dim email As New EmailLog
             email = SetEmailLog(sFrom, sTo, sSubject, sBody, "Enqueued", EmailSendStatus.Pending, DateTime.Now,
@@ -762,10 +794,10 @@ Public Class Mail
 
 
 
-            SendGraphMail(email, objCustomer)
+            sRet = SendGraphMail(email, objCustomer)
         Else
             Dim msg As New MailMessage()
-            Dim sRet As String = ""
+
 
             With msg
                 .From = New MailAddress(sFrom)

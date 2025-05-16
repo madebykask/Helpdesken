@@ -33,7 +33,7 @@ namespace DH.Helpdesk.EmailEngine.Library
 
         public void ProcessEmails()
         {
-            _logger.Debug("ProcessEmails has been started.");
+            _logger.Debug("ProcessEmails has been started successfully");
 
             var maxAttempts = int.Parse(ConfigurationManager.AppSettings["MaxAttempts"]);
             var query = from e in _context.EmailLogs
@@ -429,6 +429,10 @@ namespace DH.Helpdesk.EmailEngine.Library
                 return _settings[customerId];
 
             var setting = _context.Settings.FirstOrDefault(x => x.Customer_Id == customerId);
+
+            if (setting != null)
+                _context.Entry(setting).State = System.Data.Entity.EntityState.Detached;
+
             _settings[customerId] = setting;
 
             return setting;

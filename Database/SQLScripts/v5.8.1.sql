@@ -1,4 +1,4 @@
-﻿--update DB from 5.3.58.0 to 5.8.0 version
+﻿--update DB from 5.3.58.0 to 5.8.1 version
 
 -- 5.3.58.0 --
 
@@ -1902,6 +1902,6 @@ END
 GO
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.8.0'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.8.1'
 GO
 

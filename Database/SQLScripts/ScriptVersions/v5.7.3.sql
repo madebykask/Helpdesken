@@ -1,4 +1,4 @@
-﻿--update DB from 5.3.58.0 to 5.8.0 version
+﻿--update DB from 5.3.58.0 to 5.7.3 version
 
 -- 5.3.58.0 --
 
@@ -1829,79 +1829,24 @@ BEGIN
 END	
 GO
 
+-- 5.7.1 
+-- Changes for 5.7.1 goes here
+
+-- 5.7.2 
+-- Changes for 5.7.2 goes here
+
 -- 5.7.3
 -- Changes for 5.7.3 goes here
 
--- 5.8.0 
--- Changes for 5.8.0 goes here
-
-RAISERROR ('Add Column UseGraphSendingEmail to tblSettings', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblSettings','UseGraphSendingEmail') IS NULL
+RAISERROR ('Add Column OriginWorkingGroup_Id to tblCase', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCase','OriginWorkingGroup_Id') IS NULL
 	BEGIN	 
-		ALTER TABLE [dbo].[tblSettings]
-		ADD UseGraphSendingEmail bit not null default 0
+		ALTER TABLE [dbo].[tblCase]
+		ADD OriginWorkingGroup_Id int null
 	End
 Go
-
-RAISERROR ('Add Column GraphClientId to tblSettings', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblSettings','GraphClientId') IS NULL
-	BEGIN	 
-		ALTER TABLE [dbo].[tblSettings]
-		ADD GraphClientId nvarchar(200) null
-	End
-GO
-
-RAISERROR ('Add Column GraphTenantId to tblSettings', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblSettings','GraphTenantId') IS NULL
-	BEGIN	 
-		ALTER TABLE [dbo].[tblSettings]
-		ADD GraphTenantId nvarchar(200) null
-	End
-Go
-
-RAISERROR ('Add Column GraphClientSecret to tblSettings', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblSettings','GraphClientSecret') IS NULL
-	BEGIN	 
-		ALTER TABLE [dbo].[tblSettings]
-		ADD GraphClientSecret nvarchar(200) null
-	End
-Go
-
-RAISERROR ('Add Column GraphClientSecretExpireDate to tblSettings', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblSettings','GraphClientSecretExpireDate') IS NULL
-	BEGIN	 
-		ALTER TABLE [dbo].[tblSettings]
-		ADD GraphClientSecretExpireDate datetime null
-	End
-Go
-
-RAISERROR ('Add Column GraphUserName to tblSettings', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblSettings','GraphUserName') IS NULL
-	BEGIN	 
-		ALTER TABLE [dbo].[tblSettings]
-		ADD GraphUserName nvarchar(200) null
-	End
-Go
-
-RAISERROR ('Add Column EwsClientSecretExpireDate to tblSettings', 10, 1) WITH NOWAIT
-IF COL_LENGTH('dbo.tblSettings','EwsClientSecretExpireDate') IS NULL
-	BEGIN	 
-		ALTER TABLE [dbo].[tblSettings]
-		ADD EwsClientSecretExpireDate datetime null
-	End
-Go
-
-RAISERROR ('Dropping column OriginWorkingGroup_Id from tblCase if it exists', 10, 1) WITH NOWAIT;
-
-IF COL_LENGTH('dbo.tblCase', 'OriginWorkingGroup_Id') IS NOT NULL
-BEGIN
-    ALTER TABLE [dbo].[tblCase]
-    DROP COLUMN OriginWorkingGroup_Id;
-	Print 'Removed column OriginWorkingGroup_Id'
-END
-GO
 
 -- Last Line to update database version
-UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.8.0'
+UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.7.3'
 GO
 

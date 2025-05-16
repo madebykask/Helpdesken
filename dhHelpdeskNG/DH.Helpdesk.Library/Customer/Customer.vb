@@ -91,6 +91,7 @@
     Private msGraphTenantId As String
     Private msGraphClientSecret As String
     Private msGraphClientSecretExpireDate As String
+    Private msEwsClientSecretExpireDate As String
     Private msGraphUserName As String
 
 
@@ -351,6 +352,9 @@
             End If
             If Not IsDBNull(dr("GraphClientSecretExpireDate")) Then
                 msGraphClientSecretExpireDate = dr("GraphClientSecretExpireDate")
+            End If
+            If Not IsDBNull(dr("EwsClientSecretExpireDate")) Then
+                msEwsClientSecretExpireDate = dr("EwsClientSecretExpireDate")
             End If
             If Not IsDBNull(dr("GraphUserName")) Then
                 msGraphUserName = dr("GraphUserName")
@@ -1019,6 +1023,15 @@
         End Get
         Set(ByVal Value As String)
             msGraphClientSecretExpireDate = Value
+        End Set
+    End Property
+
+    Public Property EwsClientSecretExpireDate() As String
+        Get
+            Return msEwsClientSecretExpireDate
+        End Get
+        Set(ByVal Value As String)
+            msEwsClientSecretExpireDate = Value
         End Set
     End Property
 

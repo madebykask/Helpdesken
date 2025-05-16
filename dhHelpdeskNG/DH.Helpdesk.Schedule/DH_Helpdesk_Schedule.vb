@@ -47,6 +47,7 @@ Module DH_Helpdesk_Schedule
             ' parse command line args
             Dim workMode = GetWorkMode(aArguments)
             Dim sConnectionstring = GetConnectionString(aArguments)
+            'Console.WriteLine("Connectionstring from args:" & sConnectionstring)
             giSendMail = GetSendEmail(aArguments, giSendMail) 'used in 12 mode
 
             'Log cmd line args
@@ -87,6 +88,7 @@ Module DH_Helpdesk_Schedule
                 Case 6
                     giLoglevel = 1
                     openLogFile()
+                    objLogFile.WriteLine(Now() & ", watchDate")
                     watchDate(sConnectionstring)
                     closeLogFile()
                 Case 7
@@ -498,14 +500,13 @@ Module DH_Helpdesk_Schedule
 
         ' Hämta ärenden
         Dim colCase As Collection = objCaseData.getCaseAutoClose
+        objLogFile.WriteLine(Now() & ", running caseAutoClose, found " & colCase.Count & " cases to autoclose")
 
         'For debug only - remove
         'Dim debugCase As CCase = objCaseData.getCase(39360)
         'colCase.Add(debugCase)
 
-        For i As Integer = 1 To colCase.Count
-            objCase = colCase(i)
-
+        For Each objCase In colCase
             If objCase.StateSecondary_FinishingCause_Id IsNot Nothing Then
 
                 objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber)
@@ -516,7 +517,7 @@ Module DH_Helpdesk_Schedule
                 ' Save Logs (Logga händelsen)
                 Dim iLog_Id As Integer = objLogData.createLog(objCase.Id, objCase.Persons_EMail, "", "", 0, "DH Helpdesk", iCaseHistory_Id, objCase.StateSecondary_FinishingCause_Id)
                 objCaseData.closeCase(objCase)
-
+                objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Closed case")
                 objMailTemplate = objMailTemplateData.getMailTemplateById(SharedFunctions.EMailType.EMailCaseClosed, objCase.Customer_Id, objCase.RegLanguage_Id, objGlobalSettings.DBVersion)
 
 
@@ -526,10 +527,12 @@ Module DH_Helpdesk_Schedule
                     Dim caseService As New DH.Helpdesk.VBCSharpBridge.CaseExposure
                     Dim bodyWithSurvey As String = caseService.GetSurveyBodyString(objCase.Id, objMailTemplate.Id, objCase.Persons_EMail, objCustomer.HelpdeskEMail, objGlobalSettings.ServerPort, objGlobalSettings.ServerName, objMailTemplate.Body)
                     'Replace surveyfields and add it to body
+                    objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Got mailtemplate with survey fields")
                     objMailTemplate.Body = bodyWithSurvey
                     Dim caseEmailer As New DH.Helpdesk.VBCSharpBridge.CaseEmailExposure
                     If objMailTemplate.IncludeLogExternal Then
                         Dim extraBody As String = caseEmailer.GetExternalLogTextHistory(objCase.Id, iLog_Id, objCustomer.HelpdeskEMail)
+                        objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Got external case history")
                         objMailTemplate.Body += extraBody
                     End If
 
@@ -543,8 +546,9 @@ Module DH_Helpdesk_Schedule
                             Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                             Dim objMail As New Mail
                             Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, objCase.Persons_EMail, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
-
+                            objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Sent AutoClose email to " & objCase.Persons_EMail)
                             objLogData.createEMailLog(iCaseHistory_Id, objCase.Persons_EMail, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                            objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Created emailLog alt 1")
 
                         End If
 
@@ -569,8 +573,9 @@ Module DH_Helpdesk_Schedule
                                 Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                                 Dim objMail As New Mail
                                 Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, follower, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
-
+                                objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Sent AutoClose email to follower " & follower)
                                 objLogData.createEMailLog(iCaseHistory_Id, follower, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                                objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Created emailLog alt 2")
 
                             End If
                         Next
@@ -584,8 +589,9 @@ Module DH_Helpdesk_Schedule
                         Dim sEMailLogGUID As String = System.Guid.NewGuid().ToString
                         Dim objMail As New Mail
                         Dim sRet_SendMail As String = objMail.sendMail(objCase, objLog, objCustomer, sEmailList, objMailTemplate, objGlobalSettings, sMessageId, sEMailLogGUID, gsConnectionString)
-
+                        objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Sent AutoClose email to " & sEmailList)
                         objLogData.createEMailLog(iCaseHistory_Id, sEmailList, SharedFunctions.EMailType.EMailCaseClosed, sMessageId, sSendTime, sEMailLogGUID, sRet_SendMail)
+                        objLogFile.WriteLine(Now() & ", caseAutoClose, CaseNumber:" & objCase.Casenumber & " Created emailLog alt 3")
 
                     End If
 
@@ -949,7 +955,7 @@ Module DH_Helpdesk_Schedule
 
                     sMessageId = createMessageId(objCustomer.HelpdeskEMail)
 
-                    objMailData.Send(objCustomer.HelpdeskEMail, objUser.EMail, sSubject, sMessage, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
+                    objMailData.Send(objCustomer, objCustomer.HelpdeskEMail, objUser.EMail, sSubject, sMessage, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
 
                 End If
             End If
@@ -981,7 +987,7 @@ Module DH_Helpdesk_Schedule
             sMessageId = createMessageId(objCustomer.HelpdeskEMail)
 
             Dim objMail As New Mail
-            objMail.Send(objCustomer.HelpdeskEMail, cl.Recipients, "Checklista: " & cl.ChecklistName, cl.ChecklistMailBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
+            objMail.Send(objCustomer, objCustomer.HelpdeskEMail, cl.Recipients, "Checklista: " & cl.ChecklistName, cl.ChecklistMailBody, objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
         Next
 
 
@@ -1232,7 +1238,7 @@ Module DH_Helpdesk_Schedule
 
                         Dim sMessageId As String = createMessageId(objCustomer.HelpdeskEMail)
 
-                        Dim sRet_SendMail As String = objMail.Send(objCustomer.HelpdeskEMail, Replace(objCustomer.CaseStatisticsEMailList, vbCrLf, ""), "Ärendestatistik - " & objCustomer.Name & " - " & DateTime.Now.Year & "-" & DateTime.Now.Month & "-" & DateTime.Now.Day, "<FONT face=""MS Sans Serif"" size=2>" & sStatistics & "</FONT>", objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
+                        Dim sRet_SendMail As String = objMail.Send(objCustomer, objCustomer.HelpdeskEMail, Replace(objCustomer.CaseStatisticsEMailList, vbCrLf, ""), "Ärendestatistik - " & objCustomer.Name & " - " & DateTime.Now.Year & "-" & DateTime.Now.Month & "-" & DateTime.Now.Day, "<FONT face=""MS Sans Serif"" size=2>" & sStatistics & "</FONT>", objGlobalSettings.EMailBodyEncoding, objGlobalSettings.SMTPServer, sMessageId)
                     End If
                 End If
 
@@ -1288,6 +1294,9 @@ Module DH_Helpdesk_Schedule
     End Sub
 
     Private Sub closeLogFile()
+        If objLogFile Is Nothing Then
+            Return
+        End If
         objLogFile.Close()
     End Sub
 

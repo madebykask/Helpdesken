@@ -754,6 +754,14 @@
                                         </tr>
                                         <tr>
                                             <td>
+                                                Ews Tenant Id
+                                            </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.Setting.EwsTenantId, new { maxlength = "200", style = "width: 400px;" })
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
                                                 Ews Client Secret
                                             </td>
                                             <td>
@@ -763,10 +771,11 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                Ews Tenant Id
+                                                Ews Secret @Translation.GetCoreTextTranslation("Utgångsdatum")
                                             </td>
                                             <td>
-                                                @Html.TextBoxFor(model => model.Setting.EwsTenantId, new { maxlength = "200", style = "width: 400px;" })
+                                                @Html.EditorFor(model => model.Setting.EwsClientSecretExpireDate, "DatePicker", new { id = "EwsClientSecretExpireDate" })
+
                                             </td>
                                         </tr>
 
@@ -789,6 +798,7 @@
                                     @Html.HiddenFor(model => model.Setting.POP3EMailPrefix)
                                     @Html.HiddenFor(model => model.Setting.EwsApplicationId)
                                     @Html.HiddenFor(model => model.Setting.EwsClientSecret)
+                                    @Html.HiddenFor(model => model.Setting.EwsClientSecretExpireDate)
                                     @Html.HiddenFor(model => model.Setting.EwsTenantId)
                                     @Html.HiddenFor(model => model.Setting.EMailFolder)
                                     @Html.HiddenFor(model => model.Setting.EMailFolderArchive)
@@ -816,6 +826,15 @@
                                             </td>
                                             <td class="span9">
                                                 @Html.CheckBoxFor(model => model.Setting.UseGraphSendingEmail)
+                                            </td>
+                                        </tr>
+                                       <tr>
+                                           <td>
+                                               @Translation.GetCoreTextTranslation("Användarnamn")
+                                           </td>
+                                            <td>
+                                                @Html.TextBoxFor(model => model.Setting.GraphUserName, new { maxlength = "200", style = "width: 400px;" })
+
                                             </td>
                                         </tr>
                                         <tr>
@@ -848,16 +867,7 @@
                                         </tr>
                                         <tr>
                                             <td>
-                                                Graph User Name
-                                            </td>
-                                            <td>
-                                                @Html.TextBoxFor(model => model.Setting.GraphUserName, new { maxlength = "200", style = "width: 400px;" })
-
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td>
-                                                Graph Secret Expiration Date
+                                                Graph Secret @Translation.GetCoreTextTranslation("Utgångsdatum")
                                             </td>
                                             <td>
                                                 @Html.EditorFor(model => model.Setting.GraphClientSecretExpireDate, "DatePicker", new { id = "GraphClientSecretExpireDate" })

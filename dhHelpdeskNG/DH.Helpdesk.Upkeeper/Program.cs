@@ -26,9 +26,11 @@ namespace DH.Helpdesk.Upkeeper_New
                 
                 Token t = api.Login(System.Configuration.ConfigurationManager.AppSettings["UserName"], System.Configuration.ConfigurationManager.AppSettings["Password"], System.Configuration.ConfigurationManager.AppSettings["ClientId"]);
 
+
                 string UpKeeperOrgNo = System.Configuration.ConfigurationManager.AppSettings["UpKeeperOrgNo"];
 
                 logger.Debug("Token: " + t.Access_token.ToString());
+                Console.WriteLine("Token: " + t.Access_token.ToString());
 
                 int Customer_Id = 1;
 
@@ -42,6 +44,7 @@ namespace DH.Helpdesk.Upkeeper_New
                 }
 
                 logger.Debug("Customer Id: " + Customer_Id);
+                Console.WriteLine("Customer Id: " + Customer_Id);
 
                 bool CreateInventory = false;
                 if (System.Configuration.ConfigurationManager.AppSettings["CreateInventory"] != null && System.Configuration.ConfigurationManager.AppSettings["CreateInventory"].ToLower() == "true")
@@ -74,9 +77,12 @@ namespace DH.Helpdesk.Upkeeper_New
                     if (computers == null)
                     {
                         logger.Error("Computers is null, exiting....");
+                        Console.WriteLine("Computers is null, exiting....");
                         return;
                     }
+
                     logger.Debug("Antal datorer: " + computers.Count());
+                    Console.WriteLine("Antal datorer: " + computers.Count());
 
                     foreach (Dictionary<string, string> c in computers)
                     {
@@ -91,17 +97,21 @@ namespace DH.Helpdesk.Upkeeper_New
                         idx += 1;
 
                         var computerId = c["Key"].ToString();
+
                         logger.Debug("computerId: " + computerId);
+                        Console.WriteLine("computerId: " + computerId);
 
-                        var computer = api.GetComputer(computerId,UpKeeperOrgNo);
+                        var computer = api.GetComputer(t, computerId, UpKeeperOrgNo);
 
-                        
+
 
                         if (computer != null)
                         {
                             computer.Customer_Id = Customer_Id;
                             logger.Debug("CustomerId: " + Customer_Id.ToString());
+                            Console.WriteLine("CustomerId: " + Customer_Id.ToString());
                             logger.Debug("Synkroniserar: " + computer.Name + ", " + idx.ToString());
+                            Console.WriteLine("Synkroniserar: " + computer.Name + ", " + idx.ToString());
 
                             computer = data.GetComputerInfo(computer);
 
@@ -115,20 +125,23 @@ namespace DH.Helpdesk.Upkeeper_New
                             if (computer.Computer_Id == null)
                             {
                                 logger.Error(computer.Name + " saknas i DH Helpdesk");
+                                Console.WriteLine(computer.Name + " saknas i DH Helpdesk");
                             }
 
                             else if (computer.ScrapDate != null && computer.ScrapDate < DateTime.Today.AddDays(-7))
                             {
-                                logger.Debug("DeleteComputer ");
+                                logger.Debug(computer.Name + " saknas i DH Helpdesk");
+                                Console.WriteLine(computer.Name + " saknas i DH Helpdesk");
 
-                                api.DeleteComputer(computerId, UpKeeperOrgNo);
+                                api.DeleteComputer(t, computerId, UpKeeperOrgNo);
 
                                 logger.Debug(computer.Name + " borttagen i upKeeper");
+                                Console.WriteLine(computer.Name + " borttagen i upKeeper");
                             }
                             else if (UpdateInventory == true)
                             {
 
-                                var hardware = api.GetHardware(computerId, UpKeeperOrgNo);
+                                var hardware = api.GetHardware(t, computerId, UpKeeperOrgNo);
 
                                 if (hardware != null && hardware.Properties != null)
                                 {
@@ -144,6 +157,7 @@ namespace DH.Helpdesk.Upkeeper_New
                                 if (computer.ScanDate == DateTime.MinValue)
                                 {
                                     logger.Error(computer.Name + " ej scannad");
+                                    Console.WriteLine(computer.Name + " ej scannad");
                                 }
                                 else
                                 {
@@ -191,6 +205,7 @@ namespace DH.Helpdesk.Upkeeper_New
                                                     computer.MACAddress = macaddress.Replace("-", ":");
 
                                                     logger.Debug("MAC-address: " + computer.MACAddress);
+                                                    Console.WriteLine("MAC-address: " + computer.MACAddress);
                                                 }
                                             }
                                         }
@@ -209,9 +224,9 @@ namespace DH.Helpdesk.Upkeeper_New
 
                                     computer.ClientInformation.User_Id = data.GetComputerUserById(1, computer.ClientInformation.LastLoggedInUser);
 
-                                    computer.Software = api.GetComputerSoftware(computerId, UpKeeperOrgNo);
+                                    computer.Software = api.GetComputerSoftware(t, computerId, UpKeeperOrgNo);
 
-                                    computer.Hotfix = api.GetComputerUpdates(computerId, UpKeeperOrgNo);
+                                    computer.Hotfix = api.GetComputerUpdates(t, computerId, UpKeeperOrgNo);
 
                                     if (hardware.Disks != null)
                                     {
@@ -238,15 +253,17 @@ namespace DH.Helpdesk.Upkeeper_New
                                     }
 
                                     logger.Debug(computer.Name + " sparas");
+                                    Console.WriteLine(computer.Name + " sparas");
 
                                     data.Save(computer);
 
                                     if (UpdateUpKeeper == true && (computer.ScrapDate == null || computer.ScrapDate > DateTime.Today.AddDays(-7)))
                                     {
                                         logger.Debug(computer.Name + " Uppdatera upKeeper, location " + computer.Location2);
+                                        Console.WriteLine(computer.Name + " Uppdatera upKeeper, location " + computer.Location2);
 
                                         // Uppdatera upKeeper
-                                        var computerDetail = api.GetComputerDetail(computerId, UpKeeperOrgNo);
+                                        var computerDetail = api.GetComputerDetail(t, computerId, UpKeeperOrgNo);
 
                                         if (computerDetail != null)
                                         {
@@ -259,7 +276,7 @@ namespace DH.Helpdesk.Upkeeper_New
                                                 computerDetail.Location = computer.Location2;
                                             }
 
-                                            api.SaveComputerDetails(computerId, computerDetail, UpKeeperOrgNo);
+                                            api.SaveComputerDetails(t, computerId, computerDetail, UpKeeperOrgNo);
                                         }
                                     }
 
@@ -277,7 +294,8 @@ namespace DH.Helpdesk.Upkeeper_New
             }
             catch (Exception ex)
             {
-                logger.Error(ex.Message);
+                logger.Error(ex);
+                Console.WriteLine(ex);
             }
 
         }

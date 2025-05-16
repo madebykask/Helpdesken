@@ -293,7 +293,7 @@ export class CaseEditComponent {
           return EMPTY;
         }
         this.form.submit();
-  
+        console.log('CustomerId: ' + this.templateCid);
         // Check business rules, handle rule failures and technical errors separately.
         return this.caseSaveService.checkBusinessRulesOnSave(this.form, this.templateCid).pipe(
           take(1),
@@ -308,6 +308,9 @@ export class CaseEditComponent {
           const errorMessage = this.translateService.instant('Ärendet uppfyller inte villkoren i business rules.');
           this.alertService.showMessage(errorMessage, AlertType.Error, 3);
           return EMPTY;
+        }
+        else {
+          console.log('Business rules are valid');
         }
         if (!this.form.valid) {
           const errormessage = this.translateService.instant('Fyll i obligatoriska fält.');

@@ -961,11 +961,12 @@ Public Class CaseData
             For Each c As CCase In tempcol
                 ' Check when StateSecondary First Set
                 Dim dt As DateTime? = getStateSecondarySetDate(c.StateSecondary_Id, c.Id)
-
+                'How many days passed since the state secondary was set
                 Dim numberOfDays As Integer = (DateTime.Now - dt.Value).TotalDays
-
+                'if the number of days is greater than 0 
                 If numberOfDays > 0 Then
-                    If numberOfDays = c.AutoCloseDays Then
+                    'if the number of days is equal to or greater than auto close days
+                    If numberOfDays >= c.AutoCloseDays Then
                         col.Add(c)
                     End If
                 End If
@@ -977,12 +978,14 @@ Public Class CaseData
         End Try
     End Function
 
-    Private Function getCaseById(Optional iCaseId As Integer = 0, Optional ByVal sCaseGUID As String = "", Optional ByVal sMessageId As String = "", Optional ByVal iCaseNumber As Integer = 0, Optional ByVal sOrderMessageId As String = "", Optional ByVal sExternalCaseNumber As String = "") As CCase
-        Dim sSQL As String = ""
-        Dim dt As DataTable
+    Private Function getCaseById(Optional iCaseId As Integer = 0,
+                             Optional ByVal sCaseGUID As String = "",
+                             Optional ByVal sMessageId As String = "",
+                             Optional ByVal iCaseNumber As Integer = 0,
+                             Optional ByVal sOrderMessageId As String = "",
+                             Optional ByVal sExternalCaseNumber As String = "") As CCase
 
-        Try
-            sSQL = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.ExternalCaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
+        Dim sSQL As String = "SELECT tblCase.Id, tblCase.CaseGUID, tblCase.CaseNumber, tblCase.ExternalCaseNumber, tblCase.Customer_Id, tblCase.CaseType_Id, tblCaseType.CaseType, tblCase.ProductArea_Id, tblCase.Category_Id, tblCategory.Category, tblProductArea.ProductArea, " &
                        "tblCase.Priority_Id, tblCase.Region_Id, tblCase.Department_Id, tblCase.OU_Id, tblCustomer.Name AS CustomerName, tblCase.Performer_User_Id, tblCase.RegLanguage_Id, " &
                        "tblCase.Project_Id, tblCase.System_Id, tblCase.Urgency_Id, tblCase.Impact_Id, tblCase.Supplier_Id, tblCase.SMS, tblCase.VerifiedDescription, tblCase.SolutionRate, " &
                        "tblCase.InventoryType, tblCase.InventoryLocation, tblCase.Cost, tblCase.OtherCost, tblCase.Currency, tblCase.ContactBeforeAction, tblCase.Change_Id, tblCase.Problem_Id, " &
@@ -1011,66 +1014,92 @@ Public Class CaseData
                        "LEFT JOIN tblProductArea ON tblCase.ProductArea_Id=tblProductArea.Id " &
                        "LEFT JOIN tblDepartment ON tblCase.Department_Id=tblDepartment.Id "
 
-            If iCaseId > 0 Then
-                sSQL = sSQL & "WHERE tblCase.Id=" & iCaseId.ToString()
-            ElseIf sCaseGUID <> "" Then
-                sSQL = sSQL & " WHERE tblCase.CaseGUID='" & sCaseGUID & "'"
-            ElseIf sMessageId <> "" Then
-                sSQL = sSQL & "WHERE tblCase.Id IN (SELECT Case_Id FROM tblCaseHistory WHERE Id IN (SELECT CaseHistory_Id FROM tblEMailLog WHERE MessageId='" & sMessageId & "'))"
-            ElseIf iCaseNumber <> 0 Then
-                sSQL = sSQL & "WHERE tblCase.CaseNumber=" & iCaseNumber
-            ElseIf sOrderMessageId <> "" Then
-                sSQL = sSQL & "WHERE tblCase.Id IN (SELECT Id FROM tblCase WHERE CaseNumber IN (SELECT CaseNumber FROM tblOrder WHERE Id IN (SELECT Order_Id FROM tblOrderEmailLog WHERE MessageId='" & sOrderMessageId & "')))"
-            ElseIf sExternalCaseNumber <> "" Then
-                sSQL = sSQL & "WHERE tblCase.ExternalCaseNumber = '" & sExternalCaseNumber & "'"
-            End If
+        Dim whereClause As String = ""
+        Dim parameters As New List(Of SqlParameter)
 
-            dt = getDataTable(gsConnectionString, sSQL)
+        If iCaseId > 0 Then
+            parameters.Add(New SqlParameter("@caseId", iCaseId))
+            whereClause = "WHERE tblCase.Id = @caseId"
+
+        ElseIf Not String.IsNullOrWhiteSpace(sCaseGUID) Then
+            whereClause = "WHERE tblCase.CaseGUID = @caseGUID"
+            parameters.Add(New SqlParameter("@caseGUID", sCaseGUID))
+
+        ElseIf Not String.IsNullOrWhiteSpace(sMessageId) Then
+            parameters.Add(New SqlParameter("@messageId", sMessageId))
+            whereClause = "WHERE tblCase.Id IN (SELECT Case_Id FROM tblCaseHistory WHERE Id IN (SELECT CaseHistory_Id FROM tblEMailLog WHERE MessageId = @messageId))"
+
+        ElseIf iCaseNumber > 0 Then
+            parameters.Add(New SqlParameter("@caseNumber", iCaseNumber))
+            whereClause = "WHERE tblCase.CaseNumber = @caseNumber"
+
+        ElseIf Not String.IsNullOrWhiteSpace(sOrderMessageId) Then
+            parameters.Add(New SqlParameter("@orderMessageId", sOrderMessageId))
+            whereClause = "WHERE tblCase.Id IN (SELECT Id FROM tblCase WHERE CaseNumber IN (SELECT CaseNumber FROM tblOrder WHERE Id IN (SELECT Order_Id FROM tblOrderEmailLog WHERE MessageId = @orderMessageId)))"
+
+        ElseIf Not String.IsNullOrWhiteSpace(sExternalCaseNumber) Then
+            parameters.Add(New SqlParameter("@externalCaseNumber", sExternalCaseNumber))
+            whereClause = "WHERE tblCase.ExternalCaseNumber = @externalCaseNumber"
+
+        End If
+
+        sSQL &= " " & whereClause
+
+        Try
+            Dim dt As New DataTable()
+
+            Using conn As New SqlConnection(gsConnectionString)
+                Using cmd As New SqlCommand(sSQL, conn)
+                    cmd.Parameters.AddRange(parameters.ToArray())
+                    Using da As New SqlDataAdapter(cmd)
+                        da.Fill(dt)   ' Läser in alla rader direkt
+                    End Using
+                End Using
+            End Using
 
             If dt.Rows.Count > 0 Then
-                Dim c As CCase
-
-                c = New CCase(dt.Rows(0))
-
-                Return c
+                Return New CCase(dt.Rows(0))
             Else
                 Return Nothing
             End If
 
+
         Catch ex As Exception
             If giLoglevel > 0 Then
-                objLogFile.WriteLine(Now() & ", ERROR getCaseById " & ex.Message.ToString & ", " & sSQL)
+                objLogFile.WriteLine(Now() & ", ERROR getCaseById " & ex.Message & ", SQL: " & sSQL)
             End If
-
-            Throw ex
+            Throw
         End Try
     End Function
 
+
     Public Function getMailIDByMessageID(ByVal sMessageId As String) As Integer
-        Dim sSQL As String = ""
-        Dim dt As DataTable
+        Dim sSQL As String = "SELECT MailId FROM tblEMailLog WHERE MessageId = @messageId"
 
         Try
-            sSQL = "SELECT tblEMailLog.MailId " &
-                   "FROM tblEMailLog " &
-                   "WHERE MessageId='" & sMessageId & "'"
+            Using conn As New SqlConnection(gsConnectionString)
+                Using cmd As New SqlCommand(sSQL, conn)
+                    cmd.Parameters.AddWithValue("@messageId", sMessageId)
+                    conn.Open()
 
-            dt = getDataTable(gsConnectionString, sSQL)
-
-            If dt.Rows.Count > 0 Then
-                Return dt.Rows(0)("MailId")
-            Else
-                Return 0
-            End If
+                    Using reader As SqlDataReader = cmd.ExecuteReader()
+                        If reader.Read() Then
+                            Return Convert.ToInt32(reader("MailId"))
+                        Else
+                            Return 0
+                        End If
+                    End Using
+                End Using
+            End Using
 
         Catch ex As Exception
             If giLoglevel > 0 Then
-                objLogFile.WriteLine(Now() & ", ERROR getMailIDByMessageID " & ex.Message.ToString & ", " & sSQL)
+                objLogFile.WriteLine(Now() & ", ERROR getMailIDByMessageID " & ex.Message.ToString() & ", SQL: " & sSQL)
             End If
-
             Return 0
         End Try
     End Function
+
 
     Public Function checkIfCaseIsMerged(ByVal CaseId As Long) As Integer
         Dim sSQL As String = ""
@@ -1141,7 +1170,7 @@ Public Class CaseData
                         "tblCase.CaseSolution_Id, tblCase.FinishingDate, Isnull(tblUsers.ExternalUpdateMail, 0) AS ExternalUpdateMail, ISNULL(tblWorkingGroup.WorkingGroupEMail, '') AS PerformerWorkingGroupEMail, " &
                         "tblCase.StateSecondary_Id, tblStateSecondary.StateSecondary, tblStateSecondary.ResetOnExternalUpdate, tblDepartment.Department, tblCase.RegistrationSource, tblCase.WatchDate, tblCase.Available, tblCase.ReferenceNumber, " &
                         "IsNull(tblDepartment.HolidayHeader_Id, 1) AS HolidayHeader_Id, tblCase.RegUserName, isnull(tblStateSecondary.IncludeInCaseStatistics, 1) AS IncludeInCaseStatistics, " &
-                        "tblStateSecondary.FinishingCause_Id AS StateSecondary_FinishingCause_Id, tblStateSecondary.ReminderDays AS StateSecondary_ReminderDays, tblStateSecondary.AutoCloseDays AS StateSecondary_AutoCloseDays, tblCase.ExternalTime, tblCase.LeadTime, tblCase.MovedFromCustomer_Id  " &
+                        "tblStateSecondary.FinishingCause_Id AS StateSecondary_FinishingCause_Id, tblStateSecondary.ReminderDays AS StateSecondary_ReminderDays, tblStateSecondary.AutoCloseDays AS StateSecondary_AutoCloseDays, tblCase.ExternalTime, tblCase.LeadTime, tblCase.MovedFromCustomer_Id " &
                     "FROM tblCase " &
                         "INNER JOIN tblCustomer ON tblCase.Customer_Id = tblCustomer.Id " &
                         "LEFT JOIN tblUsers ON tblCase.Performer_user_Id=tblUsers.Id " &

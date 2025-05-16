@@ -634,6 +634,7 @@ Imports System.Data
         Else
             miMovedFromCustomer_Id = dr("MovedFromCustomer_Id")
         End If
+
     End Sub
 
 #End Region
@@ -1604,6 +1605,7 @@ Imports System.Data
             miMovedFromCustomer_Id = Value
         End Set
     End Property
+
 #End Region
 
 End Class

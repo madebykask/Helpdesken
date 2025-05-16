@@ -167,12 +167,14 @@ namespace DH.Helpdesk.Domain
         public string EwsClientSecret { get; set; }
 
         public string EwsTenantId { get; set; }
+        public DateTime? EwsClientSecretExpireDate { get; set; }
         public bool UseGraphSendingEmail { get; set; }
         public string GraphClientId { get; set; }
         public string GraphUserName { get; set; }
         public string GraphTenantId { get; set; }
         public string GraphClientSecret { get; set; }
         public DateTime? GraphClientSecretExpireDate { get; set; }
+        
         public string SharePointSiteId { get; set; }
         public string SharePointUserName { get; set; }
         public string SharePointPassword { get; set; }
