@@ -1901,6 +1901,15 @@ BEGIN
 END
 GO
 
+-- 5.8.1
+RAISERROR ('Add Column UseBase64Images to tblQuestionnaire', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblQuestionnaire','UseBase64Images') IS NULL
+	BEGIN	 
+		ALTER TABLE [dbo].[tblQuestionnaire]
+		ADD UseBase64Images bit not null default 0
+	End
+Go
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.8.1'
 GO
