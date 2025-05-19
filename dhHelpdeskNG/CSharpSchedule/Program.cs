@@ -3,11 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using CSharpSchedule.Logging;
 using CSharpSchedule.Services;
-using System;
-using System.IO;
-using System.Threading.Tasks;
 using Serilog;
-using CSharpSchedule.Services;
 
 class Program
 {
@@ -36,17 +32,17 @@ class Program
 
         // Add database service
         services.AddSingleton<IConfiguration>(configuration);
-        services.AddScoped<DatabaseService>();
+        services.AddScoped<ScheduleService>();
 
         var serviceProvider = services.BuildServiceProvider();
 
-        var databaseService = serviceProvider.GetRequiredService<DatabaseService>();
+        var scheduleService = serviceProvider.GetRequiredService<ScheduleService>();
 
         // Insert a user
         //await databaseService.InsertUserAsync("Alice");
 
         // Fetch users from database
-        var users = await databaseService.GetUsersAsync();
+        var users = await scheduleService.GetSchedulesAsync();
 
         foreach (var user in users)
         {

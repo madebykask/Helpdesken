@@ -11,5 +11,16 @@
         public string ScheduleDay { get; set; }
         public DateTime ChangedDate { get; set; }
         public DateTime CreatedDate { get; set; }
+        public TimeSpan? StartTime { get; set; }
+        public DateTime? StartDate { get; set; }
+        public string RepeatType { get; set; }
+        public int? RepeatInterval { get; set; }
+        public int? StartYear { get; set; }
+        public string DaysOfWeek { get; set; } // t.ex. "1,2,3"
+        public DateTime? NextRun { get; set; }
+        public DateTime? LastExecuted { get; set; }
+
+
+
     }
 }

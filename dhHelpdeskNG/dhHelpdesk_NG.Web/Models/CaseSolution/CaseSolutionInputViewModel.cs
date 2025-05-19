@@ -14,6 +14,7 @@ using DH.Helpdesk.Web.Models.CaseRules;
 using DH.Helpdesk.Web.Infrastructure.LocalizedAttributes;
 using DH.Helpdesk.BusinessData.Models.CaseSolution;
 using DH.Helpdesk.Web.Infrastructure;
+using System;
 
 namespace DH.Helpdesk.Web.Models.CaseSolution
 {
@@ -38,6 +39,23 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         public string ScheduleMonths { get; set; }
         public string[] ScheduleDay { get; set; }
         public string[] ScheduleMonth { get; set; }
+        /* Add properties for this
+         * 
+         *         public TimeSpan? StartTime { get; set; }
+        public DateTime? StartDate { get; set; }
+        public string RepeatType { get; set; }
+        public int? RepeatInterval { get; set; }
+        public int? StartYear { get; set; }
+        public string DaysOfWeek { get; set; } // t.ex. "1,2,3"
+        public DateTime? NextRun { get; set; }
+        public DateTime? LastExecuted { get; set; }
+        */
+        public TimeSpan? StartTime { get; set; }
+        public DateTime? StartDate { get; set; }
+        public string RepeatType { get; set; }
+        public int? RepeatInterval { get; set; }
+        public int? StartYear { get; set; }
+
         public string Finishing_Cause_Path { get; set; }
         public string ParantPath_ProductArea { get; set; }
         public string ParantPath_Category { get; set; }
