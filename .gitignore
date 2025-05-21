@@ -50,3 +50,4 @@ dhHelpdeskMobile/.vs/
 /dhHelpdeskNG/DH.Helpdesk.WebApi/Properties/PublishProfiles/FolderProfile1.pubxml
 # Ignore all .vs folders (recommended for Visual Studio)
 **/.vs/
+dhHelpdeskNG/CSharpSchedule
