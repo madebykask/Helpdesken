@@ -39,18 +39,6 @@ namespace DH.Helpdesk.Web.Models.CaseSolution
         public string ScheduleMonths { get; set; }
         public string[] ScheduleDay { get; set; }
         public string[] ScheduleMonth { get; set; }
-        /* Add properties for this
-         * 
-         *         public TimeSpan? StartTime { get; set; }
-        public DateTime? StartDate { get; set; }
-        public string RepeatType { get; set; }
-        public int? RepeatInterval { get; set; }
-        public int? StartYear { get; set; }
-        public string DaysOfWeek { get; set; } // t.ex. "1,2,3"
-        public DateTime? NextRun { get; set; }
-        public DateTime? LastExecuted { get; set; }
-        */
-        public TimeSpan? StartTime { get; set; }
         public DateTime? StartDate { get; set; }
         public string RepeatType { get; set; }
         public int? RepeatInterval { get; set; }

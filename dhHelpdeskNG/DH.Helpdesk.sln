@@ -63,7 +63,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.VBCSharpBridge"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "DH.Helpdesk.CaseSolutionSchedule", "DH.Helpdesk.CaseSolutionSchedule\DH.Helpdesk.CaseSolutionSchedule.vbproj", "{C758AE4F-7374-49AA-946C-DD351C1C9F95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CSharpSchedule", "CSharpSchedule\CSharpSchedule.csproj", "{3E6731F8-7CF8-46F9-B964-BF6EA10B7DDF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DH.Helpdesk.CaseSolutionYearly", "CSharpSchedule\DH.Helpdesk.CaseSolutionYearly.csproj", "{3E6731F8-7CF8-46F9-B964-BF6EA10B7DDF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

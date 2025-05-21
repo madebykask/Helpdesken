@@ -585,8 +585,12 @@ namespace DH.Helpdesk.Web.Controllers
             int scheduleMonthlyOrder = 0;// Convert.ToString(collection["ScheduleMonthlyOrder"].ToString());
             int scheduleMonthlyWeekday = 0;// Convert.ToString(collection["ScheduleMonthlyWeekday"].ToString());
             string Schedule = Convert.ToString(collection["Schedule"].ToString());
+            string repeatType = Convert.ToString(collection["RepeatType"]).ToString();
+            int repeatIntervall = Convert.ToInt32(collection["RepeatIntervall"]);
+            //int startYear = Convert.ToInt32(collection["StartYear"]);// kommer från radioknapp: Yearly / EveryXYears
 
-            var caseSolutionSchedule = new CaseSolutionSchedule();
+
+            var caseSolutionSchedule = new CaseSolutionSchedule();  
 
 
             if (Convert.ToInt32(Schedule) != 0)
@@ -615,6 +619,27 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         caseSolutionSchedule.ScheduleDay = scheduleMonthlyOrder + ":" + scheduleMonthlyWeekday + ";," + string.Join(",", scheduleMonth) + ",";
                     }
+                }
+                caseSolutionSchedule.RepeatType = repeatType;
+
+                if (repeatType == "EveryXYears")
+                {
+                    if (int.TryParse(collection["RepeatInterval"], out int interval))
+                    {
+                        caseSolutionSchedule.RepeatInterval = interval;
+                    }
+                    if (int.TryParse(collection["StartYear"], out int startYear))
+                    {
+                        caseSolutionSchedule.StartYear = startYear;
+                    }
+                }
+                else if (repeatType == "Yearly")
+                {
+                    if (int.TryParse(collection["StartYear"], out int startYear))
+                    {
+                        caseSolutionSchedule.StartYear = startYear;
+                    }
+                    caseSolutionSchedule.RepeatInterval = null;
                 }
             }
             else
@@ -1784,6 +1809,62 @@ namespace DH.Helpdesk.Web.Controllers
                     {
                         caseSolutionSchedule.ScheduleDay = scheduleMonthlyOrder + ":" + scheduleMonthlyWeekday + ";," + string.Join(",", scheduleMonth) + ",";
                     }
+                }
+                // Dagar i veckan (veckoschema)
+                var scheduleDays = collection.GetValues("ScheduleDay");
+                if (scheduleDays != null)
+                {
+                    caseSolutionSchedule.DaysOfWeek = string.Join(",", scheduleDays);
+                }
+
+                // Månader (månadsschema)
+                var scheduleMonths = collection.GetValues("ScheduleMonth");
+                if (scheduleMonths != null)
+                {
+                    caseSolutionSchedule.ScheduleMonths = string.Join(",", scheduleMonths);
+                }
+
+                // Månad: dag i månad
+                if (int.TryParse(collection["ScheduleMonthlyDay"], out int monthlyDay))
+                {
+                    caseSolutionSchedule.ScheduleMonthlyDay = monthlyDay;
+                }
+
+                // Månad: "första måndagen"
+                if (int.TryParse(collection["ScheduleMonthlyOrder"], out int order))
+                {
+                    caseSolutionSchedule.ScheduleMonthlyOrder = order;
+                }
+                if (int.TryParse(collection["ScheduleMonthlyWeekday"], out int weekday))
+                {
+                    caseSolutionSchedule.ScheduleMonthlyWeekday = weekday;
+                }
+                if(int.TryParse(collection["RepeatIntervall"], out int repeatIntervall))
+                {
+                    caseSolutionSchedule.RepeatInterval = repeatIntervall;
+                }
+                // År / vart X år
+                string repeatType = collection["RepeatType"];
+                caseSolutionSchedule.RepeatType = repeatType;
+
+                if (repeatType == "EveryXYears")
+                {
+                    if (int.TryParse(collection["RepeatInterval"], out int interval))
+                    {
+                        caseSolutionSchedule.RepeatInterval = interval;
+                    }
+                    if (int.TryParse(collection["StartYear"], out int startYear))
+                    {
+                        caseSolutionSchedule.StartYear = startYear;
+                    }
+                }
+                else if (repeatType == "Yearly")
+                {
+                    if (int.TryParse(collection["StartYear"], out int startYear))
+                    {
+                        caseSolutionSchedule.StartYear = startYear;
+                    }
+                    caseSolutionSchedule.RepeatInterval = null;
                 }
             }
             else
@@ -3363,9 +3444,10 @@ namespace DH.Helpdesk.Web.Controllers
 
                 model.ScheduleMonths = string.Empty;
                 model.ScheduleDays = string.Empty;
+                model.RepeatType = schedule.RepeatType;
 
                 if (schedule.ScheduleDay != null)
-                    model.ScheduleDays = schedule.ScheduleDay;
+                    model.ScheduleDays = schedule.ScheduleDay; //		DH.Helpdesk.Domain.CaseSolutionSchedule.ScheduleDay.get returned	"20;,4,9,10,"	string
 
                 int pos = 0;
                 pos = model.ScheduleDays.IndexOf(";", 0);
@@ -3383,6 +3465,11 @@ namespace DH.Helpdesk.Web.Controllers
                     model.ScheduleMonthlyOrder = int.Parse(model.ScheduleDays.Substring(0, pos));
                     model.ScheduleMonthlyWeekday = int.Parse(model.ScheduleDays.Substring(pos + 1, 1));
                 }
+                // Dagar i veckan (veckoschema)
+                
+                model.RepeatType = schedule.RepeatType;
+                model.RepeatInterval = schedule.RepeatInterval;
+                model.StartYear = schedule.StartYear;
             }
 
             ReadOnlyCollection<CaseSolutionSettingOverview> settingOverviews =
@@ -3488,56 +3575,176 @@ namespace DH.Helpdesk.Web.Controllers
             return req;
         }
 
-        private CaseSolutionSchedule CreateCaseSolutionSchedule(CaseSolutionInputViewModel caseSolutionInputViewModel)
+        private CaseSolutionSchedule CreateCaseSolutionSchedule(CaseSolutionInputViewModel vm)
         {
-            int caseSolutionId = caseSolutionInputViewModel.CaseSolution.Id;
-            int scheduleMonthly = caseSolutionInputViewModel.ScheduleMonthly;
-            int scheduleType = caseSolutionInputViewModel.ScheduleType;
-            int scheduleTime = caseSolutionInputViewModel.ScheduleTime;
-            int scheduleWatchDate = caseSolutionInputViewModel.ScheduleWatchDate;
-            string[] scheduleDay = caseSolutionInputViewModel.ScheduleDay;
-            string[] scheduleMonth = caseSolutionInputViewModel.ScheduleMonth;
-            int scheduleMonthlyDay = caseSolutionInputViewModel.ScheduleMonthlyDay;
-            int scheduleMonthlyOrder = caseSolutionInputViewModel.ScheduleMonthlyOrder;
-            int scheduleMonthlyWeekday = caseSolutionInputViewModel.ScheduleMonthlyWeekday;
+            if (vm.Schedule == 0)
+                return null;
 
-            var caseSolutionSchedule = new CaseSolutionSchedule();
-
-
-            if (caseSolutionInputViewModel.Schedule != 0)
+            var cs = new CaseSolutionSchedule
             {
-                caseSolutionSchedule.CaseSolution_Id = caseSolutionId;
-                caseSolutionSchedule.ScheduleType = scheduleType;
-                caseSolutionSchedule.ScheduleTime = scheduleTime;
-                caseSolutionSchedule.ScheduleWatchDate = scheduleWatchDate;
+                CaseSolution_Id = vm.CaseSolution.Id,
+                ScheduleType = vm.ScheduleType,
+                ScheduleTime = vm.ScheduleTime,
+                ScheduleWatchDate = vm.ScheduleWatchDate,
+                RepeatType = vm.RepeatType,
+                RepeatInterval = vm.RepeatInterval,
+                StartYear = vm.StartYear,
+                ScheduleMonths = vm.ScheduleMonth != null ? string.Join(",", vm.ScheduleMonth) : null,
+                StartDate = null // Sätt ev. DateTime.Now här om du använder det
+            };
 
-                if (scheduleType == 1)
-                    caseSolutionSchedule.ScheduleDay = null;
+            // 🟢 Initiera ScheduleDay för bakåtkompatibilitet
+            cs.ScheduleDay = null;
+            cs.DaysOfWeek = null;
+            cs.RepeatType = vm.RepeatType;
 
-                if (scheduleType == 2 && scheduleDay != null)
+            if (vm.RepeatType == "Yearly")
+            {
+                cs.RepeatInterval = null;
+                cs.StartYear = null;
+            }
+            else if (vm.RepeatType == "EveryXYears")
+            {
+                cs.RepeatInterval = vm.RepeatInterval;
+                cs.StartYear = vm.StartYear;
+            }
+            if (vm.ScheduleType == 1) // Dagligen
+            {
+                
+            }
+            else if (vm.ScheduleType == 2) // Veckovis
+            {
+                if (vm.ScheduleDay != null)
                 {
-                    caseSolutionSchedule.ScheduleDay = "," + string.Join(",", scheduleDay) + ",";
+                    cs.ScheduleDay = "," + string.Join(",", vm.ScheduleDay) + ",";
+                    cs.DaysOfWeek = string.Join(",", vm.ScheduleDay); // ny kolumn
                 }
-
-                if (scheduleType == 3)
+            }
+            else if (vm.ScheduleType == 3) // Månadsvis
+            {
+                if (vm.ScheduleMonthly == 1) // "Dag XX"
                 {
-                    if (scheduleMonthly == 1 && scheduleMonth != null)
-                    {
-                        caseSolutionSchedule.ScheduleDay = scheduleMonthlyDay + ";," + string.Join(",", scheduleMonth) + ",";
-                    }
+                    cs.ScheduleMonthlyDay = vm.ScheduleMonthlyDay;
+                    cs.ScheduleMonthlyOrder = 0;
+                    cs.ScheduleMonthlyWeekday = 0;
 
-                    if (scheduleMonthly == 2 && scheduleMonth != null)
+                    if (vm.ScheduleMonth != null)
                     {
-                        caseSolutionSchedule.ScheduleDay = scheduleMonthlyOrder + ":" + scheduleMonthlyWeekday + ";," + string.Join(",", scheduleMonth) + ",";
+                        cs.ScheduleDay = $"{vm.ScheduleMonthlyDay};,{string.Join(",", vm.ScheduleMonth)},";
+                    }
+                }
+                else if (vm.ScheduleMonthly == 2) // "Den tredje onsdagen" t.ex.
+                {
+                    cs.ScheduleMonthlyDay = null;
+                    cs.ScheduleMonthlyOrder = vm.ScheduleMonthlyOrder;
+                    cs.ScheduleMonthlyWeekday = vm.ScheduleMonthlyWeekday;
+
+                    if (vm.ScheduleMonth != null)
+                    {
+                        cs.ScheduleDay = $"{vm.ScheduleMonthlyOrder}:{vm.ScheduleMonthlyWeekday};,{string.Join(",", vm.ScheduleMonth)},";
                     }
                 }
             }
-            else
-                caseSolutionSchedule = null;
+            cs.NextRun = CalculateNextRun(cs);
 
-
-            return caseSolutionSchedule;
+            return cs;
         }
+        public static DateTime? CalculateNextRun(CaseSolutionSchedule schedule)
+        {
+            if (schedule == null || string.IsNullOrEmpty(schedule.RepeatType))
+                return null;
+
+            var now = DateTime.Now;
+
+            // 🕒 Tid på dagen
+            int hour = (int)schedule.ScheduleTime;
+            int minutes = (int)((schedule.ScheduleTime - hour) * 60);
+            var runTime = new TimeSpan(hour, minutes, 0);
+
+            // 🔁 Årsintervall
+            int yearStep = schedule.RepeatType == "EveryXYears" ? schedule.RepeatInterval ?? 1 : 1;
+            int startYear = Math.Max(schedule.StartYear ?? now.Year, now.Year);
+
+            // Månader att köra
+            var months = string.IsNullOrWhiteSpace(schedule.ScheduleMonths)
+                ? Enumerable.Range(1, 12)
+                : schedule.ScheduleMonths.Split(',').Select(m => int.Parse(m.Trim())).Distinct();
+
+            // Veckodagar att köra (1=mån, 7=sön)
+            var daysOfWeek = !string.IsNullOrWhiteSpace(schedule.DaysOfWeek)
+                ? schedule.DaysOfWeek.Split(',').Select(int.Parse).ToHashSet()
+                : null;
+
+            var candidates = new List<DateTime>();
+
+            for (int year = startYear; year <= startYear + 10; year += yearStep)
+            {
+                foreach (int month in months)
+                {
+                    var days = new List<DateTime>();
+
+                    // 🗓 Specifik dag i månaden (t.ex. "20")
+                    if ((schedule.ScheduleMonthlyDay ?? 0) > 0)
+                    {
+                        int d = schedule.ScheduleMonthlyDay.Value;
+                        if (d <= DateTime.DaysInMonth(year, month))
+                            days.Add(new DateTime(year, month, d));
+                    }
+                    // 📅 "Tredje onsdagen"
+                    else if ((schedule.ScheduleMonthlyOrder ?? 0) > 0 && (schedule.ScheduleMonthlyWeekday ?? 0) > 0)
+                    {
+                        var specialDay = GetNthWeekdayOfMonth(year, month, schedule.ScheduleMonthlyWeekday.Value, schedule.ScheduleMonthlyOrder.Value);
+                        if (specialDay.HasValue)
+                            days.Add(specialDay.Value);
+                    }
+                    // 🧭 "Alla måndagar i april"
+                    else if (daysOfWeek != null)
+                    {
+                        for (int d = 1; d <= DateTime.DaysInMonth(year, month); d++)
+                        {
+                            var date = new DateTime(year, month, d);
+                            int dayOfWeek = (int)date.DayOfWeek;
+                            if (dayOfWeek == 0) dayOfWeek = 7; // Söndag = 7
+                            if (daysOfWeek.Contains(dayOfWeek))
+                                days.Add(date);
+                        }
+                    }
+
+                    foreach (var date in days)
+                    {
+                        var candidate = date.Add(runTime);
+                        if (candidate > now)
+                            candidates.Add(candidate);
+                    }
+                }
+            }
+
+            return candidates.OrderBy(d => d).FirstOrDefault();
+        }
+
+
+        private static DateTime? GetNthWeekdayOfMonth(int year, int month, int weekday, int order)
+        {
+            weekday = weekday % 7;
+            var firstDay = new DateTime(year, month, 1);
+
+            var firstMatch = Enumerable.Range(0, 7)
+                .Select(i => firstDay.AddDays(i))
+                .FirstOrDefault(d => (int)d.DayOfWeek == weekday);
+
+            if (order == 5) // sista
+            {
+                var lastDay = new DateTime(year, month, DateTime.DaysInMonth(year, month));
+                return Enumerable.Range(0, 31)
+                    .Select(i => lastDay.AddDays(-i))
+                    .FirstOrDefault(d => (int)d.DayOfWeek == weekday && d.Month == month);
+            }
+
+            return firstMatch.AddDays((order - 1) * 7);
+        }
+
+
+
 
         private IList<ExtendedCaseFormForCaseModel> GetExtendedCases(int caseSolutionId , int caseId)
         {

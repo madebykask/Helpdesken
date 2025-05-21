@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Serilog;
 
-namespace CSharpSchedule.Logging
+namespace DH.Helpdesk.CaseSolutionYearly
 {
     public static class LoggerConfig
     {
