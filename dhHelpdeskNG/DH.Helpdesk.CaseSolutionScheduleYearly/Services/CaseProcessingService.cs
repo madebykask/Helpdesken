@@ -25,28 +25,28 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                 await conn.OpenAsync();
 
                 var sql = @"
-INSERT INTO tblCase (
-    CaseGUID, ExternalCaseNumber, CaseType_Id, Customer_Id, ProductArea_Id, Category_Id, Region_Id, ReportedBy,
-    Department_Id, OU_Id, Project_Id, System_Id, Urgency_Id, Impact_Id, Supplier_Id, SMS, Cost, OtherCost,
-    Problem_Id, Change_Id, CausingPartId, Verified, VerifiedDescription, SolutionRate, InventoryType, InventoryLocation,
-    Currency, ContactBeforeAction, FinishingDescription, Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone,
-    Place, UserCode, CostCentre, InventoryNumber, InvoiceNumber, Caption, Description, Miscellaneous, Available,
-    ReferenceNumber, Priority_Id, WorkingGroup_Id, Performer_User_Id, Status_Id, StateSecondary_Id,
-    WatchDate, PlanDate, AgreedDate, FinishingDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id,
-    RegUserName, CaseSolution_Id, RegTime, ChangeTime
-)
-VALUES (
-    @CaseGUID, @ExternalCaseNumber, @CaseType_Id, @Customer_Id, @ProductArea_Id, @Category_Id, @Region_Id, @ReportedBy,
-    @Department_Id, @OU_Id, @Project_Id, @System_Id, @Urgency_Id, @Impact_Id, @Supplier_Id, @SMS, @Cost, @OtherCost,
-    @Problem_Id, @Change_Id, @CausingPartId, @Verified, @VerifiedDescription, @SolutionRate, @InventoryType, @InventoryLocation,
-    @Currency, @ContactBeforeAction, @FinishingDescription, @Persons_Name, @Persons_EMail, @Persons_Phone, @Persons_CellPhone,
-    @Place, @UserCode, @CostCentre, @InventoryNumber, @InvoiceNumber, @Caption, @Description, @Miscellaneous, @Available,
-    @ReferenceNumber, @Priority_Id, @WorkingGroup_Id, @Performer_User_Id, @Status_Id, @StateSecondary_Id,
-    @WatchDate, @PlanDate, @AgreedDate, @FinishingDate, @RegistrationSource, @RegLanguage_Id, @RegistrationSourceCustomer_Id,
-    @RegUserName, @CaseSolution_Id, GETUTCDATE(), GETUTCDATE()
-);
-SELECT Id FROM tblCase WHERE CaseGUID = @CaseGUID;
-";
+                INSERT INTO tblCase (
+                    CaseGUID, ExternalCaseNumber, CaseType_Id, Customer_Id, ProductArea_Id, Category_Id, Region_Id, ReportedBy,
+                    Department_Id, OU_Id, Project_Id, System_Id, Urgency_Id, Impact_Id, Supplier_Id, SMS, Cost, OtherCost,
+                    Problem_Id, Change_Id, CausingPartId, Verified, VerifiedDescription, SolutionRate, InventoryType, InventoryLocation,
+                    Currency, ContactBeforeAction, FinishingDescription, Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone,
+                    Place, UserCode, CostCentre, InventoryNumber, InvoiceNumber, Caption, Description, Miscellaneous, Available,
+                    ReferenceNumber, Priority_Id, WorkingGroup_Id, Performer_User_Id, Status_Id, StateSecondary_Id,
+                    WatchDate, PlanDate, AgreedDate, FinishingDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id,
+                    RegUserName, CaseSolution_Id, RegTime, ChangeTime
+                )
+                VALUES (
+                    @CaseGUID, @ExternalCaseNumber, @CaseType_Id, @Customer_Id, @ProductArea_Id, @Category_Id, @Region_Id, @ReportedBy,
+                    @Department_Id, @OU_Id, @Project_Id, @System_Id, @Urgency_Id, @Impact_Id, @Supplier_Id, @SMS, @Cost, @OtherCost,
+                    @Problem_Id, @Change_Id, @CausingPartId, @Verified, @VerifiedDescription, @SolutionRate, @InventoryType, @InventoryLocation,
+                    @Currency, @ContactBeforeAction, @FinishingDescription, @Persons_Name, @Persons_EMail, @Persons_Phone, @Persons_CellPhone,
+                    @Place, @UserCode, @CostCentre, @InventoryNumber, @InvoiceNumber, @Caption, @Description, @Miscellaneous, @Available,
+                    @ReferenceNumber, @Priority_Id, @WorkingGroup_Id, @Performer_User_Id, @Status_Id, @StateSecondary_Id,
+                    @WatchDate, @PlanDate, @AgreedDate, @FinishingDate, @RegistrationSource, @RegLanguage_Id, @RegistrationSourceCustomer_Id,
+                    @RegUserName, @CaseSolution_Id, GETUTCDATE(), GETUTCDATE()
+                );
+                SELECT Id FROM tblCase WHERE CaseGUID = @CaseGUID;
+                ";
 
                 using (var cmd = new SqlCommand(sql, conn))
                 {
@@ -113,8 +113,48 @@ SELECT Id FROM tblCase WHERE CaseGUID = @CaseGUID;
 
                     try
                     {
-                        var result = await cmd.ExecuteScalarAsync();
-                        return result != null ? (int?)Convert.ToInt32(result) : null;
+                        try
+                        {
+                            var result = await cmd.ExecuteScalarAsync();
+                            var newCaseId = result != null ? Convert.ToInt32(result) : 0;
+
+                            if (newCaseId > 0)
+                            {
+                                // 2. Create isAbout data if needed
+                                if (!string.IsNullOrWhiteSpace(c.IsAbout_PersonsEmail))
+                                {
+                                    await SaveIsAboutAsync(newCaseId, c);
+                                }
+
+                                // Return the new case ID
+                                return newCaseId;
+                            }
+                            return null;
+                        }
+                        /*
+                        // 3. Lägg till case history
+                        var historyId = await SaveCaseHistoryAsync(newCaseId, "Scheduled Job");
+
+                       // 4. Logga interna/externa texter
+                       if (!string.IsNullOrWhiteSpace(caseSolution.Text_Internal) || !string.IsNullOrWhiteSpace(caseSolution.Text_External))
+                       {
+                           await SaveLogAsync(newCaseId, caseSolution, historyId);
+                       }
+
+                       // 5. Skicka mejl till utförare (om finns)
+                       if (caseSolution.PerformerUser_Id.HasValue)
+                       {
+                           await SendMailToPerformerAsync(newCaseId, caseSolution.PerformerUser_Id.Value);
+                       }
+
+                       // 6. Extended case form?
+                       if (caseSolution.ExtendedCaseFormId.HasValue)
+                       {
+                           await CreateExtendedCaseConnectionAsync(newCaseId, caseSolution.ExtendedCaseFormId.Value);
+                       }
+
+                       _logger.LogInformation("Created case for CaseSolution_Id={0}, Case_Id={1}", caseSolution.Id, newCaseId);
+               */
                     }
                     catch (Exception ex)
                     {
@@ -124,5 +164,27 @@ SELECT Id FROM tblCase WHERE CaseGUID = @CaseGUID;
                 }
             }
         }
+        private async Task SaveIsAboutAsync(int caseId, CaseSolution caseSolution)
+        {
+            using (var conn = new SqlConnection(_connectionString))
+            {
+                await conn.OpenAsync();
+
+                var sql = @"
+            INSERT INTO tblCaseIsAbout (Case_Id, IsAbout_UserCode, PersonsEmail)
+            VALUES (@Case_Id, @IsAbout_UserCode, @PersonsEmail);
+        ";
+
+                using (var cmd = new SqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddWithValue("@Case_Id", caseId);
+                    cmd.Parameters.AddWithValue("@IsAbout_UserCode", caseSolution.IsAbout_UserCode ?? (object)DBNull.Value);
+                    cmd.Parameters.AddWithValue("@PersonsEmail", caseSolution.PersonsEmail ?? (object)DBNull.Value);
+
+                    await cmd.ExecuteNonQueryAsync();
+                }
+            }
+        }
+
     }
 }
