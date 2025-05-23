@@ -208,11 +208,13 @@
     <Compile Include="Models\CaseItem.cs" />
     <Compile Include="Models\CaseScheduleItem.cs" />
     <Compile Include="Models\CaseSolutionLite.cs" />
+    <Compile Include="Models\MailTemplate.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resolver\ServiceResolver.cs" />
     <Compile Include="Services\CaseProcessingService.cs" />
     <Compile Include="Services\CaseSolutionServiceYearly.cs" />
+    <Compile Include="Services\MailTemplateService.cs" />
     <Compile Include="Services\ScheduleCalculator.cs" />
     <Compile Include="Services\ScheduleService.cs" />
   </ItemGroup>
