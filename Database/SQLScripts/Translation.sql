@@ -8727,6 +8727,20 @@ If not exists (select * from tblTextTranslation where text_id = 2188 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2188, 2, 'The case is already closed')
 GO
 
+If not exists (select * from tbltext where id = 2189)
+	insert into tbltext (id, TextString) VALUES (2189, 'Använd inbäddade bilder')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2189 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2189, 2, 'Use embedded images')
+GO
+
+If not exists (select * from tbltext where id = 2190)
+	insert into tbltext (id, TextString) VALUES (2190, 'Säkerställer att ikonen visas i mailet om bilder inte är publikt åtkomliga')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2190 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2190, 2, 'Ensures that the icon is displayed in the email if the images are not publicly accessible')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
