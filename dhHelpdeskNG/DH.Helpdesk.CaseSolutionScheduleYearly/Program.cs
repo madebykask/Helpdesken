@@ -12,12 +12,33 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
     {
         static void Main(string[] args)
         {
-            Run().GetAwaiter().GetResult();
+            Run(args).GetAwaiter().GetResult();
         }
 
-        static async Task Run()
+        static async Task Run(string[] args)
         {
-            // Load configuration from appsettings.json
+            // Standardvärden om inga argument anges
+            var defaultDateAndTime = DateTime.Now;
+            var defaultWorkMode = 0; // 0 = normalt läge, 1 = testläge (skapa inte ärenden)
+
+            // Parsa kommandoradsargument
+            var dateAndTime = defaultDateAndTime;
+            var workMode = defaultWorkMode;
+
+            // Kontrollera om det finns argument
+            if (args.Length > 0 && DateTime.TryParse(args[0], out DateTime parsedDate))
+            {
+                dateAndTime = parsedDate;
+                Log.Information("Använder angivet datum: {Date}", dateAndTime);
+            }
+
+            if (args.Length > 1 && int.TryParse(args[1], out int parsedWorkMode))
+            {
+                workMode = parsedWorkMode;
+                Log.Information("Använder arbetsläge: {WorkMode}", workMode == 0 ? "Skarpt läge" : "Testläge");
+            }
+
+            // Load configuration from app.config
             string connectionString = ConfigurationManager.ConnectionStrings["Helpdesk"].ConnectionString;
             string logFilePath = ConfigurationManager.AppSettings["LogFilePath"] ?? "logs/app.log";
 
@@ -30,45 +51,56 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
 
             try
             {
-                // Initiera Ninject
-                ServiceResolver.Initialize();
-
                 // Skapa tjänster
-                var scheduleService = new ScheduleService(connectionString); // använder ILogger
+                var scheduleService = new ScheduleService(connectionString);
                 var caseSolutionService = ServiceResolver.GetCaseSolutionService();
                 var caseService = ServiceResolver.GetCaseService();
                 var mailTemplateService = new MailTemplateService(connectionString);
 
                 var caseProcessingService = new CaseProcessingService(connectionString, mailTemplateService, caseService);
 
-                var now = Convert.ToDateTime("2025-06-01 14:00:00.000");
+                Log.Information("Programmet startat med datum: {Date}, läge: {Mode}",
+                    dateAndTime, workMode == 0 ? "Skarpt" : "Test");
 
-                var caseSolutionSchedules = await scheduleService.GetSchedulesAsync(now);
+                var caseSolutionSchedules = await scheduleService.GetSchedulesAsync(dateAndTime);
+                Log.Information("Hittade {Count} schemalagda ärenden för körning", caseSolutionSchedules.Count);
 
                 foreach (var schedule in caseSolutionSchedules)
                 {
                     var caseSolution = await caseSolutionService.GetCaseSolutionAsync(schedule.CaseSolutionId);
+
+                    if (workMode == 1) // Testläge - visa bara information
+                    {
+                        Log.Information("TEST: Skulle skapat ärende för CaseSolution_Id: {CaseSolutionId}, Caption: {Caption}",
+                            caseSolution.Id, caseSolution.Caption);
+                        continue;
+                    }
+
                     try
                     {
                         var caseId = await caseProcessingService.CreateCaseAsync(caseSolution);
 
                         if (caseId > 0)
                         {
-                            Log.Information("✅ Case created successfully with ID {CaseId} for CaseSolutionId {CaseSolutionId}", caseId, caseSolution.Id);
+                            Log.Information("✅ Case created successfully with ID {CaseId} for CaseSolutionId {CaseSolutionId}",
+                                caseId, caseSolution.Id);
                         }
                         else
                         {
-                            Log.Warning("⚠️ No Case was created for CaseSolutionId {CaseSolutionId}. Check if the insert failed silently.", caseSolution.Id);
+                            Log.Warning("⚠️ No Case was created for CaseSolutionId {CaseSolutionId}. Check if the insert failed silently.",
+                                caseSolution.Id);
+                        }
+
+                        // I testläge uppdaterar vi inte schemaläggningen
+                        if (workMode == 0)
+                        {
+                            await scheduleService.UpdateScheduleExecutionAsync(schedule, dateAndTime);
                         }
                     }
                     catch (Exception ex)
                     {
                         Log.Error(ex, "❌ Failed to create case for CaseSolutionId {CaseSolutionId}", caseSolution.Id);
                     }
-
-                    // TODO: komplettera med andra steg: IsAbout, caseHistory, e-post osv.
-
-                    await scheduleService.UpdateScheduleExecutionAsync(schedule, now);
                 }
 
                 Log.Information("✅ All schedules processed.");
