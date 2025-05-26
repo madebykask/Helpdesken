@@ -1349,7 +1349,7 @@ Public Class CaseData
                        "INNER JOIN tblCustomer ON tblCaseSolution.Customer_Id=tblCustomer.Id " &
                         "LEFT JOIN tblDepartment ON tblCaseSolution.Department_Id=tblDepartment.Id " &
                         "LEFT JOIN tblCaseSolution_ExtendedCaseForms ON tblCaseSolution.Id=tblCaseSolution_ExtendedCaseForms.CaseSolution_Id " &
-                      "WHERE ScheduleTime=" & iTime & " AND tblCaseSolution.Status = 1"
+                      "WHERE ScheduleTime=" & iTime & " AND tblCaseSolution.Status = 1 AND tblCaseSolutionSchedule.RepeatType = 'Yearly'"
 
             If giLoglevel > 0 Then
                 objLogFile.WriteLine(Now() & ", getCaseSolutionSchedule " & sSQL)
@@ -1814,7 +1814,7 @@ Public Class CaseData
                        "INNER JOIN tblCustomer ON tblCaseSolution.Customer_Id=tblCustomer.Id " &
                         "LEFT JOIN tblDepartment ON tblCaseSolution.Department_Id=tblDepartment.Id " &
                         "LEFT JOIN tblCaseSolution_ExtendedCaseForms ON tblCaseSolution.Id=tblCaseSolution_ExtendedCaseForms.CaseSolution_Id " &
-                      "WHERE ScheduleTime=" & iTime & " AND tblCaseSolution.Status = 1"
+                      "WHERE ScheduleTime=" & iTime & " AND tblCaseSolution.Status = 1 AND tblCaseSolutionSchedule.RepeatType = 'Yearly'"
 
             If giLoglevel > 0 Then
                 objLogFile.WriteLine(Now() & ", getCaseSolutionSchedule " & sSQL)
