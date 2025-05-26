@@ -1901,6 +1901,100 @@ BEGIN
 END
 GO
 
+--- New Yearly Schedule Job
+
+RAISERROR ('Adding column RepeatType (varchar)', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseSolutionSchedule', 'RepeatType') IS NULL
+BEGIN
+    ALTER TABLE dbo.tblCaseSolutionSchedule
+    ADD RepeatType varchar(50) NULL
+END
+GO
+
+-- Lägg till RepeatInterval
+RAISERROR ('Adding column RepeatInterval (int)', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseSolutionSchedule', 'RepeatInterval') IS NULL
+BEGIN
+    ALTER TABLE dbo.tblCaseSolutionSchedule
+    ADD RepeatInterval int NULL
+END
+GO
+
+-- Lägg till StartYear
+RAISERROR ('Adding column StartYear (int)', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseSolutionSchedule', 'StartYear') IS NULL
+BEGIN
+    ALTER TABLE dbo.tblCaseSolutionSchedule
+    ADD StartYear int NULL
+END
+GO
+
+-- Lägg till DaysOfWeek
+RAISERROR ('Adding column DaysOfWeek (varchar)', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseSolutionSchedule', 'DaysOfWeek') IS NULL
+BEGIN
+    ALTER TABLE dbo.tblCaseSolutionSchedule
+    ADD DaysOfWeek varchar(20) NULL -- t.ex. "1,2,3"
+END
+GO
+
+-- Lägg till NextRun
+RAISERROR ('Adding column NextRun (datetime)', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseSolutionSchedule', 'NextRun') IS NULL
+BEGIN
+    ALTER TABLE dbo.tblCaseSolutionSchedule
+    ADD NextRun datetime NULL
+END
+GO
+
+-- Lägg till LastExecuted
+RAISERROR ('Adding column LastExecuted (datetime)', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseSolutionSchedule', 'LastExecuted') IS NULL
+BEGIN
+    ALTER TABLE dbo.tblCaseSolutionSchedule
+    ADD LastExecuted datetime NULL
+END
+GO
+
+-- Lägg till ScheduleMonthlyDay
+RAISERROR ('Adding column ScheduleMonthlyDay (int)', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseSolutionSchedule', 'ScheduleMonthlyDay') IS NULL
+BEGIN
+    ALTER TABLE dbo.tblCaseSolutionSchedule
+    ADD ScheduleMonthlyDay int NULL -- t.ex. 20
+END
+GO
+
+-- Lägg till ScheduleMonthlyOrder
+RAISERROR ('Adding column ScheduleMonthlyOrder (int)', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseSolutionSchedule', 'ScheduleMonthlyOrder') IS NULL
+BEGIN
+    ALTER TABLE dbo.tblCaseSolutionSchedule
+    ADD ScheduleMonthlyOrder int NULL -- t.ex. 1 = första, 5 = sista
+END
+GO
+
+-- Lägg till ScheduleMonthlyWeekday
+RAISERROR ('Adding column ScheduleMonthlyWeekday (int)', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseSolutionSchedule', 'ScheduleMonthlyWeekday') IS NULL
+BEGIN
+    ALTER TABLE dbo.tblCaseSolutionSchedule
+    ADD ScheduleMonthlyWeekday int NULL -- 1 = måndag, 7 = söndag
+END
+GO
+
+-- Lägg till ScheduleMonths
+RAISERROR ('Adding column ScheduleMonths (varchar)', 10, 1) WITH NOWAIT
+IF COL_LENGTH('dbo.tblCaseSolutionSchedule', 'ScheduleMonths') IS NULL
+BEGIN
+    ALTER TABLE dbo.tblCaseSolutionSchedule
+    ADD ScheduleMonths varchar(30) NULL -- t.ex. "4,9,10" för April, Sept, Okt
+END
+GO
+
+update tblCaseSolutionSchedule set RepeatType = 'Yearly' where RepeatType IS NULL
+
+
 -- Last Line to update database version
 UPDATE tblGlobalSettings SET HelpdeskDBVersion = '5.8.1'
 GO
