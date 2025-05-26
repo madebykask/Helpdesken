@@ -30,6 +30,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                         WHERE 
                             NextRun IS NOT NULL
                             AND NextRun <= @Now
+                            AND RepeatType = 'EveryXYears' 
                             AND (LastExecuted IS NULL OR LastExecuted < NextRun)
                     ", conn);
 
