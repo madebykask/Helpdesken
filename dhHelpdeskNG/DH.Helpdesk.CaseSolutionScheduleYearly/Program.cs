@@ -36,11 +36,12 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                 // Skapa tjänster
                 var scheduleService = new ScheduleService(connectionString); // använder ILogger
                 var caseSolutionService = ServiceResolver.GetCaseSolutionService();
+                var caseService = ServiceResolver.GetCaseService();
                 var mailTemplateService = new MailTemplateService();
 
-                var caseProcessingService = new CaseProcessingService(connectionString, mailTemplateService);
+                var caseProcessingService = new CaseProcessingService(connectionString, mailTemplateService, caseService);
 
-                var now = Convert.ToDateTime("2026-01-01 16:05:00.000");
+                var now = Convert.ToDateTime("2028-01-01 16:00:00.000");
 
                 var caseSolutionSchedules = await scheduleService.GetSchedulesAsync(now);
 

@@ -294,6 +294,8 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.DI.Modules
             Bind<ICaseSolutionLanguageRepository>().To<CaseSolutionLanguageRepository>();
             //ICaseSolutionCategoryLanguageRepository
             Bind<ICaseSolutionCategoryLanguageRepository>().To<CaseSolutionCategoryLanguageRepository>();
+            //IFormFieldValueRepository
+           
 
             Bind<IProblemLogService>().To<ProblemLogService>();
             Bind<IProblemLogRepository>().To<ProblemLogRepository>();
@@ -308,7 +310,6 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.DI.Modules
             Bind<IEmailSendingSettingsProvider>().To<EmailSendingSettingsProvider>();
             Bind<IEmailFactory>().To<EmailFactory>().InSingletonScope();
             Bind<ICaseMailer>().To<CaseMailer>().InSingletonScope();
-            Bind<IFormFieldValueRepository>().To<FormFieldValueRepository>();
             Bind<IEmailService>().To<EmailService>();
             Bind<IEmailLogAttemptRepository>().To<EmailLogAttemptRepository>();
             Bind<IEmailLogRepository>().To<EmailLogRepository>();

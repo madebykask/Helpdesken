@@ -1,4 +1,7 @@
-﻿using DH.Helpdesk.Domain;
+﻿using DH.Helpdesk.BusinessData.Enums.Email;
+using DH.Helpdesk.Common.Constants;
+using DH.Helpdesk.Domain;
+using DH.Helpdesk.Services.Services;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
@@ -12,11 +15,13 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
     {
         private readonly string _connectionString;
         private readonly MailTemplateService _mailTemplateService;
+        private readonly ICaseService _caseService;
 
-        public CaseProcessingService(string connection, MailTemplateService mailTemplateService)
+        public CaseProcessingService(string connection, MailTemplateService mailTemplateService, ICaseService caseService)
         {
             _connectionString = connection;
             _mailTemplateService = mailTemplateService;
+            _caseService = caseService;
         }
 
         public async Task<int?> CreateCaseAsync(CaseSolution c)
@@ -124,29 +129,29 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
 
                         if (newCaseId > 0)
                         {
+                            //Get the full case data to use in the next steps
+                            Case caseCreated = await _caseService.GetCaseByIdAsync(newCaseId);
                             // 2. Create isAbout data if needed
                             if (!string.IsNullOrWhiteSpace(c.IsAbout_PersonsEmail))
                             {
                                 await SaveIsAboutAsync(newCaseId, c);
                             }
-                            var historyId = await SaveCaseHistoryAsync(newCaseId, "Scheduled Job");
-
+                            // 3. Create case history
+                            var historyId = await SaveCaseHistoryAsync(newCaseId, caseCreated);
                             // 4. Log internal/external texts if needed
                             if (!string.IsNullOrWhiteSpace(c.Text_Internal) || !string.IsNullOrWhiteSpace(c.Text_External))
                             {
                                 await SaveLogAsync(newCaseId, c, historyId);
                             }
-                            if (extendedCaseFormId.HasValue)
+                            if (extendedCaseFormId.HasValue && extendedCaseFormId.Value > 0)
                             {
-                                // Create extended case data
-                                var extendedCaseDataId = await CreateExtendedCaseDataAsync(extendedCaseFormId.Value);
-
-                                // Create the connection between the case and the extended case form/data
+                                var extendedCaseDataId = await CreateExtendedCaseDataRowAsync(extendedCaseFormId.Value);
                                 await CreateExtendedCaseConnectionAsync(newCaseId, extendedCaseFormId.Value, extendedCaseDataId);
                             }
+
                             if (c.PerformerUser_Id.HasValue && c.PerformerUser_Id.Value > 0)
                             {
-                                await SendMailToPerformerAsync(newCaseId, c.PerformerUser_Id.Value, historyId);
+                                await SendMailToPerformerAsync(caseCreated, c.PerformerUser_Id.Value, historyId);
                             }
                             return newCaseId;
                         }
@@ -168,14 +173,14 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                 await conn.OpenAsync();
 
                 var sql = @"
-            INSERT INTO tblCaseIsAbout (
-                Case_Id, UserId, SurName, EMail, Phone, CellPhone,
-                Region_Id, Department_Id, OU_Id, Location, CostCentre, UserCode
-            )
-            VALUES (
-                @Case_Id, @UserId, @SurName, @EMail, @Phone, @CellPhone,
-                @Region_Id, @Department_Id, @OU_Id, @Location, @CostCentre, @UserCode
-            );";
+                    INSERT INTO tblCaseIsAbout (
+                        Case_Id, ReportedBy, Person_Name, Person_Email, Person_Phone, Person_CellPhone,
+                        Region_Id, Department_Id, OU_Id, CostCentre, Place, UserCode
+                    )
+                    VALUES (
+                        @Case_Id, @ReportedBy, @Person_Name, @Person_Email, @Person_Phone, @Person_CellPhone,
+                        @Region_Id, @Department_Id, @OU_Id, @CostCentre, @Place, @UserCode
+                    );";
 
                 using (var cmd = new SqlCommand(sql, conn))
                 {
@@ -183,16 +188,16 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     object SqlStr(string s) => s ?? "";
 
                     cmd.Parameters.AddWithValue("@Case_Id", caseId);
-                    cmd.Parameters.AddWithValue("@UserId", SqlStr(caseSolution.IsAbout_ReportedBy));
-                    cmd.Parameters.AddWithValue("@SurName", SqlStr(caseSolution.IsAbout_PersonsName));
-                    cmd.Parameters.AddWithValue("@EMail", SqlStr(caseSolution.IsAbout_PersonsEmail));
-                    cmd.Parameters.AddWithValue("@Phone", SqlStr(caseSolution.IsAbout_PersonsPhone));
-                    cmd.Parameters.AddWithValue("@CellPhone", SqlStr(caseSolution.IsAbout_PersonsCellPhone));
+                    cmd.Parameters.AddWithValue("@ReportedBy", SqlStr(caseSolution.IsAbout_ReportedBy));
+                    cmd.Parameters.AddWithValue("@Person_Name", SqlStr(caseSolution.IsAbout_PersonsName));
+                    cmd.Parameters.AddWithValue("@Person_Email", SqlStr(caseSolution.IsAbout_PersonsEmail));
+                    cmd.Parameters.AddWithValue("@Person_Phone", SqlStr(caseSolution.IsAbout_PersonsPhone));
+                    cmd.Parameters.AddWithValue("@Person_CellPhone", SqlStr(caseSolution.IsAbout_PersonsCellPhone));
                     cmd.Parameters.AddWithValue("@Region_Id", SqlVal(caseSolution.IsAbout_Region_Id));
                     cmd.Parameters.AddWithValue("@Department_Id", SqlVal(caseSolution.IsAbout_Department_Id));
                     cmd.Parameters.AddWithValue("@OU_Id", SqlVal(caseSolution.IsAbout_OU_Id));
-                    cmd.Parameters.AddWithValue("@Location", SqlStr(caseSolution.IsAbout_Place));
                     cmd.Parameters.AddWithValue("@CostCentre", SqlStr(caseSolution.IsAbout_CostCentre));
+                    cmd.Parameters.AddWithValue("@Place", SqlStr(caseSolution.IsAbout_Place));
                     cmd.Parameters.AddWithValue("@UserCode", SqlStr(caseSolution.IsAbout_UserCode));
 
                     await cmd.ExecuteNonQueryAsync();
@@ -233,18 +238,38 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                 }
             }
         }
-        public async Task<int> SaveCaseHistoryAsync(int caseId, string createdByUser)
+        //Todo - Kolla alla värden här
+        public async Task<int> SaveCaseHistoryAsync(int caseId, Case c)
         {
             using (var conn = new SqlConnection(_connectionString))
             {
                 await conn.OpenAsync();
 
+                int customerId = c.Customer_Id;
+                int caseTypeId = c.CaseType_Id;
+                string caption = "";
+                string description = "";
+
                 var sql = @"
             INSERT INTO tblCaseHistory (
-                CaseHistoryGUID, Case_Id, CreatedDate, CreatedByUser
+                CaseHistoryGUID, Case_Id, CreatedDate, CreatedByUser,
+                Persons_Name, Persons_EMail, Place, InventoryType, 
+                InventoryLocation, Casenumber, IPAddress, CaseType_Id,
+                InvoiceNumber, Caption, Description, Miscellaneous,
+                ContactBeforeAction, SMS, Available, Cost, OtherCost,
+                ExternalTime, RegistrationSource, RelatedCaseNumber,
+                Deleted, Status, RegLanguage_Id, LeadTime, Customer_Id,
+                CaseExtraFollowers, ActionLeadTime, ActionExternalTime
             )
             VALUES (
-                @CaseHistoryGUID, @Case_Id, GETUTCDATE(), @CreatedByUser
+                @CaseHistoryGUID, @Case_Id, GETUTCDATE(), @CreatedByUser,
+                @PersonsName, @PersonsEmail, @Place, @InventoryType,
+                @InventoryLocation, @Casenumber, @IPAddress, @CaseType_Id,
+                @InvoiceNumber, @Caption, @Description, @Miscellaneous,
+                @ContactBeforeAction, @SMS, @Available, @Cost, @OtherCost,
+                @ExternalTime, @RegistrationSource, @RelatedCaseNumber,
+                @Deleted, @Status, @RegLanguage_Id, @LeadTime, @Customer_Id,
+                @CaseExtraFollowers, @ActionLeadTime, @ActionExternalTime
             );
             SELECT SCOPE_IDENTITY();";
 
@@ -254,34 +279,54 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
 
                     cmd.Parameters.AddWithValue("@CaseHistoryGUID", caseHistoryGuid);
                     cmd.Parameters.AddWithValue("@Case_Id", caseId);
-                    cmd.Parameters.AddWithValue("@CreatedByUser", createdByUser);
+                    cmd.Parameters.AddWithValue("@CreatedByUser", "");
+                    cmd.Parameters.AddWithValue("@PersonsName", ""); // Using createdByUser as the person's name
+                    cmd.Parameters.AddWithValue("@PersonsEmail", ""); // Required field
+                    cmd.Parameters.AddWithValue("@Place", "System");
+                    cmd.Parameters.AddWithValue("@InventoryType", "");
+                    cmd.Parameters.AddWithValue("@InventoryLocation", "");
+                    cmd.Parameters.AddWithValue("@Casenumber", c.CaseNumber); // Using the case ID as casenumber
+                    cmd.Parameters.AddWithValue("@IPAddress", "127.0.0.1");
+                    cmd.Parameters.AddWithValue("@CaseType_Id", caseTypeId);
+                    cmd.Parameters.AddWithValue("@InvoiceNumber", "");
+                    cmd.Parameters.AddWithValue("@Caption", caption);
+                    cmd.Parameters.AddWithValue("@Description", description);
+                    cmd.Parameters.AddWithValue("@Miscellaneous", "");
+                    cmd.Parameters.AddWithValue("@ContactBeforeAction", 0);
+                    cmd.Parameters.AddWithValue("@SMS", 0);
+                    cmd.Parameters.AddWithValue("@Available", "");
+                    cmd.Parameters.AddWithValue("@Cost", 0);
+                    cmd.Parameters.AddWithValue("@OtherCost", 0);
+                    cmd.Parameters.AddWithValue("@ExternalTime", 0);
+                    cmd.Parameters.AddWithValue("@RegistrationSource", 0);
+                    cmd.Parameters.AddWithValue("@RelatedCaseNumber", 0);
+                    cmd.Parameters.AddWithValue("@Deleted", 0);
+                    cmd.Parameters.AddWithValue("@Status", 0);
+                    cmd.Parameters.AddWithValue("@RegLanguage_Id", 1); // Default to Swedish
+                    cmd.Parameters.AddWithValue("@LeadTime", 0);
+                    cmd.Parameters.AddWithValue("@Customer_Id", customerId);
+                    cmd.Parameters.AddWithValue("@CaseExtraFollowers", "");
+                    cmd.Parameters.AddWithValue("@ActionLeadTime", 0);
+                    cmd.Parameters.AddWithValue("@ActionExternalTime", 0);
 
                     var result = await cmd.ExecuteScalarAsync();
                     return result != null ? Convert.ToInt32(result) : 0;
                 }
             }
         }
-        private async Task<int> CreateExtendedCaseDataAsync(int extendedCaseFormId)
+        private async Task<int> CreateExtendedCaseDataRowAsync(int extendedCaseFormId)
         {
             using (var conn = new SqlConnection(_connectionString))
             {
                 await conn.OpenAsync();
 
-                // First step: Create the extended case data entry
                 var sql = @"
-            INSERT INTO tblExtendedCaseData (
-                ExtendedCaseGuid, ExtendedCaseFormId, CreatedOn, CreatedBy
-            )
-            VALUES (
-                @ExtendedCaseGuid, @ExtendedCaseFormId, GETUTCDATE(), @CreatedBy
-            );
+            INSERT INTO ExtendedCaseData (ExtendedCaseFormId, CreatedOn, CreatedBy)
+            VALUES (@ExtendedCaseFormId, GETUTCDATE(), @CreatedBy);
             SELECT SCOPE_IDENTITY();";
 
                 using (var cmd = new SqlCommand(sql, conn))
                 {
-                    var extendedCaseGuid = Guid.NewGuid();
-
-                    cmd.Parameters.AddWithValue("@ExtendedCaseGuid", extendedCaseGuid);
                     cmd.Parameters.AddWithValue("@ExtendedCaseFormId", extendedCaseFormId);
                     cmd.Parameters.AddWithValue("@CreatedBy", "Scheduled Job");
 
@@ -298,18 +343,18 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                 await conn.OpenAsync();
 
                 var sql = @"
-            INSERT INTO tblCase_ExtendedCase (
-                Case_Id, ExtendedCaseForm_Id, ExtendedCaseData_Id
+            INSERT INTO tblCase_ExtendedCaseData (
+                case_Id, ExtendedCaseData_Id, ExtendedCaseForm_Id
             )
             VALUES (
-                @Case_Id, @ExtendedCaseForm_Id, @ExtendedCaseData_Id
+                @Case_Id, @ExtendedCaseData_Id, @ExtendedCaseForm_Id
             );";
 
                 using (var cmd = new SqlCommand(sql, conn))
                 {
                     cmd.Parameters.AddWithValue("@Case_Id", caseId);
-                    cmd.Parameters.AddWithValue("@ExtendedCaseForm_Id", extendedCaseFormId);
                     cmd.Parameters.AddWithValue("@ExtendedCaseData_Id", extendedCaseDataId);
+                    cmd.Parameters.AddWithValue("@ExtendedCaseForm_Id", extendedCaseFormId);
 
                     await cmd.ExecuteNonQueryAsync();
                 }
@@ -336,7 +381,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
             }
         }
 
-        private async Task<bool> SendMailToPerformerAsync(int caseId, int performerUserId, int historyId)
+        private async Task<bool> SendMailToPerformerAsync(Case caseData, int performerUserId, int historyId)
         {
             if (performerUserId <= 0)
             {
@@ -347,52 +392,176 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
             {
                 await conn.OpenAsync();
 
-                // 1. Get full case data - we'll need this for template replacements
-                var getCaseSql = @"
-            SELECT c.*, u.FirstName AS PerformerFirstName, u.SurName AS PerformerSurName, 
-                   u.Email AS PerformerEMail, u.Phone AS PerformerPhone, u.CellPhone AS PerformerCellPhone,
-                   p.Name AS PriorityName, p.Description AS PriorityDescription,
-                   ct.Name AS CaseTypeName, ca.Name AS CategoryName, pa.Name AS ProductAreaName,
-                   wg.Name AS WorkingGroupName, wg.EMail AS WorkingGroupEMail
-            FROM tblCase c
-            LEFT JOIN tblUser u ON c.Performer_User_Id = u.Id
-            LEFT JOIN tblPriority p ON c.Priority_Id = p.Id
-            LEFT JOIN tblCaseType ct ON c.CaseType_Id = ct.Id
-            LEFT JOIN tblCategory ca ON c.Category_Id = ca.Id
-            LEFT JOIN tblProductArea pa ON c.ProductArea_Id = pa.Id
-            LEFT JOIN tblWorkingGroup wg ON c.WorkingGroup_Id = wg.Id
-            WHERE c.Id = @CaseId";
+                // Get performer user data
+                var getPerformerSql = @"
+                    SELECT FirstName, SurName, Email, Phone, CellPhone 
+                    FROM tblUsers 
+                    WHERE Id = @UserId";
 
-                dynamic caseData = null;
-                using (var cmd = new SqlCommand(getCaseSql, conn))
+                dynamic performerData = null;
+                using (var cmd = new SqlCommand(getPerformerSql, conn))
                 {
-                    cmd.Parameters.AddWithValue("@CaseId", caseId);
+                    cmd.Parameters.AddWithValue("@UserId", performerUserId);
                     using (var reader = await cmd.ExecuteReaderAsync())
                     {
                         if (await reader.ReadAsync())
                         {
-                            // Create a dynamic object to store case data
-                            caseData = new System.Dynamic.ExpandoObject();
+                            performerData = new System.Dynamic.ExpandoObject();
                             for (int i = 0; i < reader.FieldCount; i++)
                             {
-                                ((IDictionary<string, object>)caseData)[reader.GetName(i)] =
+                                ((IDictionary<string, object>)performerData)[reader.GetName(i)] =
                                     reader.IsDBNull(i) ? null : reader.GetValue(i);
                             }
                         }
                         else
                         {
-                            return false; // Case not found
+                            return false; // Performer not found
                         }
                     }
                 }
 
+                // Get working group data if applicable
+                dynamic workingGroupData = null;
+                if (caseData.WorkingGroup_Id.HasValue)
+                {
+                    var getWorkingGroupSql = @"
+                        SELECT WorkingGroup, WorkingGroupEMail 
+                        FROM tblWorkingGroup 
+                        WHERE Id = @WorkingGroupId";
 
+                    using (var cmd = new SqlCommand(getWorkingGroupSql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@WorkingGroupId", caseData.WorkingGroup_Id.Value);
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                workingGroupData = new System.Dynamic.ExpandoObject();
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    ((IDictionary<string, object>)workingGroupData)[reader.GetName(i)] =
+                                        reader.IsDBNull(i) ? null : reader.GetValue(i);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Get priority data if applicable
+                dynamic priorityData = null;
+                if (caseData.Priority_Id.HasValue)
+                {
+                    var getPrioritySql = @"
+                        SELECT Priority, PriorityName, PriorityDescription 
+                        FROM tblPriority 
+                        WHERE Id = @PriorityId";
+
+                    using (var cmd = new SqlCommand(getPrioritySql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@PriorityId", caseData.Priority_Id.Value);
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                priorityData = new System.Dynamic.ExpandoObject();
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    ((IDictionary<string, object>)priorityData)[reader.GetName(i)] =
+                                        reader.IsDBNull(i) ? null : reader.GetValue(i);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Get case type data if applicable
+                dynamic caseTypeData = null;
+                if (caseData.CaseType_Id > 0)
+                {
+                    var getCaseTypeSql = @"
+                        SELECT CaseType 
+                        FROM tblCaseType 
+                        WHERE Id = @CaseTypeId";
+
+                    using (var cmd = new SqlCommand(getCaseTypeSql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@CaseTypeId", caseData.CaseType_Id);
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                caseTypeData = new System.Dynamic.ExpandoObject();
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    ((IDictionary<string, object>)caseTypeData)[reader.GetName(i)] =
+                                        reader.IsDBNull(i) ? null : reader.GetValue(i);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Get category data if applicable
+                dynamic categoryData = null;
+                if (caseData.Category_Id.HasValue)
+                {
+                    var getCategorySql = @"
+                        SELECT Category 
+                        FROM tblCategory 
+                        WHERE Id = @CategoryId";
+
+                    using (var cmd = new SqlCommand(getCategorySql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@CategoryId", caseData.Category_Id.Value);
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                categoryData = new System.Dynamic.ExpandoObject();
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    ((IDictionary<string, object>)categoryData)[reader.GetName(i)] =
+                                        reader.IsDBNull(i) ? null : reader.GetValue(i);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Get product area data if applicable
+                dynamic productAreaData = null;
+                if (caseData.ProductArea_Id.HasValue)
+                {
+                    var getProductAreaSql = @"
+                        SELECT ProductArea 
+                        FROM tblProductArea 
+                        WHERE Id = @ProductAreaId";
+
+                    using (var cmd = new SqlCommand(getProductAreaSql, conn))
+                    {
+                        cmd.Parameters.AddWithValue("@ProductAreaId", caseData.ProductArea_Id.Value);
+                        using (var reader = await cmd.ExecuteReaderAsync())
+                        {
+                            if (await reader.ReadAsync())
+                            {
+                                productAreaData = new System.Dynamic.ExpandoObject();
+                                for (int i = 0; i < reader.FieldCount; i++)
+                                {
+                                    ((IDictionary<string, object>)productAreaData)[reader.GetName(i)] =
+                                        reader.IsDBNull(i) ? null : reader.GetValue(i);
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // Continue with customer data, global settings, etc. (as in your existing code)
                 // 3. Get customer data
                 var getCustomerSql = @"
-            SELECT c.*, s.* 
-            FROM tblCustomer c
-            LEFT JOIN tblSetting s ON c.Id = s.Customer_Id
-            WHERE c.Id = @CustomerId";
+                    SELECT c.*, s.* 
+                    FROM tblCustomer c
+                    LEFT JOIN tblSettings s ON c.Id = s.Customer_Id
+                    WHERE c.Id = @CustomerId";
 
                 dynamic customerData = null;
                 using (var cmd = new SqlCommand(getCustomerSql, conn))
@@ -419,7 +588,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
 
                 // 4. Get global settings
                 var getGlobalSettingsSql = @"
-            SELECT TOP 1 * FROM tblGlobalSettings";
+                    SELECT TOP 1 * FROM tblGlobalSettings";
 
                 dynamic globalSettings = null;
                 using (var cmd = new SqlCommand(getGlobalSettingsSql, conn))
@@ -444,12 +613,12 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                 }
 
                 // 5. Get the mail template for performer assignment
-                var mailTemplateId = 3; // Using EMailAssignCasePerformer (ID 3)
-                var mailTemplate = await _mailTemplateService.GetMailTemplateByIdAsync(mailTemplateId, (int)caseData.Customer_Id, (int)caseData.RegLanguage_Id, _connectionString);
+                var mailTemplateId = 2; // Using EMailAssignCasePerformer (ID 3)
+                var mailTemplate = await _mailTemplateService.GetMailTemplateByIdAsync(mailTemplateId, caseData.Customer_Id, caseData.RegLanguage_Id, _connectionString);
 
                 if (mailTemplate == null)
                 {
-                    Console.WriteLine($"Warning: Could not find mail template {mailTemplateId} for customer {caseData.Customer_Id} and language {caseData.RegLanguage_Id}");
+                    Console.WriteLine($"Warning: Could not find mail template {mailTemplateId} for customer {caseData.Customer_Id} and language {1}");
                     return false;
                 }
 
@@ -459,51 +628,66 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
 
                 // Apply all the replacements from the Mail.vb sendMail method
                 // Get the case number
-                string caseNumber = caseData.Casenumber?.ToString() ?? "";
-
-                // Replace [#1] - CaseNumber
+                string caseNumber = caseData.CaseNumber.ToString() ?? "";
+                // [#1] - CaseNumber
                 subject = subject.Replace(GetMailTemplateIdentifier("CaseNumber"), caseNumber);
                 body = body.Replace(GetMailTemplateIdentifier("CaseNumber"), caseNumber);
 
-                // Replace [#2] - CustomerName
+                // [#2] - CustomerName
                 subject = subject.Replace(GetMailTemplateIdentifier("CustomerName"), customerData.Name?.ToString() ?? "");
                 body = body.Replace(GetMailTemplateIdentifier("CustomerName"), customerData.Name?.ToString() ?? "");
 
-                // Replace [#3] - Persons_Name
-                subject = subject.Replace(GetMailTemplateIdentifier("Persons_Name"), caseData.Persons_Name?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("Persons_Name"), caseData.Persons_Name?.ToString() ?? "");
+                // [#3] - Persons_Name
+                subject = subject.Replace(GetMailTemplateIdentifier("Persons_Name"), caseData.PersonsName ?? "");
+                body = body.Replace(GetMailTemplateIdentifier("Persons_Name"), caseData.PersonsName ?? "");
 
-                // Replace [#4] - Caption
-                subject = subject.Replace(GetMailTemplateIdentifier("Caption"), caseData.Caption?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("Caption"), caseData.Caption?.ToString() ?? "");
+                // [#4] - Caption
+                subject = subject.Replace(GetMailTemplateIdentifier("Caption"), caseData.Caption ?? "");
+                body = body.Replace(GetMailTemplateIdentifier("Caption"), caseData.Caption ?? "");
 
-                // Replace [#5] - Description
-                string description = caseData.Description?.ToString() ?? "";
+                // [#5] - Description
+                string description = caseData.Description ?? "";
                 subject = subject.Replace(GetMailTemplateIdentifier("Description"), description);
                 body = body.Replace(GetMailTemplateIdentifier("Description"), description.Replace("\r\n", "<br>"));
 
-                // Replace [#6] - FirstName (Performer)
-                subject = subject.Replace(GetMailTemplateIdentifier("FirstName"), caseData.PerformerFirstName?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("FirstName"), caseData.PerformerFirstName?.ToString() ?? "");
+                // [#6] - FirstName (Performer)
+                string performerFirstName = performerData?.FirstName?.ToString() ?? "";
+                subject = subject.Replace(GetMailTemplateIdentifier("FirstName"), performerFirstName);
+                body = body.Replace(GetMailTemplateIdentifier("FirstName"), performerFirstName);
 
-                // Replace [#7] - SurName (Performer)
-                subject = subject.Replace(GetMailTemplateIdentifier("SurName"), caseData.PerformerSurName?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("SurName"), caseData.PerformerSurName?.ToString() ?? "");
+                // [#7] - SurName (Performer)
+                string performerSurName = performerData?.SurName?.ToString() ?? "";
+                subject = subject.Replace(GetMailTemplateIdentifier("SurName"), performerSurName);
+                body = body.Replace(GetMailTemplateIdentifier("SurName"), performerSurName);
 
-                // Replace [#8] - Persons_EMail
-                subject = subject.Replace(GetMailTemplateIdentifier("Persons_EMail"), caseData.Persons_EMail?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("Persons_EMail"), caseData.Persons_EMail?.ToString() ?? "");
+                // [#8] - Persons_EMail
+                subject = subject.Replace(GetMailTemplateIdentifier("Persons_EMail"), caseData.PersonsEmail ?? "");
+                body = body.Replace(GetMailTemplateIdentifier("Persons_EMail"), caseData.PersonsEmail ?? "");
 
-                // Replace [#9] - Persons_Phone
-                subject = subject.Replace(GetMailTemplateIdentifier("Persons_Phone"), caseData.Persons_Phone?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("Persons_Phone"), caseData.Persons_Phone?.ToString() ?? "");
+                // [#9] - Persons_Phone
+                subject = subject.Replace(GetMailTemplateIdentifier("Persons_Phone"), caseData.PersonsPhone ?? "");
+                body = body.Replace(GetMailTemplateIdentifier("Persons_Phone"), caseData.PersonsPhone ?? "");
 
-                // Replace [#12] - PriorityName
-                subject = subject.Replace(GetMailTemplateIdentifier("PriorityName"), caseData.PriorityName?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("PriorityName"), caseData.PriorityName?.ToString() ?? "");
+                // Get the most recent log data if needed (for Text_External and Text_Internal)
+                // You might need to retrieve this from the database or pass it in as a parameter
+                string textExternal = ""; // Get from database or parameter if available
+                string textInternal = ""; // Get from database or parameter if available
 
-                // Replace [#13] - WorkingGroupEMail
-                string workingGroupEmail = caseData.WorkingGroupEMail?.ToString() ?? "";
+                // [#10] - Text_External
+                subject = subject.Replace(GetMailTemplateIdentifier("Text_External"), textExternal);
+                body = body.Replace(GetMailTemplateIdentifier("Text_External"), textExternal);
+
+                // [#11] - Text_Internal
+                subject = subject.Replace(GetMailTemplateIdentifier("Text_Internal"), textInternal);
+                body = body.Replace(GetMailTemplateIdentifier("Text_Internal"), textInternal);
+
+                // [#12] - PriorityName
+                string priorityName = priorityData?.PriorityName?.ToString() ?? "";
+                subject = subject.Replace(GetMailTemplateIdentifier("PriorityName"), priorityName);
+                body = body.Replace(GetMailTemplateIdentifier("PriorityName"), priorityName);
+
+                // [#13] - WorkingGroupEMail
+                string workingGroupEmail = workingGroupData?.WorkingGroupEMail?.ToString() ?? "";
                 subject = subject.Replace(GetMailTemplateIdentifier("WorkingGroupEMail"), workingGroupEmail);
                 body = body.Replace(GetMailTemplateIdentifier("WorkingGroupEMail"), workingGroupEmail);
 
@@ -521,72 +705,108 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     body = body.Replace("[#30]", string.Empty);
                 }
 
-                // Replace [#15] - WorkingGroup
-                string workingGroupName = caseData.WorkingGroupName?.ToString() ?? "";
+                // [#15] - WorkingGroup
+                string workingGroupName = workingGroupData?.WorkingGroup?.ToString() ?? "";
                 subject = subject.Replace(GetMailTemplateIdentifier("WorkingGroup"), workingGroupName);
                 body = body.Replace(GetMailTemplateIdentifier("WorkingGroup"), workingGroupName);
 
-                // Replace [#16] - RegTime
-                string regTime = caseData.RegTime?.ToString() ?? "";
+                // [#16] - RegTime
+                string regTime = caseData.RegTime.ToString() ?? "";
                 subject = subject.Replace(GetMailTemplateIdentifier("RegTime"), regTime);
                 body = body.Replace(GetMailTemplateIdentifier("RegTime"), regTime);
 
-                // Replace [#17] - InventoryNumber
-                subject = subject.Replace(GetMailTemplateIdentifier("InventoryNumber"), caseData.InventoryNumber?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("InventoryNumber"), caseData.InventoryNumber?.ToString() ?? "");
+                // [#17] - InventoryNumber
+                subject = subject.Replace(GetMailTemplateIdentifier("InventoryNumber"), caseData.InventoryNumber ?? "");
+                body = body.Replace(GetMailTemplateIdentifier("InventoryNumber"), caseData.InventoryNumber ?? "");
 
-                // Replace [#18] - Persons_CellPhone
-                subject = subject.Replace(GetMailTemplateIdentifier("Persons_CellPhone"), caseData.Persons_CellPhone?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("Persons_CellPhone"), caseData.Persons_CellPhone?.ToString() ?? "");
+                // [#18] - Persons_CellPhone
+                subject = subject.Replace(GetMailTemplateIdentifier("Persons_CellPhone"), caseData.PersonsCellphone ?? "");
+                body = body.Replace(GetMailTemplateIdentifier("Persons_CellPhone"), caseData.PersonsCellphone ?? "");
 
-                // Replace [#19] - Available
-                subject = subject.Replace(GetMailTemplateIdentifier("Available"), caseData.Available?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("Available"), caseData.Available?.ToString() ?? "");
+                // [#19] - Available
+                subject = subject.Replace(GetMailTemplateIdentifier("Available"), caseData.Available ?? "");
+                body = body.Replace(GetMailTemplateIdentifier("Available"), caseData.Available ?? "");
 
-                // Replace [#20] - Priority_Description
-                subject = subject.Replace(GetMailTemplateIdentifier("Priority_Description"), caseData.PriorityDescription?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("Priority_Description"), caseData.PriorityDescription?.ToString() ?? "");
+                // [#20] - Priority_Description
+                string priorityDescription = priorityData?.PriorityDescription?.ToString() ?? "";
+                subject = subject.Replace(GetMailTemplateIdentifier("Priority_Description"), priorityDescription);
+                body = body.Replace(GetMailTemplateIdentifier("Priority_Description"), priorityDescription);
 
-                // Replace [#21] - WatchDate
+                // [#21] - WatchDate
                 string watchDate = caseData.WatchDate?.ToString() ?? "";
                 subject = subject.Replace(GetMailTemplateIdentifier("WatchDate"), watchDate);
                 body = body.Replace(GetMailTemplateIdentifier("WatchDate"), watchDate);
 
-                // Replace [#25] - CaseType
-                subject = subject.Replace(GetMailTemplateIdentifier("CaseType"), caseData.CaseTypeName?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("CaseType"), caseData.CaseTypeName?.ToString() ?? "");
+                //// [#22] - LastChangedByUser
+                //string lastChangedByUser = (caseData.ChangedName ?? "") + " " + (caseData.ChangedSurName ?? "");
+                //subject = subject.Replace(GetMailTemplateIdentifier("LastChangedByUser"), lastChangedByUser);
+                //body = body.Replace(GetMailTemplateIdentifier("LastChangedByUser"), lastChangedByUser);
 
-                // Replace [#26] - Category
-                subject = subject.Replace(GetMailTemplateIdentifier("Category"), caseData.CategoryName?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("Category"), caseData.CategoryName?.ToString() ?? "");
+                // [#23] - Miscellaneous
+                subject = subject.Replace(GetMailTemplateIdentifier("Miscellaneous"), caseData.Miscellaneous ?? "");
+                body = body.Replace(GetMailTemplateIdentifier("Miscellaneous"), caseData.Miscellaneous ?? "");
 
-                // Replace [#27] - ProductArea
-                subject = subject.Replace(GetMailTemplateIdentifier("ProductArea"), caseData.ProductAreaName?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("ProductArea"), caseData.ProductAreaName?.ToString() ?? "");
+                // [#24] - Place
+                subject = subject.Replace(GetMailTemplateIdentifier("Place"), caseData.Place ?? "");
+                body = body.Replace(GetMailTemplateIdentifier("Place"), caseData.Place ?? "");
 
-                // Replace [#28] - ReportedBy
-                subject = subject.Replace(GetMailTemplateIdentifier("ReportedBy"), caseData.ReportedBy?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("ReportedBy"), caseData.ReportedBy?.ToString() ?? "");
+                // [#25] - CaseType
+                string caseTypeName = caseTypeData?.CaseType?.ToString() ?? "";
+                subject = subject.Replace(GetMailTemplateIdentifier("CaseType"), caseTypeName);
+                body = body.Replace(GetMailTemplateIdentifier("CaseType"), caseTypeName);
 
-                // Replace [#70] - Performer_Phone
-                subject = subject.Replace(GetMailTemplateIdentifier("Performer_Phone"), caseData.PerformerPhone?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("Performer_Phone"), caseData.PerformerPhone?.ToString() ?? "");
+                // [#26] - Category
+                string categoryName = categoryData?.Category?.ToString() ?? "";
+                subject = subject.Replace(GetMailTemplateIdentifier("Category"), categoryName);
+                body = body.Replace(GetMailTemplateIdentifier("Category"), categoryName);
 
-                // Replace [#71] - Performer_CellPhone
-                subject = subject.Replace(GetMailTemplateIdentifier("Performer_CellPhone"), caseData.PerformerCellPhone?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("Performer_CellPhone"), caseData.PerformerCellPhone?.ToString() ?? "");
+                // [#27] - ProductArea
+                string productAreaName = productAreaData?.ProductArea?.ToString() ?? "";
+                subject = subject.Replace(GetMailTemplateIdentifier("ProductArea"), productAreaName);
+                body = body.Replace(GetMailTemplateIdentifier("ProductArea"), productAreaName);
 
-                // Replace [#72] - Performer_Email
-                subject = subject.Replace(GetMailTemplateIdentifier("Performer_Email"), caseData.PerformerEMail?.ToString() ?? "");
-                body = body.Replace(GetMailTemplateIdentifier("Performer_Email"), caseData.PerformerEMail?.ToString() ?? "");
+                // [#28] - ReportedBy
+                subject = subject.Replace(GetMailTemplateIdentifier("ReportedBy"), caseData.ReportedBy ?? "");
+                body = body.Replace(GetMailTemplateIdentifier("ReportedBy"), caseData.ReportedBy ?? "");
 
+                // [#29] - RegUser
+                subject = subject.Replace(GetMailTemplateIdentifier("RegUser"), caseData.RegUserName ?? "");
+                body = body.Replace(GetMailTemplateIdentifier("RegUser"), caseData.RegUserName ?? "");
+
+                // [#70] - Performer_Phone
+                string performerPhone = performerData?.Phone?.ToString() ?? "";
+                subject = subject.Replace(GetMailTemplateIdentifier("Performer_Phone"), performerPhone);
+                body = body.Replace(GetMailTemplateIdentifier("Performer_Phone"), performerPhone);
+
+                // [#71] - Performer_CellPhone
+                string performerCellPhone = performerData?.CellPhone?.ToString() ?? "";
+                subject = subject.Replace(GetMailTemplateIdentifier("Performer_CellPhone"), performerCellPhone);
+                body = body.Replace(GetMailTemplateIdentifier("Performer_CellPhone"), performerCellPhone);
+
+                // [#72] - Performer_Email
+                string performerEmail = performerData?.Email?.ToString() ?? "";
+                subject = subject.Replace(GetMailTemplateIdentifier("Performer_Email"), performerEmail);
+                body = body.Replace(GetMailTemplateIdentifier("Performer_Email"), performerEmail);
+
+                // [#73] - IsAbout_PersonsName
+                subject = subject.Replace(GetMailTemplateIdentifier("IsAbout_PersonsName"), caseData.IsAbout_PersonsName ?? "");
+                body = body.Replace(GetMailTemplateIdentifier("IsAbout_PersonsName"), caseData.IsAbout_PersonsName ?? "");
+
+                //// [#80] - AutoCloseDays
+                //subject = subject.Replace(GetMailTemplateIdentifier("AutoCloseDays"), caseData.AutoCloseDays?.ToString() ?? "");
+                //body = body.Replace(GetMailTemplateIdentifier("AutoCloseDays"), caseData.AutoCloseDays?.ToString() ?? "");
+
+
+                // Continue with the rest of your existing code...
                 // Generate protocol
                 string protocol = (int)globalSettings.ServerPort == 443 ? "https" : "http";
 
                 // Process [#98] - Self-service link
                 var emailLogGuid = Guid.NewGuid();
-                var caseGuid = caseData.CaseGUID?.ToString() ?? "";
+                var caseGuid = caseData.CaseGUID.ToString();
 
+                // Continue with the rest of your existing URL handling code...
+                // Process [#98] - Self-service link
                 while (body.Contains("[#98]"))
                 {
                     int pos1 = body.IndexOf("[#98]");
@@ -598,28 +818,14 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                         string linkTextSelfService = body.Substring(pos1 + 5, pos2 - pos1 - 5);
 
                         string linkSelfService;
-                        if (Convert.ToString(globalSettings.DBVersion) > "5")
-                        {
-                            linkSelfService = $"<a href=\"{protocol}://{globalSettings.ExternalSite}/case/index/{emailLogGuid}\">{linkTextSelfService}</a>";
-                        }
-                        else
-                        {
-                            linkSelfService = $"<a href=\"{protocol}://{globalSettings.ServerName}/CI.asp?Id={caseGuid}\">{linkTextSelfService}</a>";
-                        }
+                        linkSelfService = $"<a href=\"{protocol}://{globalSettings.ExternalSite}/case/index/{emailLogGuid}\">{linkTextSelfService}</a>";
 
                         body = body.Replace(textToReplace, linkSelfService);
                     }
                     else
                     {
                         string linkSelfService;
-                        if (Convert.ToString(globalSettings.DBVersion) > "5")
-                        {
-                            linkSelfService = $"<a href=\"{protocol}://{globalSettings.ExternalSite}/case/index/{emailLogGuid}\">{protocol}://{globalSettings.ExternalSite}/case/index/{emailLogGuid}</a>";
-                        }
-                        else
-                        {
-                            linkSelfService = $"<a href=\"{protocol}://{globalSettings.ServerName}/CI.asp?Id={caseGuid}\">{protocol}://{globalSettings.ServerName}/CI.asp?Id={caseGuid}</a>";
-                        }
+                        linkSelfService = $"<a href=\"{protocol}://{globalSettings.ExternalSite}/case/index/{emailLogGuid}\">{protocol}://{globalSettings.ExternalSite}/case/index/{emailLogGuid}</a>";
 
                         body = body.Replace("[#98]", linkSelfService);
                     }
@@ -637,93 +843,66 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                         string linkText = body.Substring(pos1 + 5, pos2 - pos1 - 5);
 
                         string link;
-                        if (Convert.ToString(globalSettings.DBVersion) > "5")
-                        {
-                            string editCasePath = Convert.ToBoolean(globalSettings.UseMobileRouting)
-                                ? "/mobilecases/edit/"
-                                : "/Cases/Edit/";
+                        string editCasePath = Convert.ToBoolean(globalSettings.UseMobileRouting)
+                                 ? CasePaths.EDIT_CASE_MOBILEROUTE
+                                 : CasePaths.EDIT_CASE_DESKTOP;
 
-                            link = $"<br><a href=\"{protocol}://{globalSettings.ServerName}{editCasePath}{caseId}\">{linkText}</a>";
-                        }
-                        else
-                        {
-                            link = $"<br><a href=\"{protocol}://{globalSettings.ServerName}/Default.asp?GUID={caseGuid}\">{linkText}</a>";
-                        }
+                        link = $"<br><a href=\"{protocol}://{globalSettings.ServerName}{editCasePath}{caseData.Id}\">{linkText}</a>";
 
                         body = body.Replace(textToReplace, link);
                     }
                     else
                     {
                         string link;
-                        if (Convert.ToString(globalSettings.DBVersion) > "5")
-                        {
-                            string editCasePath = Convert.ToBoolean(globalSettings.UseMobileRouting)
-                                ? "/mobilecases/edit/"
-                                : "/Cases/Edit/";
+                        string editCasePath = Convert.ToBoolean(globalSettings.UseMobileRouting)
+                                ? CasePaths.EDIT_CASE_MOBILEROUTE
+                                 : CasePaths.EDIT_CASE_DESKTOP;
 
-                            link = $"<br><a href=\"{protocol}://{globalSettings.ServerName}{editCasePath}{caseId}\">{protocol}://{globalSettings.ServerName}{editCasePath}{caseId}</a>";
-                        }
-                        else
-                        {
-                            link = $"<br><a href=\"{protocol}://{globalSettings.ServerName}/Default.asp?GUID={caseGuid}\">{protocol}://{globalSettings.ServerName}/Default.asp?GUID={caseGuid}</a>";
-                        }
+                        link = $"<br><a href=\"{protocol}://{globalSettings.ServerName}{editCasePath}{caseData.Id}\">{protocol}://{globalSettings.ServerName}{editCasePath}{caseData.Id}</a>";
 
                         body = body.Replace("[#99]", link);
                     }
                 }
 
+
                 // Replace line breaks with <br>
                 body = body.Replace("\r\n", "<br>");
 
                 // 7. Create a message ID
-                string messageId = await CreateMessageIdAsync(customerData.HelpdeskEMail?.ToString());
+                string messageId = await CreateMessageIdAsync(customerData.HelpDeskEmail?.ToString());
 
-                // 8. Get performer email
-                var getUserSql = @"
-            SELECT Email FROM tblUser 
-            WHERE Id = @UserId AND IsActive = 1";
-
-                string performerEmail;
-                using (var cmd = new SqlCommand(getUserSql, conn))
+                // 8. Get performer email for sending the actual mail (we already have it but the code keeps the same structure)
+                string receiverEmail = performerData.Email?.ToString();
+                if (string.IsNullOrEmpty(receiverEmail))
                 {
-                    cmd.Parameters.AddWithValue("@UserId", performerUserId);
-                    var result = await cmd.ExecuteScalarAsync();
-                    if (result == null)
-                    {
-                        return false; // No valid email
-                    }
-                    performerEmail = result.ToString();
-                    if (string.IsNullOrEmpty(performerEmail))
-                    {
-                        return false; // No valid email
-                    }
+                    return false; // No valid email
                 }
 
                 // 9. Insert into tblEmailLog
                 var createEmailLogSql = @"
-            INSERT INTO tblEmailLog (
-                EMailLogGUID, Log_Id, EMailAddress, MailID, MessageId, 
-                CaseHistory_Id, CreatedDate, ChangedDate, SendTime, 
-                ResponseMessage, Body, Subject, Cc, Bcc, HighPriority, 
-                Files, [From], SendStatus, LastAttempt, Attempts, FilesInternal
-            ) 
-            VALUES (
-                @EMailLogGUID, NULL, @EmailAddress, @MailID, @MessageId,
-                @CaseHistoryId, GETUTCDATE(), GETUTCDATE(), NULL,
-                NULL, @Body, @Subject, NULL, NULL, 0,
-                NULL, @FromAddress, 0, NULL, 0, NULL
-            )";
+                    INSERT INTO tblEmailLog (
+                        EMailLogGUID, Log_Id, EMailAddress, MailID, MessageId, 
+                        CaseHistory_Id, CreatedDate, ChangedDate, SendTime, 
+                        ResponseMessage, Body, Subject, Cc, Bcc, HighPriority, 
+                        Files, [From], SendStatus, LastAttempt, Attempts, FilesInternal
+                    ) 
+                    VALUES (
+                        @EMailLogGUID, NULL, @EmailAddress, @MailID, @MessageId,
+                        @CaseHistoryId, GETUTCDATE(), GETUTCDATE(), NULL,
+                        'Enqueued', @Body, @Subject, NULL, NULL, 0,
+                        NULL, @FromAddress, 1, NULL, 0, NULL
+                    )";
 
                 using (var cmd = new SqlCommand(createEmailLogSql, conn))
                 {
                     cmd.Parameters.AddWithValue("@EMailLogGUID", emailLogGuid);
-                    cmd.Parameters.AddWithValue("@EmailAddress", performerEmail);
+                    cmd.Parameters.AddWithValue("@EmailAddress", receiverEmail);
                     cmd.Parameters.AddWithValue("@MailID", mailTemplateId);
                     cmd.Parameters.AddWithValue("@MessageId", messageId);
                     cmd.Parameters.AddWithValue("@CaseHistoryId", historyId);
                     cmd.Parameters.AddWithValue("@Body", body);
                     cmd.Parameters.AddWithValue("@Subject", subject);
-                    cmd.Parameters.AddWithValue("@FromAddress", customerData.HelpdeskEMail?.ToString() ?? "noreply@helpdesk.com");
+                    cmd.Parameters.AddWithValue("@FromAddress", customerData.HelpDeskEmail?.ToString() ?? "noreply@helpdesk.com");
 
                     await cmd.ExecuteNonQueryAsync();
                 }
@@ -734,8 +913,46 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
 
         private string GetMailTemplateIdentifier(string identifier)
         {
-            return $"[#{identifier}]";
+            // Make case-insensitive like the VB version by converting to uppercase
+            switch (identifier.ToUpperInvariant())
+            {
+                case "CASENUMBER": return "[#1]";
+                case "CUSTOMERNAME": return "[#2]";
+                case "PERSONS_NAME": return "[#3]";
+                case "CAPTION": return "[#4]";
+                case "DESCRIPTION": return "[#5]";
+                case "FIRSTNAME": return "[#6]";
+                case "SURNAME": return "[#7]";
+                case "PERSONS_EMAIL": return "[#8]";
+                case "PERSONS_PHONE": return "[#9]";
+                case "TEXT_EXTERNAL": return "[#10]";
+                case "TEXT_INTERNAL": return "[#11]";
+                case "PRIORITYNAME": return "[#12]";
+                case "WORKINGGROUPEMAIL": return "[#13]";
+                case "WORKINGGROUP": return "[#15]";
+                case "REGTIME": return "[#16]";
+                case "INVENTORYNUMBER": return "[#17]";
+                case "PERSONS_CELLPHONE": return "[#18]";
+                case "AVAILABLE": return "[#19]";
+                case "PRIORITY_DESCRIPTION": return "[#20]";
+                case "WATCHDATE": return "[#21]";
+                case "LASTCHANGEDBYUSER": return "[#22]"; // This was "ChangeTime" before - fixed!
+                case "MISCELLANEOUS": return "[#23]";
+                case "PLACE": return "[#24]";
+                case "CASETYPE": return "[#25]";
+                case "CATEGORY": return "[#26]";
+                case "PRODUCTAREA": return "[#27]";
+                case "REPORTEDBY": return "[#28]";
+                case "REGUSER": return "[#29]";
+                case "PERFORMER_PHONE": return "[#70]";
+                case "PERFORMER_CELLPHONE": return "[#71]";
+                case "PERFORMER_EMAIL": return "[#72]";
+                case "ISABOUT_PERSONSNAME": return "[#73]";
+                case "AUTOCLOSEDAYS": return "[#80]";
+                default: return ""; // Return empty string for unknown identifiers like in VB
+            }
         }
+
 
         private async Task<string> CreateMessageIdAsync(string senderEmail)
         {
