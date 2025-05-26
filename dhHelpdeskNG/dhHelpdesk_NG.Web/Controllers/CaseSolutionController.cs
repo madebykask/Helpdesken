@@ -3433,7 +3433,8 @@ namespace DH.Helpdesk.Web.Controllers
             model.ScheduleDays = string.Empty;
             model.ScheduleMonths = string.Empty;
             model.Schedule = 0;
-			model.ScheduleTime = 1;
+			model.ScheduleTime = 7;
+            model.RepeatType = "Yearly";
 
             if (schedule != null)
             {
@@ -3590,7 +3591,6 @@ namespace DH.Helpdesk.Web.Controllers
                 RepeatInterval = vm.RepeatInterval,
                 StartYear = vm.StartYear,
                 ScheduleMonths = vm.ScheduleMonth != null ? string.Join(",", vm.ScheduleMonth) : null,
-                StartDate = null // Sätt ev. DateTime.Now här om du använder det
             };
 
             // 🟢 Initiera ScheduleDay för bakåtkompatibilitet
