@@ -5,6 +5,7 @@ using System.Configuration;
 using Serilog;
 using System;
 using System.Threading.Tasks;
+using System.Net.Mail;
 
 namespace DH.Helpdesk.CaseSolutionScheduleYearly
 {
@@ -99,6 +100,9 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                     }
                     catch (Exception ex)
                     {
+                        //Send error mail
+                        SendErrorMail("Fel vid skapande av ärende", $"Misslyckades att skapa ärende för CaseSolutionId {caseSolution.Id}. Fel: {ex.Message}");
+
                         Log.Error(ex, "❌ Failed to create case for CaseSolutionId {CaseSolutionId}", caseSolution.Id);
                     }
                 }
@@ -107,6 +111,8 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
             }
             catch (Exception ex)
             {
+                // Send error mail
+                SendErrorMail("Fel under DH.Helpdesk.CaseSolutionScheduleYearly", $"Ett fel inträffade under schemaläggningen: {ex.Message}\n{ex.StackTrace}");
                 Log.Error(ex, "🔴 Unhandled error during schedule run.");
             }
             finally
@@ -114,5 +120,32 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                 Log.CloseAndFlush();
             }
         }
+
+        private static void SendErrorMail(string subject, string body)
+        {
+            try
+            {
+                var smtpServer = ConfigurationManager.AppSettings["SmtpServer"];
+                var smtpPort = int.TryParse(ConfigurationManager.AppSettings["SmtpPort"], out var port) ? port : 25;
+                var from = ConfigurationManager.AppSettings["ErrorMailSender"];
+                var to = ConfigurationManager.AppSettings["ErrorMailRecipient"];
+
+                using (var client = new SmtpClient(smtpServer, smtpPort))
+                using (var message = new MailMessage(from, to, subject, body))
+                {
+                    client.EnableSsl = false; // Ingen autentisering, ingen SSL
+                    client.DeliveryMethod = SmtpDeliveryMethod.Network;
+                    client.UseDefaultCredentials = true; // Anonymt
+                    client.Send(message);
+                }
+            }
+            catch (Exception ex)
+            {
+                // Logga till fil eller ignorera, men kasta inte vidare för att undvika loop
+                Serilog.Log.Error(ex, "Misslyckades att skicka felmejl.");
+            }
+        }
     }
 }
+
+
