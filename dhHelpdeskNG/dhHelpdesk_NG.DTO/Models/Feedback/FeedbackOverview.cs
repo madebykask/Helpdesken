@@ -16,5 +16,7 @@ namespace DH.Helpdesk.BusinessData.Models.Feedback
 
         public bool ExcludeAdministrators { get; set; }
 
+        public bool UseBase64Images { get; set; }
+
     }
 }

@@ -34,7 +34,9 @@
 
 		public bool ExcludeAdministrators { get; set; }
 
-		public QuestionnaireType Type { get; set; }
+        public bool UseBase64Images { get; set; }
+
+        public QuestionnaireType Type { get; set; }
 
 	public virtual ICollection<QuestionnaireQuestionEntity> QuestionnaireQuestionEntities { get; set; }
 

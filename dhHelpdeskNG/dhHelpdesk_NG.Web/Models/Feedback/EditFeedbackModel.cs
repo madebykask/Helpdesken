@@ -61,8 +61,9 @@ namespace DH.Helpdesk.Web.Models.Feedback
         public CircularCaseFilter CaseFilter { get; set; }
 
 		public bool ExcludeAdministrators { get; set; }
+        public bool UseBase64Images { get; set; }
 
-		public List<QuestionnaireQuesOptionModel> Options { get; set; }
+        public List<QuestionnaireQuesOptionModel> Options { get; set; }
 
 		public bool IsNew
 		{
