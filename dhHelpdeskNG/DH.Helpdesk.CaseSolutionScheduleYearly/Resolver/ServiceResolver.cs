@@ -31,6 +31,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Resolver
         public static IEmailService GetEmailService() => _kernel.Get<IEmailService>();
         public static IMailTemplateService GetTemplateService() => _kernel.Get<IMailTemplateService>();
         public static ICaseSolutionService GetCaseSolutionService() => _kernel.Get<ICaseSolutionService>();
+        public static ISettingService GetSettingService() => _kernel.Get<ISettingService>();
 
         // Lägg till fler .Get<T>() om du behöver
     }
