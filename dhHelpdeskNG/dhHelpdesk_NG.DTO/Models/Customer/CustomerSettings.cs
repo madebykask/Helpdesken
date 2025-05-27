@@ -184,8 +184,8 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         public bool DisableCaseEndDate { get; set; }
         public bool CreateComputerFromOrder { get; set; }
 
-        //GraphQL settings
-
+        //Graph settings
+        public bool UseGraphSendingEmail { get; set; }
         public string GraphClientId { get; set; }
         public string GraphUserName { get; set; }
         public string GraphTenantId { get; set; }

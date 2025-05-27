@@ -26,7 +26,7 @@ public static class ScheduleCalculator
 
         var candidates = new List<DateTime>();
 
-        for (int y = startYear; y <= startYear + 10; y += yearStep)
+        for (int y = startYear; y <= startYear + 20; y += yearStep)
         {
             foreach (var m in months)
             {

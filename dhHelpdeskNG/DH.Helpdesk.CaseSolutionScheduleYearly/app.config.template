@@ -12,6 +12,9 @@
 		<add key="CustomerId" value="#{CustomerId}" />
 		<add key="ErrorMailTo" value="#{ErrorMailTo}" />
 		<add key="LogFilePath" value="#{LogFilePath}" />
+		<add key="ErrorMailSender" value="#{ErrorMailSender}" />
+		<add key="SmtpServer" value="#{SmtpSender}" />
+		<add key="SmtpPort" value="#{SmtpPort}" />
 	</appSettings>
 	<runtime>
 		<assemblyBinding xmlns="urn:schemas-microsoft-com:asm.v1">

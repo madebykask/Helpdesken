@@ -90,7 +90,8 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            GraphClientId = entity.GraphClientId,
                            GraphClientSecret = entity.GraphClientSecret,
                            GraphUserName = entity.GraphUserName,
-                           ErrorMailTo = entity.ErrorMailTo
+                           ErrorMailTo = entity.ErrorMailTo,
+                           UseGraphSendingEmail = entity.UseGraphSendingEmail
             };
         }
     }

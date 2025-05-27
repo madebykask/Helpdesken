@@ -10,7 +10,6 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Helpers
     {
         public static string GetMailTemplateIdentifier(string identifier)
         {
-            // Make case-insensitive like the VB version by converting to uppercase
             switch (identifier.ToUpperInvariant())
             {
                 case "CASENUMBER": return "[#1]";
@@ -33,7 +32,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Helpers
                 case "AVAILABLE": return "[#19]";
                 case "PRIORITY_DESCRIPTION": return "[#20]";
                 case "WATCHDATE": return "[#21]";
-                case "LASTCHANGEDBYUSER": return "[#22]"; // This was "ChangeTime" before - fixed!
+                case "LASTCHANGEDBYUSER": return "[#22]"; 
                 case "MISCELLANEOUS": return "[#23]";
                 case "PLACE": return "[#24]";
                 case "CASETYPE": return "[#25]";

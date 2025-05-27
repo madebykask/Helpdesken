@@ -1026,7 +1026,7 @@ namespace DH.Helpdesk.Web.Controllers
                 caseSolutionInputViewModel.CaseSolution.Project_Id = Project_Id;
             }
 
-            if (collection["CaseSolution.UserSearchCategory_Id "].ToString().Trim() != string.Empty)
+            if (collection["CaseSolution.UserSearchCategory_Id"].ToString().Trim() != string.Empty)
             {
                 int UserSearchCategory_Id = Convert.ToInt32(collection["CaseSolution.UserSearchCategory_Id "].ToString());
                 caseSolutionInputViewModel.CaseSolution.UserSearchCategory_Id = UserSearchCategory_Id;
@@ -3677,7 +3677,7 @@ namespace DH.Helpdesk.Web.Controllers
 
             var candidates = new List<DateTime>();
 
-            for (int year = startYear; year <= startYear + 10; year += yearStep)
+            for (int year = startYear; year <= startYear + 20; year += yearStep)
             {
                 foreach (int month in months)
                 {
