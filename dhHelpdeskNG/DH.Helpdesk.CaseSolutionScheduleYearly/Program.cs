@@ -24,6 +24,8 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
         {
             // Standardvärden om inga argument anges
             var defaultDateAndTime = DateTime.Now;
+            //test
+            //var defaultDateAndTime = Convert.ToDateTime("2025-07-01 14:00:00"); // Sätt ett standarddatum för testning
             var defaultWorkMode = 0; // 0 = normalt läge, 1 = testläge (skapa inte ärenden)
 
             // Parsa kommandoradsargument

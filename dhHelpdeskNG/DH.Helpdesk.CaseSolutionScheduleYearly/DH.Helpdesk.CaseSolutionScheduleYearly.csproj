@@ -239,6 +239,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="readme.md" />
     <Compile Include="Helpers\MailTemplateHelper.cs" />
     <Compile Include="Helpers\Enums.cs" />
     <Compile Include="DI\Modules\DatabaseModule.cs" />
