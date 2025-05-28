@@ -220,6 +220,11 @@ $(function () {
             $('.chDay, .chMonth').toggle($("[name$=ScheduleType]").index($('#optScheduleType3')) == 2);
             $('.chWeek').hide();
         }
+        //if ($('#optScheduleType4').is(':checked') || $('#optScheduleType5').is(':checked')) {
+        //    $(".chYear").show(); // visa egen <td> eller <div> för årsschemat
+        //} else if ($('#optScheduleType5').is(':checked')) {
+        //    toggle($("[name$=ScheduleTypeYear]").index($('#optScheduleType5')) == 4);
+        //}
     };
 
     $("#chkSchedule").click(function () {

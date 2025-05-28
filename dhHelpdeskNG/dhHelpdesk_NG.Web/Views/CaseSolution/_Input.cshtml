@@ -2232,6 +2232,33 @@
                                                 @Translation.Get("Varje månad", Enums.TranslationSource.TextTranslation)
                                             </label>
                                         </p>
+                                        <p>
+                                            <label class="radio">
+                                                <input type="radio" name="RepeatType"
+                                                       @(Model.RepeatType == "Yearly" ? "checked='checked'" : "")
+                                                       id="optScheduleType4" value="Yearly" />
+                                                @Translation.Get("Varje år", Enums.TranslationSource.TextTranslation)
+                                            </label>
+                                        </p>
+                                        <p>
+                                            <label class="radio">
+                                                <input type="radio" name="RepeatType"
+                                                       @(Model.RepeatType == "EveryXYears" ? "checked='checked'" : "")
+                                                       id="optScheduleType5" value="EveryXYears" />
+                                                @Translation.Get("Vart", Enums.TranslationSource.TextTranslation)
+
+                                                <select name="RepeatInterval" style="width: 60px;">
+                                                    @for (int i = 2; i <= 20; i++)
+            {
+                                                    <option @(Model.RepeatInterval == i ? "selected='selected'" : "") value="@i">@i</option>
+            }
+                                                </select>
+
+                                                @Translation.Get("år", Enums.TranslationSource.TextTranslation)
+
+                                            </label>
+                                        </p>
+
                                     </td>
                                     <!-- ******************************* DAY ************************************** -->
                                     <td id="chosenDay" class="chDay span3" style="display: none;">
@@ -2257,6 +2284,15 @@
                                             }
                                         </select>
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
+                                        <br /><br />
+                                        @Translation.Get("Med start", Enums.TranslationSource.TextTranslation)
+
+                                        <select name="StartYear" style="width: 80px;">
+                                            @for (int y = DateTime.Now.Year; y <= DateTime.Now.Year + 20; y++)
+                                            {
+                                                <option @(Model.StartYear == y ? "selected='selected'" : "") value="@y">@y</option>
+                                            }
+                                        </select>
                                     </td>
                                     <!-- ********************************* WEEK ************************************* -->
                                     <td id="chosenWeek" class="chWeek span6" style="display: none;">

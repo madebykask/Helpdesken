@@ -184,6 +184,14 @@ namespace DH.Helpdesk.BusinessData.Models.Customer
         public bool DisableCaseEndDate { get; set; }
         public bool CreateComputerFromOrder { get; set; }
 
+        //Graph settings
+        public bool UseGraphSendingEmail { get; set; }
+        public string GraphClientId { get; set; }
+        public string GraphUserName { get; set; }
+        public string GraphTenantId { get; set; }
+        public string GraphClientSecret { get; set; }
+        public string ErrorMailTo { get; set; }
+
         /// <summary>
         /// The is module on.
         /// </summary>

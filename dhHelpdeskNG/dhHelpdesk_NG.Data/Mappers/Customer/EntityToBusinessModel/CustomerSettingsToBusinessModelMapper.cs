@@ -86,6 +86,12 @@ namespace DH.Helpdesk.Dal.Mappers.Customer.EntityToBusinessModel
                            TimeZoneOffset = entity.TimeZone_offset,
                            DisableCaseEndDate = entity.DisableCaseEndDate.ToBool(),
                            BlockedEmailRecipients = entity.BlockedEmailRecipients,
+                           GraphTenantId = entity.GraphTenantId,
+                           GraphClientId = entity.GraphClientId,
+                           GraphClientSecret = entity.GraphClientSecret,
+                           GraphUserName = entity.GraphUserName,
+                           ErrorMailTo = entity.ErrorMailTo,
+                           UseGraphSendingEmail = entity.UseGraphSendingEmail
             };
         }
     }
