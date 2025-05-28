@@ -25,7 +25,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
             // Standardvärden om inga argument anges
             var defaultDateAndTime = DateTime.Now;
             //test
-            //var defaultDateAndTime = Convert.ToDateTime("2029-06-01 14:00:00.000"); // Sätt ett standarddatum för testning
+            //var defaultDateAndTime = Convert.ToDateTime("2029-07-01 14:00:00.000"); // Sätt ett standarddatum för testning
             var defaultWorkMode = 0; // 0 = normalt läge, 1 = testläge (skapa inte ärenden)
 
             // Parsa kommandoradsargument
@@ -180,6 +180,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                 }
                 else
                 {
+                    //TODO - Anvönda samma logik som i EmailProcessor .cs för att skicka e-post utan Graph API
                     try
                     {
                         var smtpServer = ConfigurationManager.AppSettings["SmtpServer"];
