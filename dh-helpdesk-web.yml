@@ -164,7 +164,7 @@ steps:
   displayName: Build DH.Helpdesk.CaseSolutionScheduleYearly
   inputs:
     msbuildVersion: '17.0'  
-    solution: '**/dhHelpdeskNG/DH.Helpdesk.TaskScheduler/DH.Helpdesk.CaseSolutionScheduleYearly.csproj'
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.CaseSolutionScheduleYearly/DH.Helpdesk.CaseSolutionScheduleYearly.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.CaseSolutionScheduleYearly"'
 
 # # Run Code Analysis task
