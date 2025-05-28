@@ -64,7 +64,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
         }
         public async Task UpdateScheduleExecutionAsync(CaseScheduleItem item, DateTime executed)
         {
-            var next = ScheduleCalculator.CalculateNextRunYearly(item, executed); // 🟢 Beräkna nästa körning
+            var next = ScheduleCalculator.CalculateNextRun(item, executed); // 🟢 Beräkna nästa körning
 
             using (var conn = new SqlConnection(_connectionString))
             {

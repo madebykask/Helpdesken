@@ -5,7 +5,7 @@ using System.Linq;
 
 public static class ScheduleCalculator
 {
-    public static DateTime? CalculateNextRunYearly(CaseScheduleItem schedule, DateTime fromTime)
+    public static DateTime? CalculateNextRun(CaseScheduleItem schedule, DateTime fromTime)
     {
         var now = fromTime;
 

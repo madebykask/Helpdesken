@@ -25,7 +25,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
             // Standardvärden om inga argument anges
             var defaultDateAndTime = DateTime.Now;
             //test
-            //var defaultDateAndTime = Convert.ToDateTime("2025-07-01 14:00:00"); // Sätt ett standarddatum för testning
+            //var defaultDateAndTime = Convert.ToDateTime("2029-06-01 14:00:00.000"); // Sätt ett standarddatum för testning
             var defaultWorkMode = 0; // 0 = normalt läge, 1 = testläge (skapa inte ärenden)
 
             // Parsa kommandoradsargument
@@ -60,14 +60,15 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
             {
                 Log.Information("Programmet startat med datum: {Date}, läge: {Mode}",
                    dateAndTime, workMode == 0 ? "Skarpt" : "Test");
-                var apa = Convert.ToDateTime("sdsds"); // Sätt ett standarddatum för testning
+                //var apa = Convert.ToDateTime("sdsds"); // Sätt ett standarddatum för testning
                 // Skapa tjänster
                 var scheduleService = new ScheduleService(connectionString);
                 var caseSolutionService = ServiceResolver.GetCaseSolutionService();
                 var caseService = ServiceResolver.GetCaseService();
                 var mailTemplateService = new MailTemplateService(connectionString);
+                var customerService = ServiceResolver.GetCustomerService();
 
-                var caseProcessingService = new CaseProcessingService(connectionString, mailTemplateService, caseService);
+                var caseProcessingService = new CaseProcessingService(connectionString, mailTemplateService, caseService, customerService);
 
                 var caseSolutionSchedules = await scheduleService.GetSchedulesAsync(dateAndTime);
                 Log.Information("Hittade {Count} schemalagda ärenden för körning", caseSolutionSchedules.Count);
@@ -91,6 +92,11 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                         {
                             Log.Information("✅ Case created successfully with ID {CaseId} for CaseSolutionId {CaseSolutionId}",
                                 caseId, caseSolution.Id);
+                            // I testläge uppdaterar vi inte schemaläggningen
+                            if (workMode == 0)
+                            {
+                                await scheduleService.UpdateScheduleExecutionAsync(schedule, dateAndTime);
+                            }
                         }
                         else
                         {
@@ -98,11 +104,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                                 caseSolution.Id);
                         }
 
-                        // I testläge uppdaterar vi inte schemaläggningen
-                        if (workMode == 0)
-                        {
-                            await scheduleService.UpdateScheduleExecutionAsync(schedule, dateAndTime);
-                        }
+                        
                     }
                     catch (Exception ex)
                     {

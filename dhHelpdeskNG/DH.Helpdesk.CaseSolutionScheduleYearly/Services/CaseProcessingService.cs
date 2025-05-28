@@ -17,19 +17,21 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
         private readonly string _connectionString;
         private readonly MailTemplateService _mailTemplateService;
         private readonly ICaseService _caseService;
+        private readonly ICustomerService _customerService;
 
-        public CaseProcessingService(string connection, MailTemplateService mailTemplateService, ICaseService caseService)
+        public CaseProcessingService(string connection, MailTemplateService mailTemplateService, ICaseService caseService, ICustomerService customerService)
         {
             _connectionString = connection;
             _mailTemplateService = mailTemplateService;
             _caseService = caseService;
+            _customerService = customerService;
         }
 
         public async Task<int?> CreateCaseAsync(CaseSolution c)
         {
             // First, check if there's an extended case form connected to this case solution
             var extendedCaseFormId = await GetExtendedCaseFormIdForCaseSolutionAsync(c.Id);
-
+            var customer = _customerService.GetCustomer(c.Customer_Id);
             var caseGuid = Guid.NewGuid();
 
             using (var conn = new SqlConnection(_connectionString))
@@ -117,8 +119,8 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     cmd.Parameters.AddWithValue("@PlanDate", SqlVal(c.PlanDate));
                     cmd.Parameters.AddWithValue("@AgreedDate", SqlVal(c.AgreedDate));
                     cmd.Parameters.AddWithValue("@FinishingDate", SqlVal(c.FinishingDate));
-                    cmd.Parameters.AddWithValue("@RegistrationSource", 0);
-                    cmd.Parameters.AddWithValue("@RegLanguage_Id", 1);
+                    cmd.Parameters.AddWithValue("@RegistrationSource", SqlVal(c.RegistrationSource));
+                    cmd.Parameters.AddWithValue("@RegLanguage_Id", customer.Language_Id);
                     cmd.Parameters.AddWithValue("@RegistrationSourceCustomer_Id", SqlVal(c.RegistrationSource));
                     cmd.Parameters.AddWithValue("@RegUserName", SqlStr(c.ReportedBy));
                     cmd.Parameters.AddWithValue("@CaseSolution_Id", SqlVal(c.Id));
@@ -281,13 +283,13 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     cmd.Parameters.AddWithValue("@CaseHistoryGUID", caseHistoryGuid);
                     cmd.Parameters.AddWithValue("@Case_Id", caseId);
                     cmd.Parameters.AddWithValue("@CreatedByUser", "");
-                    cmd.Parameters.AddWithValue("@PersonsName", ""); // Using createdByUser as the person's name
-                    cmd.Parameters.AddWithValue("@PersonsEmail", ""); // Required field
+                    cmd.Parameters.AddWithValue("@PersonsName", ""); 
+                    cmd.Parameters.AddWithValue("@PersonsEmail", ""); 
                     cmd.Parameters.AddWithValue("@Place", "System");
                     cmd.Parameters.AddWithValue("@InventoryType", "");
                     cmd.Parameters.AddWithValue("@InventoryLocation", "");
-                    cmd.Parameters.AddWithValue("@Casenumber", c.CaseNumber); // Using the case ID as casenumber
-                    cmd.Parameters.AddWithValue("@IPAddress", "127.0.0.1");
+                    cmd.Parameters.AddWithValue("@Casenumber", c.CaseNumber); 
+                    cmd.Parameters.AddWithValue("@IPAddress", ""); //Sätter till tomt, kan ändras om det behövs
                     cmd.Parameters.AddWithValue("@CaseType_Id", caseTypeId);
                     cmd.Parameters.AddWithValue("@InvoiceNumber", "");
                     cmd.Parameters.AddWithValue("@Caption", caption);
@@ -299,11 +301,11 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     cmd.Parameters.AddWithValue("@Cost", 0);
                     cmd.Parameters.AddWithValue("@OtherCost", 0);
                     cmd.Parameters.AddWithValue("@ExternalTime", 0);
-                    cmd.Parameters.AddWithValue("@RegistrationSource", 0);
+                    cmd.Parameters.AddWithValue("@RegistrationSource", c.RegistrationSourceCustomer_Id); 
                     cmd.Parameters.AddWithValue("@RelatedCaseNumber", 0);
                     cmd.Parameters.AddWithValue("@Deleted", 0);
                     cmd.Parameters.AddWithValue("@Status", 0);
-                    cmd.Parameters.AddWithValue("@RegLanguage_Id", 1); // Default to Swedish
+                    cmd.Parameters.AddWithValue("@RegLanguage_Id", c.RegLanguage_Id); 
                     cmd.Parameters.AddWithValue("@LeadTime", 0);
                     cmd.Parameters.AddWithValue("@Customer_Id", customerId);
                     cmd.Parameters.AddWithValue("@CaseExtraFollowers", "");
