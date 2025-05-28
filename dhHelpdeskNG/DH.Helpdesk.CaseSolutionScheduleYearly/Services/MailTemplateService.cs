@@ -422,9 +422,9 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     body = body.Replace(MailTemplateHelper.GetMailTemplateIdentifier("WatchDate"), watchDate);
 
                     //// [#22] - LastChangedByUser
-                    //string lastChangedByUser = (caseData.ChangedName ?? "") + " " + (caseData.ChangedSurName ?? "");
-                    //subject = subject.Replace(GetMailTemplateIdentifier("LastChangedByUser"), lastChangedByUser);
-                    //body = body.Replace(GetMailTemplateIdentifier("LastChangedByUser"), lastChangedByUser);
+                    string lastChangedByUser = "";
+                    subject = subject.Replace(MailTemplateHelper.GetMailTemplateIdentifier("LastChangedByUser"), lastChangedByUser);
+                    body = body.Replace(MailTemplateHelper.GetMailTemplateIdentifier("LastChangedByUser"), lastChangedByUser);
 
                     // [#23] - Miscellaneous
                     subject = subject.Replace(MailTemplateHelper.GetMailTemplateIdentifier("Miscellaneous"), caseData.Miscellaneous ?? "");
@@ -519,6 +519,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                                 $"{protocol}://{globalSettings.ExternalSite}/case/index/{emailLogGuid}</a>";
                             body = body.Replace("[#98]", linkSelfService);
                         }
+                        
                     }
 
                     // Process [#99] - Helpdesk link
@@ -555,8 +556,6 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                             body = body.Replace("[#99]", link);
                         }
                     }
-
-
 
                     // Replace line breaks with <br>
                     body = body.Replace("\r\n", "<br>");

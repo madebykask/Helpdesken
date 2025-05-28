@@ -1,6 +1,5 @@
 ﻿using DH.Helpdesk.CaseSolutionScheduleYearly.Resolver;
 using DH.Helpdesk.CaseSolutionScheduleYearly.Services;
-using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using Serilog;
 using System;
@@ -24,8 +23,8 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
         {
             // Standardvärden om inga argument anges
             var defaultDateAndTime = DateTime.Now;
-            //test
-            //var defaultDateAndTime = Convert.ToDateTime("2029-07-01 14:00:00.000"); // Sätt ett standarddatum för testning
+            //För test i debug - titta i tabellen tblCaseSolutionSchedule efter NextRun
+            //var defaultDateAndTime = Convert.ToDateTime("2025-07-06 14:00:00.000"); // Sätt ett standarddatum för testning
             var defaultWorkMode = 0; // 0 = normalt läge, 1 = testläge (skapa inte ärenden)
 
             // Parsa kommandoradsargument
@@ -60,7 +59,6 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
             {
                 Log.Information("Programmet startat med datum: {Date}, läge: {Mode}",
                    dateAndTime, workMode == 0 ? "Skarpt" : "Test");
-                //var apa = Convert.ToDateTime("sdsds"); // Sätt ett standarddatum för testning
                 // Skapa tjänster
                 var scheduleService = new ScheduleService(connectionString);
                 var caseSolutionService = ServiceResolver.GetCaseSolutionService();
@@ -90,8 +88,12 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
 
                         if (caseId > 0)
                         {
-                            Log.Information("✅ Case created successfully with ID {CaseId} for CaseSolutionId {CaseSolutionId}",
-                                caseId, caseSolution.Id);
+                            Log.Information(
+                               "✅ Case created successfully with ID {CaseId} for CaseSolutionId {CaseSolutionId}, Caption: {Caption}",
+                               caseId,
+                               caseSolution.Id,
+                               caseSolution.Caption
+                             );
                             // I testläge uppdaterar vi inte schemaläggningen
                             if (workMode == 0)
                             {
@@ -100,11 +102,10 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                         }
                         else
                         {
+                            SendErrorEmail("Fel vid skapande av ärende", $"Misslyckades att skapa ärende för CaseSolutionId {caseSolution.Id}");
                             Log.Warning("⚠️ No Case was created for CaseSolutionId {CaseSolutionId}. Check if the insert failed silently.",
                                 caseSolution.Id);
-                        }
-
-                        
+                        }                       
                     }
                     catch (Exception ex)
                     {
