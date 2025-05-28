@@ -160,6 +160,13 @@ steps:
     solution: '**/dhHelpdeskNG/DH.Helpdesk.LicenseReporter/DH.Helpdesk.LicenseReporter.csproj'
     msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.LicenseReporter"'
 
+- task: MSBuild@1
+  displayName: Build DH.Helpdesk.CaseSolutionScheduleYearly
+  inputs:
+    msbuildVersion: '17.0'  
+    solution: '**/dhHelpdeskNG/DH.Helpdesk.TaskScheduler/DH.Helpdesk.CaseSolutionScheduleYearly.csproj'
+    msbuildArguments: '/p:TargetFrameworkVersion=v4.7.2 /p:SkipInvalidConfigurations=true /p:OutDir="$(Build.ArtifactStagingDirectory)\DH.Helpdesk.CaseSolutionScheduleYearly"'
+
 # # Run Code Analysis task
 # - task: SonarQubeAnalyze@5
 
@@ -274,6 +281,12 @@ steps:
   inputs:
     pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.LicenseReporter' 
     artifactName: 'DH.Helpdesk.LicenseReporter'
+
+- task: PublishBuildArtifacts@1
+  displayName: Publish Artifact DH.Helpdesk.CaseSolutionScheduleYearly
+  inputs:
+    pathtoPublish: '$(Build.ArtifactStagingDirectory)/DH.Helpdesk.CaseSolutionScheduleYearly' 
+    artifactName: 'DH.Helpdesk.CaseSolutionScheduleYearly'
 
 #Ext-Case-Api
 - task: NuGetCommand@2
