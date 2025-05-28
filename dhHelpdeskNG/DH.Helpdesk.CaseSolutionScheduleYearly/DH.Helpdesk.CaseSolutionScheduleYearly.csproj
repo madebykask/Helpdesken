@@ -262,8 +262,12 @@
     <Compile Include="Services\ScheduleService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="app.config.template" />
-    <None Include="App.config" />
+    <None Include="app.config.template">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="App.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
