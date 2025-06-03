@@ -8741,6 +8741,20 @@ If not exists (select * from tblTextTranslation where text_id = 2190 and Languag
 	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2190, 2, 'Ensures that the icon is displayed in the email if the images are not publicly accessible')
 GO
 
+If not exists (select * from tbltext where id = 2191)
+	insert into tbltext (id, TextString) VALUES (2191, 'Varje år')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2191 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2191, 2, 'Every year')
+GO
+
+If not exists (select * from tbltext where id = 2192)
+	insert into tbltext (id, TextString) VALUES (2192, 'Vart')
+GO
+If not exists (select * from tblTextTranslation where text_id = 2192 and Language_Id = 2)
+	insert into tblTextTranslation(Text_Id, Language_Id, TextTranslation) VALUES(2192, 2, 'Every')
+GO
+
 -- Generate id sequence for customer generated IDs
 If not exists (select * from tbltext where id = 20000)
 	insert into tbltext (id, TextString) VALUES (20000, 'Start för kundsekvens av systemgenererade ID:n (ignore)')
