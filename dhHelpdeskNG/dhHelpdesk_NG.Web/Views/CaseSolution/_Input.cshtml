@@ -2232,32 +2232,34 @@
                                                 @Translation.Get("Varje månad", Enums.TranslationSource.TextTranslation)
                                             </label>
                                         </p>
-                                        <p>
-                                            <label class="radio">
-                                                <input type="radio" name="RepeatType"
-                                                       @(Model.RepeatType == "Yearly" ? "checked='checked'" : "")
-                                                       id="optScheduleType4" value="Yearly" />
-                                                @Translation.Get("Varje år", Enums.TranslationSource.TextTranslation)
-                                            </label>
-                                        </p>
-                                        <p>
-                                            <label class="radio">
-                                                <input type="radio" name="RepeatType"
-                                                       @(Model.RepeatType == "EveryXYears" ? "checked='checked'" : "")
-                                                       id="optScheduleType5" value="EveryXYears" />
-                                                @Translation.Get("Vart", Enums.TranslationSource.TextTranslation)
+                                        <div id="yearlyOptionsContainer" style="display: none;">
+                                            <br />
+                                            <p>
+                                                <label class="radio">
+                                                    <input type="radio" name="RepeatType"
+                                                           @(Model.RepeatType == "Yearly" ? "checked='checked'" : "")
+                                                           id="optScheduleType4" value="Yearly" />
+                                                    @Translation.Get("Varje år", Enums.TranslationSource.TextTranslation)
+                                                </label>
+                                            </p>
+                                            <p>
+                                                <label class="radio">
+                                                    <input type="radio" name="RepeatType"
+                                                           @(Model.RepeatType == "EveryXYears" ? "checked='checked'" : "")
+                                                           id="optScheduleType5" value="EveryXYears" />
+                                                    @Translation.Get("Vart", Enums.TranslationSource.TextTranslation)
 
-                                                <select name="RepeatInterval" style="width: 60px;">
-                                                    @for (int i = 2; i <= 20; i++)
-            {
-                                                    <option @(Model.RepeatInterval == i ? "selected='selected'" : "") value="@i">@i</option>
-            }
-                                                </select>
+                                                    <select name="RepeatInterval" style="width: 60px;">
+                                                        @for (int i = 2; i <= 20; i++)
+                                                        {
+                                                            <option @(Model.RepeatInterval == i ? "selected='selected'" : "") value="@i">@i</option>
+                                                        }
+                                                    </select>
 
-                                                @Translation.Get("år", Enums.TranslationSource.TextTranslation)
-
-                                            </label>
-                                        </p>
+                                                    @Translation.Get("år", Enums.TranslationSource.TextTranslation)
+                                                </label>
+                                            </p>
+                                        </div>
 
                                     </td>
                                     <!-- ******************************* DAY ************************************** -->
@@ -2284,11 +2286,12 @@
                                             }
                                         </select>
                                         @Translation.Get("dagar", Enums.TranslationSource.TextTranslation)
-                                        <br /><br />
+                                        <br /><br /><br />
+                                        
                                         @Translation.Get("Med start", Enums.TranslationSource.TextTranslation)
 
                                         <select name="StartYear" style="width: 80px;">
-                                            @for (int y = DateTime.Now.Year; y <= DateTime.Now.Year + 20; y++)
+                                            @for (int y = DateTime.Now.Year; y <= DateTime.Now.Year + 10; y++)
                                             {
                                                 <option @(Model.StartYear == y ? "selected='selected'" : "") value="@y">@y</option>
                                             }
@@ -2810,4 +2813,42 @@
             //inputs.forEach(input => input.bootstrapSwitch('disabled', true));
         })
     }
+</script>
+<script type="text/javascript">
+    // Check if this is a new case solution (ID = 0)
+    var isNewCaseSolution = @(Model.CaseSolution.Id == 0 ? "true" : "false");
+
+    function toggleYearlyOptions() {
+        var scheduleType1 = document.getElementById('optScheduleType1').checked;
+        var scheduleType2 = document.getElementById('optScheduleType2').checked;
+        var scheduleType3 = document.getElementById('optScheduleType3').checked;
+        var yearlyContainer = document.getElementById('yearlyOptionsContainer');
+
+        if (!isNewCaseSolution) {
+            // Always show for existing case solutions
+            yearlyContainer.style.display = 'block';
+        } else {
+            // Only show for new case solutions if one of the first 3 options is selected
+            if (scheduleType1 || scheduleType2 || scheduleType3) {
+                yearlyContainer.style.display = 'block';
+            } else {
+                yearlyContainer.style.display = 'none';
+            }
+        }
+    }
+
+    // Run on page load to set initial state
+    $(document).ready(function() {
+        toggleYearlyOptions();
+
+        // Also trigger when Schedule checkbox is changed
+        $("#chkSchedule").change(function() {
+            toggleYearlyOptions();
+        });
+
+        // Trigger when any of the schedule type radios are changed
+        $("#optScheduleType1, #optScheduleType2, #optScheduleType3").change(function() {
+            toggleYearlyOptions();
+        });
+    });
 </script>

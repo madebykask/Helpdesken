@@ -46,7 +46,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     Currency, ContactBeforeAction, FinishingDescription, Persons_Name, Persons_EMail, Persons_Phone, Persons_CellPhone,
                     Place, UserCode, CostCentre, InventoryNumber, InvoiceNumber, Caption, Description, Miscellaneous, Available,
                     ReferenceNumber, Priority_Id, WorkingGroup_Id, Performer_User_Id, Status_Id, StateSecondary_Id,
-                    WatchDate, PlanDate, AgreedDate, FinishingDate, RegistrationSource, RegLanguage_Id, RegistrationSourceCustomer_Id,
+                    WatchDate, PlanDate, AgreedDate, FinishingDate, RegistrationSource, RegLanguage_Id, 
                     RegUserName, CaseSolution_Id, RegTime, ChangeTime
                 )
                 VALUES (
@@ -56,7 +56,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     @Currency, @ContactBeforeAction, @FinishingDescription, @Persons_Name, @Persons_EMail, @Persons_Phone, @Persons_CellPhone,
                     @Place, @UserCode, @CostCentre, @InventoryNumber, @InvoiceNumber, @Caption, @Description, @Miscellaneous, @Available,
                     @ReferenceNumber, @Priority_Id, @WorkingGroup_Id, @Performer_User_Id, @Status_Id, @StateSecondary_Id,
-                    @WatchDate, @PlanDate, @AgreedDate, @FinishingDate, @RegistrationSource, @RegLanguage_Id, @RegistrationSourceCustomer_Id,
+                    @WatchDate, @PlanDate, @AgreedDate, @FinishingDate, @RegistrationSource, @RegLanguage_Id, 
                     @RegUserName, @CaseSolution_Id, GETUTCDATE(), GETUTCDATE()
                 );
                 SELECT Id FROM tblCase WHERE CaseGUID = @CaseGUID;
@@ -119,9 +119,8 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     cmd.Parameters.AddWithValue("@PlanDate", SqlVal(c.PlanDate));
                     cmd.Parameters.AddWithValue("@AgreedDate", SqlVal(c.AgreedDate));
                     cmd.Parameters.AddWithValue("@FinishingDate", SqlVal(c.FinishingDate));
-                    cmd.Parameters.AddWithValue("@RegistrationSource", SqlVal(c.RegistrationSource));
+                    cmd.Parameters.AddWithValue("@RegistrationSource", 3);
                     cmd.Parameters.AddWithValue("@RegLanguage_Id", customer.Language_Id);
-                    cmd.Parameters.AddWithValue("@RegistrationSourceCustomer_Id", SqlVal(c.RegistrationSource));
                     cmd.Parameters.AddWithValue("@RegUserName", SqlStr(c.ReportedBy));
                     cmd.Parameters.AddWithValue("@CaseSolution_Id", SqlVal(c.Id));
 
@@ -301,7 +300,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     cmd.Parameters.AddWithValue("@Cost", 0);
                     cmd.Parameters.AddWithValue("@OtherCost", 0);
                     cmd.Parameters.AddWithValue("@ExternalTime", 0);
-                    cmd.Parameters.AddWithValue("@RegistrationSource", c.RegistrationSourceCustomer_Id); 
+                    cmd.Parameters.AddWithValue("@RegistrationSource", 3); 
                     cmd.Parameters.AddWithValue("@RelatedCaseNumber", 0);
                     cmd.Parameters.AddWithValue("@Deleted", 0);
                     cmd.Parameters.AddWithValue("@Status", 0);
