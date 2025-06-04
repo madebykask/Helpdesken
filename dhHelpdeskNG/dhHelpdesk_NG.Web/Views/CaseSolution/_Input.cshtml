@@ -2815,25 +2815,26 @@
     }
 </script>
 <script type="text/javascript">
-    // Check if this is a new case solution (ID = 0)
-    var isNewCaseSolution = @(Model.CaseSolution.Id == 0 ? "true" : "false");
 
     function toggleYearlyOptions() {
+        var scheduleChecked = document.getElementById('chkSchedule').checked;
         var scheduleType1 = document.getElementById('optScheduleType1').checked;
         var scheduleType2 = document.getElementById('optScheduleType2').checked;
         var scheduleType3 = document.getElementById('optScheduleType3').checked;
         var yearlyContainer = document.getElementById('yearlyOptionsContainer');
 
-        if (!isNewCaseSolution) {
-            // Always show for existing case solutions
+        // Om schema inte är aktivt, dölj alltid yearly-alternativet
+        if (!scheduleChecked) {
+            yearlyContainer.style.display = 'none';
+            return;
+        }
+
+        // Visa yearlyOptions endast om något av de 3 första alternativen är valt
+        // Samma logik för både nya och befintliga casesolutions
+        if (scheduleType1 || scheduleType2 || scheduleType3) {
             yearlyContainer.style.display = 'block';
         } else {
-            // Only show for new case solutions if one of the first 3 options is selected
-            if (scheduleType1 || scheduleType2 || scheduleType3) {
-                yearlyContainer.style.display = 'block';
-            } else {
-                yearlyContainer.style.display = 'none';
-            }
+            yearlyContainer.style.display = 'none';
         }
     }
 

@@ -240,6 +240,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="readme.md" />
+    <Compile Include="Helpers\Enums.cs" />
     <Compile Include="Helpers\MailTemplateHelper.cs" />
     <Compile Include="DI\Modules\DatabaseModule.cs" />
     <Compile Include="DI\Modules\InfrastructureModule.cs" />

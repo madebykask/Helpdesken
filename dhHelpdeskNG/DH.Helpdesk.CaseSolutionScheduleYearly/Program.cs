@@ -1,10 +1,12 @@
-﻿using DH.Helpdesk.CaseSolutionScheduleYearly.Resolver;
+﻿using DH.Helpdesk.CaseSolutionScheduleYearly.Helpers;
+using DH.Helpdesk.CaseSolutionScheduleYearly.Resolver;
 using DH.Helpdesk.CaseSolutionScheduleYearly.Services;
 using Newtonsoft.Json;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Net.Http;
 using System.Net.Mail;
 using System.Text;
@@ -12,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace DH.Helpdesk.CaseSolutionScheduleYearly
 {
+
     class Program
     {
         static void Main(string[] args)
@@ -21,44 +24,72 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
 
         static async Task Run(string[] args)
         {
-            // Standardvärden om inga argument anges
-            var defaultDateAndTime = DateTime.Now;
             //För test i debug - titta i tabellen tblCaseSolutionSchedule efter NextRun
-            //var defaultDateAndTime = Convert.ToDateTime("2025-07-06 14:00:00.000"); // Sätt ett standarddatum för testning
-            var defaultWorkMode = 0; // 0 = normalt läge, 1 = testläge (skapa inte ärenden)
+            //var defaultDateAndTime = Convert.ToDateTime("2025-06-04 14:12:00.000"); // Sätt ett standarddatum för testning
+            var defaultDateAndTime = DateTime.Now;
+            var defaultWorkMode = Enums.WorkMode.Production; // 0 = normalt läge, 1 = testläge (skapa inte ärenden)
 
             // Parsa kommandoradsargument
             var dateAndTime = defaultDateAndTime;
             var workMode = defaultWorkMode;
 
             // Kontrollera om det finns argument
-            if (args.Length > 0 && DateTime.TryParse(args[0], out DateTime parsedDate))
+            if (args.Length > 0)
             {
-                dateAndTime = parsedDate;
-                Log.Information("Använder angivet datum: {Date}", dateAndTime);
+                // Hantera datum om det finns i första argumentet
+                if (DateTime.TryParse(args[0], out DateTime parsedDate))
+                {
+                    dateAndTime = parsedDate;
+                }
+                // Om första argumentet är "Test" eller "Production"
+                else if (Enum.TryParse(args[0], true, out Enums.WorkMode parsedMode))
+                {
+                    workMode = parsedMode;
+                }
             }
 
-            if (args.Length > 1 && int.TryParse(args[1], out int parsedWorkMode))
+            // Kontrollera om det finns ett andra argument
+            if (args.Length > 1)
             {
-                workMode = parsedWorkMode;
-                Log.Information("Använder arbetsläge: {WorkMode}", workMode == 0 ? "Skarpt läge" : "Testläge");
+                // Om andra argumentet är "Test" eller "Production"
+                if (Enum.TryParse(args[1], true, out Enums.WorkMode parsedMode))
+                {
+                    workMode = parsedMode;
+                }
             }
 
             // Load configuration from app.config
             string connectionString = ConfigurationManager.ConnectionStrings["Helpdesk"].ConnectionString;
             string logFilePath = ConfigurationManager.AppSettings["LogFilePath"] ?? "logs/app.log";
 
-            // Configure Serilog
+            // Om det inte är en absolut sökväg, kombinera med programmets exekverings-katalog
+            if (!Path.IsPathRooted(logFilePath))
+            {
+                logFilePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, logFilePath);
+            }
+
+            // Skapa katalogen för loggfilen om den inte existerar
+            string logDirectory = Path.GetDirectoryName(logFilePath);
+            if (!string.IsNullOrEmpty(logDirectory))
+            {
+                Directory.CreateDirectory(logDirectory);
+            }
+            string logFileWithDate = Path.Combine(
+            Path.GetDirectoryName(logFilePath) ?? "",
+            Path.GetFileNameWithoutExtension(logFilePath) + "_.log");
+
             Log.Logger = new LoggerConfiguration()
-                 .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Day)
-                 .CreateLogger();
+                    .WriteTo.File(
+                        logFileWithDate,
+                        rollingInterval: RollingInterval.Day)
+                    .CreateLogger();
 
             ServiceResolver.Initialize();
 
             try
             {
                 Log.Information("Programmet startat med datum: {Date}, läge: {Mode}",
-                   dateAndTime, workMode == 0 ? "Skarpt" : "Test");
+                   dateAndTime, workMode); 
                 // Skapa tjänster
                 var scheduleService = new ScheduleService(connectionString);
                 var caseSolutionService = ServiceResolver.GetCaseSolutionService();
@@ -75,7 +106,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                 {
                     var caseSolution = await caseSolutionService.GetCaseSolutionAsync(schedule.CaseSolutionId);
 
-                    if (workMode == 1) // Testläge - visa bara information
+                    if (workMode == Enums.WorkMode.Test) // Testläge - visa bara information
                     {
                         Log.Information("TEST: Skulle skapat ärende för CaseSolution_Id: {CaseSolutionId}, Caption: {Caption}",
                             caseSolution.Id, caseSolution.Caption);
@@ -95,7 +126,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                                caseSolution.Caption
                              );
                             // I testläge uppdaterar vi inte schemaläggningen
-                            if (workMode == 0)
+                            if (workMode == Enums.WorkMode.Production) 
                             {
                                 await scheduleService.UpdateScheduleExecutionAsync(schedule, dateAndTime);
                             }
@@ -109,20 +140,20 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                     }
                     catch (Exception ex)
                     {
-                        //Send error mail
-                        SendErrorEmail("Fel vid skapande av ärende", $"Misslyckades att skapa ärende för CaseSolutionId {caseSolution.Id}. Fel: {ex.Message}");
-
                         Log.Error(ex, "❌ Failed to create case for CaseSolutionId {CaseSolutionId}", caseSolution.Id);
+                        
+                        SendErrorEmail("Fel vid skapande av ärende", $"Misslyckades att skapa ärende för CaseSolutionId {caseSolution.Id}. Fel: {ex.Message}");
                     }
                 }
 
                 Log.Information("✅ All schedules processed.");
             }
+
             catch (Exception ex)
             {
-                // Send error mail
-                SendErrorEmail("Fel under DH.Helpdesk.CaseSolutionScheduleYearly", $"Ett fel inträffade under schemaläggningen: {ex.Message}\n{ex.StackTrace}");
                 Log.Error(ex, "🔴 Unhandled error during schedule run.");
+                SendErrorEmail("Fel under DH.Helpdesk.CaseSolutionScheduleYearly", $"Ett fel inträffade under schemaläggningen: {ex.Message}\n{ex.StackTrace}");
+               
             }
             finally
             {

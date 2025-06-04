@@ -1,15 +1,11 @@
-﻿using DH.Helpdesk.BusinessData.Enums.Email;
-using DH.Helpdesk.Common.Constants;
-using DH.Helpdesk.Domain;
+﻿using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
-using DH.Helpdesk.CaseSolutionScheduleYearly.Helpers;
-
+using Serilog;
+using Microsoft.Graph.Drives.Item.Items.Item.Workbook.Functions.VarA;
 namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
 {
     internal class CaseProcessingService
@@ -18,6 +14,9 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
         private readonly MailTemplateService _mailTemplateService;
         private readonly ICaseService _caseService;
         private readonly ICustomerService _customerService;
+
+        private static object SqlVal<T>(T val) => EqualityComparer<T>.Default.Equals(val, default(T)) ? DBNull.Value : (object)val;
+        private static object SqlStr(string s) => s ?? "";
 
         public CaseProcessingService(string connection, MailTemplateService mailTemplateService, ICaseService caseService, ICustomerService customerService)
         {
@@ -64,9 +63,6 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
 
                 using (var cmd = new SqlCommand(sql, conn))
                 {
-                    object SqlVal<T>(T val) => EqualityComparer<T>.Default.Equals(val, default(T)) ? DBNull.Value : (object)val;
-                    object SqlStr(string s) => s ?? "";
-
                     cmd.Parameters.AddWithValue("@CaseGUID", caseGuid);
                     cmd.Parameters.AddWithValue("@ExternalCaseNumber", "");
                     cmd.Parameters.AddWithValue("@CaseType_Id", SqlVal(c.CaseType_Id));
@@ -128,11 +124,15 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     {
                         var result = await cmd.ExecuteScalarAsync();
                         var newCaseId = result != null ? Convert.ToInt32(result) : 0;
-
+                                              
                         if (newCaseId > 0)
                         {
                             //Get the full case data to use in the next steps
                             Case caseCreated = await _caseService.GetCaseByIdAsync(newCaseId);
+                            if (caseCreated == null)
+                            {
+                                throw new Exception($"Could not retrieve newly created case with ID {newCaseId}");
+                            }
                             // 2. Create isAbout data if needed
                             if (!string.IsNullOrWhiteSpace(c.IsAbout_PersonsEmail))
                             {
@@ -157,13 +157,15 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                             }
                             return newCaseId;
                         }
-                        return null;
+                        throw new Exception($"Failed to create case for CaseSolution_Id: {c.Id}. Database returned no ID.");
                     }
-
+                    catch (SqlException sqlEx)
+                    {
+                        throw new Exception($"Failed to create case for CaseSolution_Id: {c.Id}", sqlEx);
+                    }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("❌ Error creating case: " + ex.Message);
-                        return null;
+                        throw new Exception($"Failed to create case for CaseSolution_Id: {c.Id}", ex);
                     }
                 }
             }
@@ -186,8 +188,6 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
 
                 using (var cmd = new SqlCommand(sql, conn))
                 {
-                    object SqlVal<T>(T val) => EqualityComparer<T>.Default.Equals(val, default(T)) ? DBNull.Value : (object)val;
-                    object SqlStr(string s) => s ?? "";
 
                     cmd.Parameters.AddWithValue("@Case_Id", caseId);
                     cmd.Parameters.AddWithValue("@ReportedBy", SqlStr(caseSolution.IsAbout_ReportedBy));
@@ -227,8 +227,6 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
 
                 using (var cmd = new SqlCommand(sql, conn))
                 {
-                    object SqlStr(string s) => s ?? "";
-
                     cmd.Parameters.AddWithValue("@CaseHistory_Id", caseHistoryId);
                     cmd.Parameters.AddWithValue("@Case_Id", caseId);
                     cmd.Parameters.AddWithValue("@Text_Internal", SqlStr(caseSolution.Text_Internal));
@@ -251,6 +249,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                 int caseTypeId = c.CaseType_Id;
                 string caption = "";
                 string description = "";
+                decimal CaseNumber = c.CaseNumber;
 
                 var sql = @"
             INSERT INTO tblCaseHistory (
@@ -287,7 +286,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     cmd.Parameters.AddWithValue("@Place", "System");
                     cmd.Parameters.AddWithValue("@InventoryType", "");
                     cmd.Parameters.AddWithValue("@InventoryLocation", "");
-                    cmd.Parameters.AddWithValue("@Casenumber", c.CaseNumber); 
+                    cmd.Parameters.AddWithValue("@Casenumber", CaseNumber); 
                     cmd.Parameters.AddWithValue("@IPAddress", ""); //Sätter till tomt, kan ändras om det behövs
                     cmd.Parameters.AddWithValue("@CaseType_Id", caseTypeId);
                     cmd.Parameters.AddWithValue("@InvoiceNumber", "");
