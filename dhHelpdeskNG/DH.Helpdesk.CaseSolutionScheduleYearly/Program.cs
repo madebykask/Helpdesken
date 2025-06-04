@@ -6,7 +6,6 @@ using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Net.Http;
 using System.Net.Mail;
@@ -15,11 +14,7 @@ using System.Threading.Tasks;
 
 namespace DH.Helpdesk.CaseSolutionScheduleYearly
 {
-    enum WorkMode
-    {
-        Production = 0,
-        Test = 1
-    }
+
     class Program
     {
         static void Main(string[] args)
@@ -30,9 +25,9 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
         static async Task Run(string[] args)
         {
             //För test i debug - titta i tabellen tblCaseSolutionSchedule efter NextRun
-            //var defaultDateAndTime = Convert.ToDateTime("2027-02-07 14:00:00.000"); // Sätt ett standarddatum för testning
+            //var defaultDateAndTime = Convert.ToDateTime("2025-06-04 14:12:00.000"); // Sätt ett standarddatum för testning
             var defaultDateAndTime = DateTime.Now;
-            var defaultWorkMode = WorkMode.Production; // 0 = normalt läge, 1 = testläge (skapa inte ärenden)
+            var defaultWorkMode = Enums.WorkMode.Production; // 0 = normalt läge, 1 = testläge (skapa inte ärenden)
 
             // Parsa kommandoradsargument
             var dateAndTime = defaultDateAndTime;
@@ -47,7 +42,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                     dateAndTime = parsedDate;
                 }
                 // Om första argumentet är "Test" eller "Production"
-                else if (Enum.TryParse(args[0], true, out WorkMode parsedMode))
+                else if (Enum.TryParse(args[0], true, out Enums.WorkMode parsedMode))
                 {
                     workMode = parsedMode;
                 }
@@ -57,7 +52,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
             if (args.Length > 1)
             {
                 // Om andra argumentet är "Test" eller "Production"
-                if (Enum.TryParse(args[1], true, out WorkMode parsedMode))
+                if (Enum.TryParse(args[1], true, out Enums.WorkMode parsedMode))
                 {
                     workMode = parsedMode;
                 }
@@ -111,7 +106,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                 {
                     var caseSolution = await caseSolutionService.GetCaseSolutionAsync(schedule.CaseSolutionId);
 
-                    if (workMode == WorkMode.Test) // Testläge - visa bara information
+                    if (workMode == Enums.WorkMode.Test) // Testläge - visa bara information
                     {
                         Log.Information("TEST: Skulle skapat ärende för CaseSolution_Id: {CaseSolutionId}, Caption: {Caption}",
                             caseSolution.Id, caseSolution.Caption);
@@ -131,7 +126,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
                                caseSolution.Caption
                              );
                             // I testläge uppdaterar vi inte schemaläggningen
-                            if (workMode == 0)
+                            if (workMode == Enums.WorkMode.Production) 
                             {
                                 await scheduleService.UpdateScheduleExecutionAsync(schedule, dateAndTime);
                             }
