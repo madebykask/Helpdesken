@@ -23,9 +23,9 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly
         static async Task Run(string[] args)
         {
             // Standardvärden om inga argument anges
-            //var defaultDateAndTime = DateTime.Now;
+            var defaultDateAndTime = DateTime.Now;
             //För test i debug - titta i tabellen tblCaseSolutionSchedule efter NextRun
-            var defaultDateAndTime = Convert.ToDateTime("2027-02-07 14:00:00.000"); // Sätt ett standarddatum för testning
+            //var defaultDateAndTime = Convert.ToDateTime("2027-02-07 14:00:00.000"); // Sätt ett standarddatum för testning
             var defaultWorkMode = 0; // 0 = normalt läge, 1 = testläge (skapa inte ärenden)
 
             // Parsa kommandoradsargument
