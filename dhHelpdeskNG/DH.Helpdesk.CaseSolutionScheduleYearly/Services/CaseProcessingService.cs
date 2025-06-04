@@ -1,15 +1,11 @@
-﻿using DH.Helpdesk.BusinessData.Enums.Email;
-using DH.Helpdesk.Common.Constants;
-using DH.Helpdesk.Domain;
+﻿using DH.Helpdesk.Domain;
 using DH.Helpdesk.Services.Services;
-using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
-using DH.Helpdesk.CaseSolutionScheduleYearly.Helpers;
-
+using Serilog;
+using Microsoft.Graph.Drives.Item.Items.Item.Workbook.Functions.VarA;
 namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
 {
     internal class CaseProcessingService
@@ -128,7 +124,7 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                     {
                         var result = await cmd.ExecuteScalarAsync();
                         var newCaseId = result != null ? Convert.ToInt32(result) : 0;
-
+                                              
                         if (newCaseId > 0)
                         {
                             //Get the full case data to use in the next steps
@@ -157,13 +153,12 @@ namespace DH.Helpdesk.CaseSolutionScheduleYearly.Services
                             }
                             return newCaseId;
                         }
-                        return null;
+                        throw new Exception($"Failed to create case for CaseSolution_Id: {c.Id}. Database returned no ID.");
                     }
 
                     catch (Exception ex)
                     {
-                        Console.WriteLine("❌ Error creating case: " + ex.Message);
-                        return null;
+                        throw new Exception($"Failed to create case for CaseSolution_Id: {c.Id}", ex);
                     }
                 }
             }

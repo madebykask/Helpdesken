@@ -11,7 +11,7 @@ Lägg till följande inställningar i din `App.config` under `<appSettings>`:
 		<add key="ErrorMailSender" value="noreply@dhsolutions.se" />
 		<add key="SmtpServer" value="relay2.hostnet.se" />
 		<add key="SmtpPort" value="25" />
-		<add key="LogFilePath" value="C:/temp/Logs/casesolutionyearly_.log" />
+		<add key="LogFilePath" value="C:/temp/logs/CaseSolutionYearly.log" />
 	</appSettings>
 
 - **CustomerId**: ID för den kund vars inställningar ska användas (t.ex. Graph-klient, avsändare).
