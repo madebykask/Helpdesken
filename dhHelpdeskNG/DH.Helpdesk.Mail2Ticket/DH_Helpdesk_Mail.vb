@@ -1631,17 +1631,17 @@ Module DH_Helpdesk_Mail
     End Function
     ' Helper method to sanitize file names
     Private Function SanitizeFileName(fileName As String) As String
-        Try
-            ' Replace invalid characters with an underscore
-            Dim invalidChars As Char() = System.IO.Path.GetInvalidFileNameChars().Concat(System.IO.Path.GetInvalidPathChars()).ToArray()
-            Dim sanitizedFileName As String = New String(fileName.Select(Function(c) If(invalidChars.Contains(c), "_"c, c)).ToArray())
+        ' Replace invalid characters with an underscore
+        Dim invalidChars As Char() = System.IO.Path.GetInvalidFileNameChars().Concat(System.IO.Path.GetInvalidPathChars()).ToArray()
+        Dim sanitizedFileName As String = New String(fileName.Select(Function(c) If(invalidChars.Contains(c), "_"c, c)).ToArray())
 
-            ' Extract file extension if it exists
-            Dim extension As String = System.IO.Path.GetExtension(fileName)
+        Try
+            ' Extract file extension from the sanitized file name
+            Dim extension As String = System.IO.Path.GetExtension(sanitizedFileName)
 
             Dim fileNameWithoutExtension As String = System.IO.Path.GetFileNameWithoutExtension(sanitizedFileName)
 
-            ' Extract file extension and remove it from the sanitized file name
+            ' Truncate the name if it's too long
             If fileNameWithoutExtension.Length > 100 - extension.Length Then
                 fileNameWithoutExtension = fileNameWithoutExtension.Substring(0, 100 - extension.Length)
             End If
@@ -1651,8 +1651,9 @@ Module DH_Helpdesk_Mail
 
             Return sanitizedFileName
         Catch ex As Exception
-            Dim extension As String = System.IO.Path.GetExtension(fileName)
+            ' Fallback in case path operations still fail
             LogToFile("Could not sanitize filename: " & fileName, 1)
+            Dim extension As String = System.IO.Path.GetExtension(sanitizedFileName)
             Return $"UnknownFile_{DateTime.Now:HHmmssfff}{extension}"
         End Try
 
