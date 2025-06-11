@@ -609,6 +609,16 @@ namespace DH.Helpdesk.Web.Controllers
             m.CaseInputViewModel = this.PopulateBulkCaseEditModal(m.CaseSetting.CustomerId);
             var user = _userService.GetUser(userId);
 
+            if (SessionFacade.CaseOverviewGridSettings.pageOptions == null)
+            {
+                SessionFacade.CaseOverviewGridSettings.pageOptions = new GridPageOptions();
+            }
+
+            if (SessionFacade.CurrentCaseSearch.CaseSearchFilter.PageInfo == null)
+            {
+                SessionFacade.CurrentCaseSearch.CaseSearchFilter.PageInfo = new PageInfo();
+            }
+
             SessionFacade.CaseOverviewGridSettings.pageOptions.pageIndex =
                 SessionFacade.CurrentCaseSearch.CaseSearchFilter.PageInfo.PageNumber;
 
