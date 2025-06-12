@@ -1684,6 +1684,26 @@ EditPage.prototype.unlockCaseById = function (caseId, url) {
     });
 };
 
+EditPage.prototype.unlockCaseOnUnload = function () {
+    var self = this;
+    var p = self.p;
+    var caseId = self.case && self.case.id;
+    if (!caseId) return;
+
+    if (navigator.sendBeacon) {
+        var data = new FormData();
+        data.append('caseId', caseId);
+        navigator.sendBeacon(p.unlockCaseByCaseIdUrl, data);
+    } else {
+        $.ajax({
+            type: 'POST',
+            url: p.unlockCaseByCaseIdUrl,
+            data: { caseId: caseId },
+            async: false
+        });
+    }
+};
+
 EditPage.prototype.redirectToUrl = function (url) {
     window.location.href = url;
 };
@@ -2163,6 +2183,8 @@ EditPage.prototype.init = function (p) {
     self.$caseTab.on('shown', function (e) {
         window.scrollTo(0, 0);
     });
+
+    $(window).on('beforeunload', Utils.callAsMe(self.unlockCaseOnUnload, self));
 
     /* Temporary disabled since Extended Case does not use token */
     //self.recoverTokenIfNeeded();
